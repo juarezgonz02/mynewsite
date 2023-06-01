@@ -14,9 +14,13 @@
                 <div v-else class="card" style="border: none;">
                     <div style="margin: 20px 0px 0px 20px;" >
                             <b style="color:red">
-                                <i v-if="ya_aplico_hoy == 0">  </i>
-                                <i v-else>  No puede aplicar a otro proyecto este día. Inténtelo mañana nuevamente.  </i>
+                                <p v-if="ya_aplico_hoy == 0">  </p>
+                                <p v-else>  No puede aplicar a otro proyecto este día. Inténtelo mañana nuevamente.  </p>
                                 
+                            </b>
+                            <b style="color:red">
+                                <p v-if="ya_aplico_proyecto == 0">  </p>
+                                <p v-else>No puede aplicar a un nuevo proyecto. Ya se encuentra inscrito a un proyecto</p>
                             </b>
                     </div>
                     <div class="card-body">
@@ -36,7 +40,7 @@
                                     <td v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`" data-toggle="modal" data-target="#modal-info" @click="abrirModal('info', proyecto)" style="text-align: center;"></td>
                                     <td>
                                         <div class="button-container" style="margin: 8px 0px 8px 4px;">
-                                            <div v-if="ya_aplico_hoy == 0" style="display: flex; margin: 0px 10px;">
+                                            <div v-if="ya_aplico_hoy == 0 || ya_aplico_proyecto == 0" style="display: flex; margin: 0px 10px;">
                                                 <button type="button" data-toggle="modal" data-target="#modal-aplicar" @click="abrirModal('aplicar', proyecto)" class="btn btn-success btn-sm" style="width: 100%; border-radius: 5px;">
                                                     <i class="icon-check"></i>
                                                     <span class="btn-label">Aplicar</span>
@@ -172,8 +176,10 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                 user_id : 0,
                 user_email: '',
                 ya_aplico_hoy : 0,
+                ya_aplico_proyecto : 0,
                 descripcion : '',
                 arrayProyectos : [''],
+                arrayProyectosAplicados : [''],
                 modal : 0,
                 modal2 : 0,
                 id_proyecto : 0,                
@@ -234,15 +240,27 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                 .catch(function (error) {
                     console.log(error);
                 });
-
                 axios.get(`${API_HOST}/ya_aplico`).then(function (response) {
                     me.ya_aplico_hoy = response.data;
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
+                // Si ya aplicó hoy, no se cargan los proyectos
+                var url = `${API_HOST}/proyectos_aplicados` /*?page=' + page*/;
+                axios.get(url).then(function (response) {
+                    me.arrayProyectosAplicados = response.data;
+                    me.ya_aplico_proyecto = me.arrayProyectosAplicados ? 1 : 0;
+                    console.log("Proyectos aplicados: desde proyectos disponibles");
+                    console.log(me.ya_aplico_proyecto);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
                 axios.get(`${API_HOST}/pxe_estudiante`).then(function (response) {
                     me.arrayPXE = response.data;
+                    //console.log(me.arrayPXE);
                 }).catch(function (error) {
                     console.log(error);
                 });
