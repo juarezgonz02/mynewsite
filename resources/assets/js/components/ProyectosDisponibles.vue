@@ -250,9 +250,8 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                 var url = `${API_HOST}/proyectos_aplicados` /*?page=' + page*/;
                 axios.get(url).then(function (response) {
                     me.arrayProyectosAplicados = response.data;
-                    me.ya_aplico_proyecto = me.arrayProyectosAplicados ? 1 : 0;
-                    console.log("Proyectos aplicados: desde proyectos disponibles");
-                    console.log(me.ya_aplico_proyecto);
+                    me.ya_aplico_proyecto = me.arrayProyectosAplicados.length > 0 ? 1 : 0;
+                    //console.log(me.arrayProyectosAplicados.length);
                 })
                 .catch(function (error) {
                     console.log(error);
