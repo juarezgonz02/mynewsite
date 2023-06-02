@@ -25,7 +25,7 @@ class ProyectoxEstudianteController extends Controller{
         $proyectos = ProyectoxEstudiante::join('proyecto', 'proyecto.idProyecto', '=','proyectoxestudiante.idProyecto')
         ->join('users', 'proyectoxestudiante.idUser','=','users.idUser')
         ->select('proyecto.idProyecto', 'proyecto.nombre','proyecto.descripcion','proyecto.estado',
-        'proyecto.tipo_horas', 'proyecto.cupos_act','proyecto.cupos', 'proyecto.horario', 'proyecto.encargado','proyecto.fecha_inicio','proyecto.fecha_fin')
+        'proyecto.tipo_horas', 'proyecto.cupos_act','proyecto.cupos', 'proyecto.horario', 'proyecto.encargado','proyecto.fecha_inicio','proyecto.fecha_fin','proyectoxestudiante.estado as estadoPxe')
         ->where('proyectoxestudiante.idUser','=', $id)
         ->orderBy('proyecto.idProyecto', 'desc')->get();
         
@@ -60,12 +60,35 @@ class ProyectoxEstudianteController extends Controller{
         $proXEst->estado = $estado;
         $proXEst->save();
 
+        $allProXEst = ProyectoxEstudiante::where('proyectoxestudiante.idUser', '=', $idUser)->get();
+        foreach($allProXEst as $proXEst){
+            if($proXEst->idProyecto != $idProyecto){
+                $proXEst->estado = 2;
+                $proXEst->save();
+            }
+        }
+
         if($estado == 1){
             $restarCupo = Proyecto::where('proyecto.idProyecto', '=', $idProyecto)->first();
             $restarCupo->cupos_act = $restarCupo->cupos_act + 1;
             $restarCupo->save();
         }
         
+        // Eliminando el resto de solicitudes y actualizando cupos
+
+        $pxe = ProyectoxEstudiante::where('proyectoxestudiante.idUser', '=', $idUser)->get();
+        $allProyectosByEstudiante = Proyecto::join('proyectoxestudiante', 'proyecto.idProyecto', '=', 'proyectoxestudiante.idProyecto')
+        ->select('proyecto.idProyecto', 'proyecto.cupos_act')
+        ->where('proyectoxestudiante.idUser', '=', $idUser)->get();
+        
+        foreach($pxe as $p){
+            if($p->idProyecto != $idProyecto){
+
+                $p->delete();
+            }
+        }
+
+
         $mailData = User::join('proyectoxestudiante', 'users.idUser', '=', 'proyectoxestudiante.idUser')
         ->join('proyecto', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
         ->select('users.nombres', 'users.apellidos', 'users.correo','proyecto.encargado','proyecto.nombre')

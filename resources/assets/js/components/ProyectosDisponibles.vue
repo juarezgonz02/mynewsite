@@ -250,8 +250,12 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                 var url = `${API_HOST}/proyectos_aplicados` /*?page=' + page*/;
                 axios.get(url).then(function (response) {
                     me.arrayProyectosAplicados = response.data;
-                    me.ya_aplico_proyecto = me.arrayProyectosAplicados.length > 0 ? 1 : 0;
-                    //console.log(me.arrayProyectosAplicados.length);
+                    // Si alguno de los proyectos ya aplicados, tiene estado aplicado (1), ya no puede aplicar a nuevo proyecto
+                    me.arrayProyectosAplicados.forEach(proyecto => {
+                        if(proyecto.estadoPxe == 1){
+                            me.ya_aplico_proyecto = 1;
+                        }
+                    });
                 })
                 .catch(function (error) {
                     console.log(error);
