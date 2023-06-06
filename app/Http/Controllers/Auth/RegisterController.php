@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Mail;
 use App\Rules\Captcha;
-
+use Swift_TransportException;
 class RegisterController extends Controller
 {
     use RegistersUsers;
@@ -44,7 +44,6 @@ class RegisterController extends Controller
         
         $email = $request->carnet . "@uca.edu.sv";
         $user = User::whereCorreo($email)->first();
-
         if($user == null){
             $nombre = $this->formatStr($request->nombres);
             $apellido = $this->formatStr($request->apellidos);
@@ -79,7 +78,10 @@ class RegisterController extends Controller
                 'api_token' => $this->generarApiToken()
             ]);
             $user = User::whereCorreo($email)->first();
-            $this->sendEmail($user);
+            if(!$this->sendEmail($user)){
+                $user->delete();
+                return (500);
+            }
             return redirect('/');
         }
         elseif($user != null && $user->verificado == 0){
@@ -105,14 +107,20 @@ class RegisterController extends Controller
     }
 
     public function sendEmail($user){
-        Mail::send(
-            'emails.verificar',
-            ['user' => $user],
-            function($message) use ($user){
-                $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                $message->to($user->correo);
-                $message->subject("Solicitud de creación de cuenta.");
-            }
-        );
+        try{
+            Mail::send(
+                'emails.verificar',
+                ['user' => $user],
+                function($message) use ($user){
+                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+                    $message->to($user->correo);
+                    $message->subject("Solicitud de creación de cuenta.");
+                }
+            );
+        }catch(Swift_TransportException $e){
+            echo "Error al enviar correo electrónico de registro. Ponte en contacto con el administrador.";
+            return false;
+        }
+        return true;
     }
 }
