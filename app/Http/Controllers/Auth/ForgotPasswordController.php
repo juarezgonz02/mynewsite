@@ -79,7 +79,7 @@ class ForgotPasswordController extends Controller
                 ->withErrors(['no_verificado' => trans('auth.carnet_no_verificado')])
                 ->withInput(request(['carnet']));
             }
-            elseif($user->ultima_fecha_contra >= date('d-m-Y')){
+            elseif($user->ultima_fecha_contra == date('d-m-Y')){
                 return back()
                 ->withErrors(['cambio_fecha' => trans('auth.ya_cambio_contra')])
                 ->withInput(request(['carnet'])); 
@@ -94,7 +94,7 @@ class ForgotPasswordController extends Controller
     //Se muestra el formulario para cambiar la contraseña olvidada
     public function formularioOlvidoContrsenia($email){
         $user = User::whereCorreo($email)->first();
-        if($user->ultima_fecha_contra >= date('d-m-Y')){
+        if($user->ultima_fecha_contra == date('d-m-Y')){
             return redirect('/');
         }
         else {
