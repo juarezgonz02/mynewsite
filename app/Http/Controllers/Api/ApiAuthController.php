@@ -125,7 +125,7 @@ class ApiAuthController extends Controller
         }
 
         $usuario = User::where('correo', '=', $request->correo)->firstOrFail();
-        if($usuario->ultima_fecha_contra >= date('d-m-Y')) {
+        if($usuario->ultima_fecha_contra == date('d-m-Y')) {
             return response()->json([
                 'error' => trans('auth.ya_cambio_contra')
             ], 200);

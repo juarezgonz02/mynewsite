@@ -40,7 +40,7 @@
                                     <td v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`" data-toggle="modal" data-target="#modal-info" @click="abrirModal('info', proyecto)" style="text-align: center;"></td>
                                     <td>
                                         <div class="button-container" style="margin: 8px 0px 8px 4px;">
-                                            <div v-if="ya_aplico_hoy == 0 || ya_aplico_proyecto == 0" style="display: flex; margin: 0px 10px;">
+                                            <div v-if="ya_aplico_hoy == 0 && ya_aplico_proyecto == 0" style="display: flex; margin: 0px 10px;">
                                                 <button type="button" data-toggle="modal" data-target="#modal-aplicar" @click="abrirModal('aplicar', proyecto)" class="btn btn-success btn-sm" style="width: 100%; border-radius: 5px;">
                                                     <i class="icon-check"></i>
                                                     <span class="btn-label">Aplicar</span>

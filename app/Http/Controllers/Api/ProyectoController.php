@@ -19,17 +19,22 @@ class ProyectoController extends Controller
 {
     public function getPermisoAplicar() {
         $user = Auth()->user();
+
+        // Verificar si el usuario ya se encuentra en un proyecto activo
+        $proyecto = ProyectoxEstudiante::where('idUser', '=', $user->idUser)
+            ->where('estado', '=', 1)
+            ->first();
+
+        $proyectoActivo = 0; 
+        if ($proyecto != null) {
+            $proyectoActivo = 1; 
+        }
         if($user->ya_aplico_hoy == date('d-m-Y') ) {
-            return response()->json([
-                'mensaje' => 'No tiene permiso',
-                'permiso' => 0
-            ], 403);
+            return response()->json(
+                ['permiso' => 0, 'proyectoActivo' => $proyectoActivo],200);
         }
         else{
-            return response()->json([
-                'mensaje' => 'Si tiene permiso',
-                'permiso' => 1
-            ]);
+            return response()->json(['permiso' => 1, 'proyectoActivo' => $proyectoActivo],200);
         }
     }
 
@@ -47,7 +52,7 @@ class ProyectoController extends Controller
             ->leftJoin('proyectoxestudiante', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
             ->select('proyecto.idProyecto', 'proyecto.nombre','proyecto.descripcion','proyecto.estado', 'proyecto.tipo_horas', 'proyecto.cupos_act','proyecto.cupos', 'proyecto.horario', 'proyecto.encargado','proyecto.fecha_inicio','proyecto.fecha_fin')
             ->where('proyecto.estado','=','1')
-//            ->where('proyecto.fecha_inicio', '>=', date('Y-m-d'))
+            // ->where('proyecto.fecha_inicio', '>=', date('Y-m-d'))
             ->where('proyectoxcarrera.limite_inf', '<=', $idPerfil)
             ->where('proyectoxcarrera.limite_sup', '>=', $idPerfil)
             ->where('proyectoxcarrera.idCarrera', '=', $idCarrera)
