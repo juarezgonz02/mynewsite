@@ -51,8 +51,8 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://uca-css.test'),
-
+    // 'url' => env('APP_URL', 'http://uca-css.test'),
+    'url' => env('APP_URL', 'https://uca.edu.sv'),
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
