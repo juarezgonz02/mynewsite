@@ -191,8 +191,10 @@ class ProyectoController extends Controller
                 'emails.reunion',
                 ['nombre_proyecto' => $project, 'lugar' => $place, 'fecha' => $date, 'encargado' => $manager], 
                 function($message) use ($student){
-                    #$message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                    $message->from("juarezgonzalez02@gmail.com", "Centro de Servicio Social");
+                    # TEST 
+                    # $message->from("juarezgonzalez02@gmail.com", "Centro de Servicio Social");
+                    
+                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
                     $message->to($student);
                     $message->subject("El encargado del proyecto solicitó una reunion.");
                 }
