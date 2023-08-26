@@ -129,31 +129,31 @@ class ProyectoController extends Controller
             'message' => 'Proyecto Actualizado Exitosamente'
         ]);
     }
-
+    
     public function postApplyStudent(Request $request) {
         $correo = $request->carnet . '@uca.edu.sv';
         $student = User::whereCorreo($correo)->firstOrFail();
         $verify = ProyectoxEstudiante::where('proyectoxestudiante.idProyecto', '=', $request->idProyecto)
-                                    ->where('proyectoxestudiante.idUser', '=', $student->idUser)
-                                    ->first();
+        ->where('proyectoxestudiante.idUser', '=', $student->idUser)
+        ->first();
         if($verify == null){
             $pXe = new ProyectoxEstudiante();
             $pXe->idProyecto = $request->idProyecto;
             $pXe->idUser = $student->idUser;
             $pXe->estado = $request->estado;
             $pXe->save();
-
+            
             $restarCupo = Proyecto::where('proyecto.idProyecto', '=', $request->idProyecto)->first();
             $restarCupo->cupos_act = $restarCupo->cupos_act + 1;
             $restarCupo->save();
-
+            
             $proyecto = ProyectoxEstudiante::join('users', 'users.idUser', '=', 'proyectoxestudiante.idUser')
-                ->join('proyecto', 'proyecto.idProyecto','=', 'proyectoxestudiante.idProyecto')
-                ->select('proyecto.encargado', 'proyecto.nombre', 'users.nombres', 'users.apellidos', 'users.correo')
-                ->where('users.idUser', '=', $student->idUser)
-                ->where('proyecto.idProyecto','=', $request->idProyecto)->first();
+            ->join('proyecto', 'proyecto.idProyecto','=', 'proyectoxestudiante.idProyecto')
+            ->select('proyecto.encargado', 'proyecto.nombre', 'users.nombres', 'users.apellidos', 'users.correo')
+            ->where('users.idUser', '=', $student->idUser)
+            ->where('proyecto.idProyecto','=', $request->idProyecto)->first();
             $this->sendEmail($proyecto,2);
-
+            
             return response()->json(['message' => 'Alumno agregado']);
         }
         else
@@ -161,7 +161,26 @@ class ProyectoController extends Controller
             return response()->json(['message' => 'El estudiante ya está en el proyecto o tiene una solicitud de aplicar'], 400);
         }
     }
+    
+    public function postSendMeetingEmails(Request $request) {
+        $project = $request -> proyecto;
+        $students = $request -> estudiantes;
+        $place = $request -> lugar;
+        $date = $request -> fecha;
+        $manager = $request -> encargado;
 
+        Mail::send(
+            'emails.reunion',
+            ['nombre_proyecto' => $project, 'lugar' => $place, 'fecha' => $date, 'nombre_encargado' => $manager], 
+            function($message) use ($request){
+                #$message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+                $message->from("juarezgonzalez02@gmail.com", "Centro de Servicio Social");
+                $message->to($request->correo_encargado);
+                $message->subject("El encargado del proyecto solicitó una reunion.");
+            }
+        );
+        
+    }
 
     public function sendEmail($user, $mailType){
         if($mailType == 1){
@@ -175,7 +194,7 @@ class ProyectoController extends Controller
                 }
             );
         }
-        else{
+        else {
             Mail::send(
                 'emails.agregadoPorAdmin',
                 ['user' => $user],
@@ -186,6 +205,6 @@ class ProyectoController extends Controller
                 }
             );
         }
-
+        
     }
 }

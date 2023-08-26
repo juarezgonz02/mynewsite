@@ -97,7 +97,8 @@ class ApiAuthController extends Controller
             'emails.verificar',
             ['user' => $usuario],
             function($message) use ($usuario){
-                $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+                $message->from("juarezgonzalez02@gmail.com", "Centro de Servicio Social");
+                #$message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
                 $message->to($usuario->correo);
                 $message->subject("Solicitud de creación de cuenta.");
             }
