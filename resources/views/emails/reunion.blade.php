@@ -22,7 +22,7 @@
             <b>Hora:</b> {{ $hora }}
         </p>
         <p> 
-            <b>Encargado:</b> {{ $nombre_encargado }}
+            <b>Encargado:</b> {{ $encargado -> nombres }} {{ $encargado -> apellidos }}
         </p>
         <p>
             Atentamente, Centro de Servicio Social.
