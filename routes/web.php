@@ -44,6 +44,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/todos_proyectos', 'ProyectoController@index');
         Route::get('/historial_proyectos', 'ProyectoController@proyectosNoDisponibles');
         Route::post('/proyecto/insertar', 'ProyectoController@store');
+         // REUNION 
+        Route::post('/sendMeetingMail', 'ProyectoController@postSendMeetingEmails');
+
         Route::put('/proyecto/actualizar', 'ProyectoController@update'); 
         Route::put('/proyecto/estado', 'ProyectoController@state');
         Route::get('/carrera', 'CarreraController@index');
