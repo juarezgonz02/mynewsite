@@ -19,7 +19,7 @@
             <b>Fecha:</b> {{ $fecha }}
         </p>
         <p> 
-            <b>Hora:</b> {{ $hora }}
+            <b>Hora:</b> {{ $hour }}
         </p>
         <p> 
             <b>Encargado:</b> {{ $encargado -> nombres }} {{ $encargado -> apellidos }}

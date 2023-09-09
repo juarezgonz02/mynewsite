@@ -226,8 +226,8 @@ class ProyectoController extends Controller
         $project = $request -> proyecto;
         $students = $request -> estudiantes;
         $place = $request -> lugar;
-        $time = $request -> hora;
         $date = $request -> fecha;
+        $hour = $request -> hora;
 
         #TODO: Cambiar a correo CSS 
 
@@ -236,12 +236,12 @@ class ProyectoController extends Controller
         foreach ($students as $student) {
             Mail::send(
                 'emails.reunion',
-                ['nombre_proyecto' => $project, 'lugar' => $place, 'fecha' => $date, 'hora' => $time,'encargado' => $manager], 
+                ['nombre_proyecto' => $project, 'lugar' => $place, 'fecha' => $date, 'hour' => $hour,'encargado' => $manager], 
                 function($message) use ($student){
                     # TEST 
                     
-                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                    #$message->from("juarezgonzalez02@gmail.com", "Centro de Servicio Social");
+                    #$message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+                    $message->from("juarezgonzalez02@gmail.com", "Centro de Servicio Social");
                     $message->to($student);
                     $message->subject("El encargado del proyecto solicitó una reunion.");
                 }
@@ -252,7 +252,7 @@ class ProyectoController extends Controller
         // Envia una copia al encargado del proyecto
         Mail::send(
             'emails.reunion',
-            ['nombre_proyecto' => $project, 'lugar' => $place, 'fecha' => $date, 'encargado' => $manager], 
+            ['nombre_proyecto' => $project, 'lugar' => $place, 'fecha' => $date, 'hour' => $hour,'encargado' => $manager], 
             function($message) use ($manager){
                 #$message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
                 $message->from("juarezgonzalez02@gmail.com", "Centro de Servicio Social");
