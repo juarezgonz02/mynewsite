@@ -219,4 +219,47 @@ class ProyectoController extends Controller
     public function cuposActuales(Request $request){
         return Proyecto::select('proyecto.cupos_act', 'proyecto.cupos')->where('idProyecto', '=', $request->idProyecto)->first();
     }
+
+    public function postSendMeetingEmails(Request $request) {
+        $manager = Auth()->user();
+
+        $project = $request -> proyecto;
+        $students = $request -> estudiantes;
+        $place = $request -> lugar;
+        $date = $request -> fecha;
+        $hour = $request -> hora;
+
+        #TODO: Cambiar a correo CSS 
+
+        // Envia a los estudiantes involucrados
+
+        foreach ($students as $student) {
+            Mail::send(
+                'emails.reunion',
+                ['nombre_proyecto' => $project, 'lugar' => $place, 'fecha' => $date, 'hour' => $hour,'encargado' => $manager], 
+                function($message) use ($student){
+                    # TEST 
+                    
+                    #$message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+                    $message->from("juarezgonzalez02@gmail.com", "Centro de Servicio Social");
+                    $message->to($student);
+                    $message->subject("El encargado del proyecto solicitó una reunion.");
+                }
+            );
+        }
+
+        
+        // Envia una copia al encargado del proyecto
+        Mail::send(
+            'emails.reunion',
+            ['nombre_proyecto' => $project, 'lugar' => $place, 'fecha' => $date, 'hour' => $hour,'encargado' => $manager], 
+            function($message) use ($manager){
+                #$message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+                $message->from("juarezgonzalez02@gmail.com", "Centro de Servicio Social");
+                $message->to($manager->correo);
+                $message->subject("Copia Solicitud de Reunion.");
+            }
+        );
+        
+    }
 }

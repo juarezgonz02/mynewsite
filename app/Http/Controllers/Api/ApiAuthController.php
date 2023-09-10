@@ -93,6 +93,7 @@ class ApiAuthController extends Controller
             'password'              => bcrypt('temporal'),
             'api_token'             => $this->generarApiToken()
         ]);
+
         Mail::send(
             'emails.verificar',
             ['user' => $usuario],
