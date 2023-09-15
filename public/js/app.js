@@ -38528,6 +38528,86 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -38552,6 +38632,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             modal3: 0,
             modal4: 0,
             modal5: 0,
+            modal6: 0,
             id_proyecto: 0,
             id_estudiante: 0,
             modal_encargado: '',
@@ -38569,6 +38650,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             modal_perfil: 0,
             modal_createdAt: '',
             modal_confirmar: '',
+            modal_descripcion: '',
+            modal_fecha: '',
+            modal_hora: '',
+            modal_lugar: '',
             carnet: '',
             nombre_completo: '',
             errorProyecto: [''],
@@ -38691,6 +38776,40 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 });
             }
         },
+        enviarReunion: function enviarReunion() {
+            if (this.validarReunion()) {
+                return;
+            }
+            var me = this;
+            /*axios.post(`${API_HOST}/sendMeetingMail`, {
+                'project' : this.modal_descripcion, 
+                'students' : this.arrayEstudiantes,
+                'place' : this.modal_lugar ,
+                'date' : this.modal_fecha ,
+                'hour' : this.modal_hora 
+            }).then(function (response) {
+                me.cerrarModal();
+                console.log(response);
+                //me.bindData();
+            }).catch(function (error) {
+                console.log(error);
+            });*/
+            if (this.id_proyecto) {
+                axios.post(__WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__["a" /* API_HOST */] + '/sendMeetingMail', {
+                    'project': this.modal_descripcion,
+                    'students': this.arrayEstudiantes,
+                    'place': this.modal_lugar,
+                    'date': this.modal_fecha,
+                    'hour': this.modal_hora
+                }).then(function (response) {
+                    me.cerrarModal();
+                    console.log(response);
+                    //me.bindData();
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            }
+        },
         regexCorreo: function regexCorreo(correo) {
             var re = new RegExp("^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$");
             return re.test(correo);
@@ -38771,6 +38890,73 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.flagErrorProyecto = true;
             return true;
         },
+        validarReunion: function validarReunion() {
+            var _this2 = this;
+
+            this.errorProyecto = [];
+            this.flagError = false;
+            this.errorPerfilMsg = "";
+
+            if (!this.modal_nombre) this.errorProyecto.push(1);else this.errorProyecto.push(0);
+            if (!this.modal_lugar) this.errorProyecto.push(1);else this.errorProyecto.push(0);
+            if (!this.modal_fecha) {
+                this.errorProyecto.push(1);
+                this.errorDateMsg = "Debe seleccionar una fecha";
+            } else this.errorProyecto.push(0);
+            if (!this.modal_hora) this.errorProyecto.push(1);else this.errorProyecto.push(0);
+
+            var flagCP1 = true,
+                flagCP2 = true,
+                flagCP3 = true;
+            var msg1 = "",
+                msg2 = "",
+                msg3 = "",
+                msg4 = "";
+            var i = 0,
+                j = 0;
+
+            if (this.arrayCarreraPerfil.length == 0) {
+                this.flagError = true;
+                msg4 = "Debe agregar carreras";
+            }
+
+            this.arrayCarreraPerfil.forEach(function (document) {
+                if ((!document[0] || !document[1] || !document[2]) && flagCP1) {
+                    msg1 = "Debe seleccionar todos los campos. ";
+                    flagCP1 = false;
+                    _this2.flagError = true;
+                }
+                if (document[1] > document[2] && flagCP2) {
+                    msg2 = "Rango invalido, seleccione rangos válidos. ";
+                    flagCP2 = false;
+                    _this2.flagError = true;
+                }
+                j = 0;
+                _this2.arrayCarreraPerfil.forEach(function (subDocument) {
+                    if (subDocument[0] && i != j && document[0] == subDocument[0] && flagCP3) {
+                        msg3 = "No puede seleccionar la misma carrera más de una vez.";
+                        flagCP3 = false;
+                        _this2.flagError = true;
+                    }
+                    j++;
+                });
+                i++;
+            });
+            this.errorPerfilMsg += msg1 + msg2 + msg3 + msg4;
+            var tempFlag = false;
+            if (this.errorProyecto.find(function (element) {
+                return element > 0;
+            }) == undefined) {
+                tempFlag = true;
+            }
+            if (tempFlag && !this.flagError) {
+                //No hay errores
+                this.flagErrorProyecto = false;
+                return false;
+            }
+            this.flagErrorProyecto = true;
+            return true;
+        },
         estadoProyecto: function estadoProyecto() {
             var me = this;
             if (me.modal_confirmar != me.modal_nombre) {
@@ -38800,6 +38986,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.modal2 = 0;
                 this.modal3 = 0;
                 this.modal5 = 0;
+                this.modal6 = 0;
                 this.id_proyecto = 0;
             }
         },
@@ -38902,6 +39089,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         this.modal_fecha_fin = data.fecha_fin;
                         break;
                     }
+                case "reunion":
+                    {
+                        this.modal6 = 1;
+                        this.id_proyecto = data.idProyecto;
+                        this.modal_descripcion = '';
+                        this.arrayEstudiantes = data;
+                        this.modal_lugar = '';
+                        this.modal_fecha = '';
+                        this.modal_hora = '';
+                        this.flagError = false;
+                        this.flagErrorProyecto = false;
+                        this.errorPerfilMsg = "";
+                    }
                 default:
                     break;
             }
@@ -38959,7 +39159,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (response) {
                 me.arrayEstudiantes = response.data;
                 me.arrayEstudiantes.forEach(function (element, index, array) {
+                    me.arrayEstudiantes[index].correoCompleto = element.correo;
                     me.arrayEstudiantes[index].correo = element.correo.substr(0, 8);
+                    me.arrayEstudiantes[index].nombreCompleto = element.nombres + " " + element.apellidos;
                 });
             }).catch(function (error) {
                 console.log(error);
@@ -39287,7 +39489,10 @@ var render = function() {
                                     "button",
                                     {
                                       staticClass: "btn btn-info btn-sm",
-                                      staticStyle: { width: "100%" },
+                                      staticStyle: {
+                                        "margin-bottom": "8px",
+                                        width: "100%"
+                                      },
                                       attrs: {
                                         type: "button",
                                         "data-toggle": "modal",
@@ -39313,6 +39518,37 @@ var render = function() {
                                       proyecto.notificaciones == 1
                                         ? _c("span", { attrs: { id: "badge" } })
                                         : _vm._e()
+                                    ]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "button-container" }, [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-info btn-sm",
+                                      staticStyle: { width: "100%" },
+                                      attrs: {
+                                        type: "button",
+                                        "data-toggle": "modal",
+                                        "data-target": "#meetingModal",
+                                        id: "meetingbutton"
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.abrirModal(
+                                            "estudiantes",
+                                            proyecto
+                                          )
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c("i", { staticClass: "icon-people" }),
+                                      _vm._v(" "),
+                                      _c("span", { staticClass: "btn-label" }, [
+                                        _vm._v("Reunión")
+                                      ])
                                     ]
                                   )
                                 ])
@@ -41109,6 +41345,312 @@ var render = function() {
                   )
                 ]
               )
+            ])
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          tabindex: "-1",
+          role: "dialog",
+          id: "meetingModal",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "modal-dialog modal-primary modal-lg",
+            attrs: { role: "document" }
+          },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                (_vm.add_edit_flag = 1)
+                  ? _c("div", [
+                      _c("h4", { staticClass: "modal-title" }, [
+                        _vm._v("Programar reunión")
+                      ])
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "close",
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": "modal",
+                      "aria-label": "Close"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.cerrarModal()
+                      }
+                    }
+                  },
+                  [
+                    _c("span", { attrs: { "aria-hidden": "true" } }, [
+                      _vm._v("×")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("form", [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "form-group row div-form",
+                      staticStyle: { "margin-bottom": "20px" }
+                    },
+                    [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "col-md-3 form-control-label",
+                          attrs: { for: "text-input" }
+                        },
+                        [_vm._v("Descripción (opcional)")]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-9" }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.modal_descripcion,
+                              expression: "modal_descripcion"
+                            }
+                          ],
+                          staticClass: "form-control inputs",
+                          attrs: {
+                            type: "text",
+                            placeholder: "Descripción de la reunión"
+                          },
+                          domProps: { value: _vm.modal_descripcion },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.modal_descripcion = $event.target.value
+                            }
+                          }
+                        })
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group row div-form" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "col-md-3 form-control-label",
+                        attrs: { for: "text-input" }
+                      },
+                      [_vm._v("Fecha y hora")]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-3" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.modal_fecha,
+                            expression: "modal_fecha"
+                          }
+                        ],
+                        attrs: { type: "date", value: "2017-06-01" },
+                        domProps: { value: _vm.modal_fecha },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.modal_fecha = $event.target.value
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.errorProyecto[1] == 1 || _vm.errorProyecto[1] == 2
+                        ? _c("div", [
+                            _c("p", { staticClass: "show error" }, [
+                              _vm._v(_vm._s(_vm.errorDateMsg))
+                            ])
+                          ])
+                        : _c("div", [
+                            _c("p", { staticClass: "hide error" }, [
+                              _vm._v(".")
+                            ])
+                          ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-3" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.modal_hora,
+                            expression: "modal_hora"
+                          }
+                        ],
+                        attrs: { type: "time", value: "09:00 am" },
+                        domProps: { value: _vm.modal_hora },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.modal_hora = $event.target.value
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.errorProyecto[2] == 1 || _vm.errorProyecto[2] == 2
+                        ? _c("div", [
+                            _c("p", { staticClass: "show error" }, [
+                              _vm._v(_vm._s(_vm.errorDateMsg))
+                            ])
+                          ])
+                        : _c("div", [
+                            _c("p", { staticClass: "hide error" }, [
+                              _vm._v(".")
+                            ])
+                          ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group row div-form" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "col-md-3 form-control-label",
+                        attrs: { for: "text-input" }
+                      },
+                      [_vm._v("Lugar o enlace")]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-9" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.modal_lugar,
+                            expression: "modal_lugar"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          placeholder: "Lugar o enlace de la reunión"
+                        },
+                        domProps: { value: _vm.modal_lugar },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.modal_lugar = $event.target.value
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "p",
+                        {
+                          staticClass: "error",
+                          class: {
+                            show: _vm.errorProyecto[3] == 1,
+                            hide: _vm.errorProyecto[3] != 1
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "Debe incluir un lugar o enlace para la reunión"
+                          )
+                        ]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group row div-form" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "col-md-3 form-control-label",
+                        attrs: { for: "text-input" }
+                      },
+                      [_vm._v("Miembros inscritos")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "col-md-9" },
+                      _vm._l(_vm.arrayEstudiantes, function(estudiante) {
+                        return _c("div", [
+                          _c("p", {
+                            domProps: {
+                              textContent: _vm._s(estudiante.nombreCompleto)
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("p", {
+                            domProps: {
+                              textContent: _vm._s(estudiante.correoCompleto)
+                            }
+                          })
+                        ])
+                      }),
+                      0
+                    )
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: { type: "button", "data-dismiss": "modal" },
+                    on: {
+                      click: function($event) {
+                        return _vm.cerrarModal()
+                      }
+                    }
+                  },
+                  [_vm._v("Cerrar")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": _vm.flagErrorProyecto ? "" : "modal"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.enviarReunion()
+                      }
+                    }
+                  },
+                  [_vm._v("Aceptar")]
+                )
+              ])
             ])
           ]
         )

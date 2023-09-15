@@ -47,10 +47,17 @@
                                             </button>
                                         </div>
                                         <div class="button-container">
-                                            <button type="button" @click="abrirModal('estudiantes', proyecto)" data-toggle="modal" data-target="#membersModal" class="btn btn-info btn-sm" id="membersbutton" style="width: 100%;">
+                                            <button type="button" @click="abrirModal('estudiantes', proyecto)" data-toggle="modal" data-target="#membersModal" class="btn btn-info btn-sm" id="membersbutton" style="margin-bottom: 8px; width: 100%;">
                                                 <i class="icon-people"></i>
                                                 <span class="btn-label">Miembros</span>
                                                 <span id="badge" v-if="proyecto.notificaciones == 1" ></span>
+                                            </button>
+                                        </div>
+                                        <div class="button-container">
+                                            <button type="button" @click="abrirModal('estudiantes', proyecto)" data-toggle="modal" data-target="#meetingModal" class="btn btn-info btn-sm" id="meetingbutton" style="width: 100%;">
+                                                <i class="icon-people"></i>
+                                                <span class="btn-label">Reunión</span>
+                                                <!--<span id="badge" v-if="proyecto.notificaciones == 1" ></span>-->
                                             </button>
                                         </div>
                                     </td>
@@ -449,6 +456,79 @@
                 <!-- /.modal-dialog -->
             </div>
             <!--Fin del modal-->
+            <!--Inicio del modal programar reunión-->
+            <div class="modal fade" tabindex="-1" role="dialog" id="meetingModal" aria-hidden="true">
+                <div class="modal-dialog modal-primary modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div v-if="add_edit_flag = 1">
+                                <h4 class="modal-title">Programar reunión</h4>
+                            </div>
+                            <!--<div v-else-if="add_edit_flag = 2">
+                                <h4 class="modal-title">Programar reunión</h4>
+                            </div>-->
+                            <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group row div-form" style="margin-bottom: 20px">
+                                    <label class="col-md-3 form-control-label" for="text-input">Descripción (opcional)</label>
+                                    <div class="col-md-9">
+                                        <input type="text" v-model="modal_descripcion" class="form-control inputs" placeholder="Descripción de la reunión">
+                                        <!--<p :class="{show: errorProyecto[0] == 1, hide: errorProyecto[0] != 1}" class="error">El nombre no puede ir vacío</p>-->
+                                    </div>
+                                </div>
+                                <div class="form-group row div-form">
+                                    <label class="col-md-3 form-control-label" for="text-input">Fecha y hora</label>
+                                    <div class="col-md-3">
+                                        <input type="date" value="2017-06-01" v-model="modal_fecha">
+                                        <div v-if="errorProyecto[1] == 1 || errorProyecto[1] == 2">
+                                            <p class="show error">{{errorDateMsg}}</p>
+                                        </div>
+                                        <div v-else>
+                                            <p class="hide error">.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="time" value="09:00 am" v-model="modal_hora">
+                                        <div v-if="errorProyecto[2] == 1 || errorProyecto[2] == 2">
+                                            <p class="show error">{{errorDateMsg}}</p>
+                                        </div>
+                                        <div v-else>
+                                            <p class="hide error">.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row div-form">
+                                    <label class="col-md-3 form-control-label" for="text-input">Lugar o enlace</label>
+                                    <div class="col-md-9">
+                                        <input type="text" v-model="modal_lugar" class="form-control" placeholder="Lugar o enlace de la reunión">
+                                        <p :class="{show: errorProyecto[3] == 1, hide: errorProyecto[3] != 1}" class="error">Debe incluir un lugar o enlace para la reunión</p>
+                                    </div>
+                                </div>
+                                <div class="form-group row div-form">
+                                    <label class="col-md-3 form-control-label" for="text-input">Miembros inscritos</label>
+                                    <div class="col-md-9">
+                                        <div v-for="estudiante in arrayEstudiantes" >
+                                            <p v-text="estudiante.nombreCompleto"></p>
+                                            <p v-text="estudiante.correoCompleto"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="cerrarModal()">Cerrar</button>
+                            <button type="button" class="btn btn-primary" v-bind:data-dismiss="flagErrorProyecto ? '' : 'modal' " @click ="enviarReunion()">Aceptar</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!--Fin del modal-->
             <footer class="app-footer" id="footer" style="display: flex; flex-direction: column; justify-content: center; font-size: 15px; padding: 10px 0px">
                 <span><a target="_blank" href="http://www.uca.edu.sv/servicio-social/">Centro de Servicio Social | UCA</a> &copy; 2021</span>
                 <span>Desarrollado por <a href="#"></a>Grupo de Horas Sociales</span>
@@ -480,6 +560,7 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                 modal3 : 0,
                 modal4 : 0,
                 modal5 : 0,
+                modal6 : 0,
                 id_proyecto : 0,  
                 id_estudiante : 0,              
                 modal_encargado : '',
@@ -497,6 +578,10 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                 modal_perfil : 0,
                 modal_createdAt : '',
                 modal_confirmar : '',
+                modal_descripcion : '',
+                modal_fecha : '',
+                modal_hora : '',
+                modal_lugar : '',
                 carnet : '',
                 nombre_completo : '',
                 errorProyecto : [''],
@@ -621,6 +706,40 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                     }); 
                 }
             },
+            enviarReunion(){
+                if(this.validarReunion()){
+                    return;
+                }
+                let me = this;
+                /*axios.post(`${API_HOST}/sendMeetingMail`, {
+                    'project' : this.modal_descripcion, 
+                    'students' : this.arrayEstudiantes,
+                    'place' : this.modal_lugar ,
+                    'date' : this.modal_fecha ,
+                    'hour' : this.modal_hora 
+                }).then(function (response) {
+                    me.cerrarModal();
+                    console.log(response);
+                    //me.bindData();
+                }).catch(function (error) {
+                    console.log(error);
+                });*/
+                if(this.id_proyecto){
+                    axios.post(`${API_HOST}/sendMeetingMail`, {
+                        'project' : this.modal_descripcion, 
+                        'students' : this.arrayEstudiantes,
+                        'place' : this.modal_lugar ,
+                        'date' : this.modal_fecha ,
+                        'hour' : this.modal_hora 
+                    }).then(function (response) {
+                        me.cerrarModal();
+                        console.log(response);
+                        //me.bindData();
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                }
+            },
             regexCorreo(correo){
                 let re = new RegExp("^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$");
                 return re.test(correo)
@@ -706,6 +825,67 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                 this.flagErrorProyecto = true
                 return true;
             },
+            validarReunion(){
+                this.errorProyecto = [];
+                this.flagError = false;
+                this.errorPerfilMsg = "";
+
+                if(!this.modal_nombre) this.errorProyecto.push(1);
+                else this.errorProyecto.push(0);
+                if(!this.modal_lugar) this.errorProyecto.push(1);
+                else this.errorProyecto.push(0);
+                if(!this.modal_fecha) {
+                    this.errorProyecto.push(1);
+                    this.errorDateMsg = "Debe seleccionar una fecha";
+                }
+                else this.errorProyecto.push(0);
+                if(!this.modal_hora) this.errorProyecto.push(1);
+                else this.errorProyecto.push(0);
+                
+                var flagCP1 = true, flagCP2 = true, flagCP3 = true;
+                var msg1 = "", msg2 = "", msg3 = "", msg4 = "";
+                var i = 0, j = 0;
+
+                if(this.arrayCarreraPerfil.length == 0){
+                    this.flagError = true
+                    msg4 = "Debe agregar carreras"
+                }
+                
+                this.arrayCarreraPerfil.forEach(document => {
+                    if((!document[0] || !document[1] || !document[2]) && flagCP1){
+                        msg1 = "Debe seleccionar todos los campos. ";
+                        flagCP1 = false;
+                        this.flagError = true;
+                    }
+                    if(document[1] > document[2] && flagCP2){
+                        msg2 = "Rango invalido, seleccione rangos válidos. ";
+                        flagCP2 = false;
+                        this.flagError = true;
+                    }
+                    j = 0;
+                    this.arrayCarreraPerfil.forEach(subDocument => {
+                        if(subDocument[0] && (i != j && document[0] == subDocument[0]) && flagCP3){
+                            msg3 = "No puede seleccionar la misma carrera más de una vez."
+                            flagCP3 = false;
+                            this.flagError = true;
+                        }
+                        j++
+                    })
+                    i++;
+                })
+                this.errorPerfilMsg += msg1 + msg2 + msg3 + msg4;
+                var tempFlag = false
+                if(this.errorProyecto.find(element => element > 0) == undefined){
+                    tempFlag = true
+                }
+                if(tempFlag && !this.flagError){
+                    //No hay errores
+                    this.flagErrorProyecto = false
+                    return false;
+                } 
+                this.flagErrorProyecto = true
+                return true;
+            },
             estadoProyecto(){
                 let me = this;
                 if(me.modal_confirmar != me.modal_nombre){
@@ -737,6 +917,7 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                     this.modal2 = 0;
                     this.modal3 = 0;
                     this.modal5 = 0;
+                    this.modal6 = 0;
                     this.id_proyecto = 0;
                 }
             },
@@ -837,6 +1018,19 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                             this.modal_fecha_fin = data.fecha_fin;
                             break;
                         }
+                    case "reunion":
+                        {
+                            this.modal6 = 1;
+                            this.id_proyecto = data.idProyecto;
+                            this.modal_descripcion = ''; 
+                            this.arrayEstudiantes = data;
+                            this.modal_lugar = '';
+                            this.modal_fecha = '';
+                            this.modal_hora = '';
+                            this.flagError = false;
+                            this.flagErrorProyecto = false;
+                            this.errorPerfilMsg = "";
+                        }
                     default:
                         break;
                 }
@@ -897,7 +1091,9 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                 }).then(function (response){
                     me.arrayEstudiantes = response.data;
                     me.arrayEstudiantes.forEach(function(element, index, array){
+                        me.arrayEstudiantes[index].correoCompleto = element.correo;
                         me.arrayEstudiantes[index].correo = element.correo.substr(0, 8);
+                        me.arrayEstudiantes[index].nombreCompleto = element.nombres + " " + element.apellidos;
                     })
                 })
                 .catch(function (error) {
