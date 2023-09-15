@@ -38777,30 +38777,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         enviarReunion: function enviarReunion() {
-            if (this.validarReunion()) {
+            if (!this.validarReunion()) {
                 return;
             }
             var me = this;
-            /*axios.post(`${API_HOST}/sendMeetingMail`, {
-                'project' : this.modal_descripcion, 
-                'students' : this.arrayEstudiantes,
-                'place' : this.modal_lugar ,
-                'date' : this.modal_fecha ,
-                'hour' : this.modal_hora 
-            }).then(function (response) {
-                me.cerrarModal();
-                console.log(response);
-                //me.bindData();
-            }).catch(function (error) {
-                console.log(error);
-            });*/
             if (this.id_proyecto) {
                 axios.post(__WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__["a" /* API_HOST */] + '/sendMeetingMail', {
-                    'project': this.modal_descripcion,
-                    'students': this.arrayEstudiantes,
-                    'place': this.modal_lugar,
-                    'date': this.modal_fecha,
-                    'hour': this.modal_hora
+                    'proyecto': this.modal_descripcion,
+                    'estudiantes': this.arrayEstudiantes.map(function (e) {
+                        return e.correoCompleto;
+                    }),
+                    'lugar': this.modal_lugar,
+                    'fecha': this.modal_fecha,
+                    'hora': this.modal_hora
                 }).then(function (response) {
                     me.cerrarModal();
                     console.log(response);

@@ -707,30 +707,17 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                 }
             },
             enviarReunion(){
-                if(this.validarReunion()){
+                if(!this.validarReunion()){
                     return;
                 }
                 let me = this;
-                /*axios.post(`${API_HOST}/sendMeetingMail`, {
-                    'project' : this.modal_descripcion, 
-                    'students' : this.arrayEstudiantes,
-                    'place' : this.modal_lugar ,
-                    'date' : this.modal_fecha ,
-                    'hour' : this.modal_hora 
-                }).then(function (response) {
-                    me.cerrarModal();
-                    console.log(response);
-                    //me.bindData();
-                }).catch(function (error) {
-                    console.log(error);
-                });*/
                 if(this.id_proyecto){
                     axios.post(`${API_HOST}/sendMeetingMail`, {
-                        'project' : this.modal_descripcion, 
-                        'students' : this.arrayEstudiantes,
-                        'place' : this.modal_lugar ,
-                        'date' : this.modal_fecha ,
-                        'hour' : this.modal_hora 
+                        'proyecto' : this.modal_descripcion, 
+                        'estudiantes' : this.arrayEstudiantes.map(e => e.correoCompleto),
+                        'lugar' : this.modal_lugar ,
+                        'fecha' : this.modal_fecha ,
+                        'hora' : this.modal_hora 
                     }).then(function (response) {
                         me.cerrarModal();
                         console.log(response);
