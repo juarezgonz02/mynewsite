@@ -210,7 +210,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr v-for="acp in arrayCarreraPerfil" :key="acp">
+                                                <tr v-for="acp in arrayCarreraPerfil" :key="acp.id">
                                                     <td>
                                                         <select class="form-control custom-select" v-model="acp[0]">
                                                             <option v-for="carrera in arrayCarreras" :value="carrera.idCarrera" :key="carrera.idCarrera">{{carrera.nombre}}</option>
