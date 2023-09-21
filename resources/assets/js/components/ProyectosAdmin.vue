@@ -54,7 +54,7 @@
                                             </button>
                                         </div>
                                         <div class="button-container">
-                                            <button type="button" @click="abrirModal('estudiantes', proyecto)" data-toggle="modal" data-target="#meetingModal" class="btn btn-info btn-sm" id="meetingbutton" style="width: 100%;">
+                                            <button type="button" @click="abrirModal('reunion', proyecto)" data-toggle="modal" data-target="#meetingModal" class="btn btn-info btn-sm" id="meetingbutton" style="width: 100%;">
                                                 <i class="icon-people"></i>
                                                 <span class="btn-label">Reunión</span>
                                                 <!--<span id="badge" v-if="proyecto.notificaciones == 1" ></span>-->
@@ -473,27 +473,21 @@
                         </div>
                         <div class="modal-body">
                             <form>
-                                <div class="form-group row div-form" style="margin-bottom: 20px">
-                                    <label class="col-md-3 form-control-label" for="text-input">Descripción (opcional)</label>
-                                    <div class="col-md-9">
-                                        <input type="text" v-model="modal_descripcion" class="form-control inputs" placeholder="Descripción de la reunión">
-                                        <!--<p :class="{show: errorProyecto[0] == 1, hide: errorProyecto[0] != 1}" class="error">El nombre no puede ir vacío</p>-->
-                                    </div>
-                                </div>
                                 <div class="form-group row div-form">
                                     <label class="col-md-3 form-control-label" for="text-input">Fecha y hora</label>
                                     <div class="col-md-3">
                                         <input type="date" value="2017-06-01" v-model="modal_fecha">
-                                        <div v-if="errorProyecto[1] == 1 || errorProyecto[1] == 2">
+                                        <p :class="{show: errorProyecto[0] == 1, hide: errorProyecto[0] != 1}" class="error">El nombre no puede ir vacío</p>
+                                        <!--<div v-if="errorProyecto[1] == 1">
                                             <p class="show error">{{errorDateMsg}}</p>
                                         </div>
                                         <div v-else>
                                             <p class="hide error">.</p>
-                                        </div>
+                                        </div>-->
                                     </div>
                                     <div class="col-md-3">
                                         <input type="time" value="09:00 am" v-model="modal_hora">
-                                        <div v-if="errorProyecto[2] == 1 || errorProyecto[2] == 2">
+                                        <div v-if="errorProyecto[1] == 1 || errorProyecto[1] == 2">
                                             <p class="show error">{{errorDateMsg}}</p>
                                         </div>
                                         <div v-else>
@@ -505,7 +499,13 @@
                                     <label class="col-md-3 form-control-label" for="text-input">Lugar o enlace</label>
                                     <div class="col-md-9">
                                         <input type="text" v-model="modal_lugar" class="form-control" placeholder="Lugar o enlace de la reunión">
-                                        <p :class="{show: errorProyecto[3] == 1, hide: errorProyecto[3] != 1}" class="error">Debe incluir un lugar o enlace para la reunión</p>
+                                        <p :class="{show: errorProyecto[2] == 1, hide: errorProyecto[2] != 1}" class="error">Debe incluir un lugar o enlace para la reunión</p>
+                                    </div>
+                                </div>
+                                <div class="form-group row div-form" style="margin-bottom: 20px">
+                                    <label class="col-md-3 form-control-label" for="text-input">Motivo o descripción de la reunión (opcional)</label>
+                                    <div class="col-md-9">
+                                        <textarea type="text" v-model="modal_descripcion" class="form-control" style="resize: none;" placeholder="Motivo o descripción de la reunión"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group row div-form">
@@ -514,6 +514,12 @@
                                         <div v-for="estudiante in arrayEstudiantes" >
                                             <p v-text="estudiante.nombreCompleto"></p>
                                             <p v-text="estudiante.correoCompleto"></p>
+                                        </div>
+                                        <div v-if="flagError">
+                                            <P class="show error">{{errorPerfilMsg}}</P>
+                                        </div>
+                                        <div v-else>
+                                            <p class="hide error">.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -539,6 +545,7 @@
 <script>
 import {API_HOST} from '../constants/endpoint.js';
 import {API_HOST_ASSETS} from '../constants/endpoint.js';
+import Swal from 'sweetalert2';
     export default {
         data(){
             return{
@@ -707,7 +714,7 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                 }
             },
             enviarReunion(){
-                if(!this.validarReunion()){
+                if(this.validarReunion()){
                     return;
                 }
                 let me = this;
@@ -719,10 +726,18 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                         'fecha' : this.modal_fecha ,
                         'hora' : this.modal_hora 
                     }).then(function (response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Correo enviado',
+                            text: 'El correo con información de la reunión fue enviado exitosamente',
+                        });
                         me.cerrarModal();
-                        console.log(response);
-                        //me.bindData();
                     }).catch(function (error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Correo no enviado',
+                            text: 'El correo con la información de la reunión no fue enviado',
+                        });
                         console.log(error);
                     });
                 }
@@ -817,10 +832,6 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                 this.flagError = false;
                 this.errorPerfilMsg = "";
 
-                if(!this.modal_nombre) this.errorProyecto.push(1);
-                else this.errorProyecto.push(0);
-                if(!this.modal_lugar) this.errorProyecto.push(1);
-                else this.errorProyecto.push(0);
                 if(!this.modal_fecha) {
                     this.errorProyecto.push(1);
                     this.errorDateMsg = "Debe seleccionar una fecha";
@@ -828,39 +839,24 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                 else this.errorProyecto.push(0);
                 if(!this.modal_hora) this.errorProyecto.push(1);
                 else this.errorProyecto.push(0);
+                if(!this.modal_lugar) this.errorProyecto.push(1);
+                else this.errorProyecto.push(0);
                 
                 var flagCP1 = true, flagCP2 = true, flagCP3 = true;
                 var msg1 = "", msg2 = "", msg3 = "", msg4 = "";
                 var i = 0, j = 0;
 
-                if(this.arrayCarreraPerfil.length == 0){
+                if(this.arrayEstudiantes.length == 0){
+                    this.flagError = true
+                    this.errorPerfilMsg = "El proyecto no tiene estudiantes inscritos"
+                }
+
+                /*if(this.arrayCarreraPerfil.length == 0){
                     this.flagError = true
                     msg4 = "Debe agregar carreras"
-                }
-                
-                this.arrayCarreraPerfil.forEach(document => {
-                    if((!document[0] || !document[1] || !document[2]) && flagCP1){
-                        msg1 = "Debe seleccionar todos los campos. ";
-                        flagCP1 = false;
-                        this.flagError = true;
-                    }
-                    if(document[1] > document[2] && flagCP2){
-                        msg2 = "Rango invalido, seleccione rangos válidos. ";
-                        flagCP2 = false;
-                        this.flagError = true;
-                    }
-                    j = 0;
-                    this.arrayCarreraPerfil.forEach(subDocument => {
-                        if(subDocument[0] && (i != j && document[0] == subDocument[0]) && flagCP3){
-                            msg3 = "No puede seleccionar la misma carrera más de una vez."
-                            flagCP3 = false;
-                            this.flagError = true;
-                        }
-                        j++
-                    })
-                    i++;
-                })
-                this.errorPerfilMsg += msg1 + msg2 + msg3 + msg4;
+                }*/
+
+                //this.errorPerfilMsg += msg1 + msg2 + msg3 + msg4;
                 var tempFlag = false
                 if(this.errorProyecto.find(element => element > 0) == undefined){
                     tempFlag = true
@@ -869,8 +865,8 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                     //No hay errores
                     this.flagErrorProyecto = false
                     return false;
-                } 
-                this.flagErrorProyecto = true
+                }
+                this.flagErrorProyecto = true;
                 return true;
             },
             estadoProyecto(){
@@ -1010,13 +1006,14 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                             this.modal6 = 1;
                             this.id_proyecto = data.idProyecto;
                             this.modal_descripcion = ''; 
-                            this.arrayEstudiantes = data;
+                            this.arrayEstudiantes = this.getEstudiantes();
                             this.modal_lugar = '';
                             this.modal_fecha = '';
                             this.modal_hora = '';
                             this.flagError = false;
                             this.flagErrorProyecto = false;
                             this.errorPerfilMsg = "";
+                            break;
                         }
                     default:
                         break;

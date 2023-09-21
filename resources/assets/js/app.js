@@ -8,6 +8,9 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+//import Vue from 'vue';
+import VueSweetalert2 from 'vue-sweetalert2';
+//import Swal from 'sweetalert2'
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -26,6 +29,7 @@ Vue.component('admin-proyectos', require('./components/ProyectosAdmin.vue'));
 Vue.component('admin-estudiantes', require('./components/EstudiantesAdmin.vue'));
 Vue.component('spinner', require('./components/Spinner.vue'));
 Vue.component('table-loader', require('./components/TableLoader.vue'));
+Vue.use(VueSweetalert2);
 
 
 const app = new Vue({
