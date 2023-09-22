@@ -38628,7 +38628,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -38804,7 +38803,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
             var me = this;
             if (this.id_proyecto) {
-                console.log(this.proyecto);
                 axios.post(__WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__["a" /* API_HOST */] + '/sendMeetingMail', {
                     'nombre_proyecto': this.proyecto,
                     'descripcion': this.modal_descripcion,

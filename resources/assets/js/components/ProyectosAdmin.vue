@@ -57,7 +57,6 @@
                                             <button type="button" @click="abrirModal('reunion', proyecto)" data-toggle="modal" data-target="#meetingModal" class="btn btn-info btn-sm" id="meetingbutton" style="width: 100%;">
                                                 <i class="icon-people"></i>
                                                 <span class="btn-label">Reunión</span>
-                                                <!--<span id="badge" v-if="proyecto.notificaciones == 1" ></span>-->
                                             </button>
                                         </div>
                                     </td>
@@ -716,7 +715,6 @@ import Swal from 'sweetalert2';
                 }
                 let me = this;
                 if(this.id_proyecto){
-                    console.log(this.proyecto);
                     axios.post(`${API_HOST}/sendMeetingMail`, {
                         'nombre_proyecto' : this.proyecto,
                         'descripcion' : this.modal_descripcion, 
