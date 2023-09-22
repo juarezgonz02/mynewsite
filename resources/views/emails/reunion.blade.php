@@ -8,12 +8,12 @@
 </head>
 <body>
     <div style="color:black">
-        <p> Centro de servicio social Programación de reunión. {{ $nombre_proyecto }}</p>
+        <p> Centro de servicio social Programación de reunión. <b>{{ $nombre_proyecto }}</b></p>
         <p>
-            Se le notifica que se ha programado una reunion de discusión del proyecto {{ $nombre_proyecto }}, con los siguientes detalles:
+            Se le notifica que se ha programado una reunion de discusión del proyecto <b>{{ $nombre_proyecto }}</b>, con los siguientes detalles:
             </p><br>
         <p>
-            <b>Descripción: </b> {{$descripcion}} </p>
+            <b>Motivo: </b> {{$descripcion}} </p>
         <p> 
             <b>Lugar:</b> {{ $lugar }}
         </p>
