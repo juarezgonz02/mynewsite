@@ -240,8 +240,8 @@ class ProyectoController extends Controller
                 function($message) use ($student){
                     # TEST 
                     
-                    #$message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                    $message->from("00009220@uca.edu.sv", "Centro de Servicio Social");
+                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+                    #$message->from("00009220@uca.edu.sv", "Centro de Servicio Social");
                     $message->to($student);
                     $message->subject("El encargado del proyecto solicitó una reunion.");
                 }
@@ -254,8 +254,8 @@ class ProyectoController extends Controller
             'emails.reunion',
             ['nombre_proyecto' => $project, 'lugar' => $place, 'fecha' => $date, 'hour' => $hour,'encargado' => $manager], 
             function($message) use ($manager){
-                #$message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                $message->from("00009220@uca.edu.sv", "Centro de Servicio Social");
+                $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+                #$message->from("00009220@uca.edu.sv", "Centro de Servicio Social");
                 $message->to($manager->correo);
                 $message->subject("Copia Solicitud de Reunion.");
             }

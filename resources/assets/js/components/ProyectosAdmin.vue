@@ -464,9 +464,6 @@
                             <div v-if="add_edit_flag = 1">
                                 <h4 class="modal-title">Programar reunión</h4>
                             </div>
-                            <!--<div v-else-if="add_edit_flag = 2">
-                                <h4 class="modal-title">Programar reunión</h4>
-                            </div>-->
                             <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()" aria-label="Close">
                                 <span aria-hidden="true">×</span>
                             </button>
@@ -474,16 +471,16 @@
                         <div class="modal-body">
                             <form>
                                 <div class="form-group row div-form">
+                                    <label class="col-md-3 form-control-label" for="text-input">Nombre del proyecto</label>
+                                    <div class="col-md-9">
+                                        <p v-text="proyecto"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group row div-form">
                                     <label class="col-md-3 form-control-label" for="text-input">Fecha y hora</label>
                                     <div class="col-md-3">
                                         <input type="date" value="2017-06-01" v-model="modal_fecha">
                                         <p :class="{show: errorProyecto[0] == 1, hide: errorProyecto[0] != 1}" class="error">El nombre no puede ir vacío</p>
-                                        <!--<div v-if="errorProyecto[1] == 1">
-                                            <p class="show error">{{errorDateMsg}}</p>
-                                        </div>
-                                        <div v-else>
-                                            <p class="hide error">.</p>
-                                        </div>-->
                                     </div>
                                     <div class="col-md-3">
                                         <input type="time" value="09:00 am" v-model="modal_hora">
@@ -720,7 +717,8 @@ import Swal from 'sweetalert2';
                 let me = this;
                 if(this.id_proyecto){
                     axios.post(`${API_HOST}/sendMeetingMail`, {
-                        'proyecto' : this.modal_descripcion, 
+                        'proyecto' : this.nombre,
+                        'descripcion' : this.modal_descripcion, 
                         'estudiantes' : this.arrayEstudiantes.map(e => e.correoCompleto),
                         'lugar' : this.modal_lugar ,
                         'fecha' : this.modal_fecha ,
@@ -728,15 +726,15 @@ import Swal from 'sweetalert2';
                     }).then(function (response) {
                         Swal.fire({
                             icon: 'success',
-                            title: 'Correo enviado',
-                            text: 'El correo con información de la reunión fue enviado exitosamente',
+                            title: 'Correos enviados',
+                            text: 'Los correos con información de la reunión fue enviado exitosamente.',
                         });
                         me.cerrarModal();
                     }).catch(function (error) {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Correo no enviado',
-                            text: 'El correo con la información de la reunión no fue enviado',
+                            title: 'Correos no enviados',
+                            text: 'Los correos con la información de la reunión no fue enviado. Intente nuevamente.',
                         });
                         console.log(error);
                     });
@@ -841,22 +839,12 @@ import Swal from 'sweetalert2';
                 else this.errorProyecto.push(0);
                 if(!this.modal_lugar) this.errorProyecto.push(1);
                 else this.errorProyecto.push(0);
-                
-                var flagCP1 = true, flagCP2 = true, flagCP3 = true;
-                var msg1 = "", msg2 = "", msg3 = "", msg4 = "";
-                var i = 0, j = 0;
 
                 if(this.arrayEstudiantes.length == 0){
                     this.flagError = true
                     this.errorPerfilMsg = "El proyecto no tiene estudiantes inscritos"
                 }
-
-                /*if(this.arrayCarreraPerfil.length == 0){
-                    this.flagError = true
-                    msg4 = "Debe agregar carreras"
-                }*/
-
-                //this.errorPerfilMsg += msg1 + msg2 + msg3 + msg4;
+                
                 var tempFlag = false
                 if(this.errorProyecto.find(element => element > 0) == undefined){
                     tempFlag = true
@@ -1005,6 +993,7 @@ import Swal from 'sweetalert2';
                         {
                             this.modal6 = 1;
                             this.id_proyecto = data.idProyecto;
+                            this.proyecto = data.nombre;
                             this.modal_descripcion = ''; 
                             this.arrayEstudiantes = this.getEstudiantes();
                             this.modal_lugar = '';
@@ -1013,6 +1002,8 @@ import Swal from 'sweetalert2';
                             this.flagError = false;
                             this.flagErrorProyecto = false;
                             this.errorPerfilMsg = "";
+                            this.errorProyecto = [];
+                            this.errorPerfilMsg = '';
                             break;
                         }
                     default:
