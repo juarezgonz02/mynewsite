@@ -223,7 +223,8 @@ class ProyectoController extends Controller
     public function postSendMeetingEmails(Request $request) {
         $manager = Auth()->user();
 
-        $project = $request -> proyecto;
+        $project = $request -> nombre_proyecto;
+        $description = $request -> descripcion;
         $students = $request -> estudiantes;
         $place = $request -> lugar;
         $date = $request -> fecha;
@@ -236,7 +237,7 @@ class ProyectoController extends Controller
         foreach ($students as $student) {
             Mail::send(
                 'emails.reunion',
-                ['nombre_proyecto' => $project, 'lugar' => $place, 'fecha' => $date, 'hour' => $hour,'encargado' => $manager], 
+                ['nombre_proyecto' => $project, 'descripcion' => $description, 'lugar' => $place, 'fecha' => $date, 'hour' => $hour,'encargado' => $manager], 
                 function($message) use ($student){
                     # TEST 
                     
@@ -252,7 +253,7 @@ class ProyectoController extends Controller
         // Envia una copia al encargado del proyecto
         Mail::send(
             'emails.reunion',
-            ['nombre_proyecto' => $project, 'lugar' => $place, 'fecha' => $date, 'hour' => $hour,'encargado' => $manager], 
+            ['nombre_proyecto' => $project, 'descripcion' => $description, 'lugar' => $place, 'fecha' => $date, 'hour' => $hour,'encargado' => $manager], 
             function($message) use ($manager){
                 $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
                 #$message->from("00009220@uca.edu.sv", "Centro de Servicio Social");

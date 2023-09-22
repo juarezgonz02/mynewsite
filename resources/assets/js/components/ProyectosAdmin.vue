@@ -716,8 +716,9 @@ import Swal from 'sweetalert2';
                 }
                 let me = this;
                 if(this.id_proyecto){
+                    console.log(this.proyecto);
                     axios.post(`${API_HOST}/sendMeetingMail`, {
-                        'proyecto' : this.nombre,
+                        'nombre_proyecto' : this.proyecto,
                         'descripcion' : this.modal_descripcion, 
                         'estudiantes' : this.arrayEstudiantes.map(e => e.correoCompleto),
                         'lugar' : this.modal_lugar ,
