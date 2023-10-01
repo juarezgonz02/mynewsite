@@ -221,9 +221,10 @@ class ProyectoController extends Controller
     }
 
     public function postSendMeetingEmails(Request $request) {
-        $manager = Auth()->user();
-
-        $project = $request -> nombre_proyecto;
+        
+        $manager = $request -> encargado;
+        $manager_mail = $request -> encargado_correo;
+        $project = $request -> proyecto;
         $description = $request -> descripcion;
         $students = $request -> estudiantes;
         $place = $request -> lugar;
@@ -241,8 +242,8 @@ class ProyectoController extends Controller
                 function($message) use ($student){
                     # TEST 
                     
-                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                    #$message->from("00009220@uca.edu.sv", "Centro de Servicio Social");
+                    #$message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+                    $message->from("00126320@uca.edu.sv", "Centro de Servicio Social");
                     $message->to($student);
                     $message->subject("El encargado del proyecto solicitó una reunion.");
                 }
@@ -254,10 +255,10 @@ class ProyectoController extends Controller
         Mail::send(
             'emails.reunion',
             ['nombre_proyecto' => $project, 'descripcion' => $description, 'lugar' => $place, 'fecha' => $date, 'hour' => $hour,'encargado' => $manager], 
-            function($message) use ($manager){
+            function($message) use ($manager, $manager_mail ){
                 $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
                 #$message->from("00009220@uca.edu.sv", "Centro de Servicio Social");
-                $message->to($manager->correo);
+                $message->to($manager_mail);
                 $message->subject("Copia Solicitud de Reunion.");
             }
         );

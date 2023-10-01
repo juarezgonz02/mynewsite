@@ -717,7 +717,9 @@ import Swal from 'sweetalert2';
                 if(this.id_proyecto){
                     axios.post(`${API_HOST}/sendMeetingMail`, {
                         'nombre_proyecto' : this.proyecto,
-                        'descripcion' : this.modal_descripcion, 
+                        'descripcion' : this.modal_descripcion,
+                        'encargado' : this.modal_encargado,
+                        "encargado_correo": this.modal_correo,
                         'estudiantes' : this.arrayEstudiantes.map(e => e.correoCompleto),
                         'lugar' : this.modal_lugar ,
                         'fecha' : this.modal_fecha ,
@@ -994,6 +996,8 @@ import Swal from 'sweetalert2';
                             this.id_proyecto = data.idProyecto;
                             this.proyecto = data.nombre;
                             this.modal_descripcion = ''; 
+                            this.modal_encargado = data.encargado;
+                            this.modal_correo = data.correo_encargado;
                             this.arrayEstudiantes = this.getEstudiantes();
                             this.modal_lugar = '';
                             this.modal_fecha = '';

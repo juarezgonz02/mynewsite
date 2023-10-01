@@ -24,8 +24,7 @@
             <b>Hora:</b> {{ $hour }}
         </p>
         <p> 
-            <b>Encargado:</b> {{ $encargado -> nombres }} {{ $encargado -> apellidos }}
-        </p>
+            <b>Encargado:</b> {{ $encargado}}        </p>
         <p>
             Atentamente, Centro de Servicio Social.
         </p><br><br>

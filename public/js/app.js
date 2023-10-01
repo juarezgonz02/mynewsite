@@ -38806,6 +38806,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 axios.post(__WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__["a" /* API_HOST */] + '/sendMeetingMail', {
                     'nombre_proyecto': this.proyecto,
                     'descripcion': this.modal_descripcion,
+                    'encargado': this.modal_encargado,
+                    "encargado_correo": this.modal_correo,
                     'estudiantes': this.arrayEstudiantes.map(function (e) {
                         return e.correoCompleto;
                     }),
@@ -39078,6 +39080,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         this.id_proyecto = data.idProyecto;
                         this.proyecto = data.nombre;
                         this.modal_descripcion = '';
+                        this.modal_encargado = data.encargado;
+                        this.modal_correo = data.correo_encargado;
                         this.arrayEstudiantes = this.getEstudiantes();
                         this.modal_lugar = '';
                         this.modal_fecha = '';
