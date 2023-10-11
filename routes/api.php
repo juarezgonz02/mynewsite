@@ -49,8 +49,8 @@ Route::middleware(['auth:api', ])->group(function () {
             Route::post('/storeProyecto', 'ProyectoController@store');
             Route::post('/postApplyStudent', 'Api\ProyectoController@postApplyStudent');
 
-            // REUNION 
-            Route::post('/sendMeetingMail', 'Api\ProyectoController@postSendMeetingEmails');
+// REUNION 
+Route::post('/sendMeetingMail', 'Api\ProyectoController@postSendMeetingEmails');           
             
             // ESTUDIANTES
             Route::get('/getAllStudents', 'Api\EstudianteController@getAllStudents');

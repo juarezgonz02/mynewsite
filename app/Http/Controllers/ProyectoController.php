@@ -221,45 +221,33 @@ class ProyectoController extends Controller
     }
 
     public function postSendMeetingEmails(Request $request) {
-        $manager = Auth()->user();
-
-        $project = $request -> proyecto;
+        $manager = $request -> encargado;
+        $manager_mail = $request -> encargado_correo;
+        $project = $request -> nombre_proyecto;
+        $description = $request -> descripcion;
         $students = $request -> estudiantes;
         $place = $request -> lugar;
         $date = $request -> fecha;
         $hour = $request -> hora;
 
-        #TODO: Cambiar a correo CSS 
 
         // Envia a los estudiantes involucrados
-
-        foreach ($students as $student) {
+       
             Mail::send(
                 'emails.reunion',
-                ['nombre_proyecto' => $project, 'lugar' => $place, 'fecha' => $date, 'hour' => $hour,'encargado' => $manager], 
-                function($message) use ($student){
+                ['nombre_proyecto' => $project, 'descripcion' => $description, 'lugar' => $place, 'fecha' => $date, 'hour' => $hour,'encargado' => $manager], 
+                function($message) use ($students, $manager_mail){
                     # TEST 
-                    
-                    #$message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                    $message->from("juarezgonzalez02@gmail.com", "Centro de Servicio Social");
-                    $message->to($student);
+                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+                    foreach ($students as $student) {
+                        $message->to($student);
+                    }
+                    $message->cc($manager_mail);
                     $message->subject("El encargado del proyecto solicitó una reunion.");
                 }
             );
-        }
-
         
-        // Envia una copia al encargado del proyecto
-        Mail::send(
-            'emails.reunion',
-            ['nombre_proyecto' => $project, 'lugar' => $place, 'fecha' => $date, 'hour' => $hour,'encargado' => $manager], 
-            function($message) use ($manager){
-                #$message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                $message->from("juarezgonzalez02@gmail.com", "Centro de Servicio Social");
-                $message->to($manager->correo);
-                $message->subject("Copia Solicitud de Reunion.");
-            }
-        );
+
         
     }
 }
