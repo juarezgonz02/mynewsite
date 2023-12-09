@@ -334,6 +334,7 @@
                                             <th>Año de carrera</th>
                                             <th>Carrera</th>
                                             <th>Estado</th>
+                                            <th>Acción</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -359,6 +360,17 @@
                                                     <span  class="badge badge-danger" style="border-radius: 5px;"><p id="estadorp" style="display: inline;">RECHAZADO</p></span>
                                                 </div>
                                             </td>
+                                            <td>
+                                                <div v-if="estudiante.estado == 1">
+
+                                                    <button type="button" data-toggle="modal" data-target="#removeStudentModal" @click="
+                                                    abrirModal('remover_estudiante', estudiante)
+                                                    
+                                                    " class="btn btn-danger btn-sm">
+                                                    Remover
+                                                </button>  &nbsp;
+                                                </div>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -372,7 +384,7 @@
             </div>
             <!--Fin del modal-->
             <!--Inicio del modal de confirmacion para aceptar o rechazar estudiantes-->
-            <div class="modal fade" :class="{'mostrar' : modal4}" tabindex="-1" role="dialog" id="confirmModal" aria-hidden="true">
+            <div class="modal fade" :class="{'mostrar' : modal7}" tabindex="-1" role="dialog" id="confirmModal" aria-hidden="true">
                 <div v-if="loading == 1">
                     <spinner></spinner>
                 </div>
@@ -531,6 +543,44 @@
                 <!-- /.modal-dialog -->
             </div>
             <!--Fin del modal-->
+            <!--Inicio del modal estado del proyecto-->
+            <!-- <div class="modal fade" tabindex="-1" role="dialog" id="removeStudentModal" aria-hidden="true"> -->
+                <div class="modal fade" :class="{'mostrar' : modal4}" tabindex="-1" role="dialog" id="removeStudentModal" aria-hidden="true">
+                    <div v-if="loading == 1">
+                        <spinner></spinner>
+                    </div>
+                    <div v-if="loading == 0" class="modal-dialog modal-primary" role="document">
+                        <div class="modal-content ">
+                            <div class="modal-header">
+                                <div>
+                                    <h4 class="modal-title">Remover estudiante</h4>
+                                </div>
+                                <button id="cerrarModalARE1" type="button" class="close" data-dismiss="modal" @click="cerrarModal()" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div style="display: flex; flex-direction: row; align-items: baseline;">
+                                    <h6  >Estas a punto de remover a &nbsp;  </h6>
+                                    <h5 v-text="rem_nombre_completo"></h5>
+                                </div>
+                                <div style="display: flex; flex-direction: row; align-items: baseline;">
+                                    <h6>de:  &nbsp; </h6>
+                                    <h6 style="font-weight: 	bold;" v-text="nombre_proyecto"></h6>
+                                </div>
+                                <p>¿Estás seguro de que deseas remover a este estudiante? Al dar click en Confirmar el estudiante sera removido del proyecto 
+                                    y le sera aplicada una <b>penalización de 30 dias  </b>sin poder aplicar a otros proyectos.</p>
+                                
+                            </div>
+                            <div class="modal-footer">
+                                
+                                <button id="cerrarModalARE2" type="button" class="btn btn-secondary" data-dismiss="modal" @click="cerrarModal()">Cancelar</button>
+                                <button id="aceptarRechazarEst" type="button" class="btn btn-primary" data-dismiss="modal" @click ="aceptarRechazarEstudiante()">Confirmar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!--Fin del modal-->
             <footer class="app-footer" id="footer" style="display: flex; flex-direction: column; justify-content: center; font-size: 15px; padding: 10px 0px">
                 <span><a target="_blank" href="http://www.uca.edu.sv/servicio-social/">Centro de Servicio Social | UCA</a> &copy; 2021</span>
                 <span>Desarrollado por <a href="#"></a>Grupo de Horas Sociales</span>
@@ -564,6 +614,7 @@ import Swal from 'sweetalert2';
                 modal4 : 0,
                 modal5 : 0,
                 modal6 : 0,
+                modal7: 0,
                 id_proyecto : 0,  
                 id_estudiante : 0,              
                 modal_encargado : '',
@@ -964,6 +1015,7 @@ import Swal from 'sweetalert2';
                             this.flagError = false;
                             this.errorEstudianteMsg = '';
                             this.getEstudiantes()
+                            this.proyecto = data;
                             break;
                         }
                     case "confirmacion":
@@ -1007,6 +1059,19 @@ import Swal from 'sweetalert2';
                             this.errorPerfilMsg = "";
                             this.errorProyecto = [];
                             this.errorPerfilMsg = '';
+                            break;
+                        }
+                    case "remover_estudiante":
+                        {
+                            this.modal7 = 1;
+                            this.id_proyecto = this.proyecto.idProyecto;
+                            this.nombre_proyecto = this.proyecto.nombre;
+                            this.modal_cupos = data.cupos;
+                            this.carnet = '';
+                            this.rem_nombre_completo = data.nombres + " " + data.apellidos;
+                            this.id_estudiante = 0;
+                            this.flagError = false;
+                            this.errorEstudianteMsg = '';
                             break;
                         }
                     default:

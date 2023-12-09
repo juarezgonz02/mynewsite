@@ -38628,6 +38628,56 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -38654,6 +38704,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             modal4: 0,
             modal5: 0,
             modal6: 0,
+            modal7: 0,
             id_proyecto: 0,
             id_estudiante: 0,
             modal_encargado: '',
@@ -39049,6 +39100,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         this.flagError = false;
                         this.errorEstudianteMsg = '';
                         this.getEstudiantes();
+                        this.proyecto = data;
                         break;
                     }
                 case "confirmacion":
@@ -39091,6 +39143,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         this.errorPerfilMsg = "";
                         this.errorProyecto = [];
                         this.errorPerfilMsg = '';
+                        break;
+                    }
+                case "remover_estudiante":
+                    {
+                        this.modal7 = 1;
+                        this.id_proyecto = this.proyecto.idProyecto;
+                        this.nombre_proyecto = this.proyecto.nombre;
+                        this.modal_cupos = data.cupos;
+                        this.carnet = '';
+                        this.rem_nombre_completo = data.nombres + " " + data.apellidos;
+                        this.id_estudiante = 0;
+                        this.flagError = false;
+                        this.errorEstudianteMsg = '';
                         break;
                     }
                 default:
@@ -45293,6 +45358,42 @@ var render = function() {
                                       : estudiante.estado == 1
                                       ? _c("div", [_vm._m(5, true)])
                                       : _c("div", [_vm._m(6, true)])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [
+                                    estudiante.estado == 1
+                                      ? _c("div", [
+                                          _c(
+                                            "button",
+                                            {
+                                              staticClass:
+                                                "btn btn-danger btn-sm",
+                                              attrs: {
+                                                type: "button",
+                                                "data-toggle": "modal",
+                                                "data-target":
+                                                  "#removeStudentModal"
+                                              },
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.abrirModal(
+                                                    "remover_estudiante",
+                                                    estudiante
+                                                  )
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                                                Remover\n                                            "
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(
+                                            "   \n                                            "
+                                          )
+                                        ])
+                                      : _vm._e()
                                   ])
                                 ]
                               )
@@ -45330,7 +45431,7 @@ var render = function() {
       "div",
       {
         staticClass: "modal fade",
-        class: { mostrar: _vm.modal4 },
+        class: { mostrar: _vm.modal7 },
         attrs: {
           tabindex: "-1",
           role: "dialog",
@@ -45976,7 +46077,145 @@ var render = function() {
       ]
     ),
     _vm._v(" "),
-    _vm._m(7)
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        class: { mostrar: _vm.modal4 },
+        attrs: {
+          tabindex: "-1",
+          role: "dialog",
+          id: "removeStudentModal",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _vm.loading == 1 ? _c("div", [_c("spinner")], 1) : _vm._e(),
+        _vm._v(" "),
+        _vm.loading == 0
+          ? _c(
+              "div",
+              {
+                staticClass: "modal-dialog modal-primary",
+                attrs: { role: "document" }
+              },
+              [
+                _c("div", { staticClass: "modal-content " }, [
+                  _c("div", { staticClass: "modal-header" }, [
+                    _vm._m(7),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "close",
+                        attrs: {
+                          id: "cerrarModalARE1",
+                          type: "button",
+                          "data-dismiss": "modal",
+                          "aria-label": "Close"
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.cerrarModal()
+                          }
+                        }
+                      },
+                      [
+                        _c("span", { attrs: { "aria-hidden": "true" } }, [
+                          _vm._v("×")
+                        ])
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "modal-body" }, [
+                    _c(
+                      "div",
+                      {
+                        staticStyle: {
+                          display: "flex",
+                          "flex-direction": "row",
+                          "align-items": "baseline"
+                        }
+                      },
+                      [
+                        _c("h6", [_vm._v("Estas a punto de remover a    ")]),
+                        _vm._v(" "),
+                        _c("h5", {
+                          domProps: {
+                            textContent: _vm._s(_vm.rem_nombre_completo)
+                          }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticStyle: {
+                          display: "flex",
+                          "flex-direction": "row",
+                          "align-items": "baseline"
+                        }
+                      },
+                      [
+                        _c("h6", [_vm._v("de:    ")]),
+                        _vm._v(" "),
+                        _c("h6", {
+                          staticStyle: { "font-weight": "bold" },
+                          domProps: { textContent: _vm._s(_vm.nombre_proyecto) }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm._m(8)
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "modal-footer" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary",
+                        attrs: {
+                          id: "cerrarModalARE2",
+                          type: "button",
+                          "data-dismiss": "modal"
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.cerrarModal()
+                          }
+                        }
+                      },
+                      [_vm._v("Cancelar")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: {
+                          id: "aceptarRechazarEst",
+                          type: "button",
+                          "data-dismiss": "modal"
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.aceptarRechazarEstudiante()
+                          }
+                        }
+                      },
+                      [_vm._v("Confirmar")]
+                    )
+                  ])
+                ])
+              ]
+            )
+          : _vm._e()
+      ]
+    ),
+    _vm._v(" "),
+    _vm._m(9)
   ])
 }
 var staticRenderFns = [
@@ -46063,7 +46302,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Carrera")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Estado")])
+        _c("th", [_vm._v("Estado")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Acción")])
       ])
     ])
   },
@@ -46104,6 +46345,26 @@ var staticRenderFns = [
         )
       ]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c("h4", { staticClass: "modal-title" }, [_vm._v("Remover estudiante")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v(
+        "¿Estás seguro de que deseas remover a este estudiante? Al dar click en Confirmar el estudiante sera removido del proyecto \n                                y le sera aplicada una "
+      ),
+      _c("b", [_vm._v("penalización de 30 dias  ")]),
+      _vm._v("sin poder aplicar a otros proyectos.")
+    ])
   },
   function() {
     var _vm = this
