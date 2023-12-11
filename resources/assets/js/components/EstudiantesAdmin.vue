@@ -68,8 +68,12 @@
                                 <div class="form-group row">
                                     <label for="perfil" class="form-control-label">Penalizado hasta:</label>
                                 </div>
-                                <div class="form-group row">
-                                    <label for="perfil" class="form-control-label" style="font-weight: bold; color: red; margin-left: 20px; font-size: medium;" v-text="timeout"></label>
+                                <div class="form-group row" style="align-items: center;">
+                                    <label for="perfil" class="form-control-label" style="font-weight: bold; color: red; margin-left: 20px; font-size: medium; margin-right: 30px;" v-text="timeout"></label>
+                                    <button type="button" class="btn btn-warning" style="margin-right: 15px;" @click ="removerTimeOut()">Remover penalización</button>
+                                    <label for="perfil" class="form-control-label">*Al dar click en "Remover penalización" el estudiante podra volver a aplicar a otros proyectos inmediatamente</label>
+                                </div>
+                                <div>
                                 </div>
                             </div>
                             <div v-if="errorActualizar == 1" id="message" style="margin-bottom:0" class="alert alert-success row" role="alert">
@@ -115,7 +119,8 @@ import {API_HOST} from '../constants/endpoint.js';
                 arrayPerfil : [],
                 errorActualizar : false,
                 flagError : false,
-                timeout : ''
+                timeout : '',
+                idUser : 0
             }
         },
         methods:{
@@ -159,6 +164,7 @@ import {API_HOST} from '../constants/endpoint.js';
                         me.idFacultad = carrera.idFacultad;
                         me.getCarreras(true)
                         me.timeout = me.fechaLegible(estudiante.timeout);
+                        me.idUser = estudiante.idUser;
                     }
                     else me.flagError = true
                 })
@@ -204,6 +210,17 @@ import {API_HOST} from '../constants/endpoint.js';
                 else{
                     this.errorActualizar = 2;
                 }
+            },
+            removerTimeOut(){
+                let me = this
+                axios.patch(`${API_HOST}/estudiante/${me.idUser}/remover-timeout`, {
+                }).then(function (response) {
+                    me.errorActualizar = 1
+                    me.buscarEstudiante()
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
             },
             cerrarModal(){
                 

@@ -22,6 +22,11 @@
                                 <p v-if="ya_aplico_proyecto == 0">  </p>
                                 <p v-else>No puede aplicar a un nuevo proyecto. Ya se encuentra inscrito a un proyecto</p>
                             </b>
+                            <b style="color:red" v-if="timeout != ''">
+                                <p>No puede aplicar a nuevos proyectos hasta</p>
+                                <p v-text="timeout"></p>
+                                
+                            </b>
                     </div>
                     <div class="card-body">
                         <table class="table table-bordered table-hover table-sm" style="font-size: 1.25em;">
@@ -40,7 +45,7 @@
                                     <td v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`" data-toggle="modal" data-target="#modal-info" @click="abrirModal('info', proyecto)" style="text-align: center;"></td>
                                     <td>
                                         <div class="button-container" style="margin: 8px 0px 8px 4px;">
-                                            <div v-if="ya_aplico_hoy == 0 && ya_aplico_proyecto == 0" style="display: flex; margin: 0px 10px;">
+                                            <div v-if="ya_aplico_hoy == 0 && ya_aplico_proyecto == 0 && !timeout" style="display: flex; margin: 0px 10px;">
                                                 <button type="button" data-toggle="modal" data-target="#modal-aplicar" @click="abrirModal('aplicar', proyecto)" class="btn btn-success btn-sm" style="width: 100%; border-radius: 5px;">
                                                     <i class="icon-check"></i>
                                                     <span class="btn-label">Aplicar</span>
@@ -202,7 +207,8 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                     'from' : 0,
                     'to' : 0
                 },
-                offset : 3
+                offset : 3,
+                timeout : '',
             }
         },
         computed:{
@@ -236,6 +242,10 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                 axios.get(`${API_HOST}/get_user`).then(function (response) {
                     me.user_id = response.data.idUser;
                     me.user_email = response.data.correo;
+                    if (me.fechaLegible(response.data.timeout))
+                        me.timeout = me.fechaLegible(response.data.timeout);
+                    else
+                        me.timeout = '';
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -343,7 +353,17 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
             logout(){
                 var url = `${API_HOST}/logout`;
                 axios.post(url).then(() => location.href = `${API_HOST}/`)
-            }
+            },
+            fechaLegible(fecha){
+                if (fecha == null || fecha == "") return null;
+                var date = new Date(fecha);
+                // plus 1 day 
+                date.setDate(date.getDate() + 1);
+                var day = date.getDate() ;
+                var month = date.getMonth() + 1;
+                var year = date.getFullYear();
+                return day + "/" + month + "/" + year;
+            },
         },
         mounted() {
             this.bindData();
