@@ -46199,11 +46199,7 @@ var render = function() {
                           type: "button",
                           "data-dismiss": "modal"
                         },
-                        on: {
-                          click: function($event) {
-                            return _vm.aceptarRechazarEstudiante()
-                          }
-                        }
+                        on: { click: function($event) {} }
                       },
                       [_vm._v("Confirmar")]
                     )

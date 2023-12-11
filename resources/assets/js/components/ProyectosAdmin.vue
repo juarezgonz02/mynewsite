@@ -575,7 +575,7 @@
                             <div class="modal-footer">
                                 
                                 <button id="cerrarModalARE2" type="button" class="btn btn-secondary" data-dismiss="modal" @click="cerrarModal()">Cancelar</button>
-                                <button id="aceptarRechazarEst" type="button" class="btn btn-primary" data-dismiss="modal" @click ="aceptarRechazarEstudiante()">Confirmar</button>
+                                <button id="aceptarRechazarEst" type="button" class="btn btn-primary" data-dismiss="modal" @click ="">Confirmar</button>
                             </div>
                         </div>
                     </div>
