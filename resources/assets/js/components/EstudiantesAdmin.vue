@@ -63,6 +63,15 @@
                                     <option v-for="perfil in arrayPerfil" :value="perfil.idPerfil" :key="perfil.idPerfil">{{perfil.perfil}}</option>
                                 </select>
                             </div>
+                            <div v-if="timeout">
+
+                                <div class="form-group row">
+                                    <label for="perfil" class="form-control-label">Penalizado hasta:</label>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="perfil" class="form-control-label" style="font-weight: bold; color: red; margin-left: 20px; font-size: medium;" v-text="timeout"></label>
+                                </div>
+                            </div>
                             <div v-if="errorActualizar == 1" id="message" style="margin-bottom:0" class="alert alert-success row" role="alert">
                                 Estudiante actualizado correctamente
                             </div>
@@ -106,6 +115,7 @@ import {API_HOST} from '../constants/endpoint.js';
                 arrayPerfil : [],
                 errorActualizar : false,
                 flagError : false,
+                timeout : ''
             }
         },
         methods:{
@@ -148,12 +158,21 @@ import {API_HOST} from '../constants/endpoint.js';
                         me.nombre_completo = estudiante.nombres + " " + estudiante.apellidos;
                         me.idFacultad = carrera.idFacultad;
                         me.getCarreras(true)
+                        me.timeout = me.fechaLegible(estudiante.timeout);
                     }
                     else me.flagError = true
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
+            },
+            fechaLegible(fecha){
+                if (fecha == null || fecha == "") return null;
+                var date = new Date(fecha);
+                var day = date.getDate();
+                var month = date.getMonth() + 1;
+                var year = date.getFullYear();
+                return day + "/" + month + "/" + year;
             },
             getCarreras(flag){
                 let me = this
