@@ -51,4 +51,19 @@ class UserController extends Controller
         }
          
     }
+
+    public function removerTimeOut(Request $request, $id_estudiante){
+        if(!$request->ajax()) return redirect('/home');
+        $estudiante = User::findOrFail($id_estudiante);
+        $estudiante->timeout = null;
+        $estudiante->save();
+    }
+
+    public function aplicarTimeOut(Request $request, $id_estudiante){
+        if(!$request->ajax()) return redirect('/home');
+        $estudiante = User::findOrFail($id_estudiante);
+        // now + 30 days 
+        $estudiante->timeout = date('Y-m-d', strtotime('+30 days'));
+        $estudiante->save();
+    }
 }

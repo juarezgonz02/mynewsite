@@ -237,4 +237,26 @@ class ProyectoxEstudianteController extends Controller{
             'message' => 'Alumno eliminado de proyecto'
         ]);
     }
+
+    public function removerEstudiante(Request $request, $id_proyecto, $id_estudiante){
+        $pxe = ProyectoxEstudiante::where('idProyecto','=', $id_proyecto)
+        ->where('idUser','=', $id_estudiante)->first();
+        if($pxe->estado == 1){
+            $p = Proyecto::where('idProyecto', '=', $pxe->idProyecto)->first();
+            $p->cupos_act = $p->cupos_act-1;
+            $p->save();
+        }
+        $pxe->delete();
+
+        // add 30 days timeout to user
+        $user = User::where('idUser', '=', $id_estudiante)->first();
+        $user->timeout = date('Y-m-d', strtotime('+30 days'));
+        $user->save();
+
+        
+
+        return response()->json([
+            'message' => 'Alumno eliminado de proyecto'
+        ]);
+    }
 }

@@ -39023,6 +39023,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.modal3 = 0;
                 this.modal5 = 0;
                 this.modal6 = 0;
+                this.modal7 = 0;
                 this.id_proyecto = 0;
             }
         },
@@ -39153,7 +39154,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         this.modal_cupos = data.cupos;
                         this.carnet = '';
                         this.rem_nombre_completo = data.nombres + " " + data.apellidos;
-                        this.id_estudiante = 0;
+                        this.id_estudiante = data.idUser;
                         this.flagError = false;
                         this.errorEstudianteMsg = '';
                         break;
@@ -39306,6 +39307,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var url = __WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__["a" /* API_HOST */] + '/logout';
             axios.post(url).then(function () {
                 return location.href = __WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__["a" /* API_HOST */] + '/';
+            });
+        },
+        removerEstudianteProyecto: function removerEstudianteProyecto() {
+            var me = this;
+            me.loading = 1;
+            axios.delete(__WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__["a" /* API_HOST */] + '/proyectos/' + me.id_proyecto + '/estudiante/' + me.id_estudiante, {
+                'estado': 0
+            }).then(function (response) {
+                $('#removeStudentModal').modal('hide');
+                $('#membersModal').modal('hide');
+                me.loading = 2;
+
+                me.getEstudiantes();
+                me.bindData();
+                me.loading = 0;
+            }).catch(function (error) {
+                console.log(error);
             });
         }
     },
@@ -45242,127 +45260,84 @@ var render = function() {
                           _c(
                             "tbody",
                             _vm._l(_vm.arrayEstudiantes, function(estudiante) {
-                              return _c(
-                                "tr",
-                                { key: estudiante.idEstudiante },
-                                [
-                                  _c("td", {
-                                    domProps: {
-                                      textContent: _vm._s(estudiante.nombres)
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("td", {
-                                    domProps: {
-                                      textContent: _vm._s(estudiante.apellidos)
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("td", {
-                                    domProps: {
-                                      textContent: _vm._s(estudiante.correo)
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("td", {
-                                    domProps: {
-                                      textContent: _vm._s(
-                                        _vm.arrayPerfiles[
-                                          estudiante.idPerfil - 1
-                                        ].perfil
-                                      )
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("td", {
-                                    domProps: {
-                                      textContent: _vm._s(
-                                        _vm.arrayCarreras[
-                                          estudiante.idCarrera - 1
-                                        ].nombre
-                                      )
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("td", [
-                                    estudiante.estado == 0
-                                      ? _c(
-                                          "div",
-                                          {
-                                            staticStyle: {
-                                              display: "flex",
-                                              "flex-direction": "row"
-                                            }
-                                          },
-                                          [
-                                            _c(
-                                              "button",
-                                              {
-                                                staticClass:
-                                                  "btn btn-success btn-sm",
-                                                attrs: {
-                                                  type: "button",
-                                                  "data-toggle": "modal",
-                                                  "data-target": "#confirmModal"
-                                                },
-                                                on: {
-                                                  click: function($event) {
-                                                    return _vm.abrirModal(
-                                                      "confirmacion",
-                                                      estudiante,
-                                                      true
-                                                    )
-                                                  }
-                                                }
+                              return _c("tr", { key: estudiante.idUser }, [
+                                _c("td", {
+                                  domProps: {
+                                    textContent: _vm._s(estudiante.nombres)
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("td", {
+                                  domProps: {
+                                    textContent: _vm._s(estudiante.apellidos)
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("td", {
+                                  domProps: {
+                                    textContent: _vm._s(estudiante.correo)
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("td", {
+                                  domProps: {
+                                    textContent: _vm._s(
+                                      _vm.arrayPerfiles[estudiante.idPerfil - 1]
+                                        .perfil
+                                    )
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("td", {
+                                  domProps: {
+                                    textContent: _vm._s(
+                                      _vm.arrayCarreras[
+                                        estudiante.idCarrera - 1
+                                      ].nombre
+                                    )
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("td", [
+                                  estudiante.estado == 0
+                                    ? _c(
+                                        "div",
+                                        {
+                                          staticStyle: {
+                                            display: "flex",
+                                            "flex-direction": "row"
+                                          }
+                                        },
+                                        [
+                                          _c(
+                                            "button",
+                                            {
+                                              staticClass:
+                                                "btn btn-success btn-sm",
+                                              attrs: {
+                                                type: "button",
+                                                "data-toggle": "modal",
+                                                "data-target": "#confirmModal"
                                               },
-                                              [
-                                                _vm._v(
-                                                  "\n                                                    Aceptar\n                                                "
-                                                )
-                                              ]
-                                            ),
-                                            _vm._v(
-                                              "   \n                                                "
-                                            ),
-                                            _c(
-                                              "button",
-                                              {
-                                                staticClass:
-                                                  "btn btn-danger btn-sm",
-                                                attrs: {
-                                                  type: "button",
-                                                  "data-toggle": "modal",
-                                                  "data-target": "#confirmModal"
-                                                },
-                                                on: {
-                                                  click: function($event) {
-                                                    return _vm.abrirModal(
-                                                      "confirmacion",
-                                                      estudiante,
-                                                      false
-                                                    )
-                                                  }
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.abrirModal(
+                                                    "confirmacion",
+                                                    estudiante,
+                                                    true
+                                                  )
                                                 }
-                                              },
-                                              [
-                                                _vm._v(
-                                                  "\n                                                    Rechazar\n                                                "
-                                                )
-                                              ]
-                                            ),
-                                            _vm._v(
-                                              "   \n                                            "
-                                            )
-                                          ]
-                                        )
-                                      : estudiante.estado == 1
-                                      ? _c("div", [_vm._m(5, true)])
-                                      : _c("div", [_vm._m(6, true)])
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("td", [
-                                    estudiante.estado == 1
-                                      ? _c("div", [
+                                              }
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                                                    Aceptar\n                                                "
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(
+                                            "   \n                                                "
+                                          ),
                                           _c(
                                             "button",
                                             {
@@ -45371,32 +45346,70 @@ var render = function() {
                                               attrs: {
                                                 type: "button",
                                                 "data-toggle": "modal",
-                                                "data-target":
-                                                  "#removeStudentModal"
+                                                "data-target": "#confirmModal"
                                               },
                                               on: {
                                                 click: function($event) {
                                                   return _vm.abrirModal(
-                                                    "remover_estudiante",
-                                                    estudiante
+                                                    "confirmacion",
+                                                    estudiante,
+                                                    false
                                                   )
                                                 }
                                               }
                                             },
                                             [
                                               _vm._v(
-                                                "\n                                                Remover\n                                            "
+                                                "\n                                                    Rechazar\n                                                "
                                               )
                                             ]
                                           ),
                                           _vm._v(
                                             "   \n                                            "
                                           )
-                                        ])
-                                      : _vm._e()
-                                  ])
-                                ]
-                              )
+                                        ]
+                                      )
+                                    : estudiante.estado == 1
+                                    ? _c("div", [_vm._m(5, true)])
+                                    : _c("div", [_vm._m(6, true)])
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  estudiante.estado == 1
+                                    ? _c("div", [
+                                        _c(
+                                          "button",
+                                          {
+                                            staticClass:
+                                              "btn btn-danger btn-sm",
+                                            attrs: {
+                                              type: "button",
+                                              "data-toggle": "modal",
+                                              "data-target":
+                                                "#removeStudentModal"
+                                            },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.abrirModal(
+                                                  "remover_estudiante",
+                                                  estudiante
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _vm._v(
+                                              "\n                                                Remover\n                                            "
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(
+                                          "   \n                                            "
+                                        )
+                                      ])
+                                    : _vm._e()
+                                ])
+                              ])
                             }),
                             0
                           )
@@ -46199,7 +46212,11 @@ var render = function() {
                           type: "button",
                           "data-dismiss": "modal"
                         },
-                        on: { click: function($event) {} }
+                        on: {
+                          click: function($event) {
+                            return _vm.removerEstudianteProyecto()
+                          }
+                        }
                       },
                       [_vm._v("Confirmar")]
                     )

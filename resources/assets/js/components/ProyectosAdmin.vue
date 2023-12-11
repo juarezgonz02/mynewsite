@@ -338,7 +338,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="estudiante in arrayEstudiantes" :key="estudiante.idEstudiante" >
+                                        <tr v-for="estudiante in arrayEstudiantes" :key="estudiante.idUser" >
                                             <td v-text="estudiante.nombres"></td>
                                             <td v-text="estudiante.apellidos"></td>
                                             <td v-text="estudiante.correo"></td>
@@ -575,7 +575,7 @@
                             <div class="modal-footer">
                                 
                                 <button id="cerrarModalARE2" type="button" class="btn btn-secondary" data-dismiss="modal" @click="cerrarModal()">Cancelar</button>
-                                <button id="aceptarRechazarEst" type="button" class="btn btn-primary" data-dismiss="modal" @click ="">Confirmar</button>
+                                <button id="aceptarRechazarEst" type="button" class="btn btn-primary" data-dismiss="modal" @click ="removerEstudianteProyecto()">Confirmar</button>
                             </div>
                         </div>
                     </div>
@@ -941,6 +941,7 @@ import Swal from 'sweetalert2';
                     this.modal3 = 0;
                     this.modal5 = 0;
                     this.modal6 = 0;
+                    this.modal7 = 0;
                     this.id_proyecto = 0;
                 }
             },
@@ -1069,7 +1070,7 @@ import Swal from 'sweetalert2';
                             this.modal_cupos = data.cupos;
                             this.carnet = '';
                             this.rem_nombre_completo = data.nombres + " " + data.apellidos;
-                            this.id_estudiante = 0;
+                            this.id_estudiante = data.idUser;
                             this.flagError = false;
                             this.errorEstudianteMsg = '';
                             break;
@@ -1229,6 +1230,24 @@ import Swal from 'sweetalert2';
             logout(){
                 var url = `${API_HOST}/logout`;
                 axios.post(url).then(() => location.href = `${API_HOST}/`)
+            },
+            removerEstudianteProyecto(){
+                let me = this;
+                me.loading = 1;
+                axios.delete(`${API_HOST}/proyectos/${me.id_proyecto}/estudiante/${me.id_estudiante}`, {
+                    'estado' : 0
+                }).then(function (response) {
+                    $('#removeStudentModal').modal('hide');
+                    $('#membersModal').modal('hide');
+                    me.loading = 2;
+                    
+                    
+                    me.getEstudiantes();
+                    me.bindData();
+                    me.loading = 0;
+                }).catch(function (error) {
+                    console.log(error);
+                });
             }
         },
         watch:{
