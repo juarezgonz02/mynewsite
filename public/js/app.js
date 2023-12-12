@@ -38639,6 +38639,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -38788,6 +38790,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     console.log(error);
                 });
             } else {
+                var estado = this.modal_estado_proyecto == "Cancelado" ? 0 : 1;
                 axios.put(__WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__["a" /* API_HOST */] + '/proyecto/actualizar', {
                     'idProyecto': this.id_proyecto,
                     'nombre': this.modal_nombre,
@@ -38801,7 +38804,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     'horario': this.modal_horario,
                     'tipo_horas': this.modal_tipo_horas,
                     'correo_encargado': this.modal_correo,
-                    'carreraPerfil': this.arrayCarreraPerfil
+                    'carreraPerfil': this.arrayCarreraPerfil,
+                    'estado': estado
                 }).then(function (response) {
                     me.cerrarModal();
                     me.bindData();
@@ -38964,7 +38968,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 me.loading = 1;
                 axios.put(__WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__["a" /* API_HOST */] + '/proyecto/estado', {
                     'idProyecto': this.id_proyecto,
-                    'estado': 0
+                    'estado': 0,
+                    'estado_proyecto': "Cancelado"
                 }).then(function (response) {
                     $('#statusModal').modal('hide');
                     me.loading = 2;
@@ -43700,6 +43705,22 @@ var render = function() {
                                   "data-target": "#projectDetailModal"
                                 },
                                 domProps: {
+                                  textContent: _vm._s(proyecto.estado_proyecto)
+                                },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.abrirModal("info", proyecto)
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("td", {
+                                staticStyle: { "text-align": "center" },
+                                attrs: {
+                                  "data-toggle": "modal",
+                                  "data-target": "#projectDetailModal"
+                                },
+                                domProps: {
                                   textContent: _vm._s(
                                     "" +
                                       proyecto.cupos_act +
@@ -46085,6 +46106,10 @@ var staticRenderFns = [
           },
           [_vm._v("Descripción")]
         ),
+        _vm._v(" "),
+        _c("th", { staticStyle: { "text-align": "center", width: "10%" } }, [
+          _vm._v("Estado del proyecto")
+        ]),
         _vm._v(" "),
         _c("th", { staticStyle: { "text-align": "center", width: "10%" } }, [
           _vm._v("Cupos")

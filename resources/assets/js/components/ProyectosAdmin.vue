@@ -24,6 +24,7 @@
                                 <tr>
                                     <th style="text-align: center; width: 10%;">Nombre</th>
                                     <th id="disappear" style="text-align: center;">Descripción</th>
+                                    <th style="text-align: center; width: 10%;">Estado del proyecto</th>
                                     <th style="text-align: center; width: 10%;">Cupos</th>
                                     <th style="text-align: center; width: 10%;">Acciones</th>
                                 </tr>
@@ -32,6 +33,7 @@
                                 <tr id="fila" v-for="proyecto in arrayProyectos" :key="proyecto.idProyecto">
                                     <td id="pos" v-text="proyecto.nombre" data-toggle="modal" data-target="#projectDetailModal" @click="abrirModal('info', proyecto)"></td>
                                     <td id="disappear" v-text="proyecto.descripcion" data-toggle="modal" data-target="#projectDetailModal" @click="abrirModal('info', proyecto)"></td>
+                                    <td v-text="proyecto.estado_proyecto" data-toggle="modal" data-target="#projectDetailModal" @click="abrirModal('info', proyecto)" style="text-align: center;"></td>
                                     <td v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`" data-toggle="modal" data-target="#projectDetailModal" @click="abrirModal('info', proyecto)" style="text-align: center;"></td>
                                     <td id="icons-pos" >
                                         <div class="button-container">
@@ -700,6 +702,7 @@ import Swal from 'sweetalert2';
                     }); 
                 }
                 else{
+                    var estado = (this.modal_estado_proyecto == "Cancelado" ? 0 : 1);
                     axios.put(`${API_HOST}/proyecto/actualizar`, {
                         'idProyecto' : this.id_proyecto,
                         'nombre' : this.modal_nombre,
@@ -713,7 +716,8 @@ import Swal from 'sweetalert2';
                         'horario' : this.modal_horario,
                         'tipo_horas' : this.modal_tipo_horas,
                         'correo_encargado' : this.modal_correo,
-                        'carreraPerfil' : this.arrayCarreraPerfil
+                        'carreraPerfil' : this.arrayCarreraPerfil,
+                        'estado' : estado
                     }).then(function (response) {
                         me.cerrarModal();
                         me.bindData();
@@ -881,7 +885,8 @@ import Swal from 'sweetalert2';
                     me.loading = 1
                     axios.put(`${API_HOST}/proyecto/estado`, {
                         'idProyecto' : this.id_proyecto,
-                        'estado' : 0
+                        'estado' : 0,
+                        'estado_proyecto' : "Cancelado"
                     }).then(function (response) {
                         $('#statusModal').modal('hide');
                         me.loading = 2;

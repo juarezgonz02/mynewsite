@@ -161,6 +161,7 @@ class ProyectoController extends Controller
             $proyecto->nombre = $request->nombre;
             $proyecto->tipo_horas = $request->tipo_horas;
             $proyecto->correo_encargado = $request->correo_encargado;
+            $proyecto->estado = $request->estado;
         $proyecto->save();
 
         ProyectoxCarrera::where('idProyecto', '=', $request->idProyecto)->delete();
@@ -189,6 +190,7 @@ class ProyectoController extends Controller
         if(!$request->ajax()) return redirect('/home');
         $proyecto = Proyecto::findOrFail($request->idProyecto);
         $proyecto->estado = $request->estado;
+        $proyecto->estado_proyecto = $request->estado_proyecto;
         $proyecto->save();
 
         
