@@ -135,6 +135,17 @@
                                     </div>
                                 </div>
                                 <div class="form-group row div-form">
+                                    <label class="col-md-3 form-control-label" for="text-input">Estado del proyecto</label>
+                                    <div class="col-md-9">
+                                        <select class="form-control" v-model="modal_estado_proyecto">
+                                            <option value="En curso">En curso</option>
+                                            <option value="Finalizado">Finalizado</option>
+                                            <option value="Cancelado">Cancelado</option>
+                                        </select>
+                                        <!--<p :class="{show: errorProyecto[3] == 1, hide: errorProyecto[3] != 1}" class="error">Debe seleccionar un tipo de horas</p>-->
+                                    </div>
+                                </div>
+                                <div class="form-group row div-form">
                                     <label class="col-md-3 form-control-label" for="text-input">Descripción</label>
                                     <div class="col-md-9">
                                         <textarea type="text" v-model="modal_desc" class="form-control" placeholder="Descripción"></textarea>
@@ -672,6 +683,7 @@ import Swal from 'sweetalert2';
                         'contraparte' : this.modal_contraparte,
                         'cupos_act' : 0,
                         'cupos' : this.modal_cupos,
+                        'estado_proyecto': this.modal_estado_proyecto,
                         'descripcion' : this.modal_desc,
                         'encargado' : this.modal_encargado,
                         'fecha_inicio' : this.modal_fecha_in,
@@ -693,6 +705,7 @@ import Swal from 'sweetalert2';
                         'nombre' : this.modal_nombre,
                         'contraparte' : this.modal_contraparte,
                         'cupos' : this.modal_cupos,
+                        'estado_proyecto': this.modal_estado_proyecto,
                         'descripcion' : this.modal_desc,
                         'encargado' : this.modal_encargado,
                         'fecha_inicio' : this.modal_fecha_in,
@@ -909,6 +922,7 @@ import Swal from 'sweetalert2';
                             this.modal_horario = '';
                             this.modal_contraparte = '';
                             this.modal_tipo_horas = '';
+                            this.modal_estado_proyecto = '';
                             this.contraparte = '';
                             this.modal_fecha_in = '';
                             this.modal_fecha_fin = '';
@@ -929,6 +943,7 @@ import Swal from 'sweetalert2';
                             this.modal_desc = data.descripcion;
                             this.modal_correo = data.correo_encargado;
                             this.modal_tipo_horas = data.tipo_horas;
+                            this.modal_estado_proyecto = data.estado_proyecto;
                             this.modal_cupos = data.cupos;
                             this.modal_horario = data.horario;
                             this.modal_fecha_in = data.fecha_inicio;

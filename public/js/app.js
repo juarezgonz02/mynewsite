@@ -38628,6 +38628,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -38761,6 +38772,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     'contraparte': this.modal_contraparte,
                     'cupos_act': 0,
                     'cupos': this.modal_cupos,
+                    'estado_proyecto': this.modal_estado_proyecto,
                     'descripcion': this.modal_desc,
                     'encargado': this.modal_encargado,
                     'fecha_inicio': this.modal_fecha_in,
@@ -38781,6 +38793,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     'nombre': this.modal_nombre,
                     'contraparte': this.modal_contraparte,
                     'cupos': this.modal_cupos,
+                    'estado_proyecto': this.modal_estado_proyecto,
                     'descripcion': this.modal_desc,
                     'encargado': this.modal_encargado,
                     'fecha_inicio': this.modal_fecha_in,
@@ -38994,6 +39007,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         this.modal_horario = '';
                         this.modal_contraparte = '';
                         this.modal_tipo_horas = '';
+                        this.modal_estado_proyecto = '';
                         this.contraparte = '';
                         this.modal_fecha_in = '';
                         this.modal_fecha_fin = '';
@@ -39014,6 +39028,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         this.modal_desc = data.descripcion;
                         this.modal_correo = data.correo_encargado;
                         this.modal_tipo_horas = data.tipo_horas;
+                        this.modal_estado_proyecto = data.estado_proyecto;
                         this.modal_cupos = data.cupos;
                         this.modal_horario = data.horario;
                         this.modal_fecha_in = data.fecha_inicio;
@@ -44230,6 +44245,62 @@ var render = function() {
                           }
                         },
                         [_vm._v("Debe seleccionar un tipo de horas")]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group row div-form" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "col-md-3 form-control-label",
+                        attrs: { for: "text-input" }
+                      },
+                      [_vm._v("Estado del proyecto")]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-9" }, [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.modal_estado_proyecto,
+                              expression: "modal_estado_proyecto"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.modal_estado_proyecto = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            }
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { value: "En curso" } }, [
+                            _vm._v("En curso")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "Finalizado" } }, [
+                            _vm._v("Finalizado")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "Cancelado" } }, [
+                            _vm._v("Cancelado")
+                          ])
+                        ]
                       )
                     ])
                   ]),
