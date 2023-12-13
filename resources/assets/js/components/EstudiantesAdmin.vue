@@ -29,13 +29,18 @@
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-header">
-                        <div v-if="nombre_completo == ''">
-                            <h2 style="visibility:hidden; margin-bottom:0">Nada</h2>
-                        </div>
-                        <div v-else>
-                            <h2 v-text="nombre_completo" style="margin-bottom:0"></h2>
-                        </div>
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; ">
+                            <div v-if="nombre_completo == ''">
+                                <h2 style="visibility:hidden; margin-bottom:0">Nada</h2>
+                            </div>
+                            <div v-else>
+                                <h2 v-text="nombre_completo" style="margin-bottom:0"></h2>
+                            </div>
+                            <div v-if="nombre_completo != ''">
+                                <!-- icon button  -->
+                                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editarEstudiante" style="margin-right: 15px;" @click="toggleEditDisabled()" >Editar</button>
+                            </div>
+                        
                     </div>
                     <div class="card-body">
                         <div class="col-md-8" style="margin: 20px 0px 0px 20px;">
@@ -43,7 +48,7 @@
                                 <label class="form-control-label">Facultad</label>
                             </div>
                             <div class="form-group row">
-                                <select class="form-control custom-select" id="facultad " v-model="idFacultad">
+                                <select :disabled="editDisabled" class="form-control custom-select" id="facultad " v-model="idFacultad">
                                     <option v-for="facultad in arrayFacultad" :value="facultad.idFacultad" :key="facultad.idFacultad">{{facultad.nombre}}</option>
                                 </select>
                             </div>
@@ -51,7 +56,7 @@
                                 <label class="form-control-label">Carrera</label>
                             </div>
                             <div class="form-group row">
-                                <select class="form-control custom-select" id="carrera" v-model="idCarrera">
+                                <select :disabled="editDisabled" class="form-control custom-select" id="carrera" v-model="idCarrera">
                                     <option v-for="carrera in arrayCarreraFact" :value="carrera.idCarrera" :key="carrera.idCarrera">{{carrera.nombre}}</option>
                                 </select>
                             </div>
@@ -59,7 +64,7 @@
                                 <label for="perfil" class="form-control-label">Año de carrera</label>
                             </div>
                             <div class="form-group row">
-                                <select class="form-control custom-select" id="perfil" v-model="idPerfil">
+                                <select :disabled="editDisabled" class="form-control custom-select" id="perfil" v-model="idPerfil">
                                     <option v-for="perfil in arrayPerfil" :value="perfil.idPerfil" :key="perfil.idPerfil">{{perfil.perfil}}</option>
                                 </select>
                             </div>
@@ -76,6 +81,15 @@
                                 <div>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label for="perfil" class="form-control-label" >Inscrito en:</label>
+                            </div>
+                            <div class="form-group row">
+                                <label for="perfil" class="label" style="font-weight: bold;" v-text="proyectoInscrito"></label>
+                            </div>
+                            <div v-if="!proyectoInscritoFlag" id="message" style="margin-bottom:0" class="alert alert-info row" role="alert">
+                                No se encuentra inscrito en ningun proyecto.
+                            </div>
                             <div v-if="errorActualizar == 1" id="message" style="margin-bottom:0" class="alert alert-success row" role="alert">
                                 Estudiante actualizado correctamente
                             </div>
@@ -89,7 +103,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="button" class="btn btn-primary" @click ="actualizarEstudiante()">Confirmar</button>
+                        <button :disabled="editDisabled" type="button" class="btn btn-primary" @click ="actualizarEstudiante()">Confirmar</button>
                     </div>
                 </div>
             </div>
@@ -120,7 +134,11 @@ import {API_HOST} from '../constants/endpoint.js';
                 errorActualizar : false,
                 flagError : false,
                 timeout : '',
-                idUser : 0
+                idUser : 0,
+                editDisabled : true,
+                proyectoInscrito : '',
+                proyectoInscritoFlag : true
+                
             }
         },
         methods:{
@@ -165,6 +183,7 @@ import {API_HOST} from '../constants/endpoint.js';
                         me.getCarreras(true)
                         me.timeout = me.fechaLegible(estudiante.timeout);
                         me.idUser = estudiante.idUser;
+                        me.getUserProyectos()
                     }
                     else me.flagError = true
                 })
@@ -222,8 +241,34 @@ import {API_HOST} from '../constants/endpoint.js';
                     console.log(error);
                 });
             },
+            getUserProyectos(){
+                let me = this
+                axios.get(`${API_HOST}/estudiante/${me.idUser}/proyectos`, {
+                }).then(function (response) {
+                    
+                    if (response.data[0].nombre == null)
+                    {
+                        me.proyectoInscritoFlag = false
+                        me.proyectoInscrito = ''
+                        errorActualizar = 1
+                        return
+                    } 
+                    else me.proyectoInscritoFlag = true
+                    me.proyectoInscrito = response.data[0].nombre
+                    console.log(response.data)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    me.proyectoInscritoFlag = false
+                        me.proyectoInscrito = ''
+                        errorActualizar = 1
+                });
+            },
             cerrarModal(){
                 
+            },
+            toggleEditDisabled(){
+                this.editDisabled = !this.editDisabled
             },
             abrirModal(modelo, data = []){
                 switch (modelo) {

@@ -561,7 +561,7 @@
                             </div>
                             <div class="modal-body">
                                 <div style="display: flex; flex-direction: row; align-items: baseline;">
-                                    <h6  >Estas a punto de remover a &nbsp;  </h6>
+                                    <h6  >Estás a punto de remover a &nbsp;  </h6>
                                     <h5 v-text="rem_nombre_completo"></h5>
                                 </div>
                                 <div style="display: flex; flex-direction: row; align-items: baseline;">
