@@ -250,7 +250,7 @@ import {API_HOST} from '../constants/endpoint.js';
                     {
                         me.proyectoInscritoFlag = false
                         me.proyectoInscrito = ''
-                        errorActualizar = 1
+                        
                         return
                     } 
                     else me.proyectoInscritoFlag = true
@@ -261,7 +261,6 @@ import {API_HOST} from '../constants/endpoint.js';
                     console.log(error);
                     me.proyectoInscritoFlag = false
                         me.proyectoInscrito = ''
-                        errorActualizar = 1
                 });
             },
             cerrarModal(){

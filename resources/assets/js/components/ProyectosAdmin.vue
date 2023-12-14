@@ -655,7 +655,11 @@ import Swal from 'sweetalert2';
                     'from' : 0,
                     'to' : 0
                 },
-                offset : 3
+                offset : 3,
+                rem_nombre_completo : '',
+                proyecto : '',
+                nombre_proyecto : '',
+
             }
         },
         computed:{
@@ -1016,7 +1020,7 @@ import Swal from 'sweetalert2';
                             this.flagError = false;
                             this.errorEstudianteMsg = '';
                             this.getEstudiantes()
-                            this.proyecto = data;
+                            this.proyectoInscrito = data;
                             break;
                         }
                     case "confirmacion":
@@ -1065,8 +1069,8 @@ import Swal from 'sweetalert2';
                     case "remover_estudiante":
                         {
                             this.modal7 = 1;
-                            this.id_proyecto = this.proyecto.idProyecto;
-                            this.nombre_proyecto = this.proyecto.nombre;
+                            this.id_proyecto = this.proyectoInscrito.idProyecto;
+                            this.nombre_proyecto = this.proyectoInscrito.nombre;
                             this.modal_cupos = data.cupos;
                             this.carnet = '';
                             this.rem_nombre_completo = data.nombres + " " + data.apellidos;
