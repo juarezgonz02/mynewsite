@@ -22,6 +22,9 @@
                     <li @click='menu=3' class="nav-item">
                         <a style="font-family: 'Abel';" class="nav-link active" href="#"><i><img src="<?php echo $ruta; ?>/img/icons/lightbulb_white_24dp.svg" alt="recordatorio"></i> Recordatorio </a>
                     </li>
+                    <li @click='menu=4' class="nav-item">
+                        <a style="font-family: 'Abel';" class="nav-link active" href="#"><i><img src="<?php echo $ruta; ?>/img/icons/lightbulb_white_24dp.svg" alt="recordatorio"></i> Estadisticas </a>
+                    </li>
                 </ul>
             </nav>
             <button class="sidebar-minimizer mobile-sidebar-toggler brand-minimizer" type="button"></button>

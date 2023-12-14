@@ -14,6 +14,9 @@
             <template v-if="menu==3">
                 <recordatorio></recordatorio>
             </template>
+            <template v-if="menu==4">
+                <estadisticas></estadisticas>
+            </template>
 
         @elseif(Auth::user()->idRol == 2)
             <template v-if="menu==0">
