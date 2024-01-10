@@ -45,7 +45,7 @@
                                         <div class="button-container">
                                             <button type="button" @click="abrirModal('estado', proyecto)" data-toggle="modal" data-target="#statusModal" class="btn btn-danger btn-sm" style="margin: 8px 0; width: 100%;">
                                                 <i class="icon-lock"></i>
-                                                <span class="btn-label">Desactivar</span>
+                                                <span class="btn-label">Cambiar estado</span>
                                             </button>
                                         </div>
                                         <div class="button-container">
@@ -136,7 +136,7 @@
                                         <p :class="{show: errorProyecto[3] == 1, hide: errorProyecto[3] != 1}" class="error">Debe seleccionar un tipo de horas</p>
                                     </div>
                                 </div>
-                                <div class="form-group row div-form">
+                                <!--<div class="form-group row div-form">
                                     <label class="col-md-3 form-control-label" for="text-input">Estado del proyecto</label>
                                     <div class="col-md-9">
                                         <select class="form-control" v-model="modal_estado_proyecto">
@@ -144,9 +144,8 @@
                                             <option value="Finalizado">Finalizado</option>
                                             <option value="Cancelado">Cancelado</option>
                                         </select>
-                                        <!--<p :class="{show: errorProyecto[3] == 1, hide: errorProyecto[3] != 1}" class="error">Debe seleccionar un tipo de horas</p>-->
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="form-group row div-form">
                                     <label class="col-md-3 form-control-label" for="text-input">Descripción</label>
                                     <div class="col-md-9">
@@ -274,13 +273,23 @@
                 <div v-if="loading == 0" class="modal-dialog modal-primary modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title">¿Desactivar el proyecto {{ modal_nombre }}?</h4>
+                            <h4 class="modal-title">Cambiar estado al proyecto {{ modal_nombre }}</h4>
                             <button type="button" data-dismiss="modal" class="close" @click="cerrarModal()" aria-label="Close">
                                 <span aria-hidden="true">×</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <h5>Por favor escriba <b>{{ modal_nombre }}</b> para desactivar este proyecto</h5>
+                            <div class="form-group row div-form">
+                                <label class="col-md-3 form-control-label" for="text-input">Estado del proyecto</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" v-model="estado_proyecto">
+                                        <option value="En curso">En curso</option>
+                                        <option value="Finalizado">Finalizado</option>
+                                        <option value="Cancelado">Cancelado</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <h5>Por favor escriba <b>{{ modal_nombre }}</b> para confirmar el cambio de estado de este proyecto</h5>
                             <div class="col-md-9 -alt">
                                 <input type="text" v-model="modal_confirmar" class="form-control">
                                 <p :class="{show: errorEstado == 1, hide: errorEstado != 1}" class="error">El texto ingresado no coincide con el solicitado</p>
@@ -883,10 +892,32 @@ import Swal from 'sweetalert2';
                 }
                 else {
                     me.loading = 1
+                    var estado = (this.estado_proyecto == "En curso" ? 1 : 0);
+                    axios.get(`${API_HOST}/estudiantesxproyecto`, {
+                        params:{
+                            idProyecto: me.id_proyecto
+                        }
+                    }).then(function (response){
+                        me.arrayEstudiantes = response.data;
+                        if (estado == 0) {
+                            me.arrayEstudiantes.forEach(function(element, index, array){
+                                console.log("test");
+                                console.log(me.arrayEstudiantes[index]);
+                                axios.post(`${API_HOST}/proyecto/desaplicar`, {
+                                    'idProyecto' : me.id_proyecto,
+                                    'idUser' : me.arrayEstudiantes[index].idUser
+                                }).catch(function (error) {
+                                    console.log(error);
+                                });
+                            })
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
                     axios.put(`${API_HOST}/proyecto/estado`, {
                         'idProyecto' : this.id_proyecto,
-                        'estado' : 0,
-                        'estado_proyecto' : "Cancelado"
+                        'estado' : estado,
+                        'estado_proyecto' : this.estado_proyecto
                     }).then(function (response) {
                         $('#statusModal').modal('hide');
                         me.loading = 2;
@@ -894,7 +925,7 @@ import Swal from 'sweetalert2';
                         me.cerrarModal();
                     }).catch(function (error) {
                         console.log(error);
-                    }); 
+                    });
                 }
             },
             cerrarModal(){
@@ -967,6 +998,7 @@ import Swal from 'sweetalert2';
                             this.modal2 = 1;
                             this.id_proyecto = data.idProyecto;
                             this.modal_nombre = data.nombre;
+                            this.estado_proyecto = data.estado_proyecto;
                             this.errorEstado = 0;
                             this.modal_confirmar = '';
                             this.flagErrorEstado = false;

@@ -38641,6 +38641,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -38966,10 +38975,32 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 me.errorEstado = 1;
             } else {
                 me.loading = 1;
+                var estado = this.estado_proyecto == "En curso" ? 1 : 0;
+                axios.get(__WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__["a" /* API_HOST */] + '/estudiantesxproyecto', {
+                    params: {
+                        idProyecto: me.id_proyecto
+                    }
+                }).then(function (response) {
+                    me.arrayEstudiantes = response.data;
+                    if (estado == 0) {
+                        me.arrayEstudiantes.forEach(function (element, index, array) {
+                            console.log("test");
+                            console.log(me.arrayEstudiantes[index]);
+                            axios.post(__WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__["a" /* API_HOST */] + '/proyecto/desaplicar', {
+                                'idProyecto': me.id_proyecto,
+                                'idUser': me.arrayEstudiantes[index].idUser
+                            }).catch(function (error) {
+                                console.log(error);
+                            });
+                        });
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                });
                 axios.put(__WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__["a" /* API_HOST */] + '/proyecto/estado', {
                     'idProyecto': this.id_proyecto,
-                    'estado': 0,
-                    'estado_proyecto': "Cancelado"
+                    'estado': estado,
+                    'estado_proyecto': this.estado_proyecto
                 }).then(function (response) {
                     $('#statusModal').modal('hide');
                     me.loading = 2;
@@ -39052,6 +39083,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         this.modal2 = 1;
                         this.id_proyecto = data.idProyecto;
                         this.modal_nombre = data.nombre;
+                        this.estado_proyecto = data.estado_proyecto;
                         this.errorEstado = 0;
                         this.modal_confirmar = '';
                         this.flagErrorEstado = false;
@@ -43793,7 +43825,7 @@ var render = function() {
                                       _c("i", { staticClass: "icon-lock" }),
                                       _vm._v(" "),
                                       _c("span", { staticClass: "btn-label" }, [
-                                        _vm._v("Desactivar")
+                                        _vm._v("Cambiar estado")
                                       ])
                                     ]
                                   )
@@ -44266,62 +44298,6 @@ var render = function() {
                           }
                         },
                         [_vm._v("Debe seleccionar un tipo de horas")]
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-group row div-form" }, [
-                    _c(
-                      "label",
-                      {
-                        staticClass: "col-md-3 form-control-label",
-                        attrs: { for: "text-input" }
-                      },
-                      [_vm._v("Estado del proyecto")]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-md-9" }, [
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.modal_estado_proyecto,
-                              expression: "modal_estado_proyecto"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.modal_estado_proyecto = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
-                            }
-                          }
-                        },
-                        [
-                          _c("option", { attrs: { value: "En curso" } }, [
-                            _vm._v("En curso")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "Finalizado" } }, [
-                            _vm._v("Finalizado")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "Cancelado" } }, [
-                            _vm._v("Cancelado")
-                          ])
-                        ]
                       )
                     ])
                   ]),
@@ -44949,9 +44925,7 @@ var render = function() {
                   _c("div", { staticClass: "modal-header" }, [
                     _c("h4", { staticClass: "modal-title" }, [
                       _vm._v(
-                        "¿Desactivar el proyecto " +
-                          _vm._s(_vm.modal_nombre) +
-                          "?"
+                        "Cambiar estado al proyecto " + _vm._s(_vm.modal_nombre)
                       )
                     ]),
                     _vm._v(" "),
@@ -44979,10 +44953,68 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "modal-body" }, [
+                    _c("div", { staticClass: "form-group row div-form" }, [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "col-md-3 form-control-label",
+                          attrs: { for: "text-input" }
+                        },
+                        [_vm._v("Estado del proyecto")]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-9" }, [
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.estado_proyecto,
+                                expression: "estado_proyecto"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.estado_proyecto = $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              }
+                            }
+                          },
+                          [
+                            _c("option", { attrs: { value: "En curso" } }, [
+                              _vm._v("En curso")
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "Finalizado" } }, [
+                              _vm._v("Finalizado")
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "Cancelado" } }, [
+                              _vm._v("Cancelado")
+                            ])
+                          ]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
                     _c("h5", [
                       _vm._v("Por favor escriba "),
                       _c("b", [_vm._v(_vm._s(_vm.modal_nombre))]),
-                      _vm._v(" para desactivar este proyecto")
+                      _vm._v(
+                        " para confirmar el cambio de estado de este proyecto"
+                      )
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "col-md-9 -alt" }, [
