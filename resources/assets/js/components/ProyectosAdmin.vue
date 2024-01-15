@@ -672,6 +672,7 @@ import Swal from 'sweetalert2';
                 rem_nombre_completo : '',
                 proyecto : '',
                 nombre_proyecto : '',
+                modal_estado_proyecto : '',
 
             }
         },
