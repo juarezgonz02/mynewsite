@@ -38783,7 +38783,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     'contraparte': this.modal_contraparte,
                     'cupos_act': 0,
                     'cupos': this.modal_cupos,
-                    'estado_proyecto': this.modal_estado_proyecto,
+                    'estado_proyecto': 'En curso',
                     'descripcion': this.modal_desc,
                     'encargado': this.modal_encargado,
                     'fecha_inicio': this.modal_fecha_in,
@@ -38984,8 +38984,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     me.arrayEstudiantes = response.data;
                     if (estado == 0) {
                         me.arrayEstudiantes.forEach(function (element, index, array) {
-                            console.log("test");
-                            console.log(me.arrayEstudiantes[index]);
                             axios.post(__WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__["a" /* API_HOST */] + '/proyecto/desaplicar', {
                                 'idProyecto': me.id_proyecto,
                                 'idUser': me.arrayEstudiantes[index].idUser

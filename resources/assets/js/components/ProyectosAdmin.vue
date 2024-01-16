@@ -694,7 +694,7 @@ import Swal from 'sweetalert2';
                         'contraparte' : this.modal_contraparte,
                         'cupos_act' : 0,
                         'cupos' : this.modal_cupos,
-                        'estado_proyecto': this.modal_estado_proyecto,
+                        'estado_proyecto': 'En curso',
                         'descripcion' : this.modal_desc,
                         'encargado' : this.modal_encargado,
                         'fecha_inicio' : this.modal_fecha_in,
@@ -901,8 +901,6 @@ import Swal from 'sweetalert2';
                         me.arrayEstudiantes = response.data;
                         if (estado == 0) {
                             me.arrayEstudiantes.forEach(function(element, index, array){
-                                console.log("test");
-                                console.log(me.arrayEstudiantes[index]);
                                 axios.post(`${API_HOST}/proyecto/desaplicar`, {
                                     'idProyecto' : me.id_proyecto,
                                     'idUser' : me.arrayEstudiantes[index].idUser
