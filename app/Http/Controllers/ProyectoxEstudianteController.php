@@ -237,4 +237,29 @@ class ProyectoxEstudianteController extends Controller{
             'message' => 'Alumno eliminado de proyecto'
         ]);
     }
+
+    public function get_all_applications(Request $request){
+        
+        $solicitudes = ProyectoxEstudiante::leftJoin('proyecto', 'proyecto.idProyecto', '=', 'proyectoxestudiante.idProyecto')
+        ->leftJoin('users', 'users.idUser', '=', 'proyectoxestudiante.idUser')
+        ->leftJoin('carrera', 'users.idCarrera', 'carrera.idCarrera')
+        ->leftJoin('perfil', 'users.idPerfil', 'perfil.idPerfil')
+        ->where('proyectoxestudiante.estado', '=', '0')->select("users.nombres as u_nombre", "users.apellidos as u_apellido", 'carrera.nombre as carrera', 'perfil.descripcion as ano',"proyecto.*", "users.nombres", "users.apellidos", "users.correo" )
+        ->paginate(10);
+
+        $proyectos = [];
+
+        return [
+            'pagination' => [
+                'total'         => $solicitudes->total(),
+                'current_page'  => $solicitudes->currentPage(),
+                'per_page'      => $solicitudes->perPage(),
+                'last_page'     => $solicitudes->lastPage(),
+                'from'          => $solicitudes->firstItem(),
+                'to'            => $solicitudes->lastItem(),
+            ],
+            'solicitudes' => $solicitudes
+        ];
+    }
+
 }
