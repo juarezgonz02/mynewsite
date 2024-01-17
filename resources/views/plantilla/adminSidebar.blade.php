@@ -11,7 +11,10 @@
                         </span>
                     </li>
                     <li @click='menu=0' class="nav-item">
-                        <a style="font-family: 'Abel';" class="nav-link active" href="#"><i><img src="<?php echo $ruta; ?>/img/icons/assignment_white_24dp.svg" alt="proyectos"></i> Proyectos </a>
+                      <a style="font-family: 'Abel';" class="nav-link active" href="#"><i><img src="<?php echo $ruta; ?>/img/icons/assignment_white_24dp.svg" alt="proyectos"></i> Proyectos </a>
+                    </li>
+                    <li @click='menu=4' class="nav-item">
+                        <a style="font-family: 'Abel';" class="nav-link active" href="#"><i><img src="<?php echo $ruta; ?>/img/icons/solicitudes_icon_24px.svg" alt="Solicitudes"></i> Solicitudes </a>
                     </li>
                     <li @click='menu=1' class="nav-item">
                         <a style="font-family: 'Abel';" class="nav-link active" href="#"><i><img src="<?php echo $ruta; ?>/img/icons/search_white_24dp.svg" alt="buscar"></i> Buscar estudiantes </a>

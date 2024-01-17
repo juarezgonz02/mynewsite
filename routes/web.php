@@ -42,6 +42,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['Administrador'])->group(function () {
         Route::get('/todos_proyectos', 'ProyectoController@index');
+        Route::get('/buscar_nombre', 'ProyectoController@buscar_nombre');
+        Route::get('/buscar_filtros', 'BusquedaController@buscar_filtros');
         Route::get('/historial_proyectos', 'ProyectoController@proyectosNoDisponibles');
         Route::post('/proyecto/insertar', 'ProyectoController@store');
          // REUNION 
@@ -60,6 +62,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/facultad', 'FacultadController@index');
         Route::put('/estudiante/actualizar', 'UserController@actualizarEstudiante');
         Route::get('/cupos_actuales', 'ProyectoController@cuposActuales');
+        Route::get('/solicitudes', 'ProyectoxEstudianteController@get_all_applications');
     });
 
     Route::middleware(['NormalUser'])->group(function () {

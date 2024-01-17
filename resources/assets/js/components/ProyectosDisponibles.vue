@@ -24,6 +24,37 @@
                             </b>
                     </div>
                     <div class="card-body">
+                         <!-- Barra accion superior -->
+                       <div class="form-group" style=" flex-wrap: wrap; flex-direction: column-reverse;">
+                            <div class="filter-group">
+                                <form class="search-group">
+                                    <div class="search-bar">
+                                        <input class="search-input" style="margin: auto; width: 100%;" type="text" v-model="filtrandoPorNombre" placeholder="Buscar por nombre del proyecto">
+                                    </div>
+                                    <div style="flex-direction: column-reverse">
+                                        <button type="button" @click="bindDataByFilters(0)" class="btn btn-primary search-button"><i class="icon-magnifier"></i> Buscar</button>
+                                    </div>
+                                </form>
+                                <div class="filter-selector" >
+                                    
+                                    <select class="custom-select" v-model="filtrandoPor" @change="bindDataByFilters(0)">
+                                        <option value="todas" disabled selected>Filtrar por tipo: </option>
+                                        <option value="ext"> Externa </option>
+                                        <option value="int"> Interna </option>
+                                    </select>
+                                </div>
+                                <div class="filter-selector">
+                                    <select class="custom-select"  v-model="ordenandoPor" @change="bindDataByFilters(0)">
+                                        <option value="recientes" disabled selected>Ordenar por: </option>
+                                        <option :value="`recientes`" >Reciente</option>
+                                        <option :value="`menos_cupos`"> Menos cupos libres </option>
+                                        <option :value="`mas_cupos`"> Mas cupos libres </option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!---->
                         <table class="table table-bordered table-hover table-sm" style="font-size: 1.25em;">
                             <thead>
                                 <tr>
@@ -202,7 +233,10 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                     'from' : 0,
                     'to' : 0
                 },
-                offset : 3
+                offset : 3,
+                filtrandoPor: "todas",
+                filtrandoPorNombre: "",
+                ordenandoPor: "recientes"
             }
         },
         computed:{
@@ -343,10 +377,61 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
             logout(){
                 var url = `${API_HOST}/logout`;
                 axios.post(url).then(() => location.href = `${API_HOST}/`)
-            }
+            },
+            bindDataByFilters(page){
+
+                let me = this;
+                me.loadTable = true;
+                axios.get(`${API_HOST}/get_user`).then(function (response) {
+                    me.user_id = response.data.idUser;
+                    me.user_email = response.data.correo;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+                axios.get(`${API_HOST}/ya_aplico`).then(function (response) {
+                    me.ya_aplico_hoy = response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+                // Si ya aplicó hoy, no se cargan los proyectos
+                var url = `${API_HOST}/proyectos_aplicados` /*?page=' + page*/;
+                axios.get(url).then(function (response) {
+                    me.arrayProyectosAplicados = response.data;
+                    // Si alguno de los proyectos ya aplicados, tiene estado aplicado (1), ya no puede aplicar a nuevo proyecto
+                    me.arrayProyectosAplicados.forEach(proyecto => {
+                        if(proyecto.estadoPxe == 1){
+                            me.ya_aplico_proyecto = 1;
+                        }
+                    });
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+                axios.get(`${API_HOST}/pxe_estudiante`).then(function (response) {
+                    me.arrayPXE = response.data;
+                    //console.log(me.arrayPXE);
+                }).catch(function (error) {
+                    console.log(error);
+                });
+
+                var url = `${API_HOST}/proyectos_carrera?page=${page}`;
+                axios.get(url).then(function (response) {
+                    var respuesta = response.data;
+                    var proyectos = respuesta.proyectos.data;
+                    me.arrayProyectos = proyectos;
+                    me.pagination = respuesta.pagination;
+                    me.loadTable = false;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
         },
         mounted() {
-            this.bindData();
+            this.bindDataByFilters(1);
         }
     }
 </script>
@@ -426,4 +511,32 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
         
     }
 
+    
+    .filter-group{
+        display: flex;
+        gap: 1em;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .search-bar{
+        flex: 1;
+    }
+
+    .search-group{
+        flex: 2;
+        display: flex;
+        gap: 1em;
+        height: fit-content;
+        flex-wrap: nowrap;
+    }
+
+    .filter-selector {
+        max-width: 20%;
+    }
+
+    .search-input {
+        flex: 2;
+        height: 100%;
+    }
 </style>
