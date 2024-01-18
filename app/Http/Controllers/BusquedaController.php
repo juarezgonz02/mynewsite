@@ -12,39 +12,6 @@ use Mail;
 
 class BusquedaController extends Controller
 {
-    public function buscar_nombre(Request $request)
-    {
-        if(!$request->ajax()) return redirect('/home');
-
-        $name = $request->query('name');
-
-        $proyectos = Proyecto::where('nombre' ,'like', $name."%")->orderByRaw('created_at DESC')->paginate(5);
-
-        $cupos = ProyectoxEstudiante::select('idProyecto')->where('estado','=','0')->groupBy('idProyecto')->get();
-
-        for($i = 0; $i < count($proyectos); $i++){
-            $proyectos[$i]->notificaciones = 0;
-            for($j = 0; $j < count($cupos) ; $j++){
-                if($proyectos[$i]->idProyecto == $cupos[$j]->idProyecto){
-                    $proyectos[$i]->notificaciones = 1;
-                    break;
-                }
-            }
-        }
-
-        return [
-            'pagination' => [
-                'total'         => $proyectos->total(),
-                'current_page'  => $proyectos->currentPage(),
-                'per_page'      => $proyectos->perPage(),
-                'last_page'     => $proyectos->lastPage(),
-                'from'          => $proyectos->firstItem(),
-                'to'            => $proyectos->lastItem(),
-            ],
-            'proyectos' => $proyectos
-        ];
-    }
-
     public function buscar_filtros(Request $request)
     {
         if(!$request->ajax()) return redirect('/home');
