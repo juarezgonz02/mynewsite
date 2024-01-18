@@ -240,14 +240,28 @@ class ProyectoxEstudianteController extends Controller{
 
     public function get_all_applications(Request $request){
         
+
+        $name = $request->query('nombre');
+        
+        $carrera = $request->query('carrera');
+        
+
         $solicitudes = ProyectoxEstudiante::leftJoin('proyecto', 'proyecto.idProyecto', '=', 'proyectoxestudiante.idProyecto')
         ->leftJoin('users', 'users.idUser', '=', 'proyectoxestudiante.idUser')
         ->leftJoin('carrera', 'users.idCarrera', 'carrera.idCarrera')
         ->leftJoin('perfil', 'users.idPerfil', 'perfil.idPerfil')
-        ->where('proyectoxestudiante.estado', '=', '0')->select("users.nombres as u_nombre", "users.apellidos as u_apellido", 'carrera.nombre as carrera', 'perfil.descripcion as ano',"proyecto.*", "users.nombres", "users.apellidos", "users.correo" )
-        ->paginate(10);
+        ->select("users.nombres as u_nombre", "users.apellidos as u_apellido", 'carrera.idCarrera as id_c' , 'carrera.nombre as carrera', 'perfil.descripcion as ano',"proyecto.*", "users.nombres", "users.apellidos", "users.correo" )
+        ->where('proyectoxestudiante.estado', '=', '0');
+        
+        if($name != ""){
+            $solicitudes = $solicitudes->where('proyecto.nombre', 'like', $name.'%');
+        }
 
-        $proyectos = [];
+        if($carrera != "-1"){
+            $solicitudes = $solicitudes->where('users.idCarrera', '=', $carrera);
+        }    
+    
+        $solicitudes = $solicitudes->paginate(10);
 
         return [
             'pagination' => [
