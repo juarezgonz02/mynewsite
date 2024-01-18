@@ -16,7 +16,7 @@
                        <!-- Barra accion superior -->
                        <div class="form-group" style=" flex-wrap: wrap; flex-direction: column-reverse;">
                             <div class="filter-group">
-                                <form class="search-group">
+                                <form class="search-group" @submit.prevent="bindDataByFilters(0)">
                                     <div class="search-bar">
                                         <input class="search-input" style="margin: auto; width: 100%;" type="text" v-model="filtrandoPorNombre" placeholder="Buscar por nombre del proyecto">
                                     </div>
@@ -27,7 +27,7 @@
                                 <div class="filter-selector" >
                                     
                                     <select class="custom-select" v-model="filtrandoPorCarrera" @change="bindDataByFilters(0)">
-                                        <option value="todas" disabled selected>Filtrar por carrera: </option>
+                                        <option value="-1" disabled selected>Filtrar por carrera: </option>
                                         <option v-for="carrera in arrayCarreras" :value="carrera.idCarrera" :key="carrera.idCarrera">{{carrera.nombre}}</option>
                                     </select>
                                 </div>

@@ -27,7 +27,7 @@
                          <!-- Barra accion superior -->
                        <div class="form-group" style=" flex-wrap: wrap; flex-direction: column-reverse;">
                             <div class="filter-group">
-                                <form class="search-group">
+                                <form class="search-group" @submit.prevent="bindDataByFilters(0)">
                                     <div class="search-bar">
                                         <input class="search-input" style="margin: auto; width: 100%;" type="text" v-model="filtrandoPorNombre" placeholder="Buscar por nombre del proyecto">
                                     </div>
@@ -37,12 +37,14 @@
                                 </form>
                                 <div class="filter-selector" >
                                     
-                                    <select class="custom-select" v-model="filtrandoPor" @change="bindDataByFilters(0)">
+                                    <select class="custom-select" v-model="filtrandoPorTipo" @change="bindDataByFilters(0)">
                                         <option value="todas" disabled selected>Filtrar por tipo: </option>
-                                        <option value="ext"> Externa </option>
-                                        <option value="int"> Interna </option>
+                                        <option value="Externas"> Externa </option>
+                                        <option value="Internas"> Interna </option>
                                     </select>
                                 </div>
+
+                                <!--  
                                 <div class="filter-selector">
                                     <select class="custom-select"  v-model="ordenandoPor" @change="bindDataByFilters(0)">
                                         <option value="recientes" disabled selected>Ordenar por: </option>
@@ -51,6 +53,7 @@
                                         <option :value="`mas_cupos`"> Mas cupos libres </option>
                                     </select>
                                 </div>
+                                  -->
 
                             </div>
                         </div>
@@ -234,7 +237,7 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                     'to' : 0
                 },
                 offset : 3,
-                filtrandoPor: "todas",
+                filtrandoPorTipo: "todas",
                 filtrandoPorNombre: "",
                 ordenandoPor: "recientes"
             }
@@ -317,7 +320,7 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
             cambiarPagina(page){
                 let me = this;
                 me.pagination.current_page = page;
-                me.bindData(page);
+                me.bindDataByFilters(page);
             },
             aplicarProyecto(){
                 let me = this
@@ -339,7 +342,7 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
             cerrarModal(){
                 this.modal = 0;
                 this.id_proyecto = 0
-                this.bindData();
+                this.bindDataByFilters();
             },
             cerrarModalDos(){
                 this.modal2 = 0;
@@ -417,7 +420,7 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                     console.log(error);
                 });
 
-                var url = `${API_HOST}/proyectos_carrera?page=${page}`;
+                var url = `${API_HOST}/proyectos_carrera?nombre=${this.filtrandoPorNombre}&tipo=${this.filtrandoPorTipo}&page=${page}`;
                 axios.get(url).then(function (response) {
                     var respuesta = response.data;
                     var proyectos = respuesta.proyectos.data;

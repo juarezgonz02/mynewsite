@@ -16,7 +16,7 @@
                        <!-- Barra accion superior -->
                        <div class="form-group" style=" flex-wrap: wrap; flex-direction: column-reverse;">
                             <div class="filter-group">
-                                <form class="search-group">
+                                <form class="search-group" @submit.prevent="bindDataByFilters(0)">
                                     <div class="search-bar">
                                         <input class="search-input" style="margin: auto; width: 100%;" type="text" v-model="filtrandoPorNombre" placeholder="Buscar por nombre del proyecto">
                                     </div>

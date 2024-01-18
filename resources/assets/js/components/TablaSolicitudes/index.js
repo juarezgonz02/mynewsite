@@ -72,7 +72,7 @@ export default {
             offset : 3,
             arraySolicitudes: [],
             filtrandoPorNombre: "",
-            filtrandoPorCarrera: "todas",
+            filtrandoPorCarrera: "-1",
             ordenandoPor: "recientes",
             selectedFilter: "",
             proyecto: ""
