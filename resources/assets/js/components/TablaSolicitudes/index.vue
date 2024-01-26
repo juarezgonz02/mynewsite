@@ -53,26 +53,6 @@
                                     <td id="disappear" v-text="solicitud.carrera" ></td>
                                     <td v-text="`${solicitud.cupos_act}${'/'}${solicitud.cupos}`" data-toggle="modal" data-target="#projectDetailModal" style="text-align: center;"></td>
                                     <td id="icons-pos" >
-                                        <!-- Unussed>
-                                            <div class="button-container">
-                                                <button type="button" @click="abrirModal('editar', proyecto)" data-toggle="modal" data-target="#editModal" class="btn btn-warning btn-sm" style="width: 100%;">
-                                                    <i class="icon-pencil"></i>
-                                                    <span class="btn-label">Editar</span>
-                                            </button>
-                                        </div>
-                                        <div class="button-container">
-                                            <button type="button" @click="abrirModal('estado', proyecto)" data-toggle="modal" data-target="#statusModal" class="btn btn-danger btn-sm" style="margin: 8px 0; width: 100%;">
-                                                <i class="icon-lock"></i>
-                                                <span class="btn-label">Desactivar</span>
-                                            </button>
-                                        </div>
-                                        <div class="button-container">
-                                            <button type="button" @click="abrirModal('reunion', proyecto)" data-toggle="modal" data-target="#meetingModal" class="btn btn-info btn-sm" id="meetingbutton" style="width: 100%;">
-                                                <i class="icon-people"></i>
-                                                <span class="btn-label">Reunión</span>
-                                            </button>
-                                        </div>
-                                        <!-->
                                             <div class="button-container">
                                                 <button type="button" @click="abrirModal('estudiantes', solicitud)" data-toggle="modal" data-target="#membersModal" class="btn btn-info btn-sm" id="membersbutton" style="margin-bottom: 8px; width: 100%;">
                                                     <i class="icon-people"></i>

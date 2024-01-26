@@ -63,6 +63,10 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/estudiante/actualizar', 'UserController@actualizarEstudiante');
         Route::get('/cupos_actuales', 'ProyectoController@cuposActuales');
         Route::get('/solicitudes', 'ProyectoxEstudianteController@get_all_applications');
+        
+        Route::post('/users/admin/new', 'AdminUserController@createUser');
+        Route::delete('/users/admin/delete', 'AdminUserController@deleteAdminUser');
+        Route::get('/users/admin/all', 'AdminUserController@getAllAdmins');
     });
 
     Route::middleware(['NormalUser'])->group(function () {
