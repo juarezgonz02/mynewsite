@@ -66,10 +66,24 @@ class ProyectosxCarreraController extends Controller
         // ->where('proyecto.fecha_inicio', '>=', date('Y-m-d'))// Se mostraran los proyectos que aun no han iniciado deacuerdo a la fecha de consulta
         ->whereRaw('(proyectoxestudiante.idUser !=' . $user->idUser . ' OR proyectoxestudiante.idUser IS NULL)')
         ->whereRaw('proyecto.idProyecto NOT IN (SELECT p.idProyecto FROM proyecto p, proyectoxestudiante pe WHERE p.idProyecto = pe.idProyecto AND pe.idUser = ' . $user->idUser . ')')
-        ->whereRaw('proyecto.cupos_act < proyecto.cupos')
-        ->groupBy('proyecto.idProyecto', 'proyecto.nombre', 'proyecto.descripcion', 'proyecto.estado', 'proyecto.tipo_horas', 'proyecto.cupos_act', 'proyecto.cupos', 'proyecto.horario', 'proyecto.encargado','proyecto.fecha_inicio','proyecto.fecha_fin')
-        ->orderBy('proyecto.idProyecto', 'desc')->paginate(10);
+        ->whereRaw('proyecto.cupos_act < proyecto.cupos');
         
+        $name = $request -> query('nombre');
+        $tipo = $request -> query('tipo');
+
+        if($name != ''){
+            $proyectos = $proyectos->where('proyecto.nombre', "like", $name.'%');
+            
+        }
+        
+        if($tipo != 'todas'){
+            $proyectos = $proyectos->where('proyecto.tipo_horas', "=", $tipo);
+
+        }
+        
+        $proyectos = $proyectos->groupBy('proyecto.idProyecto', 'proyecto.nombre', 'proyecto.descripcion', 'proyecto.estado', 'proyecto.tipo_horas', 'proyecto.cupos_act', 'proyecto.cupos', 'proyecto.horario', 'proyecto.encargado','proyecto.fecha_inicio','proyecto.fecha_fin')
+        ->orderBy('proyecto.idProyecto', 'desc')->paginate(10);
+
         return [
             'pagination' => [
                 'total'         => $proyectos->total(),

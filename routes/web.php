@@ -42,6 +42,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['Administrador'])->group(function () {
         Route::get('/todos_proyectos', 'ProyectoController@index');
+        Route::get('/buscar_nombre', 'ProyectoController@buscar_nombre');
+        Route::get('/buscar_filtros', 'BusquedaController@buscar_filtros');
         Route::get('/historial_proyectos', 'ProyectoController@proyectosNoDisponibles');
         Route::post('/proyecto/insertar', 'ProyectoController@store');
          // REUNION 
@@ -65,6 +67,11 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/proyectos/{id_proyecto}/estudiante/{id_estudiante}', 'ProyectoxEstudianteController@removerEstudiante' );
         Route::patch('/estudiante/{id_estudiante}/remover-timeout', 'UserController@removerTimeOut' );
         Route::get('/estadisticas', 'EstadisticasController@getEstadisticasGenerales');
+        Route::get('/solicitudes', 'ProyectoxEstudianteController@get_all_applications');
+        
+        Route::post('/users/admin/new', 'AdminUserController@createUser');
+        Route::delete('/users/admin/delete', 'AdminUserController@deleteAdminUser');
+        Route::get('/users/admin/all', 'AdminUserController@getAllAdmins');
     });
 
     Route::middleware(['NormalUser'])->group(function () {

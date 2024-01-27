@@ -259,4 +259,42 @@ class ProyectoxEstudianteController extends Controller{
             'message' => 'Alumno eliminado de proyecto'
         ]);
     }
+    public function get_all_applications(Request $request){
+        
+
+        $name = $request->query('nombre');
+        
+        $carrera = $request->query('carrera');
+        
+
+        $solicitudes = ProyectoxEstudiante::leftJoin('proyecto', 'proyecto.idProyecto', '=', 'proyectoxestudiante.idProyecto')
+        ->leftJoin('users', 'users.idUser', '=', 'proyectoxestudiante.idUser')
+        ->leftJoin('carrera', 'users.idCarrera', 'carrera.idCarrera')
+        ->leftJoin('perfil', 'users.idPerfil', 'perfil.idPerfil')
+        ->select("users.nombres as u_nombre", "users.apellidos as u_apellido", 'carrera.idCarrera as id_c' , 'carrera.nombre as carrera', 'perfil.descripcion as ano',"proyecto.*", "users.nombres", "users.apellidos", "users.correo" )
+        ->where('proyectoxestudiante.estado', '=', '0');
+        
+        if($name != ""){
+            $solicitudes = $solicitudes->where('proyecto.nombre', 'like', $name.'%');
+        }
+
+        if($carrera != "-1"){
+            $solicitudes = $solicitudes->where('users.idCarrera', '=', $carrera);
+        }    
+    
+        $solicitudes = $solicitudes->paginate(10);
+
+        return [
+            'pagination' => [
+                'total'         => $solicitudes->total(),
+                'current_page'  => $solicitudes->currentPage(),
+                'per_page'      => $solicitudes->perPage(),
+                'last_page'     => $solicitudes->lastPage(),
+                'from'          => $solicitudes->firstItem(),
+                'to'            => $solicitudes->lastItem(),
+            ],
+            'solicitudes' => $solicitudes
+        ];
+    }
+
 }

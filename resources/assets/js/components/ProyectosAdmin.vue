@@ -12,13 +12,40 @@
                 </div>
                 <div v-else class="card" style="border: none;">
                     <div class="card-body">
-                        <div class="form-group row" style="flex-direction: row-reverse;">
-                            <div class="col-md-6">
-                                <div class="input-group" style="flex-direction: row-reverse;">
+                       
+                       <!-- Barra accion superior -->
+                       <div class="form-group" style=" flex-wrap: wrap; flex-direction: column-reverse;">
+                            <div class="filter-group">
+                                <form class="search-group" @submit.prevent="bindDataByFilters(0)">
+                                    <div class="search-bar">
+                                        <input class="search-input" style="margin: auto; width: 100%;" type="text" v-model="filtrandoPorNombre" placeholder="Buscar por nombre del proyecto">
+                                    </div>
+                                    <div style="flex-direction: column-reverse">
+                                        <button type="button" @click="bindDataByFilters(0)" class="btn btn-primary search-button"><i class="icon-magnifier"></i> Buscar</button>
+                                    </div>
+                                </form>
+                                <div class="filter-selector" >
+                                    
+                                    <select class="custom-select" v-model="filtrandoPorCarrera" @change="bindDataByFilters(0)">
+                                        <option value="-1" disabled selected>Filtrar por carrera: </option>
+                                        <option v-for="carrera in arrayCarreras" :value="carrera.idCarrera" :key="carrera.idCarrera">{{carrera.nombre}}</option>
+                                    </select>
+                                </div>
+                                <div class="filter-selector">
+                                    <select class="custom-select"  v-model="ordenandoPor" @change="bindDataByFilters(0)">
+                                        <option value="" disabled selected>Ordenar por: </option>
+                                        <option :value="`recientes`" >Reciente</option>
+                                        <option :value="`menos_cupos`"> Menos cupos libres </option>
+                                        <option :value="`mas_cupos`"> Mas cupos libres </option>
+                                    </select>
+                                </div>
+                                <div style="flex-direction: column-reverse">
                                     <button type="button" @click="abrirModal('insertar', null)" data-toggle="modal" data-target="#editModal" class="btn btn-primary"><i class="icon-plus"></i> Agregar Proyecto</button>
                                 </div>
                             </div>
                         </div>
+                        <!---->
+
                         <table class="table table-bordered table-hover table-sm" style="font-size: 1.25em;">
                             <thead>
                                 <tr>
@@ -674,6 +701,11 @@ import Swal from 'sweetalert2';
                 nombre_proyecto : '',
                 modal_estado_proyecto : '',
 
+                filtrandoPorNombre: "",
+                filtrandoPorCarrera: "-1",
+                ordenandoPor: "recientes",
+                selectedFilter: "",
+                proyecto: ""
             }
         },
         computed:{
@@ -702,6 +734,7 @@ import Swal from 'sweetalert2';
         },
         methods:{
             bindData(page){
+
                 let me = this;
                 me.loadTable = true;
 
@@ -723,10 +756,39 @@ import Swal from 'sweetalert2';
                     console.log(error);
                 });
             },
+            bindDataByFilters(page){
+
+                let me = this;
+
+                me.loadTable = true;
+
+                var url = `${API_HOST}/buscar_filtros?nombre=${me.filtrandoPorNombre}&carrera=${me.filtrandoPorCarrera}&orden=${me.ordenandoPor}&page=${page}`;
+
+                me.getCarrerasAndPerfils();
+                
+                axios.get(`${API_HOST}/get_user`).then(function (response) {
+                    me.user_email = response.data.correo;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+                
+                axios.get(url).then(function (response) {
+                    var respuesta = response.data;
+                    me.arrayProyectos = respuesta.proyectos.data;
+                    me.pagination = respuesta.pagination;
+                    me.loadTable = false;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
             cambiarPagina(page){
                 let me = this;
                 me.pagination.current_page = page;
-                me.bindData(page);
+
+                me.bindDataByFilters(page);
+                
             },
             actualizarInsertarProyecto(){
                 if(this.validarProyecto()){
@@ -1301,7 +1363,7 @@ import Swal from 'sweetalert2';
             }
         },
         mounted() {
-            this.bindData();
+            this.bindDataByFilters(1);
         },
     }
 </script>
@@ -1477,6 +1539,34 @@ import Swal from 'sweetalert2';
     #estadorp{
         display: none;
     }
+}
+
+.filter-group{
+    display: flex;
+    gap: 1em;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.search-bar{
+    flex: 1;
+}
+
+.search-group{
+    flex: 2;
+    display: flex;
+    gap: 1em;
+    height: fit-content;
+    flex-wrap: nowrap;
+}
+
+.filter-selector {
+    max-width: 20%;
+}
+
+.search-input {
+    flex: 2;
+    height: 100%;
 }
 
 </style>

@@ -30,7 +30,9 @@ Vue.component('admin-estudiantes', require('./components/EstudiantesAdmin.vue'))
 Vue.component('spinner', require('./components/Spinner.vue'));
 Vue.component('table-loader', require('./components/TableLoader.vue'));
 Vue.component('estadisticas', require('./components/Estadisticas.vue'));
+Vue.component('todas-solicitudes', require('./components/TablaSolicitudes/index.vue'));
 Vue.use(VueSweetalert2);
+
 
 
 const app = new Vue({
