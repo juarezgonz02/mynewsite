@@ -536,17 +536,20 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
 
     
     .filter-group{
+    align-items: center;
         display: flex;
         gap: 1em;
         flex-wrap: wrap;
         justify-content: space-between;
     }
 
-    .search-bar{
+    .search-bar{ 
+    height: 100%;
         flex: 1;
     }
 
-    .search-group{
+    .search-group{ 
+    align-items: center;
         flex: 2;
         display: flex;
         gap: 1em;
