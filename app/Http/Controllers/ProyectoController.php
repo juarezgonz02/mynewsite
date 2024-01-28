@@ -85,6 +85,7 @@ class ProyectoController extends Controller
         $proyecto->contraparte = $request->contraparte;
         $proyecto->cupos_act = $request->cupos_act;
         $proyecto->cupos = $request->cupos;
+        $proyecto->estado_proyecto = $request->estado_proyecto;
         $proyecto->descripcion = $request->descripcion;
         $proyecto->encargado = $request->encargado;
         $proyecto->fecha_inicio = $request->fecha_inicio;
@@ -151,6 +152,7 @@ class ProyectoController extends Controller
         $proyecto = Proyecto::findOrFail($request->idProyecto);
             $proyecto->contraparte = $request->contraparte;
             $proyecto->cupos = $request->cupos;
+            $proyecto->estado_proyecto = $request->estado_proyecto;
             $proyecto->descripcion = $request->descripcion;
             $proyecto->encargado = $request->encargado;
             $proyecto->fecha_inicio = $request->fecha_inicio;
@@ -159,6 +161,7 @@ class ProyectoController extends Controller
             $proyecto->nombre = $request->nombre;
             $proyecto->tipo_horas = $request->tipo_horas;
             $proyecto->correo_encargado = $request->correo_encargado;
+            $proyecto->estado = $request->estado;
         $proyecto->save();
 
         ProyectoxCarrera::where('idProyecto', '=', $request->idProyecto)->delete();
@@ -187,6 +190,7 @@ class ProyectoController extends Controller
         if(!$request->ajax()) return redirect('/home');
         $proyecto = Proyecto::findOrFail($request->idProyecto);
         $proyecto->estado = $request->estado;
+        $proyecto->estado_proyecto = $request->estado_proyecto;
         $proyecto->save();
 
         
@@ -249,5 +253,26 @@ class ProyectoController extends Controller
         
 
         
+    }
+    public function getMisProyectos(Request $request) {
+        $user = Auth::user();
+        $proyectos = $user->proyectos()
+                            ->with(['carreras', 'estudiantes.carrera.facultad'])
+                        ->orderBy('created_at', 'desc')
+                            ->get();
+
+        return response()->json($proyectos);
+    }
+
+    public function getEstudianteProyecto(Request $request, $idEstudiante ){
+
+        $proyectos = Proyecto::join('proyectoxestudiante', 'proyecto.idProyecto', '=', 'proyectoxestudiante.idProyecto')
+                            ->join('users', 'users.idUser', '=', 'proyectoxestudiante.idUser')
+                            ->select('proyecto.nombre', 'proyecto.descripcion', 'proyecto.encargado', 'proyecto.correo_encargado', 'proyecto.horario', 'proyecto.fecha_inicio', 'proyecto.fecha_fin', 'proyecto.tipo_horas', 'proyecto.contraparte', 'proyecto.cupos', 'proyecto.cupos_act', 'proyecto.estado', 'proyecto.idProyecto')
+                            ->where('users.idUser', '=', $idEstudiante)
+                        ->where('proyectoxestudiante.estado', '=', '1')
+                            ->get();
+
+        return response()->json($proyectos);
     }
 }

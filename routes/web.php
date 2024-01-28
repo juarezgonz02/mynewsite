@@ -49,6 +49,8 @@ Route::middleware(['auth'])->group(function () {
          // REUNION 
         Route::post('/sendMeetingMail', 'ProyectoController@postSendMeetingEmails');
 
+        Route::get('/estudiante/{idEstudiante}/proyectos', 'ProyectoController@getEstudianteProyecto');
+
         Route::put('/proyecto/actualizar', 'ProyectoController@update'); 
         Route::put('/proyecto/estado', 'ProyectoController@state');
         Route::get('/carrera', 'CarreraController@index');
@@ -62,6 +64,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/facultad', 'FacultadController@index');
         Route::put('/estudiante/actualizar', 'UserController@actualizarEstudiante');
         Route::get('/cupos_actuales', 'ProyectoController@cuposActuales');
+        Route::delete('/proyectos/{id_proyecto}/estudiante/{id_estudiante}', 'ProyectoxEstudianteController@removerEstudiante' );
+        Route::patch('/estudiante/{id_estudiante}/remover-timeout', 'UserController@removerTimeOut' );
+        Route::get('/estadisticas', 'EstadisticasController@getEstadisticasGenerales');
         Route::get('/solicitudes', 'ProyectoxEstudianteController@get_all_applications');
         
         Route::post('/users/admin/new', 'AdminUserController@createUser');

@@ -51,6 +51,7 @@
                                 <tr>
                                     <th style="text-align: center; width: 10%;">Nombre</th>
                                     <th id="disappear" style="text-align: center;">Descripción</th>
+                                    <th style="text-align: center; width: 10%;">Estado del proyecto</th>
                                     <th style="text-align: center; width: 10%;">Cupos</th>
                                     <th style="text-align: center; width: 10%;">Acciones</th>
                                 </tr>
@@ -59,6 +60,7 @@
                                 <tr id="fila" v-for="proyecto in arrayProyectos" :key="proyecto.idProyecto">
                                     <td id="pos" v-text="proyecto.nombre" data-toggle="modal" data-target="#projectDetailModal" @click="abrirModal('info', proyecto)"></td>
                                     <td id="disappear" v-text="proyecto.descripcion" data-toggle="modal" data-target="#projectDetailModal" @click="abrirModal('info', proyecto)"></td>
+                                    <td v-text="proyecto.estado_proyecto" data-toggle="modal" data-target="#projectDetailModal" @click="abrirModal('info', proyecto)" style="text-align: center;"></td>
                                     <td v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`" data-toggle="modal" data-target="#projectDetailModal" @click="abrirModal('info', proyecto)" style="text-align: center;"></td>
                                     <td id="icons-pos" >
                                         <div class="button-container">
@@ -159,6 +161,17 @@
                                             <option value="Externas">Externas</option>
                                         </select>
                                         <p :class="{show: errorProyecto[3] == 1, hide: errorProyecto[3] != 1}" class="error">Debe seleccionar un tipo de horas</p>
+                                    </div>
+                                </div>
+                                <div class="form-group row div-form">
+                                    <label class="col-md-3 form-control-label" for="text-input">Estado del proyecto</label>
+                                    <div class="col-md-9">
+                                        <select class="form-control" v-model="modal_estado_proyecto">
+                                            <option value="En curso">En curso</option>
+                                            <option value="Finalizado">Finalizado</option>
+                                            <option value="Cancelado">Cancelado</option>
+                                        </select>
+                                        <!--<p :class="{show: errorProyecto[3] == 1, hide: errorProyecto[3] != 1}" class="error">Debe seleccionar un tipo de horas</p>-->
                                     </div>
                                 </div>
                                 <div class="form-group row div-form">
@@ -361,10 +374,11 @@
                                             <th>Año de carrera</th>
                                             <th>Carrera</th>
                                             <th>Estado</th>
+                                            <th>Acción</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="estudiante in arrayEstudiantes" :key="estudiante.idEstudiante" >
+                                        <tr v-for="estudiante in arrayEstudiantes" :key="estudiante.idUser" >
                                             <td v-text="estudiante.nombres"></td>
                                             <td v-text="estudiante.apellidos"></td>
                                             <td v-text="estudiante.correo"></td>
@@ -386,6 +400,17 @@
                                                     <span  class="badge badge-danger" style="border-radius: 5px;"><p id="estadorp" style="display: inline;">RECHAZADO</p></span>
                                                 </div>
                                             </td>
+                                            <td>
+                                                <div v-if="estudiante.estado == 1">
+
+                                                    <button type="button" data-toggle="modal" data-target="#removeStudentModal" @click="
+                                                    abrirModal('remover_estudiante', estudiante)
+                                                    
+                                                    " class="btn btn-danger btn-sm">
+                                                    Remover
+                                                </button>  &nbsp;
+                                                </div>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -399,7 +424,7 @@
             </div>
             <!--Fin del modal-->
             <!--Inicio del modal de confirmacion para aceptar o rechazar estudiantes-->
-            <div class="modal fade" :class="{'mostrar' : modal4}" tabindex="-1" role="dialog" id="confirmModal" aria-hidden="true">
+            <div class="modal fade" :class="{'mostrar' : modal7}" tabindex="-1" role="dialog" id="confirmModal" aria-hidden="true">
                 <div v-if="loading == 1">
                     <spinner></spinner>
                 </div>
@@ -558,6 +583,44 @@
                 <!-- /.modal-dialog -->
             </div>
             <!--Fin del modal-->
+            <!--Inicio del modal estado del proyecto-->
+            <!-- <div class="modal fade" tabindex="-1" role="dialog" id="removeStudentModal" aria-hidden="true"> -->
+                <div class="modal fade" :class="{'mostrar' : modal4}" tabindex="-1" role="dialog" id="removeStudentModal" aria-hidden="true">
+                    <div v-if="loading == 1">
+                        <spinner></spinner>
+                    </div>
+                    <div v-if="loading == 0" class="modal-dialog modal-primary" role="document">
+                        <div class="modal-content ">
+                            <div class="modal-header">
+                                <div>
+                                    <h4 class="modal-title">Remover estudiante</h4>
+                                </div>
+                                <button id="cerrarModalARE1" type="button" class="close" data-dismiss="modal" @click="cerrarModal()" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div style="display: flex; flex-direction: row; align-items: baseline;">
+                                    <h6  >Estás a punto de remover a &nbsp;  </h6>
+                                    <h5 v-text="rem_nombre_completo"></h5>
+                                </div>
+                                <div style="display: flex; flex-direction: row; align-items: baseline;">
+                                    <h6>de:  &nbsp; </h6>
+                                    <h6 style="font-weight: 	bold;" v-text="nombre_proyecto"></h6>
+                                </div>
+                                <p>¿Estás seguro de que deseas remover a este estudiante? Al dar click en Confirmar el estudiante sera removido del proyecto 
+                                    y le sera aplicada una <b>penalización de 30 dias  </b>sin poder aplicar a otros proyectos.</p>
+                                
+                            </div>
+                            <div class="modal-footer">
+                                
+                                <button id="cerrarModalARE2" type="button" class="btn btn-secondary" data-dismiss="modal" @click="cerrarModal()">Cancelar</button>
+                                <button id="aceptarRechazarEst" type="button" class="btn btn-primary" data-dismiss="modal" @click ="removerEstudianteProyecto()">Confirmar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!--Fin del modal-->
             <footer class="app-footer" id="footer" style="display: flex; flex-direction: column; justify-content: center; font-size: 15px; padding: 10px 0px">
                 <span><a target="_blank" href="http://www.uca.edu.sv/servicio-social/">Centro de Servicio Social | UCA</a> &copy; 2021</span>
                 <span>Desarrollado por <a href="#"></a>Grupo de Horas Sociales</span>
@@ -591,6 +654,7 @@ import Swal from 'sweetalert2';
                 modal4 : 0,
                 modal5 : 0,
                 modal6 : 0,
+                modal7: 0,
                 id_proyecto : 0,  
                 id_estudiante : 0,              
                 modal_encargado : '',
@@ -632,6 +696,11 @@ import Swal from 'sweetalert2';
                     'to' : 0
                 },
                 offset : 3,
+                rem_nombre_completo : '',
+                proyecto : '',
+                nombre_proyecto : '',
+                modal_estado_proyecto : '',
+
                 filtrandoPorNombre: "",
                 filtrandoPorCarrera: "-1",
                 ordenandoPor: "recientes",
@@ -734,6 +803,7 @@ import Swal from 'sweetalert2';
                         'contraparte' : this.modal_contraparte,
                         'cupos_act' : 0,
                         'cupos' : this.modal_cupos,
+                        'estado_proyecto': this.modal_estado_proyecto,
                         'descripcion' : this.modal_desc,
                         'encargado' : this.modal_encargado,
                         'fecha_inicio' : this.modal_fecha_in,
@@ -750,11 +820,13 @@ import Swal from 'sweetalert2';
                     }); 
                 }
                 else{
+                    var estado = (this.modal_estado_proyecto == "Cancelado" ? 0 : 1);
                     axios.put(`${API_HOST}/proyecto/actualizar`, {
                         'idProyecto' : this.id_proyecto,
                         'nombre' : this.modal_nombre,
                         'contraparte' : this.modal_contraparte,
                         'cupos' : this.modal_cupos,
+                        'estado_proyecto': this.modal_estado_proyecto,
                         'descripcion' : this.modal_desc,
                         'encargado' : this.modal_encargado,
                         'fecha_inicio' : this.modal_fecha_in,
@@ -762,7 +834,8 @@ import Swal from 'sweetalert2';
                         'horario' : this.modal_horario,
                         'tipo_horas' : this.modal_tipo_horas,
                         'correo_encargado' : this.modal_correo,
-                        'carreraPerfil' : this.arrayCarreraPerfil
+                        'carreraPerfil' : this.arrayCarreraPerfil,
+                        'estado' : estado
                     }).then(function (response) {
                         me.cerrarModal();
                         me.bindData();
@@ -930,7 +1003,8 @@ import Swal from 'sweetalert2';
                     me.loading = 1
                     axios.put(`${API_HOST}/proyecto/estado`, {
                         'idProyecto' : this.id_proyecto,
-                        'estado' : 0
+                        'estado' : 0,
+                        'estado_proyecto' : "Cancelado"
                     }).then(function (response) {
                         $('#statusModal').modal('hide');
                         me.loading = 2;
@@ -952,6 +1026,7 @@ import Swal from 'sweetalert2';
                     this.modal3 = 0;
                     this.modal5 = 0;
                     this.modal6 = 0;
+                    this.modal7 = 0;
                     this.id_proyecto = 0;
                 }
             },
@@ -971,6 +1046,7 @@ import Swal from 'sweetalert2';
                             this.modal_horario = '';
                             this.modal_contraparte = '';
                             this.modal_tipo_horas = '';
+                            this.modal_estado_proyecto = '';
                             this.contraparte = '';
                             this.modal_fecha_in = '';
                             this.modal_fecha_fin = '';
@@ -991,6 +1067,7 @@ import Swal from 'sweetalert2';
                             this.modal_desc = data.descripcion;
                             this.modal_correo = data.correo_encargado;
                             this.modal_tipo_horas = data.tipo_horas;
+                            this.modal_estado_proyecto = data.estado_proyecto;
                             this.modal_cupos = data.cupos;
                             this.modal_horario = data.horario;
                             this.modal_fecha_in = data.fecha_inicio;
@@ -1026,6 +1103,7 @@ import Swal from 'sweetalert2';
                             this.flagError = false;
                             this.errorEstudianteMsg = '';
                             this.getEstudiantes()
+                            this.proyectoInscrito = data;
                             break;
                         }
                     case "confirmacion":
@@ -1069,6 +1147,19 @@ import Swal from 'sweetalert2';
                             this.errorPerfilMsg = "";
                             this.errorProyecto = [];
                             this.errorPerfilMsg = '';
+                            break;
+                        }
+                    case "remover_estudiante":
+                        {
+                            this.modal7 = 1;
+                            this.id_proyecto = this.proyectoInscrito.idProyecto;
+                            this.nombre_proyecto = this.proyectoInscrito.nombre;
+                            this.modal_cupos = data.cupos;
+                            this.carnet = '';
+                            this.rem_nombre_completo = data.nombres + " " + data.apellidos;
+                            this.id_estudiante = data.idUser;
+                            this.flagError = false;
+                            this.errorEstudianteMsg = '';
                             break;
                         }
                     default:
@@ -1226,6 +1317,24 @@ import Swal from 'sweetalert2';
             logout(){
                 var url = `${API_HOST}/logout`;
                 axios.post(url).then(() => location.href = `${API_HOST}/`)
+            },
+            removerEstudianteProyecto(){
+                let me = this;
+                me.loading = 1;
+                axios.delete(`${API_HOST}/proyectos/${me.id_proyecto}/estudiante/${me.id_estudiante}`, {
+                    'estado' : 0
+                }).then(function (response) {
+                    $('#removeStudentModal').modal('hide');
+                    $('#membersModal').modal('hide');
+                    me.loading = 2;
+                    
+                    
+                    me.getEstudiantes();
+                    me.bindData();
+                    me.loading = 0;
+                }).catch(function (error) {
+                    console.log(error);
+                });
             }
         },
         watch:{

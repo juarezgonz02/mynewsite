@@ -9,19 +9,19 @@ class AdminUserController extends Controller
 {
 
     public function createUser(Request $request){
-        if(!$req->ajax()) return redirect('/home');
+        if(!$request->ajax()) return redirect('/home');
         
-        $validator = Validator::make($request->all(), [
-            'correo' => 'required|string|email|unique:users,correo',
-            'nombre' => 'required|string|regex:/([a-zA-ZñÑáéíóúÁÉÍÓÚ])+((\s*)+([a-zA-ZñÑáéíóúÁÉÍÓÚ]*)*)+$/',
-            'apellido' => 'required|string|regex:/([a-zA-ZñÑáéíóúÁÉÍÓÚ])+((\s*)+([a-zA-ZñÑáéíóúÁÉÍÓÚ]*)*)+$/',
-            'genero' => 'required|in:F,M',
-            'contrasena' => 'required'
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'correo' => 'required|string|email|unique:users,correo',
+        //     'nombre' => 'required|string|regex:/([a-zA-ZñÑáéíóúÁÉÍÓÚ])+((\s*)+([a-zA-ZñÑáéíóúÁÉÍÓÚ]*)*)+$/',
+        //     'apellido' => 'required|string|regex:/([a-zA-ZñÑáéíóúÁÉÍÓÚ])+((\s*)+([a-zA-ZñÑáéíóúÁÉÍÓÚ]*)*)+$/',
+        //     'genero' => 'required|in:F,M',
+        //     'contrasena' => 'required'
+        // ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
-        }
+        // if ($validator->fails()) {
+        //     return response()->json($validator->messages(), 400);
+        // }
 
         $usuario = User::create([
             'nombres'               => strtoupper($request->nombre),
@@ -70,7 +70,8 @@ class AdminUserController extends Controller
 
     public function getAllAdmins(Request $request) {
         
-        $admins = $this->getAdminsExceptMe();
+        // $admins = $this->getAdminsExceptMe();
+        $admins = User::select("nombres", "apellidos", "correo")->where("idRol", "=", "1")->get();
         
         return [
             'users' => $admins
@@ -80,6 +81,6 @@ class AdminUserController extends Controller
     private function getAdminsExceptMe() {
         $me = Auth() -> user() -> idUser;
 
-        return User::select("nombres", "apellidos", "correo")->where("idUser", "not", "=", $me)->get();
+        return User::select("nombres", "apellidos", "correo")->where("idUser", "!=", $me)->where("idRol", "=", "1")->get();
     }
 }
