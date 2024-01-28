@@ -12,8 +12,8 @@
             
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Email</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
                 </tr>
             </thead>
             <tbody>
