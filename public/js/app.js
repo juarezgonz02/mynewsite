@@ -65,6 +65,27 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return API_HOST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return API_HOST_ASSETS; });
+/**
+ * Constante que contiene el endpoint de producción
+ * @type {string}
+
+export const API_HOST = 'http://201.131.110.26/desarrollo/CSS-UCA/public'
+ */
+/**
+ * Constante que contiene el endpoint de desarrollo
+ * @type {string}
+ */
+var API_HOST = 'http://uca-css.test/css-proyecto/public';
+// export const API_HOST = 'https://uca.edu.sv/servicio-social/proyectos/public';
+var API_HOST_ASSETS = '/css-proyecto/public';
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -372,27 +393,6 @@ module.exports = {
   trim: trim
 };
 
-
-/***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return API_HOST; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return API_HOST_ASSETS; });
-/**
- * Constante que contiene el endpoint de producción
- * @type {string}
-
-export const API_HOST = 'http://201.131.110.26/desarrollo/CSS-UCA/public'
- */
-/**
- * Constante que contiene el endpoint de desarrollo
- * @type {string}
- */
-var API_HOST = 'http://uca-css.test/css-proyecto/public';
-// export const API_HOST = 'https://uca.edu.sv/servicio-social/proyectos/public';
-var API_HOST_ASSETS = '/css-proyecto/public';
 
 /***/ }),
 /* 2 */
@@ -847,7 +847,7 @@ module.exports = g;
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
-var utils = __webpack_require__(0);
+var utils = __webpack_require__(1);
 var normalizeHeaderName = __webpack_require__(24);
 
 var DEFAULT_CONTENT_TYPE = {
@@ -1155,7 +1155,7 @@ process.umask = function() { return 0; };
 "use strict";
 
 
-var utils = __webpack_require__(0);
+var utils = __webpack_require__(1);
 var settle = __webpack_require__(25);
 var buildURL = __webpack_require__(27);
 var parseHeaders = __webpack_require__(28);
@@ -5734,6 +5734,7 @@ Vue.component('spinner', __webpack_require__(79));
 Vue.component('table-loader', __webpack_require__(84));
 Vue.component('estadisticas', __webpack_require__(91));
 Vue.component('todas-solicitudes', __webpack_require__(96));
+Vue.component('coordinadores', __webpack_require__(101));
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_sweetalert2___default.a);
 
 var app = new Vue({
@@ -25598,7 +25599,7 @@ module.exports = __webpack_require__(21);
 "use strict";
 
 
-var utils = __webpack_require__(0);
+var utils = __webpack_require__(1);
 var bind = __webpack_require__(7);
 var Axios = __webpack_require__(23);
 var defaults = __webpack_require__(6);
@@ -25685,7 +25686,7 @@ function isSlowBuffer (obj) {
 
 
 var defaults = __webpack_require__(6);
-var utils = __webpack_require__(0);
+var utils = __webpack_require__(1);
 var InterceptorManager = __webpack_require__(32);
 var dispatchRequest = __webpack_require__(33);
 var isAbsoluteURL = __webpack_require__(35);
@@ -25777,7 +25778,7 @@ module.exports = Axios;
 "use strict";
 
 
-var utils = __webpack_require__(0);
+var utils = __webpack_require__(1);
 
 module.exports = function normalizeHeaderName(headers, normalizedName) {
   utils.forEach(headers, function processHeader(value, name) {
@@ -25857,7 +25858,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 "use strict";
 
 
-var utils = __webpack_require__(0);
+var utils = __webpack_require__(1);
 
 function encode(val) {
   return encodeURIComponent(val).
@@ -25932,7 +25933,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 "use strict";
 
 
-var utils = __webpack_require__(0);
+var utils = __webpack_require__(1);
 
 /**
  * Parse headers into an object
@@ -25976,7 +25977,7 @@ module.exports = function parseHeaders(headers) {
 "use strict";
 
 
-var utils = __webpack_require__(0);
+var utils = __webpack_require__(1);
 
 module.exports = (
   utils.isStandardBrowserEnv() ?
@@ -26094,7 +26095,7 @@ module.exports = btoa;
 "use strict";
 
 
-var utils = __webpack_require__(0);
+var utils = __webpack_require__(1);
 
 module.exports = (
   utils.isStandardBrowserEnv() ?
@@ -26154,7 +26155,7 @@ module.exports = (
 "use strict";
 
 
-var utils = __webpack_require__(0);
+var utils = __webpack_require__(1);
 
 function InterceptorManager() {
   this.handlers = [];
@@ -26213,7 +26214,7 @@ module.exports = InterceptorManager;
 "use strict";
 
 
-var utils = __webpack_require__(0);
+var utils = __webpack_require__(1);
 var transformData = __webpack_require__(34);
 var isCancel = __webpack_require__(11);
 var defaults = __webpack_require__(6);
@@ -26299,7 +26300,7 @@ module.exports = function dispatchRequest(config) {
 "use strict";
 
 
-var utils = __webpack_require__(0);
+var utils = __webpack_require__(1);
 
 /**
  * Transform the data for a request or a response
@@ -39006,7 +39007,7 @@ exports.push([module.i, "\n@font-face {\r\n    font-family: 'Abel';\r\n    src: 
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__ = __webpack_require__(0);
 //
 //
 //
@@ -39399,7 +39400,7 @@ exports.push([module.i, "\n@font-face {\r\n    font-family: 'Abel';\r\n    src: 
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__ = __webpack_require__(0);
 //
 //
 //
@@ -40248,7 +40249,7 @@ exports.push([module.i, "\n@font-face {\r\n    font-family: 'Abel';\r\n    src: 
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__ = __webpack_require__(0);
 //
 //
 //
@@ -41707,7 +41708,7 @@ exports.push([module.i, "\n@font-face {\nfont-family: 'Abel';\nsrc: url(/css-pro
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__ = __webpack_require__(0);
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
@@ -42633,7 +42634,7 @@ exports.push([module.i, "\n@font-face {\n  font-family: 'Abel';\n  src: url(/css
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_sweetalert2__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_sweetalert2___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_sweetalert2__);
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -47152,7 +47153,7 @@ exports.push([module.i, "\n@font-face {\n  font-family: 'Abel';\n  src: url(/css
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__ = __webpack_require__(0);
 //
 //
 //
@@ -49088,7 +49089,7 @@ exports.push([module.i, "\n.container-dashboard[data-v-5465b578] {\r\n    \r\n  
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__ = __webpack_require__(0);
 //
 //
 //
@@ -49621,7 +49622,7 @@ exports.push([module.i, "\n@font-face {\n  font-family: 'Abel';\n  src: url(/css
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_sweetalert2__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_sweetalert2___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_sweetalert2__);
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -51824,6 +51825,555 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-ff5654bc", module.exports)
+  }
+}
+
+/***/ }),
+/* 101 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(102)
+}
+var normalizeComponent = __webpack_require__(4)
+/* script */
+var __vue_script__ = __webpack_require__(104)
+/* template */
+var __vue_template__ = __webpack_require__(105)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/Coordinadores.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-590c6427", Component.options)
+  } else {
+    hotAPI.reload("data-v-590c6427", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 102 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(103);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("4d6eb211", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-590c6427\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Coordinadores.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-590c6427\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Coordinadores.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 103 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Estilos generales para mejorar la apariencia de la tabla y los elementos */\n.container {\n  padding-top: 5vh;\n  max-width: 700px;\n  margin: 0 auto;\n}\n.newCoordContainer{\n  padding: 5vh;\n  max-width: 700px;\n  margin: 0 auto;\n  background-color: #f2f2f2;\n  border-radius: 20px;\n}\nh1 {\n  text-align: center;\n}\ntable {\n  width: 100%;\n  border-collapse: collapse;\n  margin-top: 20px;\n}\nth, td {\n  border: 1px solid #ddd;\n  padding: 8px;\n  text-align: left;\n}\nth {\n  background-color: #f2f2f2;\n}\ntr:nth-child(even) {\n  background-color: #f9f9f9;\n}\nbutton {\n  display: block;\n  margin-top: 20px;\n  padding: 10px;\n  background-color: #4CAF50;\n  color: white;\n  border: none;\n  cursor: pointer;\n  max-width: 200px;\n  margin: 10px 0;\n  font-size: 1rem;\n}\n\n\n/* Estilos para el modal */\ninput, select {\n  display: block;\n  margin: 10px 0;\n  width: 300px;\n}\np{\n  font-size: 1rem;\n  font-weight: 300;\n  color: #666;\n}\n\n/* Agregar estilos adicionales según sea necesario */\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 104 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__constants_endpoint__ = __webpack_require__(0);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            coordinadores: [],
+            showRegisterModal: false,
+            newCoordinador: {
+                nombre: '',
+                apellido: '',
+                correo: '',
+                contrasena: '',
+                genero: ''
+            },
+            errorMessage: '',
+            confirmPassword: '',
+            showSuccess: false
+        };
+    },
+
+    methods: {
+        showModal: function showModal() {
+            this.showRegisterModal = !this.showRegisterModal;
+        },
+        registerCoordinador: function registerCoordinador() {
+            this.errorMessage = '';
+            if (this.newCoordinador.nombre == '') {
+                // alert('El nombre es requerido');
+                this.errorMessage = 'El nombre es requerido';
+
+                return;
+            }
+
+            if (this.newCoordinador.apellido == '') {
+                // alert('El apellido es requerido');
+                this.errorMessage = 'El apellido es requerido';
+                return;
+            }
+
+            if (this.newCoordinador.correo == '') {
+                // alert('El correo es requerido');
+                this.errorMessage = 'El correo es requerido';
+                return;
+            }
+
+            if (this.newCoordinador.contrasena == '') {
+                // alert('La contraseña es requerida');
+                this.errorMessage = 'La contraseña es requerida';
+                return;
+            }
+
+            if (this.newCoordinador.genero == '') {
+                // alert('El genero es requerido');
+                this.errorMessage = 'El genero es requerido';
+                return;
+            }
+
+            // validate email format with regex includes domain @uca.edu.sv
+
+            var email = this.newCoordinador.correo;
+            var regexCorreo = /^[a-zA-Z0-9._-]+@uca\.edu\.sv$/;
+            if (!regexCorreo.test(email)) {
+                this.errorMessage = 'El correo no es un correo UCA valido';
+                return;
+            }
+
+            if (this.newCoordinador.contrasena != this.confirmPassword) {
+                this.errorMessage = 'Las contraseñas no coinciden';
+                return;
+            }
+
+            console.log(this.newCoordinador);
+
+            var me = this;
+
+            // /users/admin/new
+            axios.post(__WEBPACK_IMPORTED_MODULE_0__constants_endpoint__["a" /* API_HOST */] + '/users/admin/new', {
+                nombre: this.newCoordinador.nombre,
+                apellido: this.newCoordinador.apellido,
+                correo: this.newCoordinador.correo,
+                contrasena: this.newCoordinador.contrasena,
+                genero: this.newCoordinador.genero
+
+            }).then(function (response) {
+                // console.log(response.status);
+                if (response.status == 200) {
+                    me.showSuccess = true;
+                    //me.coordinadores.push(me.newCoordinador);
+                }
+                me.bindData();
+            }).catch(function (error) {
+                console.log(error);
+            });
+
+            // this.coordinadores.push(this.newCoordinador);
+            this.showRegisterModal = false;
+            this.newCoordinador = {
+                nombre: '',
+                apellido: '',
+                correo: '',
+                contrasena: '',
+                genero: ''
+            };
+            this.confirmPassword = '';
+        },
+        bindData: function bindData() {
+            this.coordinadores = [];
+            // console.log('bind data')
+            var me = this;
+            axios.get(__WEBPACK_IMPORTED_MODULE_0__constants_endpoint__["a" /* API_HOST */] + '/users/admin/all').then(function (response) {
+                me.coordinadores = response.data.users;
+                // console.log(response.data.users);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+    },
+    mounted: function mounted() {
+        this.bindData();
+    }
+});
+
+/***/ }),
+/* 105 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("main", { staticClass: "main" }, [
+    _c("div", { staticClass: "container" }, [
+      _c("h1", [_vm._v("Coordinadores")]),
+      _vm._v(" "),
+      _vm.showSuccess
+        ? _c(
+            "div",
+            {
+              staticStyle: {
+                color: "green",
+                border: "1px solid green",
+                "background-color": "rgb(242, 255, 242)",
+                padding: "10px",
+                "font-weight": "400"
+              }
+            },
+            [_c("p", [_vm._v("Coordinador registrado con exito")])]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _c("table", [
+        _vm._m(0),
+        _vm._v(" "),
+        _c(
+          "tbody",
+          _vm._l(_vm.coordinadores, function(coordinador) {
+            return _c("tr", { key: coordinador.id }, [
+              _c("td", [
+                _vm._v(
+                  _vm._s(coordinador.nombres + " " + coordinador.apellidos)
+                )
+              ]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(coordinador.correo))])
+            ])
+          }),
+          0
+        )
+      ]),
+      _vm._v(" "),
+      _c("button", { on: { click: _vm.showModal } }, [
+        _vm._v("Nuevo Coordinador")
+      ]),
+      _vm._v(" "),
+      _vm.showRegisterModal
+        ? _c("div", { staticClass: "newCoordContainer" }, [
+            _c("h2", [_vm._v("Nuevo Coordinador")]),
+            _vm._v(" "),
+            _vm.errorMessage
+              ? _c(
+                  "p",
+                  {
+                    staticStyle: {
+                      color: "red",
+                      border: "1px solid red",
+                      "background-color": "rgb(255, 242, 242)",
+                      padding: "10px",
+                      "font-weight": "400"
+                    }
+                  },
+                  [_vm._v(_vm._s(_vm.errorMessage))]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.newCoordinador.nombre,
+                  expression: "newCoordinador.nombre"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", placeholder: "Nombre", required: "" },
+              domProps: { value: _vm.newCoordinador.nombre },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.newCoordinador, "nombre", $event.target.value)
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.newCoordinador.apellido,
+                  expression: "newCoordinador.apellido"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", placeholder: "Apellido", required: "" },
+              domProps: { value: _vm.newCoordinador.apellido },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.newCoordinador, "apellido", $event.target.value)
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.newCoordinador.correo,
+                  expression: "newCoordinador.correo"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "email", placeholder: "Correo", required: "" },
+              domProps: { value: _vm.newCoordinador.correo },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.newCoordinador, "correo", $event.target.value)
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.newCoordinador.contrasena,
+                  expression: "newCoordinador.contrasena"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                type: "password",
+                placeholder: "Contraseña",
+                required: ""
+              },
+              domProps: { value: _vm.newCoordinador.contrasena },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(
+                    _vm.newCoordinador,
+                    "contrasena",
+                    $event.target.value
+                  )
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.confirmPassword,
+                  expression: "confirmPassword"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                type: "password",
+                placeholder: "Confirmar Contraseña",
+                required: ""
+              },
+              domProps: { value: _vm.confirmPassword },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.confirmPassword = $event.target.value
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.newCoordinador.genero,
+                    expression: "newCoordinador.genero"
+                  }
+                ],
+                staticClass: "form-control custom-select",
+                attrs: { required: "" },
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.newCoordinador,
+                      "genero",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  }
+                }
+              },
+              [
+                _c(
+                  "option",
+                  { attrs: { value: "", disabled: "", selected: "" } },
+                  [_vm._v("Seleccione su genero")]
+                ),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "M" } }, [_vm._v("Masculino")]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "F" } }, [_vm._v("Femenito")])
+              ]
+            ),
+            _vm._v(" "),
+            _c("p", [
+              _vm._v(
+                "*Verifica los datos del coordinador, recuerda que una vez registrado no podras realizar ningun tipo de cambio. "
+              )
+            ]),
+            _vm._v(" "),
+            _c("button", { on: { click: _vm.registerCoordinador } }, [
+              _vm._v("Registrar")
+            ])
+          ])
+        : _vm._e()
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Email")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-590c6427", module.exports)
   }
 }
 

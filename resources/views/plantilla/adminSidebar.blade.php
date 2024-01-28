@@ -28,6 +28,9 @@
                     <li @click='menu=5' class="nav-item">
                         <a style="font-family: 'Abel';" class="nav-link active" href="#"><i><img src="<?php echo $ruta; ?>/img/icons/stats.svg" alt="Estadisticas"></i> Estadisticas</a>
                     </li>
+                    <li @click='menu=6' class="nav-item">
+                        <a style="font-family: 'Abel';" class="nav-link active" href="#"><i><img src="<?php echo $ruta; ?>/img/icons/coordinadores.svg" alt="Estadisticas"></i> Coordinadores</a>
+                    </li>
                 </ul>
             </nav>
             <button class="sidebar-minimizer mobile-sidebar-toggler brand-minimizer" type="button"></button>
