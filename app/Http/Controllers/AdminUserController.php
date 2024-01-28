@@ -5,23 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Carrera;
+use Illuminate\Support\Facades\Validator;
+
 class AdminUserController extends Controller
 {
 
     public function createUser(Request $request){
         if(!$request->ajax()) return redirect('/home');
         
-        // $validator = Validator::make($request->all(), [
-        //     'correo' => 'required|string|email|unique:users,correo',
-        //     'nombre' => 'required|string|regex:/([a-zA-ZñÑáéíóúÁÉÍÓÚ])+((\s*)+([a-zA-ZñÑáéíóúÁÉÍÓÚ]*)*)+$/',
-        //     'apellido' => 'required|string|regex:/([a-zA-ZñÑáéíóúÁÉÍÓÚ])+((\s*)+([a-zA-ZñÑáéíóúÁÉÍÓÚ]*)*)+$/',
-        //     'genero' => 'required|in:F,M',
-        //     'contrasena' => 'required'
-        // ]);
 
-        // if ($validator->fails()) {
-        //     return response()->json($validator->messages(), 400);
-        // }
+        $validator = $this->valid($request); 
+        if ($validator -> fails()) {
+            return response()->json($validator->messages(), 400);
+        }
 
         $usuario = User::create([
             'nombres'               => strtoupper($request->nombre),
@@ -82,5 +78,17 @@ class AdminUserController extends Controller
         $me = Auth() -> user() -> idUser;
 
         return User::select("nombres", "apellidos", "correo")->where("idUser", "!=", $me)->where("idRol", "=", "1")->get();
+    }
+
+    private function valid(Request $request){
+        $validator = Validator::make($request->all(), [
+            'correo' => 'required|string|regex:/^.+@uca.edu.sv$/i|unique:users,correo',
+            'nombre' => 'required|string|regex:/([a-zA-ZñÑáéíóúÁÉÍÓÚ])+((\s*)+([a-zA-ZñÑáéíóúÁÉÍÓÚ]*)*)+$/',
+            'apellido' => 'required|string|regex:/([a-zA-ZñÑáéíóúÁÉÍÓÚ])+((\s*)+([a-zA-ZñÑáéíóúÁÉÍÓÚ]*)*)+$/',
+            'genero' => 'required|in:F,M',
+            'contrasena' => 'required|min:8'
+        ]);
+
+        return $validator;
     }
 }

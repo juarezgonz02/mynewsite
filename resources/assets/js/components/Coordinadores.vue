@@ -116,19 +116,22 @@ export default {
                 this.errorMessage = 'El correo no es un correo UCA valido';
                 return;
             }
-
-
+            
+            var passregex = /^(?=.*[0-9])(?=.*[- ?!@#$%^&*\/\\])(?=.*[A-Z])(?=.*[a-z])[a-zA-Z0-9- ?!@#$%^&*\/\\]{8,30}$/
+            
+            if(!passregex.test(this.newCoordinador.contrasena)){
+                this.errorMessage = 'La contraseña debe tener almenos 8 caracteres, una mayuscula, un simbolo especial y un número';
+                return;    
+            }
+            
             if ( this.newCoordinador.contrasena != this.confirmPassword ) {
                 this.errorMessage = 'Las contraseñas no coinciden';
                 return;
             }
+
             
             console.log(this.newCoordinador)
             
-            
-
-            
-
             let me = this;
             
             // /users/admin/new
@@ -144,12 +147,12 @@ export default {
                 // console.log(response.status);
                 if (response.status == 200) {
                     me.showSuccess = true
-                    //me.coordinadores.push(me.newCoordinador);
                 }
                 me.bindData();
             })
             .catch(function (error) {
-                console.log(error);
+                console.log(error.response);
+                this.errorMessage = error.response
             });
 
 
