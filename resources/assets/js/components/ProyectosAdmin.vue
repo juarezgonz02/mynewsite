@@ -27,16 +27,22 @@
                                 <div class="filter-selector" >
                                     
                                     <select class="custom-select" v-model="filtrandoPorCarrera" @change="bindDataByFilters(0)">
-                                        <option value="-1" disabled selected>Filtrar por carrera: </option>
-                                        <option v-for="carrera in arrayCarreras" :value="carrera.idCarrera" :key="carrera.idCarrera">{{carrera.nombre}}</option>
+                                        <option :value="JSON.stringify({por: 'carrera', id: -1})" disabled selected>Filtrar por: </option>
+                                        <optgroup label="Factultad"> 
+                                            <option v-for="facultad in arrayFactultad" :value="JSON.stringify({por: 'facultad', id: facultad.idFacultad})" :key="facultad.idFacultad">{{facultad.nombre}}</option>
+                                        </optgroup>
+                                        <optgroup label="Carrera">
+                                            <option v-for="carrera in arrayCarreras" :value="JSON.stringify({por: 'carrera', id: carrera.idCarrera})" :key="carrera.idCarrera">{{carrera.nombre}}</option>
+                                        </optgroup>
                                     </select>
                                 </div>
                                 <div class="filter-selector">
                                     <select class="custom-select"  v-model="ordenandoPor" @change="bindDataByFilters(0)">
                                         <option value="" disabled selected>Ordenar por: </option>
-                                        <option :value="`recientes`" >Reciente</option>
-                                        <option :value="`menos_cupos`"> Menos cupos libres </option>
-                                        <option :value="`mas_cupos`"> Mas cupos libres </option>
+                                        <option value="recientes" >Reciente</option>
+                                        <option value="menos_cupos"> Menos cupos libres </option>
+                                        <option value="mas_cupos"> Más cupos libres </option>
+                                        <option value="n_solicitudes"> Número solictudes  </option>
                                     </select>
                                 </div>
                                 <div style="flex-direction: column-reverse">
@@ -700,12 +706,12 @@ import Swal from 'sweetalert2';
                 proyecto : '',
                 nombre_proyecto : '',
                 modal_estado_proyecto : '',
-
                 filtrandoPorNombre: "",
-                filtrandoPorCarrera: "-1",
+                filtrandoPorCarrera: JSON.stringify({'por': 'carrera', 'id': -1}),
                 ordenandoPor: "recientes",
                 selectedFilter: "",
-                proyecto: ""
+                proyecto: "",
+                arrayFactultad: [],
             }
         },
         computed:{
@@ -739,7 +745,7 @@ import Swal from 'sweetalert2';
                 me.loadTable = true;
 
                 var url = `${API_HOST}/todos_proyectos?page=${page}`;
-                me.getCarrerasAndPerfils();
+                me.getFactultadesCarrerasAndPerfils();
                 axios.get(`${API_HOST}/get_user`).then(function (response) {
                     me.user_email = response.data.correo;
                 })
@@ -761,10 +767,12 @@ import Swal from 'sweetalert2';
                 let me = this;
 
                 me.loadTable = true;
+                
+                let filtros = JSON.parse(me.filtrandoPorCarrera)
 
-                var url = `${API_HOST}/buscar_filtros?nombre=${me.filtrandoPorNombre}&carrera=${me.filtrandoPorCarrera}&orden=${me.ordenandoPor}&page=${page}`;
+                var url = `${API_HOST}/buscar_filtros?nombre=${me.filtrandoPorNombre}&filtro=${filtros.por}&id=${filtros.id}&orden=${me.ordenandoPor}&page=${page}`;
 
-                me.getCarrerasAndPerfils();
+                me.getFacultadesCarrerasAndPerfils();
                 
                 axios.get(`${API_HOST}/get_user`).then(function (response) {
                     me.user_email = response.data.correo;
@@ -1166,7 +1174,7 @@ import Swal from 'sweetalert2';
                         break;
                 }
             },
-            getCarrerasAndPerfils(){
+            getFacultadesCarrerasAndPerfils(){
                 let me = this
                 axios.get(`${API_HOST}/carrera`).then(function (response) {
                     me.arrayCarrerasSin = response.data;
@@ -1178,8 +1186,16 @@ import Swal from 'sweetalert2';
                 .catch(function (error) {
                     console.log(error);
                 });
+
                 axios.get(`${API_HOST}/perfil`).then(function (response) {
                     me.arrayPerfiles = response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+                axios.get(`${API_HOST}/facultad`).then(function (response) {
+                    me.arrayFactultad = response.data;
                 })
                 .catch(function (error) {
                     console.log(error);

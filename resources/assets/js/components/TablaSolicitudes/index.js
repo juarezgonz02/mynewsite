@@ -72,10 +72,11 @@ export default {
             offset : 3,
             arraySolicitudes: [],
             filtrandoPorNombre: "",
-            filtrandoPorCarrera: "-1",
+            filtrandoPorCarrera: JSON.stringify({'por': 'carrera', 'id': -1}),
             ordenandoPor: "recientes",
             selectedFilter: "",
-            proyecto: ""
+            proyecto: "",
+            arrayFactultad: []
         }
     },
     computed:{
@@ -109,7 +110,7 @@ export default {
             me.loadTable = true;
 
             var url = `${API_HOST}/todos_proyectos?page=${page}`;
-            me.getCarrerasAndPerfils();
+            me.getFacultadesCarrerasAndPerfils();
             axios.get(`${API_HOST}/get_user`).then(function (response) {
                 me.user_email = response.data.correo;
             })
@@ -131,10 +132,12 @@ export default {
             let me = this;
 
             me.loadTable = true;
+            
+            let filtros = JSON.parse(me.filtrandoPorCarrera)
 
-            var url = `${API_HOST}/solicitudes?nombre=${me.filtrandoPorNombre}&carrera=${me.filtrandoPorCarrera}&orden=${me.ordenandoPor}&page=${page}`;
+            var url = `${API_HOST}/solicitudes?nombre=${me.filtrandoPorNombre}&filtro=${filtros.por}&id=${filtros.id}&orden=${me.ordenandoPor}&page=${page}`;
 
-            me.getCarrerasAndPerfils();
+            me.getFacultadesCarrerasAndPerfils();
             
             axios.get(`${API_HOST}/get_user`).then(function (response) {
                 me.user_email = response.data.correo;
@@ -503,7 +506,7 @@ export default {
                     break;
             }
         },
-        getCarrerasAndPerfils(){
+        getFacultadesCarrerasAndPerfils(){
             let me = this
             axios.get(`${API_HOST}/carrera`).then(function (response) {
                 me.arrayCarrerasSin = response.data;
@@ -515,8 +518,16 @@ export default {
             .catch(function (error) {
                 console.log(error);
             });
+
             axios.get(`${API_HOST}/perfil`).then(function (response) {
                 me.arrayPerfiles = response.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+            axios.get(`${API_HOST}/facultad`).then(function (response) {
+                me.arrayFactultad = response.data;
             })
             .catch(function (error) {
                 console.log(error);

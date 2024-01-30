@@ -16,19 +16,16 @@ class BusquedaController extends Controller
     {
         if(!$request->ajax()) return redirect('/home');
 
-        $nombre = "";
-        if($request->query('nombre') != ""){
-            $nombre = $request->query('nombre');
-        }
+        $nombre = $request->query('nombre') ?: "";
+        
+        $buscandoPor = $request->query('filtro');
+        
+        $busquedaId = $request->query('id');
         
         $ncarrera = 'todas';
-        if($request->query('carrera') != "-1" || $request->query('carrera') != "-2"){ 
-            $ncarrera = $request->query('carrera');
-        }else if($request->query('carrera') != "-2"){
-            $ncarrera = 'todas_ex';
-        }
         
         $orden = "created_at DESC";
+        
         switch($request->query('orden')) {
             case 'antiguos': 
                 $orden = "created_at DESC";
@@ -45,22 +42,19 @@ class BusquedaController extends Controller
             case 'menos_cupos':
                 $orden = 'cupos_act DESC';     
                 break;    
+
+            case 'n_solicitudes':
+                $orden = 'cupos_act DESC';     
+                break;    
             
             default: 
                 $orden = 'created_at DESC';
         }
         
-        $proyectos = $this->obtener_por_filtros($nombre, $ncarrera, $orden);
-
-        $cupos = ProyectoxEstudiante::select('idProyecto')->where('estado', '=', '0')->get();
-        for($i = 0; $i < count($proyectos); $i++){
-            $proyectos[$i]->notificaciones = 0;
-            for($j = 0; $j < count($cupos) ; $j++){
-                if($proyectos[$i]->idProyecto == $cupos[$j]->idProyecto){
-                    $proyectos[$i]->notificaciones = 1;
-                    break;
-                }
-            }
+        if($buscandoPor == "carrera"){
+            $proyectos = $this->obtener_por_carrera($nombre, $busquedaId, $orden);
+        }else{
+            $proyectos = $this->obtener_por_facultad($nombre, $busquedaId, $orden);
         }
 
         return [
@@ -77,7 +71,30 @@ class BusquedaController extends Controller
         ];
     }
 
-    private function obtener_por_filtros(string $nombre, string $ncarrera, string $orden)
+
+    private function obtener_por_facultad(string $nombre, string $nfacultad, string $orden){
+        
+        $proyectos =  $proyectos = ProyectoXCarrera::join('proyecto', 'proyecto.idProyecto', '=', 'proyectoxcarrera.idProyecto')
+        ->leftJoin('carrera', 'carrera.idCarrera', '=', 'proyectoxcarrera.idCarrera')
+        ->select("proyecto.*", "carrera.idCarrera")->where('carrera.idFacultad', '=', $nfacultad) ->where('proyecto.nombre', 'like', $nombre.'%');
+
+        $proyectos = $proyectos->orderByRaw('proyecto.'.$orden)->paginate(5);
+        
+        $cupos = ProyectoxEstudiante::select('idProyecto')->where('estado', '=', '0')->get();
+        for($i = 0; $i < count($proyectos); $i++){
+            $proyectos[$i]->notificaciones = 0;
+            for($j = 0; $j < count($cupos) ; $j++){
+                if($proyectos[$i]->idProyecto == $cupos[$j]->idProyecto){
+                    $proyectos[$i]->notificaciones = 1;
+                    break;
+                }
+            }
+        }
+
+        return $proyectos;
+    }
+    
+    private function obtener_por_carrera(string $nombre, string $ncarrera, string $orden)
     {
         if($ncarrera == "-1"){
             $proyectos = Proyecto::where('proyecto.nombre' ,'like', $nombre."%")->where('proyecto.estado', '=', '1');
@@ -92,6 +109,16 @@ class BusquedaController extends Controller
 
         $proyectos = $proyectos->orderByRaw('proyecto.'.$orden)->paginate(5);
         
+        $cupos = ProyectoxEstudiante::select('idProyecto')->where('estado', '=', '0')->get();
+        for($i = 0; $i < count($proyectos); $i++){
+            $proyectos[$i]->notificaciones = 0;
+            for($j = 0; $j < count($cupos) ; $j++){
+                if($proyectos[$i]->idProyecto == $cupos[$j]->idProyecto){
+                    $proyectos[$i]->notificaciones = 1;
+                    break;
+                }
+            }
+        }
 
         return $proyectos;
         

@@ -27,9 +27,15 @@
                                 <div class="filter-selector" >
                                     
                                     <select class="custom-select" v-model="filtrandoPorCarrera" @change="bindDataByFilters(0)">
-                                        <option value="-1" disabled selected>Filtrar por carrera: </option>
-                                        <option v-for="carrera in arrayCarreras" :value="carrera.idCarrera" :key="carrera.idCarrera">{{carrera.nombre}}</option>
+                                        <option :value="JSON.stringify({por: 'carrera', id: -1})" disabled selected>Filtrar por: </option>
+                                        <optgroup label="Factultad"> 
+                                            <option v-for="facultad in arrayFactultad" :value="JSON.stringify({por: 'facultad', id: facultad.idFacultad})" :key="facultad.idFacultad">{{facultad.nombre}}</option>
+                                        </optgroup>
+                                        <optgroup label="Carrera">
+                                            <option v-for="carrera in arrayCarreras" :value="JSON.stringify({por: 'carrera', id: carrera.idCarrera})" :key="carrera.idCarrera">{{carrera.nombre}}</option>
+                                        </optgroup>
                                     </select>
+                                </div>
                                 </div>
 
                             </div>
@@ -51,7 +57,7 @@
                                     <td id="pos" v-text="`${solicitud.u_nombre} ${solicitud.u_apellido}`" data-toggle="modal" data-target="#userDetailModal" @click="abrirModal('info_user', solicitud)"></td>
                                     <td id="disappear" v-text="solicitud.nombre" data-toggle="modal" data-target="#projectDetailModal" @click="abrirModal('info_proyecto', solicitud)"></td>
                                     <td id="disappear" v-text="solicitud.carrera" ></td>
-                                    <td v-text="`${solicitud.cupos_act}${'/'}${solicitud.cupos}`" data-toggle="modal" data-target="#projectDetailModal" style="text-align: center;"></td>
+                                    <td v-text="`${solicitud.cupos_act}${'/'}${solicitud.cupos}`" style="text-align: center;"></td>
                                     <td id="icons-pos" >
                                             <div class="button-container">
                                                 <button type="button" @click="abrirModal('estudiantes', solicitud)" data-toggle="modal" data-target="#membersModal" class="btn btn-info btn-sm" id="membersbutton" style="margin-bottom: 8px; width: 100%;">
