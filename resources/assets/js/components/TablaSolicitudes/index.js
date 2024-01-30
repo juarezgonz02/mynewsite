@@ -186,7 +186,7 @@ export default {
                     'carreraPerfil' : this.arrayCarreraPerfil
                 }).then(function (response) {
                     me.cerrarModal();
-                    me.bindData();
+                    me.bindDataByFilters();
                 }).catch(function (error) {
                     console.log(error);
                 }); 
@@ -207,7 +207,7 @@ export default {
                     'carreraPerfil' : this.arrayCarreraPerfil
                 }).then(function (response) {
                     me.cerrarModal();
-                    me.bindData();
+                    me.bindDataByFilters();
                 }).catch(function (error) {
                     console.log(error);
                 }); 
@@ -376,7 +376,7 @@ export default {
                 }).then(function (response) {
                     $('#statusModal').modal('hide');
                     me.loading = 2;
-                    me.bindData();
+                    me.bindDataByFilters();
                     me.cerrarModal();
                 }).catch(function (error) {
                     console.log(error);
@@ -628,7 +628,7 @@ export default {
                 }
                 me.loading = 0;
                 me.getEstudiantes();
-                me.bindData();
+                me.bindDataByFilters();
             })
             .catch(function (error) {
                 console.log(error);
@@ -656,7 +656,7 @@ export default {
                 me.loading = 2;
                 me.cerrarModal();
                 me.getEstudiantes();
-                me.bindData();
+                me.bindDataByFilters();
                 me.loading = 0;
             }).catch(function (error) {
                 console.log(error);
