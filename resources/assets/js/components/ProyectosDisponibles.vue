@@ -110,6 +110,11 @@
                             </ul>
                         </nav>
                     </div>
+                    <div v-if="!loadTable">
+                        <div style="margin: 20px 0px 0px 20px;" >
+                            <p >{{user_info}}</p>
+                        </div>
+                    </div>
                 </div>
                 <!-- Fin ejemplo de tabla Listado -->
             </div>
@@ -214,6 +219,9 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                 loadTable : false,
                 user_id : 0,
                 user_email: '',
+                user_perfil: '',
+                user_carrera: '',
+                user_info: "",
                 ya_aplico_hoy : 0,
                 ya_aplico_proyecto : 0,
                 descripcion : '',
@@ -270,63 +278,10 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                     from++;
                 }
                 return pagesArray;
-            }
+            },
         },
         methods:{
-            bindData(page){
-                let me = this;
-                me.loadTable = true;
-                axios.get(`${API_HOST}/get_user`).then(function (response) {
-                    me.user_id = response.data.idUser;
-                    me.user_email = response.data.correo;
-                    if (me.fechaLegible(response.data.timeout))
-                        me.timeout = me.fechaLegible(response.data.timeout);
-                    else
-                        me.timeout = '';
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-                axios.get(`${API_HOST}/ya_aplico`).then(function (response) {
-                    me.ya_aplico_hoy = response.data;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-                // Si ya aplicó hoy, no se cargan los proyectos
-                var url = `${API_HOST}/proyectos_aplicados` /*?page=' + page*/;
-                axios.get(url).then(function (response) {
-                    me.arrayProyectosAplicados = response.data;
-                    // Si alguno de los proyectos ya aplicados, tiene estado aplicado (1), ya no puede aplicar a nuevo proyecto
-                    me.arrayProyectosAplicados.forEach(proyecto => {
-                        if(proyecto.estadoPxe == 1){
-                            me.ya_aplico_proyecto = 1;
-                        }
-                    });
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-
-                axios.get(`${API_HOST}/pxe_estudiante`).then(function (response) {
-                    me.arrayPXE = response.data;
-                    //console.log(me.arrayPXE);
-                }).catch(function (error) {
-                    console.log(error);
-                });
-
-                var url = `${API_HOST}/proyectos_carrera?page=${page}`;
-                axios.get(url).then(function (response) {
-                    var respuesta = response.data;
-                    var proyectos = respuesta.proyectos.data;
-                    me.arrayProyectos = proyectos;
-                    me.pagination = respuesta.pagination;
-                    me.loadTable = false;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            },
+            
             cambiarPagina(page){
                 let me = this;
                 me.pagination.current_page = page;
@@ -352,7 +307,7 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
             cerrarModal(){
                 this.modal = 0;
                 this.id_proyecto = 0
-                this.bindDataByFilters();
+                this.bindDataByFilters(this.pagination.current_page);
             },
             cerrarModalDos(){
                 this.modal2 = 0;
@@ -408,6 +363,10 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                 axios.get(`${API_HOST}/get_user`).then(function (response) {
                     me.user_id = response.data.idUser;
                     me.user_email = response.data.correo;
+                    me.user_carrera = response.data.carrera;
+                    me.user_perfil = response.data.perfil;
+
+                    me.user_info = `Se muestran proyectos para ${me.user_carrera.toUpperCase()}, desde: ${me.user_perfil.toUpperCase()}`;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -536,7 +495,7 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
 
     
     .filter-group{
-    align-items: center;
+        align-items: center;
         display: flex;
         gap: 1em;
         flex-wrap: wrap;
@@ -544,12 +503,12 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
     }
 
     .search-bar{ 
-    height: 100%;
+        height: 2.5em;
         flex: 1;
     }
 
     .search-group{ 
-    align-items: center;
+        align-items: center;
         flex: 2;
         display: flex;
         gap: 1em;

@@ -5,11 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Carrera;
+use App\Perfil;
+
 class UserController extends Controller
 {
     public function getUser(Request $request){
         if(!$request->ajax()) return redirect('/home');
         $user = Auth()->user();
+        $user -> perfil = Perfil::find($user->idPerfil)->descripcion;
+        $user -> carrera = Carrera::find($user->idCarrera)->nombre;
         return $user;
     }
 

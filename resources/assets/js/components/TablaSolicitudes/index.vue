@@ -3,7 +3,7 @@
             <!-- Breadcrumb -->
             <ol class="breadcrumb" style="padding-left: 30px;">
                 <li class="breadcrumb-item">Inicio</li>
-                <li class="breadcrumb-item active">Administración de Proyectos</li>
+                <li class="breadcrumb-item active">Administración de Solicitudes</li>
             </ol>
             <div class="container-fluid" style="background-color: white;">
                 <!-- Ejemplo de tabla Listado -->
