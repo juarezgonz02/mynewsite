@@ -36125,6 +36125,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -36231,6 +36247,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.get(url).then(function (response) {
                 var respuesta = response.data;
                 var proyectos = respuesta.proyectos.data;
+                console.log(respuesta);
                 me.arrayProyectos = proyectos;
                 me.pagination = respuesta.pagination;
                 me.loadTable = false;
@@ -36283,15 +36300,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         this.modal2 = 1;
                         this.id_proyecto = data.idProyecto;
                         this.modal_encargado = data.encargado;
+                        this.modal_correo_encargado = data.correo_encargado;
                         this.modal_nombre = data.nombre;
                         this.modal_desc = data.descripcion;
+                        this.modal_perfil_estudiante = data.perfil_estudiante;
                         this.modal_tipo_horas = data.tipo_horas;
                         this.modal_cupos_act = data.cupos_act;
                         this.modal_cupos = data.cupos;
                         this.modal_horario = data.horario;
                         this.modal_fecha_in = data.fecha_inicio;
                         this.modal_fecha_fin = data.fecha_fin;
-                        this.modal_estado = data.estado;
+                        this.modal_contraparte = data.contraparte;
+                        console.log(data);
                         break;
                     }
                 default:
@@ -36675,6 +36695,12 @@ var render = function() {
                     _vm._m(3),
                     _vm._v(" "),
                     _c("div", { staticClass: "modal-footer" }, [
+                      _c("h5", [
+                        _vm._v(
+                          "¿Está seguro/a que desea aplicar a este proyecto?"
+                        )
+                      ]),
+                      _vm._v(" "),
                       _c(
                         "button",
                         {
@@ -36774,16 +36800,14 @@ var render = function() {
                           _c(
                             "th",
                             {
-                              staticStyle: {
-                                "background-color": "#dedede",
-                                width: "15%"
-                              }
+                              staticClass: "col-md-4",
+                              staticStyle: { "background-color": "#dedede" }
                             },
-                            [_vm._v("Descripción")]
+                            [_vm._v("Descripción de proyecto/actividad")]
                           ),
                           _vm._v(" "),
                           _c("td", {
-                            staticStyle: { "padding-left": "16px" },
+                            staticStyle: { "padding-left": "12px" },
                             domProps: { textContent: _vm._s(_vm.modal_desc) }
                           })
                         ]),
@@ -36792,16 +36816,32 @@ var render = function() {
                           _c(
                             "th",
                             {
-                              staticStyle: {
-                                "background-color": "#dedede",
-                                width: "15%"
-                              }
+                              staticClass: "col-md-4",
+                              staticStyle: { "background-color": "#dedede" }
                             },
-                            [_vm._v("Tipo")]
+                            [_vm._v("Perfil del estudiante")]
                           ),
                           _vm._v(" "),
                           _c("td", {
-                            staticStyle: { "padding-left": "16px" },
+                            staticStyle: { "padding-left": "12px" },
+                            domProps: {
+                              textContent: _vm._s(_vm.modal_perfil_estudiante)
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("tr", [
+                          _c(
+                            "th",
+                            {
+                              staticClass: "col-md-4",
+                              staticStyle: { "background-color": "#dedede" }
+                            },
+                            [_vm._v("Tipo de horas")]
+                          ),
+                          _vm._v(" "),
+                          _c("td", {
+                            staticStyle: { "padding-left": "12px" },
                             domProps: {
                               textContent: _vm._s(_vm.modal_tipo_horas)
                             }
@@ -36812,16 +36852,14 @@ var render = function() {
                           _c(
                             "th",
                             {
-                              staticStyle: {
-                                "background-color": "#dedede",
-                                width: "15%"
-                              }
+                              staticClass: "col-md-4",
+                              staticStyle: { "background-color": "#dedede" }
                             },
                             [_vm._v("Cupos")]
                           ),
                           _vm._v(" "),
                           _c("td", {
-                            staticStyle: { "padding-left": "16px" },
+                            staticStyle: { "padding-left": "12px" },
                             domProps: {
                               textContent: _vm._s(
                                 "" + _vm.modal_cupos_act + "/" + _vm.modal_cupos
@@ -36834,16 +36872,14 @@ var render = function() {
                           _c(
                             "th",
                             {
-                              staticStyle: {
-                                "background-color": "#dedede",
-                                width: "15%"
-                              }
+                              staticClass: "col-md-4",
+                              staticStyle: { "background-color": "#dedede" }
                             },
                             [_vm._v("Horario")]
                           ),
                           _vm._v(" "),
                           _c("td", {
-                            staticStyle: { "padding-left": "16px" },
+                            staticStyle: { "padding-left": "12px" },
                             domProps: { textContent: _vm._s(_vm.modal_horario) }
                           })
                         ]),
@@ -36852,16 +36888,32 @@ var render = function() {
                           _c(
                             "th",
                             {
-                              staticStyle: {
-                                "background-color": "#dedede",
-                                width: "15%"
-                              }
+                              staticClass: "col-md-4",
+                              staticStyle: { "background-color": "#dedede" }
+                            },
+                            [_vm._v("Contraparte")]
+                          ),
+                          _vm._v(" "),
+                          _c("td", {
+                            staticStyle: { "padding-left": "12px" },
+                            domProps: {
+                              textContent: _vm._s(_vm.modal_contraparte)
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("tr", [
+                          _c(
+                            "th",
+                            {
+                              staticClass: "col-md-4",
+                              staticStyle: { "background-color": "#dedede" }
                             },
                             [_vm._v("Encargado")]
                           ),
                           _vm._v(" "),
                           _c("td", {
-                            staticStyle: { "padding-left": "16px" },
+                            staticStyle: { "padding-left": "12px" },
                             domProps: {
                               textContent: _vm._s(_vm.modal_encargado)
                             }
@@ -36872,16 +36924,32 @@ var render = function() {
                           _c(
                             "th",
                             {
-                              staticStyle: {
-                                "background-color": "#dedede",
-                                width: "15%"
-                              }
+                              staticClass: "col-md-4",
+                              staticStyle: { "background-color": "#dedede" }
+                            },
+                            [_vm._v("Correo encargado")]
+                          ),
+                          _vm._v(" "),
+                          _c("td", {
+                            staticStyle: { "padding-left": "12px" },
+                            domProps: {
+                              textContent: _vm._s(_vm.modal_correo_encargado)
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("tr", [
+                          _c(
+                            "th",
+                            {
+                              staticClass: "col-md-4",
+                              staticStyle: { "background-color": "#dedede" }
                             },
                             [_vm._v("Fecha inicial")]
                           ),
                           _vm._v(" "),
                           _c("td", {
-                            staticStyle: { "padding-left": "16px" },
+                            staticStyle: { "padding-left": "12px" },
                             domProps: {
                               textContent: _vm._s(_vm.modal_fecha_in)
                             }
@@ -36892,16 +36960,14 @@ var render = function() {
                           _c(
                             "th",
                             {
-                              staticStyle: {
-                                "background-color": "#dedede",
-                                width: "15%"
-                              }
+                              staticClass: "col-md-4",
+                              staticStyle: { "background-color": "#dedede" }
                             },
                             [_vm._v("Fecha final")]
                           ),
                           _vm._v(" "),
                           _c("td", {
-                            staticStyle: { "padding-left": "16px" },
+                            staticStyle: { "padding-left": "12px" },
                             domProps: {
                               textContent: _vm._s(_vm.modal_fecha_fin)
                             }
@@ -36957,7 +37023,7 @@ var staticRenderFns = [
     return _c("thead", [
       _c("tr", [
         _c("th", { staticStyle: { "text-align": "center", width: "10%" } }, [
-          _vm._v("Nombre")
+          _vm._v("Nombre del proyecto")
         ]),
         _vm._v(" "),
         _c(
@@ -36966,7 +37032,7 @@ var staticRenderFns = [
             staticStyle: { "text-align": "center" },
             attrs: { id: "disappear" }
           },
-          [_vm._v("Descripción")]
+          [_vm._v("Descripción del proyecto/actividad")]
         ),
         _vm._v(" "),
         _c("th", { staticStyle: { width: "10%", "text-align": "center" } }, [
@@ -37002,7 +37068,25 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-body" }, [
-      _c("h2", [_vm._v("¿Esta seguro que desea aplicar a este proyecto?")]),
+      _c("h5", [
+        _c("b", { staticStyle: { color: "red" } }, [
+          _vm._v("AVISO DE RESPONSABILIDAD")
+        ])
+      ]),
+      _vm._v(" "),
+      _c("h6", [
+        _vm._v(
+          "Al aplicar a este proyecto comprende que desde el momento en que usted ha sido aceptado/a por el/la encargado/a\n                             del proyecto, "
+        ),
+        _c("b", [
+          _vm._v(
+            "usted se compromete a completar el proyecto en su finalidad y no abandonar el proyecto"
+          )
+        ]),
+        _vm._v(
+          ", debido a que el incumplimiento\n                            y/o abandono del proyecto se considera una falta grave acorde al Art. 35 del Reglamento de Servicio Social."
+        )
+      ]),
       _vm._v(" "),
       _c("p", [
         _c("b", { staticStyle: { color: "red" } }, [_vm._v("IMPORTANTE: ")]),
@@ -38650,6 +38734,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -39114,14 +39210,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         this.modal5 = 1;
                         this.id_proyecto = data.idProyecto;
                         this.modal_encargado = data.encargado;
+                        this.modal_correo_encargado = data.correo_encargado;
                         this.modal_nombre = data.nombre;
                         this.modal_desc = data.descripcion;
+                        this.modal_perfil_estudiante = data.perfil_estudiante;
                         this.modal_tipo_horas = data.tipo_horas;
                         this.modal_cupos_act = data.cupos_act;
                         this.modal_cupos = data.cupos;
                         this.modal_horario = data.horario;
                         this.modal_fecha_in = data.fecha_inicio;
                         this.modal_fecha_fin = data.fecha_fin;
+                        this.modal_contraparte = data.contraparte;
                         break;
                     }
                 case "reunion":
@@ -45626,12 +45725,15 @@ var render = function() {
                       _c("tr", [
                         _c(
                           "th",
-                          { staticStyle: { "background-color": "#dedede" } },
-                          [_vm._v("Descripción")]
+                          {
+                            staticClass: "col-md-4",
+                            staticStyle: { "background-color": "#dedede" }
+                          },
+                          [_vm._v("Descripción de proyecto/actividad")]
                         ),
                         _vm._v(" "),
                         _c("td", {
-                          staticStyle: { "padding-left": "16px" },
+                          staticStyle: { "padding-left": "12px" },
                           domProps: { textContent: _vm._s(_vm.modal_desc) }
                         })
                       ]),
@@ -45639,12 +45741,33 @@ var render = function() {
                       _c("tr", [
                         _c(
                           "th",
-                          { staticStyle: { "background-color": "#dedede" } },
-                          [_vm._v("Tipo")]
+                          {
+                            staticClass: "col-md-4",
+                            staticStyle: { "background-color": "#dedede" }
+                          },
+                          [_vm._v("Perfil del estudiante")]
                         ),
                         _vm._v(" "),
                         _c("td", {
-                          staticStyle: { "padding-left": "16px" },
+                          staticStyle: { "padding-left": "12px" },
+                          domProps: {
+                            textContent: _vm._s(_vm.modal_perfil_estudiante)
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c(
+                          "th",
+                          {
+                            staticClass: "col-md-4",
+                            staticStyle: { "background-color": "#dedede" }
+                          },
+                          [_vm._v("Tipo de horas")]
+                        ),
+                        _vm._v(" "),
+                        _c("td", {
+                          staticStyle: { "padding-left": "12px" },
                           domProps: {
                             textContent: _vm._s(_vm.modal_tipo_horas)
                           }
@@ -45654,12 +45777,15 @@ var render = function() {
                       _c("tr", [
                         _c(
                           "th",
-                          { staticStyle: { "background-color": "#dedede" } },
+                          {
+                            staticClass: "col-md-4",
+                            staticStyle: { "background-color": "#dedede" }
+                          },
                           [_vm._v("Cupos")]
                         ),
                         _vm._v(" "),
                         _c("td", {
-                          staticStyle: { "padding-left": "16px" },
+                          staticStyle: { "padding-left": "12px" },
                           domProps: {
                             textContent: _vm._s(
                               "" + _vm.modal_cupos_act + "/" + _vm.modal_cupos
@@ -45671,12 +45797,15 @@ var render = function() {
                       _c("tr", [
                         _c(
                           "th",
-                          { staticStyle: { "background-color": "#dedede" } },
+                          {
+                            staticClass: "col-md-4",
+                            staticStyle: { "background-color": "#dedede" }
+                          },
                           [_vm._v("Horario")]
                         ),
                         _vm._v(" "),
                         _c("td", {
-                          staticStyle: { "padding-left": "16px" },
+                          staticStyle: { "padding-left": "12px" },
                           domProps: { textContent: _vm._s(_vm.modal_horario) }
                         })
                       ]),
@@ -45684,12 +45813,33 @@ var render = function() {
                       _c("tr", [
                         _c(
                           "th",
-                          { staticStyle: { "background-color": "#dedede" } },
+                          {
+                            staticClass: "col-md-4",
+                            staticStyle: { "background-color": "#dedede" }
+                          },
+                          [_vm._v("Contraparte")]
+                        ),
+                        _vm._v(" "),
+                        _c("td", {
+                          staticStyle: { "padding-left": "12px" },
+                          domProps: {
+                            textContent: _vm._s(_vm.modal_contraparte)
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c(
+                          "th",
+                          {
+                            staticClass: "col-md-4",
+                            staticStyle: { "background-color": "#dedede" }
+                          },
                           [_vm._v("Encargado")]
                         ),
                         _vm._v(" "),
                         _c("td", {
-                          staticStyle: { "padding-left": "16px" },
+                          staticStyle: { "padding-left": "12px" },
                           domProps: { textContent: _vm._s(_vm.modal_encargado) }
                         })
                       ]),
@@ -45697,12 +45847,33 @@ var render = function() {
                       _c("tr", [
                         _c(
                           "th",
-                          { staticStyle: { "background-color": "#dedede" } },
+                          {
+                            staticClass: "col-md-4",
+                            staticStyle: { "background-color": "#dedede" }
+                          },
+                          [_vm._v("Correo encargado")]
+                        ),
+                        _vm._v(" "),
+                        _c("td", {
+                          staticStyle: { "padding-left": "12px" },
+                          domProps: {
+                            textContent: _vm._s(_vm.modal_correo_encargado)
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("tr", [
+                        _c(
+                          "th",
+                          {
+                            staticClass: "col-md-4",
+                            staticStyle: { "background-color": "#dedede" }
+                          },
                           [_vm._v("Fecha inicial")]
                         ),
                         _vm._v(" "),
                         _c("td", {
-                          staticStyle: { "padding-left": "16px" },
+                          staticStyle: { "padding-left": "12px" },
                           domProps: { textContent: _vm._s(_vm.modal_fecha_in) }
                         })
                       ]),
@@ -45710,12 +45881,15 @@ var render = function() {
                       _c("tr", [
                         _c(
                           "th",
-                          { staticStyle: { "background-color": "#dedede" } },
+                          {
+                            staticClass: "col-md-4",
+                            staticStyle: { "background-color": "#dedede" }
+                          },
                           [_vm._v("Fecha final")]
                         ),
                         _vm._v(" "),
                         _c("td", {
-                          staticStyle: { "padding-left": "16px" },
+                          staticStyle: { "padding-left": "12px" },
                           domProps: { textContent: _vm._s(_vm.modal_fecha_fin) }
                         })
                       ])
@@ -46125,7 +46299,7 @@ var staticRenderFns = [
     return _c("thead", [
       _c("tr", [
         _c("th", { staticStyle: { "text-align": "center", width: "10%" } }, [
-          _vm._v("Nombre")
+          _vm._v("Nombre del proyecto")
         ]),
         _vm._v(" "),
         _c(
@@ -46134,7 +46308,7 @@ var staticRenderFns = [
             staticStyle: { "text-align": "center" },
             attrs: { id: "disappear" }
           },
-          [_vm._v("Descripción")]
+          [_vm._v("Descripción del proyecto/actividad")]
         ),
         _vm._v(" "),
         _c("th", { staticStyle: { "text-align": "center", width: "10%" } }, [

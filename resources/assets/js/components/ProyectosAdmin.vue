@@ -22,8 +22,8 @@
                         <table class="table table-bordered table-hover table-sm" style="font-size: 1.25em;">
                             <thead>
                                 <tr>
-                                    <th style="text-align: center; width: 10%;">Nombre</th>
-                                    <th id="disappear" style="text-align: center;">Descripción</th>
+                                    <th style="text-align: center; width: 10%;">Nombre del proyecto</th>
+                                    <th id="disappear" style="text-align: center;">Descripción del proyecto/actividad</th>
                                     <th style="text-align: center; width: 10%;">Estado del proyecto</th>
                                     <th style="text-align: center; width: 10%;">Cupos</th>
                                     <th style="text-align: center; width: 10%;">Acciones</th>
@@ -437,32 +437,44 @@
                             <table class="table table-bordered table-sm" style="font-size: 1.35em; margin-top: 10px">
                                 <tbody>                                    
                                     <tr>
-                                        <th style="background-color: #dedede;">Descripción</th>
-                                            <td v-text="modal_desc" style="padding-left: 16px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Descripción de proyecto/actividad</th>
+                                            <td v-text="modal_desc" style="padding-left: 12px;"></td>
                                     </tr>
                                     <tr>
-                                        <th style="background-color: #dedede;">Tipo</th>
-                                            <td v-text="modal_tipo_horas" style="padding-left: 16px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Perfil del estudiante</th>
+                                            <td v-text="modal_perfil_estudiante" style="padding-left: 12px;"></td>
                                     </tr>
                                     <tr>
-                                        <th style="background-color: #dedede;">Cupos</th>
-                                            <td v-text="`${modal_cupos_act}${'/'}${modal_cupos}`" style="padding-left: 16px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Tipo de horas</th>
+                                            <td v-text="modal_tipo_horas" style="padding-left: 12px;"></td>
                                     </tr>
                                     <tr>
-                                        <th style="background-color: #dedede;">Horario</th>
-                                            <td v-text="modal_horario" style="padding-left: 16px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Cupos</th>
+                                            <td v-text="`${modal_cupos_act}${'/'}${modal_cupos}`" style="padding-left: 12px;"></td>
                                     </tr>
                                     <tr>
-                                        <th style="background-color: #dedede;">Encargado</th>
-                                            <td v-text="modal_encargado" style="padding-left: 16px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Horario</th>
+                                            <td v-text="modal_horario" style="padding-left: 12px;"></td>
                                     </tr>
                                     <tr>
-                                        <th style="background-color: #dedede;">Fecha inicial</th>
-                                            <td v-text="modal_fecha_in" style="padding-left: 16px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Contraparte</th>
+                                            <td v-text="modal_contraparte" style="padding-left: 12px;"></td>
                                     </tr>
                                     <tr>
-                                        <th style="background-color: #dedede;">Fecha final</th>
-                                            <td v-text="modal_fecha_fin" style="padding-left: 16px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Encargado</th>
+                                            <td v-text="modal_encargado" style="padding-left: 12px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="col-md-4" style="background-color: #dedede;">Correo encargado</th>
+                                            <td v-text="modal_correo_encargado" style="padding-left: 12px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="col-md-4" style="background-color: #dedede;">Fecha inicial</th>
+                                            <td v-text="modal_fecha_in" style="padding-left: 12px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="col-md-4" style="background-color: #dedede;">Fecha final</th>
+                                            <td v-text="modal_fecha_fin" style="padding-left: 12px;"></td>
                                     </tr>
 
                                 </tbody>
@@ -1030,14 +1042,17 @@ import Swal from 'sweetalert2';
                             this.modal5 = 1;
                             this.id_proyecto = data.idProyecto;
                             this.modal_encargado = data.encargado;
+                            this.modal_correo_encargado = data.correo_encargado;
                             this.modal_nombre = data.nombre;
                             this.modal_desc = data.descripcion;
+                            this.modal_perfil_estudiante = data.perfil_estudiante;
                             this.modal_tipo_horas = data.tipo_horas;
                             this.modal_cupos_act = data.cupos_act;
                             this.modal_cupos = data.cupos;
                             this.modal_horario = data.horario;
                             this.modal_fecha_in = data.fecha_inicio;
                             this.modal_fecha_fin = data.fecha_fin;
+                            this.modal_contraparte = data.contraparte;
                             break;
                         }
                     case "reunion":
