@@ -22,8 +22,9 @@
                         <table class="table table-bordered table-hover table-sm" style="font-size: 1.25em;">
                             <thead>
                                 <tr>
-                                    <th style="text-align: center; width: 10%;">Nombre</th>
-                                    <th id="disappear" style="text-align: center;">Descripción</th>
+                                    <th style="text-align: center; width: 10%;">Nombre del proyecto</th>
+                                    <th id="disappear" style="text-align: center;">Descripción del proyecto/actividad</th>
+                                    <th style="text-align: center; width: 10%;">Estado del proyecto</th>
                                     <th style="text-align: center; width: 10%;">Cupos</th>
                                     <th style="text-align: center; width: 10%;">Acciones</th>
                                 </tr>
@@ -32,6 +33,7 @@
                                 <tr id="fila" v-for="proyecto in arrayProyectos" :key="proyecto.idProyecto">
                                     <td id="pos" v-text="proyecto.nombre" data-toggle="modal" data-target="#projectDetailModal" @click="abrirModal('info', proyecto)"></td>
                                     <td id="disappear" v-text="proyecto.descripcion" data-toggle="modal" data-target="#projectDetailModal" @click="abrirModal('info', proyecto)"></td>
+                                    <td v-text="proyecto.estado_proyecto" data-toggle="modal" data-target="#projectDetailModal" @click="abrirModal('info', proyecto)" style="text-align: center;"></td>
                                     <td v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`" data-toggle="modal" data-target="#projectDetailModal" @click="abrirModal('info', proyecto)" style="text-align: center;"></td>
                                     <td id="icons-pos" >
                                         <div class="button-container">
@@ -43,7 +45,7 @@
                                         <div class="button-container">
                                             <button type="button" @click="abrirModal('estado', proyecto)" data-toggle="modal" data-target="#statusModal" class="btn btn-danger btn-sm" style="margin: 8px 0; width: 100%;">
                                                 <i class="icon-lock"></i>
-                                                <span class="btn-label">Desactivar</span>
+                                                <span class="btn-label">Cambiar estado</span>
                                             </button>
                                         </div>
                                         <div class="button-container">
@@ -134,6 +136,16 @@
                                         <p :class="{show: errorProyecto[3] == 1, hide: errorProyecto[3] != 1}" class="error">Debe seleccionar un tipo de horas</p>
                                     </div>
                                 </div>
+                                <!--<div class="form-group row div-form">
+                                    <label class="col-md-3 form-control-label" for="text-input">Estado del proyecto</label>
+                                    <div class="col-md-9">
+                                        <select class="form-control" v-model="modal_estado_proyecto">
+                                            <option value="En curso">En curso</option>
+                                            <option value="Finalizado">Finalizado</option>
+                                            <option value="Cancelado">Cancelado</option>
+                                        </select>
+                                    </div>
+                                </div>-->
                                 <div class="form-group row div-form">
                                     <label class="col-md-3 form-control-label" for="text-input">Descripción</label>
                                     <div class="col-md-9">
@@ -261,13 +273,23 @@
                 <div v-if="loading == 0" class="modal-dialog modal-primary modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title">¿Desactivar el proyecto {{ modal_nombre }}?</h4>
+                            <h4 class="modal-title">Cambiar estado al proyecto {{ modal_nombre }}</h4>
                             <button type="button" data-dismiss="modal" class="close" @click="cerrarModal()" aria-label="Close">
                                 <span aria-hidden="true">×</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <h5>Por favor escriba <b>{{ modal_nombre }}</b> para desactivar este proyecto</h5>
+                            <div class="form-group row div-form">
+                                <label class="col-md-3 form-control-label" for="text-input">Estado del proyecto</label>
+                                <div class="col-md-9">
+                                    <select class="form-control" v-model="estado_proyecto">
+                                        <option value="En curso">En curso</option>
+                                        <option value="Finalizado">Finalizado</option>
+                                        <option value="Cancelado">Cancelado</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <h5>Por favor escriba <b>{{ modal_nombre }}</b> para confirmar el cambio de estado de este proyecto</h5>
                             <div class="col-md-9 -alt">
                                 <input type="text" v-model="modal_confirmar" class="form-control">
                                 <p :class="{show: errorEstado == 1, hide: errorEstado != 1}" class="error">El texto ingresado no coincide con el solicitado</p>
@@ -415,32 +437,44 @@
                             <table class="table table-bordered table-sm" style="font-size: 1.35em; margin-top: 10px">
                                 <tbody>                                    
                                     <tr>
-                                        <th style="background-color: #dedede;">Descripción</th>
-                                            <td v-text="modal_desc" style="padding-left: 16px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Descripción de proyecto/actividad</th>
+                                            <td v-text="modal_desc" style="padding-left: 12px;"></td>
                                     </tr>
                                     <tr>
-                                        <th style="background-color: #dedede;">Tipo</th>
-                                            <td v-text="modal_tipo_horas" style="padding-left: 16px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Perfil del estudiante</th>
+                                            <td v-text="modal_perfil_estudiante" style="padding-left: 12px;"></td>
                                     </tr>
                                     <tr>
-                                        <th style="background-color: #dedede;">Cupos</th>
-                                            <td v-text="`${modal_cupos_act}${'/'}${modal_cupos}`" style="padding-left: 16px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Tipo de horas</th>
+                                            <td v-text="modal_tipo_horas" style="padding-left: 12px;"></td>
                                     </tr>
                                     <tr>
-                                        <th style="background-color: #dedede;">Horario</th>
-                                            <td v-text="modal_horario" style="padding-left: 16px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Cupos</th>
+                                            <td v-text="`${modal_cupos_act}${'/'}${modal_cupos}`" style="padding-left: 12px;"></td>
                                     </tr>
                                     <tr>
-                                        <th style="background-color: #dedede;">Encargado</th>
-                                            <td v-text="modal_encargado" style="padding-left: 16px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Horario</th>
+                                            <td v-text="modal_horario" style="padding-left: 12px;"></td>
                                     </tr>
                                     <tr>
-                                        <th style="background-color: #dedede;">Fecha inicial</th>
-                                            <td v-text="modal_fecha_in" style="padding-left: 16px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Contraparte</th>
+                                            <td v-text="modal_contraparte" style="padding-left: 12px;"></td>
                                     </tr>
                                     <tr>
-                                        <th style="background-color: #dedede;">Fecha final</th>
-                                            <td v-text="modal_fecha_fin" style="padding-left: 16px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Encargado</th>
+                                            <td v-text="modal_encargado" style="padding-left: 12px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="col-md-4" style="background-color: #dedede;">Correo encargado</th>
+                                            <td v-text="modal_correo_encargado" style="padding-left: 12px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="col-md-4" style="background-color: #dedede;">Fecha inicial</th>
+                                            <td v-text="modal_fecha_in" style="padding-left: 12px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="col-md-4" style="background-color: #dedede;">Fecha final</th>
+                                            <td v-text="modal_fecha_fin" style="padding-left: 12px;"></td>
                                     </tr>
 
                                 </tbody>
@@ -672,6 +706,7 @@ import Swal from 'sweetalert2';
                         'contraparte' : this.modal_contraparte,
                         'cupos_act' : 0,
                         'cupos' : this.modal_cupos,
+                        'estado_proyecto': 'En curso',
                         'descripcion' : this.modal_desc,
                         'encargado' : this.modal_encargado,
                         'fecha_inicio' : this.modal_fecha_in,
@@ -688,11 +723,13 @@ import Swal from 'sweetalert2';
                     }); 
                 }
                 else{
+                    var estado = (this.modal_estado_proyecto == "Cancelado" ? 0 : 1);
                     axios.put(`${API_HOST}/proyecto/actualizar`, {
                         'idProyecto' : this.id_proyecto,
                         'nombre' : this.modal_nombre,
                         'contraparte' : this.modal_contraparte,
                         'cupos' : this.modal_cupos,
+                        'estado_proyecto': this.modal_estado_proyecto,
                         'descripcion' : this.modal_desc,
                         'encargado' : this.modal_encargado,
                         'fecha_inicio' : this.modal_fecha_in,
@@ -700,7 +737,8 @@ import Swal from 'sweetalert2';
                         'horario' : this.modal_horario,
                         'tipo_horas' : this.modal_tipo_horas,
                         'correo_encargado' : this.modal_correo,
-                        'carreraPerfil' : this.arrayCarreraPerfil
+                        'carreraPerfil' : this.arrayCarreraPerfil,
+                        'estado' : estado
                     }).then(function (response) {
                         me.cerrarModal();
                         me.bindData();
@@ -866,9 +904,30 @@ import Swal from 'sweetalert2';
                 }
                 else {
                     me.loading = 1
+                    var estado = (this.estado_proyecto == "En curso" ? 1 : 0);
+                    axios.get(`${API_HOST}/estudiantesxproyecto`, {
+                        params:{
+                            idProyecto: me.id_proyecto
+                        }
+                    }).then(function (response){
+                        me.arrayEstudiantes = response.data;
+                        if (estado == 0) {
+                            me.arrayEstudiantes.forEach(function(element, index, array){
+                                axios.post(`${API_HOST}/proyecto/desaplicar`, {
+                                    'idProyecto' : me.id_proyecto,
+                                    'idUser' : me.arrayEstudiantes[index].idUser
+                                }).catch(function (error) {
+                                    console.log(error);
+                                });
+                            })
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
                     axios.put(`${API_HOST}/proyecto/estado`, {
                         'idProyecto' : this.id_proyecto,
-                        'estado' : 0
+                        'estado' : estado,
+                        'estado_proyecto' : this.estado_proyecto
                     }).then(function (response) {
                         $('#statusModal').modal('hide');
                         me.loading = 2;
@@ -876,7 +935,7 @@ import Swal from 'sweetalert2';
                         me.cerrarModal();
                     }).catch(function (error) {
                         console.log(error);
-                    }); 
+                    });
                 }
             },
             cerrarModal(){
@@ -909,6 +968,7 @@ import Swal from 'sweetalert2';
                             this.modal_horario = '';
                             this.modal_contraparte = '';
                             this.modal_tipo_horas = '';
+                            this.modal_estado_proyecto = '';
                             this.contraparte = '';
                             this.modal_fecha_in = '';
                             this.modal_fecha_fin = '';
@@ -929,6 +989,7 @@ import Swal from 'sweetalert2';
                             this.modal_desc = data.descripcion;
                             this.modal_correo = data.correo_encargado;
                             this.modal_tipo_horas = data.tipo_horas;
+                            this.modal_estado_proyecto = data.estado_proyecto;
                             this.modal_cupos = data.cupos;
                             this.modal_horario = data.horario;
                             this.modal_fecha_in = data.fecha_inicio;
@@ -947,6 +1008,7 @@ import Swal from 'sweetalert2';
                             this.modal2 = 1;
                             this.id_proyecto = data.idProyecto;
                             this.modal_nombre = data.nombre;
+                            this.estado_proyecto = data.estado_proyecto;
                             this.errorEstado = 0;
                             this.modal_confirmar = '';
                             this.flagErrorEstado = false;
@@ -980,14 +1042,17 @@ import Swal from 'sweetalert2';
                             this.modal5 = 1;
                             this.id_proyecto = data.idProyecto;
                             this.modal_encargado = data.encargado;
+                            this.modal_correo_encargado = data.correo_encargado;
                             this.modal_nombre = data.nombre;
                             this.modal_desc = data.descripcion;
+                            this.modal_perfil_estudiante = data.perfil_estudiante;
                             this.modal_tipo_horas = data.tipo_horas;
                             this.modal_cupos_act = data.cupos_act;
                             this.modal_cupos = data.cupos;
                             this.modal_horario = data.horario;
                             this.modal_fecha_in = data.fecha_inicio;
                             this.modal_fecha_fin = data.fecha_fin;
+                            this.modal_contraparte = data.contraparte;
                             break;
                         }
                     case "reunion":

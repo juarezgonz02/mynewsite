@@ -85,6 +85,7 @@ class ProyectoController extends Controller
         $proyecto->contraparte = $request->contraparte;
         $proyecto->cupos_act = $request->cupos_act;
         $proyecto->cupos = $request->cupos;
+        $proyecto->estado_proyecto = $request->estado_proyecto;
         $proyecto->descripcion = $request->descripcion;
         $proyecto->encargado = $request->encargado;
         $proyecto->fecha_inicio = $request->fecha_inicio;
@@ -151,6 +152,7 @@ class ProyectoController extends Controller
         $proyecto = Proyecto::findOrFail($request->idProyecto);
             $proyecto->contraparte = $request->contraparte;
             $proyecto->cupos = $request->cupos;
+            $proyecto->estado_proyecto = $request->estado_proyecto;
             $proyecto->descripcion = $request->descripcion;
             $proyecto->encargado = $request->encargado;
             $proyecto->fecha_inicio = $request->fecha_inicio;
@@ -159,6 +161,7 @@ class ProyectoController extends Controller
             $proyecto->nombre = $request->nombre;
             $proyecto->tipo_horas = $request->tipo_horas;
             $proyecto->correo_encargado = $request->correo_encargado;
+            $proyecto->estado = $request->estado;
         $proyecto->save();
 
         ProyectoxCarrera::where('idProyecto', '=', $request->idProyecto)->delete();
@@ -187,6 +190,7 @@ class ProyectoController extends Controller
         if(!$request->ajax()) return redirect('/home');
         $proyecto = Proyecto::findOrFail($request->idProyecto);
         $proyecto->estado = $request->estado;
+        $proyecto->estado_proyecto = $request->estado_proyecto;
         $proyecto->save();
 
         
@@ -194,7 +198,7 @@ class ProyectoController extends Controller
         ->join('proyecto', 'proyecto.idProyecto', '=', 'proyectoxestudiante.idProyecto')
         ->select('users.correo', 'proyecto.nombre')
         ->where('proyectoxestudiante.idProyecto', '=', $request->idProyecto)
-        ->where('proyectoxestudiante.estado', '!=', '2')->get();
+        ->where('proyecto.estado_proyecto', '==', 'Cancelado')->get();
         if(count($users) > 0){
             $mailArray = [];
             for($i=0; $i<count($users); $i++){

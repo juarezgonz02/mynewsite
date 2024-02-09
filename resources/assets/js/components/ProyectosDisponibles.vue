@@ -27,8 +27,8 @@
                         <table class="table table-bordered table-hover table-sm" style="font-size: 1.25em;">
                             <thead>
                                 <tr>
-                                    <th style="text-align: center; width: 10%;">Nombre</th>
-                                    <th style="text-align: center;" id="disappear">Descripción</th>
+                                    <th style="text-align: center; width: 10%;">Nombre del proyecto</th>
+                                    <th style="text-align: center;" id="disappear">Descripción del proyecto/actividad</th>
                                     <th style="width: 10%; text-align: center;">Cupos</th>
                                     <th style="width: 10%; text-align: center;">Opciones</th>
                                 </tr>
@@ -88,11 +88,15 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <h2>¿Esta seguro que desea aplicar a este proyecto?</h2>
+                            <h5><b  style="color: red">AVISO DE RESPONSABILIDAD</b></h5>
+                            <h6>Al aplicar a este proyecto comprende que desde el momento en que usted ha sido aceptado/a por el/la encargado/a
+                                 del proyecto, <b>usted se compromete a completar el proyecto en su finalidad y no abandonar el proyecto</b>, debido a que el incumplimiento
+                                y/o abandono del proyecto se considera una falta grave acorde al Art. 35 del Reglamento de Servicio Social.</h6>
                             <p><b style="color:red">IMPORTANTE: </b>Este proceso se puede realizar una vez por día. Se le notificará al encargado sobre su aplicación y luego 
                             se le notificará a usted por correo si ha sido aceptado o no para pasar al siguiente proceso de aplicación.</p>
                         </div>
                         <div class="modal-footer">
+                            <h5>¿Está seguro/a que desea aplicar a este proyecto?</h5>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                             <button type="button" class="btn btn-primary" data-dismiss="modal" @click ="aplicarProyecto()">Confirmar</button>
                         </div>
@@ -117,32 +121,44 @@
                             <table class="table table-bordered table-sm" style="font-size: 1.35em; margin-top: 10px">
                                 <tbody>                                    
                                     <tr>
-                                        <th style="background-color: #dedede; width: 15%">Descripción</th>
-                                        <td v-text="modal_desc" style="padding-left: 16px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Descripción de proyecto/actividad</th>
+                                            <td v-text="modal_desc" style="padding-left: 12px;"></td>
                                     </tr>
                                     <tr>
-                                        <th style="background-color: #dedede; width: 15%">Tipo</th>
-                                        <td v-text="modal_tipo_horas" style="padding-left: 16px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Perfil del estudiante</th>
+                                            <td v-text="modal_perfil_estudiante" style="padding-left: 12px;"></td>
                                     </tr>
                                     <tr>
-                                        <th style="background-color: #dedede; width: 15%">Cupos</th>
-                                        <td v-text="`${modal_cupos_act}${'/'}${modal_cupos}`" style="padding-left: 16px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Tipo de horas</th>
+                                            <td v-text="modal_tipo_horas" style="padding-left: 12px;"></td>
                                     </tr>
                                     <tr>
-                                        <th style="background-color: #dedede; width: 15%">Horario</th>
-                                        <td v-text="modal_horario" style="padding-left: 16px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Cupos</th>
+                                            <td v-text="`${modal_cupos_act}${'/'}${modal_cupos}`" style="padding-left: 12px;"></td>
                                     </tr>
                                     <tr>
-                                        <th style="background-color: #dedede; width: 15%">Encargado</th>
-                                        <td v-text="modal_encargado" style="padding-left: 16px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Horario</th>
+                                            <td v-text="modal_horario" style="padding-left: 12px;"></td>
                                     </tr>
                                     <tr>
-                                        <th style="background-color: #dedede; width: 15%">Fecha inicial</th>
-                                        <td v-text="modal_fecha_in" style="padding-left: 16px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Contraparte</th>
+                                            <td v-text="modal_contraparte" style="padding-left: 12px;"></td>
                                     </tr>
                                     <tr>
-                                        <th style="background-color: #dedede; width: 15%">Fecha final</th>
-                                        <td v-text="modal_fecha_fin" style="padding-left: 16px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Encargado</th>
+                                            <td v-text="modal_encargado" style="padding-left: 12px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="col-md-4" style="background-color: #dedede;">Correo encargado</th>
+                                            <td v-text="modal_correo_encargado" style="padding-left: 12px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="col-md-4" style="background-color: #dedede;">Fecha inicial</th>
+                                            <td v-text="modal_fecha_in" style="padding-left: 12px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="col-md-4" style="background-color: #dedede;">Fecha final</th>
+                                            <td v-text="modal_fecha_fin" style="padding-left: 12px;"></td>
                                     </tr>
 
                                 </tbody>
@@ -272,6 +288,7 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                 axios.get(url).then(function (response) {
                     var respuesta = response.data;
                     var proyectos = respuesta.proyectos.data;
+                    console.log(respuesta)
                     me.arrayProyectos = proyectos;
                     me.pagination = respuesta.pagination;
                     me.loadTable = false;
@@ -325,15 +342,18 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                         this.modal2 = 1;
                         this.id_proyecto = data.idProyecto;
                         this.modal_encargado = data.encargado;
+                        this.modal_correo_encargado = data.correo_encargado;
                         this.modal_nombre = data.nombre;
                         this.modal_desc = data.descripcion;
+                        this.modal_perfil_estudiante = data.perfil_estudiante;
                         this.modal_tipo_horas = data.tipo_horas;
                         this.modal_cupos_act = data.cupos_act;
                         this.modal_cupos = data.cupos;
                         this.modal_horario = data.horario;
                         this.modal_fecha_in = data.fecha_inicio;
                         this.modal_fecha_fin = data.fecha_fin;
-                        this.modal_estado = data.estado;
+                        this.modal_contraparte = data.contraparte;
+                        console.log(data);
                         break;
                     }
                     default:
