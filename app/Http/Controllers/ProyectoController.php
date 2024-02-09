@@ -198,7 +198,7 @@ class ProyectoController extends Controller
         ->join('proyecto', 'proyecto.idProyecto', '=', 'proyectoxestudiante.idProyecto')
         ->select('users.correo', 'proyecto.nombre')
         ->where('proyectoxestudiante.idProyecto', '=', $request->idProyecto)
-        ->where('proyectoxestudiante.estado', '!=', '2')->get();
+        ->where('proyecto.estado_proyecto', '==', 'Cancelado')->get();
         if(count($users) > 0){
             $mailArray = [];
             for($i=0; $i<count($users); $i++){
