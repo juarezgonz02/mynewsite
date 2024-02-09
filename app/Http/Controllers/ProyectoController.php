@@ -119,7 +119,7 @@ class ProyectoController extends Controller
         for($i = 0; $i < count($carreras); $i++){
             if($options[0] == -1 || ($options[0] == -2 && ($carreras[$i]->idCarrera != 3 && $carreras[$i]->idCarrera != 9 && $carreras[$i]->idCarrera != 10))){
                 $pxc = new ProyectoxCarrera();
-                $pxc->idProyecto = $idProyecto;
+                $pxc->idProyecto = $idProyecto; 
                 $pxc->idCarrera = $carreras[$i]->idCarrera;
                 $pxc->limite_inf = $options[1];
                 $pxc->limite_sup = $options[2];
@@ -253,5 +253,26 @@ class ProyectoController extends Controller
         
 
         
+    }
+    public function getMisProyectos(Request $request) {
+        $user = Auth::user();
+        $proyectos = $user->proyectos()
+                            ->with(['carreras', 'estudiantes.carrera.facultad'])
+                        ->orderBy('created_at', 'desc')
+                            ->get();
+
+        return response()->json($proyectos);
+    }
+
+    public function getEstudianteProyecto(Request $request, $idEstudiante ){
+
+        $proyectos = Proyecto::join('proyectoxestudiante', 'proyecto.idProyecto', '=', 'proyectoxestudiante.idProyecto')
+                            ->join('users', 'users.idUser', '=', 'proyectoxestudiante.idUser')
+                            ->select('proyecto.nombre', 'proyecto.descripcion', 'proyecto.encargado', 'proyecto.correo_encargado', 'proyecto.horario', 'proyecto.fecha_inicio', 'proyecto.fecha_fin', 'proyecto.tipo_horas', 'proyecto.contraparte', 'proyecto.cupos', 'proyecto.cupos_act', 'proyecto.estado', 'proyecto.idProyecto')
+                            ->where('users.idUser', '=', $idEstudiante)
+                        ->where('proyectoxestudiante.estado', '=', '1')
+                            ->get();
+
+        return response()->json($proyectos);
     }
 }

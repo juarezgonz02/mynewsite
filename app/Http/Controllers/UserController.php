@@ -5,11 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Carrera;
+use App\Perfil;
+
 class UserController extends Controller
 {
     public function getUser(Request $request){
         if(!$request->ajax()) return redirect('/home');
         $user = Auth()->user();
+        $user -> perfil = Perfil::find($user->idPerfil)->descripcion;
+        $user -> carrera = Carrera::find($user->idCarrera)->nombre;
         return $user;
     }
 
@@ -50,5 +54,20 @@ class UserController extends Controller
             return 'https://uca.edu.sv/css-proyecto/public/';
         }
          
+    }
+
+    public function removerTimeOut(Request $request, $id_estudiante){
+        if(!$request->ajax()) return redirect('/home');
+        $estudiante = User::findOrFail($id_estudiante);
+        $estudiante->timeout = null;
+        $estudiante->save();
+    }
+
+    public function aplicarTimeOut(Request $request, $id_estudiante){
+        if(!$request->ajax()) return redirect('/home');
+        $estudiante = User::findOrFail($id_estudiante);
+        // now + 30 days 
+        $estudiante->timeout = date('Y-m-d', strtotime('+30 days'));
+        $estudiante->save();
     }
 }

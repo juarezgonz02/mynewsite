@@ -29,13 +29,18 @@
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-header">
-                        <div v-if="nombre_completo == ''">
-                            <h2 style="visibility:hidden; margin-bottom:0">Nada</h2>
-                        </div>
-                        <div v-else>
-                            <h2 v-text="nombre_completo" style="margin-bottom:0"></h2>
-                        </div>
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; ">
+                            <div v-if="nombre_completo == ''">
+                                <h2 style="visibility:hidden; margin-bottom:0">Nada</h2>
+                            </div>
+                            <div v-else>
+                                <h2 v-text="nombre_completo" style="margin-bottom:0"></h2>
+                            </div>
+                            <div v-if="nombre_completo != ''">
+                                <!-- icon button  -->
+                                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editarEstudiante" style="margin-right: 15px;" @click="toggleEditDisabled()" >Editar</button>
+                            </div>
+                        
                     </div>
                     <div class="card-body">
                         <div class="col-md-8" style="margin: 20px 0px 0px 20px;">
@@ -43,7 +48,7 @@
                                 <label class="form-control-label">Facultad</label>
                             </div>
                             <div class="form-group row">
-                                <select class="form-control custom-select" id="facultad " v-model="idFacultad">
+                                <select :disabled="editDisabled" class="form-control custom-select" id="facultad " v-model="idFacultad">
                                     <option v-for="facultad in arrayFacultad" :value="facultad.idFacultad" :key="facultad.idFacultad">{{facultad.nombre}}</option>
                                 </select>
                             </div>
@@ -51,7 +56,7 @@
                                 <label class="form-control-label">Carrera</label>
                             </div>
                             <div class="form-group row">
-                                <select class="form-control custom-select" id="carrera" v-model="idCarrera">
+                                <select :disabled="editDisabled" class="form-control custom-select" id="carrera" v-model="idCarrera">
                                     <option v-for="carrera in arrayCarreraFact" :value="carrera.idCarrera" :key="carrera.idCarrera">{{carrera.nombre}}</option>
                                 </select>
                             </div>
@@ -59,9 +64,31 @@
                                 <label for="perfil" class="form-control-label">Año de carrera</label>
                             </div>
                             <div class="form-group row">
-                                <select class="form-control custom-select" id="perfil" v-model="idPerfil">
+                                <select :disabled="editDisabled" class="form-control custom-select" id="perfil" v-model="idPerfil">
                                     <option v-for="perfil in arrayPerfil" :value="perfil.idPerfil" :key="perfil.idPerfil">{{perfil.perfil}}</option>
                                 </select>
+                            </div>
+                            <div v-if="timeout">
+
+                                <div class="form-group row">
+                                    <label for="perfil" class="form-control-label">Penalizado hasta:</label>
+                                </div>
+                                <div class="form-group row" style="align-items: center;">
+                                    <label for="perfil" class="form-control-label" style="font-weight: bold; color: red; margin-left: 20px; font-size: medium; margin-right: 30px;" v-text="timeout"></label>
+                                    <button type="button" class="btn btn-warning" style="margin-right: 15px;" @click ="removerTimeOut()">Remover penalización</button>
+                                    <label for="perfil" class="form-control-label">*Al dar click en "Remover penalización" el estudiante podra volver a aplicar a otros proyectos inmediatamente</label>
+                                </div>
+                                <div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="perfil" class="form-control-label" >Inscrito en:</label>
+                            </div>
+                            <div class="form-group row">
+                                <label for="perfil" class="label" style="font-weight: bold;" v-text="proyectoInscrito"></label>
+                            </div>
+                            <div v-if="!proyectoInscritoFlag" id="message" style="margin-bottom:0" class="alert alert-info row" role="alert">
+                                No se encuentra inscrito en ningun proyecto.
                             </div>
                             <div v-if="errorActualizar == 1" id="message" style="margin-bottom:0" class="alert alert-success row" role="alert">
                                 Estudiante actualizado correctamente
@@ -76,7 +103,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="button" class="btn btn-primary" @click ="actualizarEstudiante()">Confirmar</button>
+                        <button :disabled="editDisabled" type="button" class="btn btn-primary" @click ="actualizarEstudiante()">Confirmar</button>
                     </div>
                 </div>
             </div>
@@ -106,6 +133,12 @@ import {API_HOST} from '../constants/endpoint.js';
                 arrayPerfil : [],
                 errorActualizar : false,
                 flagError : false,
+                timeout : '',
+                idUser : 0,
+                editDisabled : true,
+                proyectoInscrito : '',
+                proyectoInscritoFlag : true
+                
             }
         },
         methods:{
@@ -148,12 +181,23 @@ import {API_HOST} from '../constants/endpoint.js';
                         me.nombre_completo = estudiante.nombres + " " + estudiante.apellidos;
                         me.idFacultad = carrera.idFacultad;
                         me.getCarreras(true)
+                        me.timeout = me.fechaLegible(estudiante.timeout);
+                        me.idUser = estudiante.idUser;
+                        me.getUserProyectos()
                     }
                     else me.flagError = true
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
+            },
+            fechaLegible(fecha){
+                if (fecha == null || fecha == "") return null;
+                var date = new Date(fecha);
+                var day = date.getDate();
+                var month = date.getMonth() + 1;
+                var year = date.getFullYear();
+                return day + "/" + month + "/" + year;
             },
             getCarreras(flag){
                 let me = this
@@ -186,8 +230,44 @@ import {API_HOST} from '../constants/endpoint.js';
                     this.errorActualizar = 2;
                 }
             },
+            removerTimeOut(){
+                let me = this
+                axios.patch(`${API_HOST}/estudiante/${me.idUser}/remover-timeout`, {
+                }).then(function (response) {
+                    me.errorActualizar = 1
+                    me.buscarEstudiante()
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
+            getUserProyectos(){
+                let me = this
+                axios.get(`${API_HOST}/estudiante/${me.idUser}/proyectos`, {
+                }).then(function (response) {
+                    
+                    if (response.data[0].nombre == null)
+                    {
+                        me.proyectoInscritoFlag = false
+                        me.proyectoInscrito = ''
+                        
+                        return
+                    } 
+                    else me.proyectoInscritoFlag = true
+                    me.proyectoInscrito = response.data[0].nombre
+                    console.log(response.data)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    me.proyectoInscritoFlag = false
+                        me.proyectoInscrito = ''
+                });
+            },
             cerrarModal(){
                 
+            },
+            toggleEditDisabled(){
+                this.editDisabled = !this.editDisabled
             },
             abrirModal(modelo, data = []){
                 switch (modelo) {

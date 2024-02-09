@@ -237,4 +237,101 @@ class ProyectoxEstudianteController extends Controller{
             'message' => 'Alumno eliminado de proyecto'
         ]);
     }
+
+    public function removerEstudiante(Request $request, $id_proyecto, $id_estudiante){
+        $pxe = ProyectoxEstudiante::where('idProyecto','=', $id_proyecto)
+        ->where('idUser','=', $id_estudiante)->first();
+        if($pxe->estado == 1){
+            $p = Proyecto::where('idProyecto', '=', $pxe->idProyecto)->first();
+            $p->cupos_act = $p->cupos_act-1;
+            $p->save();
+        }
+        $pxe->delete();
+
+        // add 30 days timeout to user
+        $user = User::where('idUser', '=', $id_estudiante)->first();
+        $user->timeout = date('Y-m-d', strtotime('+30 days'));
+        $user->save();
+
+        
+
+        return response()->json([
+            'message' => 'Alumno eliminado de proyecto'
+        ]);
+    }
+    public function get_all_applications(Request $request){
+        
+      
+        if(!$request->ajax()) return redirect('/home');
+
+        $nombre = $request->query('nombre') ?: "";
+        
+        $buscandoPor = $request->query('filtro');
+        
+        $busquedaId = $request->query('id');
+                    
+        if($buscandoPor == "carrera"){
+            $solicitudes = $this->obtener_solicitudes_por_carrera($nombre, $busquedaId);
+        }else{
+            $solicitudes = $this->obtener_solicitudes_por_facultad($nombre, $busquedaId);
+        }
+        
+        return [
+            'pagination' => [
+                'total'         => $solicitudes->total(),
+                'current_page'  => $solicitudes->currentPage(),
+                'per_page'      => $solicitudes->perPage(),
+                'last_page'     => $solicitudes->lastPage(),
+                'from'          => $solicitudes->firstItem(),
+                'to'            => $solicitudes->lastItem(),
+            ],
+            'solicitudes' => $solicitudes
+        ];
+    }
+
+    private function obtener_solicitudes_por_facultad(string $nombre, string $nfacultad){
+        
+        $solicitudes = ProyectoxEstudiante::leftJoin('proyecto', 'proyecto.idProyecto', '=', 'proyectoxestudiante.idProyecto')
+        ->leftJoin('users', 'users.idUser', '=', 'proyectoxestudiante.idUser')
+        ->leftJoin('carrera', 'users.idCarrera', 'carrera.idCarrera')
+        ->leftJoin('perfil', 'users.idPerfil', 'perfil.idPerfil')
+        ->select("users.nombres as u_nombre", "users.apellidos as u_apellido", 'carrera.idCarrera as id_c' , 'carrera.nombre as carrera', 'perfil.descripcion as ano',"proyecto.*", "users.nombres", "users.apellidos", "users.correo" )
+        ->where('proyecto.nombre', 'like', $nombre.'%')
+        ->where('carrera.idFacultad', '=', $nfacultad)
+        ->where('proyectoxestudiante.estado', '=', '0')->paginate(15);
+        
+    
+        return $solicitudes;
+    }
+    
+    private function obtener_solicitudes_por_carrera(string $nombre, string $ncarrera)
+    {
+        $solicitudes;
+
+        if($ncarrera == "-1" || $ncarrera == "-2"){
+            $solicitudes = ProyectoxEstudiante::leftJoin('proyecto', 'proyecto.idProyecto', '=', 'proyectoxestudiante.idProyecto')
+            ->leftJoin('users', 'users.idUser', '=', 'proyectoxestudiante.idUser')
+            ->leftJoin('carrera', 'users.idCarrera', 'carrera.idCarrera')
+            ->leftJoin('perfil', 'users.idPerfil', 'perfil.idPerfil')
+            ->select("users.nombres as u_nombre", "users.apellidos as u_apellido", 'carrera.idCarrera as id_c' , 'carrera.nombre as carrera', 'perfil.descripcion as ano',"proyecto.*", "users.nombres", "users.apellidos", "users.correo" )
+            ->where('proyecto.nombre', 'like', $nombre.'%')
+            ->where('proyectoxestudiante.estado', '=', '0')->paginate(15);   
+        }
+        else{
+            $solicitudes = ProyectoxEstudiante::leftJoin('proyecto', 'proyecto.idProyecto', '=', 'proyectoxestudiante.idProyecto')
+            ->leftJoin('users', 'users.idUser', '=', 'proyectoxestudiante.idUser')
+            ->leftJoin('carrera', 'users.idCarrera', 'carrera.idCarrera')
+            ->leftJoin('perfil', 'users.idPerfil', 'perfil.idPerfil')
+            ->select("users.nombres as u_nombre", "users.apellidos as u_apellido", 'carrera.idCarrera as id_c' , 'carrera.nombre as carrera', 'perfil.descripcion as ano',"proyecto.*", "users.nombres", "users.apellidos", "users.correo" )
+            ->where('proyecto.nombre', 'like', $nombre.'%')
+            ->where('carrera.idCarrera', '=', $ncarrera)
+            ->where('proyectoxestudiante.estado', '=', '0')->paginate(15);
+        }
+
+        
+        return $solicitudes;
+        
+    }
+
+
 }

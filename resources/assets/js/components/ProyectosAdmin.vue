@@ -12,13 +12,46 @@
                 </div>
                 <div v-else class="card" style="border: none;">
                     <div class="card-body">
-                        <div class="form-group row" style="flex-direction: row-reverse;">
-                            <div class="col-md-6">
-                                <div class="input-group" style="flex-direction: row-reverse;">
+                       
+                       <!-- Barra accion superior -->
+                       <div class="form-group" style=" flex-wrap: wrap; flex-direction: column-reverse;">
+                            <div class="filter-group">
+                                <form class="search-group" @submit.prevent="bindDataByFilters(0)">
+                                    <div class="search-bar">
+                                        <input class="search-input" style="margin: auto; width: 100%;" type="text" v-model="filtrandoPorNombre" placeholder="Buscar por nombre del proyecto">
+                                    </div>
+                                    <div style="flex-direction: column-reverse">
+                                        <button type="button" @click="bindDataByFilters(0)" class="btn btn-primary search-button"><i class="icon-magnifier"></i> Buscar</button>
+                                    </div>
+                                </form>
+                                <div class="filter-selector" >
+                                    
+                                    <select class="custom-select" v-model="filtrandoPorCarrera" @change="bindDataByFilters(0)">
+                                        <option :value="JSON.stringify({por: 'carrera', id: -1})" disabled selected>Filtrar por: </option>
+                                        <optgroup label="Factultad"> 
+                                            <option v-for="facultad in arrayFactultad" :value="JSON.stringify({por: 'facultad', id: facultad.idFacultad})" :key="facultad.idFacultad">{{facultad.nombre}}</option>
+                                        </optgroup>
+                                        <optgroup label="Carrera">
+                                            <option v-for="carrera in arrayCarreras" :value="JSON.stringify({por: 'carrera', id: carrera.idCarrera})" :key="carrera.idCarrera">{{carrera.nombre}}</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="filter-selector">
+                                    <select class="custom-select"  v-model="ordenandoPor" @change="bindDataByFilters(0)">
+                                        <option value="" disabled selected>Ordenar por: </option>
+                                        <option value="recientes" >Reciente</option>
+                                        <option value="menos_cupos"> Menos cupos libres </option>
+                                        <option value="mas_cupos"> Más cupos libres </option>
+                                        <option value="n_solicitudes"> Número solictudes  </option>
+                                    </select>
+                                </div>
+                                <div style="flex-direction: column-reverse">
                                     <button type="button" @click="abrirModal('insertar', null)" data-toggle="modal" data-target="#editModal" class="btn btn-primary"><i class="icon-plus"></i> Agregar Proyecto</button>
                                 </div>
                             </div>
                         </div>
+                        <!---->
+
                         <table class="table table-bordered table-hover table-sm" style="font-size: 1.25em;">
                             <thead>
                                 <tr>
@@ -356,10 +389,11 @@
                                             <th>Año de carrera</th>
                                             <th>Carrera</th>
                                             <th>Estado</th>
+                                            <th>Acción</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="estudiante in arrayEstudiantes" :key="estudiante.idEstudiante" >
+                                        <tr v-for="estudiante in arrayEstudiantes" :key="estudiante.idUser" >
                                             <td v-text="estudiante.nombres"></td>
                                             <td v-text="estudiante.apellidos"></td>
                                             <td v-text="estudiante.correo"></td>
@@ -381,6 +415,17 @@
                                                     <span  class="badge badge-danger" style="border-radius: 5px;"><p id="estadorp" style="display: inline;">RECHAZADO</p></span>
                                                 </div>
                                             </td>
+                                            <td>
+                                                <div v-if="estudiante.estado == 1">
+
+                                                    <button type="button" data-toggle="modal" data-target="#removeStudentModal" @click="
+                                                    abrirModal('remover_estudiante', estudiante)
+                                                    
+                                                    " class="btn btn-danger btn-sm">
+                                                    Remover
+                                                </button>  &nbsp;
+                                                </div>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -394,7 +439,7 @@
             </div>
             <!--Fin del modal-->
             <!--Inicio del modal de confirmacion para aceptar o rechazar estudiantes-->
-            <div class="modal fade" :class="{'mostrar' : modal4}" tabindex="-1" role="dialog" id="confirmModal" aria-hidden="true">
+            <div class="modal fade" :class="{'mostrar' : modal7}" tabindex="-1" role="dialog" id="confirmModal" aria-hidden="true">
                 <div v-if="loading == 1">
                     <spinner></spinner>
                 </div>
@@ -565,6 +610,44 @@
                 <!-- /.modal-dialog -->
             </div>
             <!--Fin del modal-->
+            <!--Inicio del modal estado del proyecto-->
+            <!-- <div class="modal fade" tabindex="-1" role="dialog" id="removeStudentModal" aria-hidden="true"> -->
+                <div class="modal fade" :class="{'mostrar' : modal4}" tabindex="-1" role="dialog" id="removeStudentModal" aria-hidden="true">
+                    <div v-if="loading == 1">
+                        <spinner></spinner>
+                    </div>
+                    <div v-if="loading == 0" class="modal-dialog modal-primary" role="document">
+                        <div class="modal-content ">
+                            <div class="modal-header">
+                                <div>
+                                    <h4 class="modal-title">Remover estudiante</h4>
+                                </div>
+                                <button id="cerrarModalARE1" type="button" class="close" data-dismiss="modal" @click="cerrarModal()" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div style="display: flex; flex-direction: row; align-items: baseline;">
+                                    <h6  >Estás a punto de remover a &nbsp;  </h6>
+                                    <h5 v-text="rem_nombre_completo"></h5>
+                                </div>
+                                <div style="display: flex; flex-direction: row; align-items: baseline;">
+                                    <h6>de:  &nbsp; </h6>
+                                    <h6 style="font-weight: 	bold;" v-text="nombre_proyecto"></h6>
+                                </div>
+                                <p>¿Estás seguro de que deseas remover a este estudiante? Al dar click en Confirmar el estudiante sera removido del proyecto 
+                                    y le sera aplicada una <b>penalización de 30 dias  </b>sin poder aplicar a otros proyectos.</p>
+                                
+                            </div>
+                            <div class="modal-footer">
+                                
+                                <button id="cerrarModalARE2" type="button" class="btn btn-secondary" data-dismiss="modal" @click="cerrarModal()">Cancelar</button>
+                                <button id="aceptarRechazarEst" type="button" class="btn btn-primary" data-dismiss="modal" @click ="removerEstudianteProyecto()">Confirmar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!--Fin del modal-->
             <footer class="app-footer" id="footer" style="display: flex; flex-direction: column; justify-content: center; font-size: 15px; padding: 10px 0px">
                 <span><a target="_blank" href="http://www.uca.edu.sv/servicio-social/">Centro de Servicio Social | UCA</a> &copy; 2021</span>
                 <span>Desarrollado por <a href="#"></a>Grupo de Horas Sociales</span>
@@ -598,6 +681,7 @@ import Swal from 'sweetalert2';
                 modal4 : 0,
                 modal5 : 0,
                 modal6 : 0,
+                modal7: 0,
                 id_proyecto : 0,  
                 id_estudiante : 0,              
                 modal_encargado : '',
@@ -638,7 +722,17 @@ import Swal from 'sweetalert2';
                     'from' : 0,
                     'to' : 0
                 },
-                offset : 3
+                offset : 3,
+                rem_nombre_completo : '',
+                proyecto : '',
+                nombre_proyecto : '',
+                modal_estado_proyecto : '',
+                filtrandoPorNombre: "",
+                filtrandoPorCarrera: JSON.stringify({'por': 'carrera', 'id': -1}),
+                ordenandoPor: "recientes",
+                selectedFilter: "",
+                proyecto: "",
+                arrayFactultad: [],
             }
         },
         computed:{
@@ -667,11 +761,12 @@ import Swal from 'sweetalert2';
         },
         methods:{
             bindData(page){
+
                 let me = this;
                 me.loadTable = true;
 
                 var url = `${API_HOST}/todos_proyectos?page=${page}`;
-                me.getCarrerasAndPerfils();
+                me.getFactultadesCarrerasAndPerfils();
                 axios.get(`${API_HOST}/get_user`).then(function (response) {
                     me.user_email = response.data.correo;
                 })
@@ -688,10 +783,41 @@ import Swal from 'sweetalert2';
                     console.log(error);
                 });
             },
+            bindDataByFilters(page){
+
+                let me = this;
+
+                me.loadTable = true;
+                
+                let filtros = JSON.parse(me.filtrandoPorCarrera)
+
+                var url = `${API_HOST}/buscar_filtros?nombre=${me.filtrandoPorNombre}&filtro=${filtros.por}&id=${filtros.id}&orden=${me.ordenandoPor}&page=${page}`;
+
+                me.getFacultadesCarrerasAndPerfils();
+                
+                axios.get(`${API_HOST}/get_user`).then(function (response) {
+                    me.user_email = response.data.correo;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+                
+                axios.get(url).then(function (response) {
+                    var respuesta = response.data;
+                    me.arrayProyectos = respuesta.proyectos.data;
+                    me.pagination = respuesta.pagination;
+                    me.loadTable = false;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
             cambiarPagina(page){
                 let me = this;
                 me.pagination.current_page = page;
-                me.bindData(page);
+
+                me.bindDataByFilters(page);
+                
             },
             actualizarInsertarProyecto(){
                 if(this.validarProyecto()){
@@ -717,7 +843,7 @@ import Swal from 'sweetalert2';
                         'carreraPerfil' : this.arrayCarreraPerfil
                     }).then(function (response) {
                         me.cerrarModal();
-                        me.bindData();
+                        me.bindDataByFilters();
                     }).catch(function (error) {
                         console.log(error);
                     }); 
@@ -741,7 +867,7 @@ import Swal from 'sweetalert2';
                         'estado' : estado
                     }).then(function (response) {
                         me.cerrarModal();
-                        me.bindData();
+                        me.bindDataByFilters();
                     }).catch(function (error) {
                         console.log(error);
                     }); 
@@ -931,7 +1057,7 @@ import Swal from 'sweetalert2';
                     }).then(function (response) {
                         $('#statusModal').modal('hide');
                         me.loading = 2;
-                        me.bindData();
+                        me.bindDataByFilters();
                         me.cerrarModal();
                     }).catch(function (error) {
                         console.log(error);
@@ -949,6 +1075,7 @@ import Swal from 'sweetalert2';
                     this.modal3 = 0;
                     this.modal5 = 0;
                     this.modal6 = 0;
+                    this.modal7 = 0;
                     this.id_proyecto = 0;
                 }
             },
@@ -1026,6 +1153,7 @@ import Swal from 'sweetalert2';
                             this.flagError = false;
                             this.errorEstudianteMsg = '';
                             this.getEstudiantes()
+                            this.proyectoInscrito = data;
                             break;
                         }
                     case "confirmacion":
@@ -1074,11 +1202,24 @@ import Swal from 'sweetalert2';
                             this.errorPerfilMsg = '';
                             break;
                         }
+                    case "remover_estudiante":
+                        {
+                            this.modal7 = 1;
+                            this.id_proyecto = this.proyectoInscrito.idProyecto;
+                            this.nombre_proyecto = this.proyectoInscrito.nombre;
+                            this.modal_cupos = data.cupos;
+                            this.carnet = '';
+                            this.rem_nombre_completo = data.nombres + " " + data.apellidos;
+                            this.id_estudiante = data.idUser;
+                            this.flagError = false;
+                            this.errorEstudianteMsg = '';
+                            break;
+                        }
                     default:
                         break;
                 }
             },
-            getCarrerasAndPerfils(){
+            getFacultadesCarrerasAndPerfils(){
                 let me = this
                 axios.get(`${API_HOST}/carrera`).then(function (response) {
                     me.arrayCarrerasSin = response.data;
@@ -1090,8 +1231,16 @@ import Swal from 'sweetalert2';
                 .catch(function (error) {
                     console.log(error);
                 });
+
                 axios.get(`${API_HOST}/perfil`).then(function (response) {
                     me.arrayPerfiles = response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+                axios.get(`${API_HOST}/facultad`).then(function (response) {
+                    me.arrayFactultad = response.data;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -1192,7 +1341,7 @@ import Swal from 'sweetalert2';
                     }
                     me.loading = 0;
                     me.getEstudiantes();
-                    me.bindData();
+                    me.bindDataByFilters();
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -1220,7 +1369,7 @@ import Swal from 'sweetalert2';
                     me.loading = 2;
                     me.cerrarModal();
                     me.getEstudiantes();
-                    me.bindData();
+                    me.bindDataByFilters();
                     me.loading = 0;
                 }).catch(function (error) {
                     console.log(error);
@@ -1229,6 +1378,24 @@ import Swal from 'sweetalert2';
             logout(){
                 var url = `${API_HOST}/logout`;
                 axios.post(url).then(() => location.href = `${API_HOST}/`)
+            },
+            removerEstudianteProyecto(){
+                let me = this;
+                me.loading = 1;
+                axios.delete(`${API_HOST}/proyectos/${me.id_proyecto}/estudiante/${me.id_estudiante}`, {
+                    'estado' : 0
+                }).then(function (response) {
+                    $('#removeStudentModal').modal('hide');
+                    $('#membersModal').modal('hide');
+                    me.loading = 2;
+                    
+                    
+                    me.getEstudiantes();
+                    me.bindDataByFilters();
+                    me.loading = 0;
+                }).catch(function (error) {
+                    console.log(error);
+                });
             }
         },
         watch:{
@@ -1257,7 +1424,7 @@ import Swal from 'sweetalert2';
             }
         },
         mounted() {
-            this.bindData();
+            this.bindDataByFilters(1);
         },
     }
 </script>
@@ -1433,6 +1600,37 @@ import Swal from 'sweetalert2';
     #estadorp{
         display: none;
     }
+}
+
+.filter-group{
+    align-items: center;
+    display: flex;
+    gap: 1em;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.search-bar{ 
+    height: 100%;
+    flex: 1;
+}
+
+.search-group{ 
+    align-items: center;
+    flex: 2;
+    display: flex;
+    gap: 1em;
+    height: 2.5em;
+    flex-wrap: nowrap;
+}
+
+.filter-selector {
+    max-width: 20%;
+}
+
+.search-input {
+    flex: 2;
+    height: 100%;
 }
 
 </style>
