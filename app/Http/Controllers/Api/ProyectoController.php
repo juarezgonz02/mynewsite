@@ -115,6 +115,7 @@ class ProyectoController extends Controller
         $validator = Validator::make($request->all(), [
             'idProyecto' => 'required',
             'estado' => 'required',
+            'estado_proyecto' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -123,6 +124,7 @@ class ProyectoController extends Controller
 
         $proyecto = Proyecto::findOrFail($request->idProyecto);
             $proyecto->estado = $request->estado;
+            $proyecto->estado_proyecto = $request->estado_proyecto;
         $proyecto->save();
 
         return response()->json([

@@ -22,7 +22,6 @@ class CreateProyectoTable extends Migration
             $table->smallInteger('cupos');
             $table->string('estado_proyecto', 30);
             $table->string('descripcion', 2000);
-            $table->string('perfil_estudiante', 2000);
             $table->string('encargado', 150);
             $table->date('fecha_inicio');
             $table->date('fecha_fin');

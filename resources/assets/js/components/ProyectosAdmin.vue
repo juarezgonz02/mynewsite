@@ -169,16 +169,6 @@
                                         <p :class="{show: errorProyecto[3] == 1, hide: errorProyecto[3] != 1}" class="error">Debe seleccionar un tipo de horas</p>
                                     </div>
                                 </div>
-                                <!--<div class="form-group row div-form">
-                                    <label class="col-md-3 form-control-label" for="text-input">Estado del proyecto</label>
-                                    <div class="col-md-9">
-                                        <select class="form-control" v-model="modal_estado_proyecto">
-                                            <option value="En curso">En curso</option>
-                                            <option value="Finalizado">Finalizado</option>
-                                            <option value="Cancelado">Cancelado</option>
-                                        </select>
-                                    </div>
-                                </div>-->
                                 <div class="form-group row div-form">
                                     <label class="col-md-3 form-control-label" for="text-input">Descripción</label>
                                     <div class="col-md-9">
@@ -193,11 +183,24 @@
                                     </div>
                                 </div>
                                 <div class="form-group row div-form">
+                                    <label class="col-md-3 form-control-label" for="text-input">Perfil del estudiante</label>
+                                    <div class="col-md-9">
+                                        <textarea type="text" v-model="modal_perfil_estudiante" class="form-control" placeholder="Perfil del estudiante"></textarea>
+                                        <span>{{modal_perfil_estudiante.length}}/2000</span>
+                                        <div v-if="errorProyecto[5] != 2">   
+                                            <p :class="{show: errorProyecto[5] == 1, hide: errorProyecto[5] != 1}" class="error">El perfil del estudiante que puede aplicar al proyecto no puede ir vacío</p>
+                                        </div>
+                                        <div v-else>
+                                            <p class="error">El perfil del estudiante no puede superar el número máximo de caracteres</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row div-form">
                                     <label class="col-md-3 form-control-label" for="text-input">Correo del encargado</label>
                                     <div class="col-md-9">
                                         <input type="text" v-model="modal_correo" class="form-control" placeholder="example@example.com">
-                                        <div v-if="errorProyecto[5] != 2">   
-                                            <p :class="{show: errorProyecto[5] == 1, hide: errorProyecto[5] != 1}" class="error">El correo del encargado no puede ir vacío</p>
+                                        <div v-if="errorProyecto[6] != 2">   
+                                            <p :class="{show: errorProyecto[6] == 1, hide: errorProyecto[6] != 1}" class="error">El correo del encargado no puede ir vacío</p>
                                         </div>
                                         <div v-else>
                                             <p class="error">El correo no es válido</p>
@@ -208,21 +211,21 @@
                                     <label class="col-md-3 form-control-label" for="text-input">Horario</label>
                                     <div class="col-md-9">
                                         <input type="text" v-model="modal_horario" class="form-control" placeholder="Horario">
-                                        <p :class="{show: errorProyecto[6] == 1, hide: errorProyecto[6] != 1}" class="error">El horario no puede ir vacío</p>
+                                        <p :class="{show: errorProyecto[7] == 1, hide: errorProyecto[7] != 1}" class="error">El horario no puede ir vacío</p>
                                     </div>
                                 </div>
                                 <div class="form-group row div-form">
                                     <label class="col-md-3 form-control-label" for="text-input">Contraparte</label>
                                     <div class="col-md-9">
                                         <input type="text" v-model="modal_contraparte" class="form-control" placeholder="Contraparte">
-                                        <p :class="{show: errorProyecto[7] == 1, hide: errorProyecto[7] != 1}" class="error">La contraparte no puede ir vacía</p>
+                                        <p :class="{show: errorProyecto[8] == 1, hide: errorProyecto[8] != 1}" class="error">La contraparte no puede ir vacía</p>
                                     </div>
                                 </div>
                                 <div class="form-group row div-form">
                                     <label class="col-md-3 form-control-label" for="text-input">Fecha de inicio</label>
                                     <div class="col-md-9">
                                         <input type="date" value="2017-06-01" v-model="modal_fecha_in">
-                                        <div v-if="errorProyecto[8] == 1 || errorProyecto[8] == 2">
+                                        <div v-if="errorProyecto[9] == 1 || errorProyecto[9] == 2">
                                             <p class="show error">{{errorDateMsg}}</p>
                                         </div>
                                         <div v-else>
@@ -234,7 +237,7 @@
                                     <label class="col-md-3 form-control-label" for="text-input">Fecha de finalización</label>
                                     <div class="col-md-9">
                                         <input type="date" value="2021-01-01" v-model="modal_fecha_fin">
-                                        <div v-if="errorProyecto[9] == 1 || errorProyecto[9] == 2">
+                                        <div v-if="errorProyecto[10] == 1 || errorProyecto[10] == 2">
                                             <p class="show error">{{errorDateMsg}}</p>
                                         </div>
                                         <div v-else>
@@ -511,7 +514,7 @@
                                     </tr>
                                     <tr>
                                         <th class="col-md-4" style="background-color: #dedede;">Correo encargado</th>
-                                            <td v-text="modal_correo_encargado" style="padding-left: 12px;"></td>
+                                            <td v-text="modal_correo" style="padding-left: 12px;"></td>
                                     </tr>
                                     <tr>
                                         <th class="col-md-4" style="background-color: #dedede;">Fecha inicial</th>
@@ -696,7 +699,7 @@ import Swal from 'sweetalert2';
                 modal_fecha_fin : '',
                 modal_contraparte : '',
                 modal_carrera : 0,
-                modal_perfil : 0,
+                modal_perfil_estudiante : 0,
                 modal_createdAt : '',
                 modal_confirmar : '',
                 modal_descripcion : '',
@@ -829,18 +832,19 @@ import Swal from 'sweetalert2';
                         'idProyecto' : this.id_proyecto,
                         'nombre' : this.modal_nombre,
                         'estado' : 1,
+                        'estado_proyecto' : 'En curso',
                         'contraparte' : this.modal_contraparte,
                         'cupos_act' : 0,
                         'cupos' : this.modal_cupos,
-                        'estado_proyecto': 'En curso',
                         'descripcion' : this.modal_desc,
+                        'perfil_estudiante' : this.modal_perfil_estudiante,
                         'encargado' : this.modal_encargado,
                         'fecha_inicio' : this.modal_fecha_in,
                         'fecha_fin' : this.modal_fecha_fin,
                         'horario' : this.modal_horario,
                         'tipo_horas' : this.modal_tipo_horas,
                         'correo_encargado' : this.modal_correo,
-                        'carreraPerfil' : this.arrayCarreraPerfil
+                        'carreraPerfil' : this.arrayCarreraPerfil,
                     }).then(function (response) {
                         me.cerrarModal();
                         me.bindDataByFilters();
@@ -849,14 +853,15 @@ import Swal from 'sweetalert2';
                     }); 
                 }
                 else{
-                    var estado = (this.modal_estado_proyecto == "Cancelado" ? 0 : 1);
                     axios.put(`${API_HOST}/proyecto/actualizar`, {
                         'idProyecto' : this.id_proyecto,
                         'nombre' : this.modal_nombre,
+                        'estado' : 1,
                         'contraparte' : this.modal_contraparte,
                         'cupos' : this.modal_cupos,
-                        'estado_proyecto': this.modal_estado_proyecto,
+                        'estado_proyecto': 'En curso',
                         'descripcion' : this.modal_desc,
+                        'perfil_estudiante' : this.modal_perfil_estudiante,
                         'encargado' : this.modal_encargado,
                         'fecha_inicio' : this.modal_fecha_in,
                         'fecha_fin' : this.modal_fecha_fin,
@@ -864,7 +869,6 @@ import Swal from 'sweetalert2';
                         'tipo_horas' : this.modal_tipo_horas,
                         'correo_encargado' : this.modal_correo,
                         'carreraPerfil' : this.arrayCarreraPerfil,
-                        'estado' : estado
                     }).then(function (response) {
                         me.cerrarModal();
                         me.bindDataByFilters();
@@ -925,6 +929,9 @@ import Swal from 'sweetalert2';
                 else this.errorProyecto.push(0)
                 if(!this.modal_desc) this.errorProyecto.push(1);
                 else if(this.modal_desc.length > 2000) this.errorProyecto.push(2);
+                else this.errorProyecto.push(0)
+                if(!this.modal_perfil_estudiante) this.errorProyecto.push(1);
+                else if(this.modal_perfil_estudiante.length > 2000) this.errorProyecto.push(2);
                 else this.errorProyecto.push(0)
                 if(!this.modal_correo) this.errorProyecto.push(1)
                 else if(!this.regexCorreo(this.modal_correo)) this.errorProyecto.push(2)
@@ -1091,11 +1098,12 @@ import Swal from 'sweetalert2';
                             this.modal_encargado = '';
                             this.modal_cupos = ''
                             this.modal_desc = '';
+                            this.modal_perfil_estudiante = '';
                             this.modal_correo = '';
                             this.modal_horario = '';
                             this.modal_contraparte = '';
                             this.modal_tipo_horas = '';
-                            this.modal_estado_proyecto = '';
+                            //this.modal_estado_proyecto = '';
                             this.contraparte = '';
                             this.modal_fecha_in = '';
                             this.modal_fecha_fin = '';
@@ -1114,9 +1122,10 @@ import Swal from 'sweetalert2';
                             this.modal_encargado = data.encargado;
                             this.modal_nombre = data.nombre;
                             this.modal_desc = data.descripcion;
+                            this.modal_perfil_estudiante = data.perfil_estudiante;
                             this.modal_correo = data.correo_encargado;
                             this.modal_tipo_horas = data.tipo_horas;
-                            this.modal_estado_proyecto = data.estado_proyecto;
+                            //this.modal_estado_proyecto = data.estado_proyecto;
                             this.modal_cupos = data.cupos;
                             this.modal_horario = data.horario;
                             this.modal_fecha_in = data.fecha_inicio;
@@ -1170,7 +1179,7 @@ import Swal from 'sweetalert2';
                             this.modal5 = 1;
                             this.id_proyecto = data.idProyecto;
                             this.modal_encargado = data.encargado;
-                            this.modal_correo_encargado = data.correo_encargado;
+                            this.modal_correo = data.correo_encargado;
                             this.modal_nombre = data.nombre;
                             this.modal_desc = data.descripcion;
                             this.modal_perfil_estudiante = data.perfil_estudiante;
