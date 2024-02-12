@@ -50,7 +50,10 @@ class ProyectoController extends Controller
 
         $proyectos = Proyecto::join('proyectoxcarrera', 'proyecto.idProyecto', '=','proyectoxcarrera.idProyecto')
             ->leftJoin('proyectoxestudiante', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
-            ->select('proyecto.idProyecto', 'proyecto.nombre','proyecto.descripcion','proyecto.estado', 'proyecto.tipo_horas', 'proyecto.cupos_act','proyecto.cupos', 'proyecto.horario', 'proyecto.encargado','proyecto.fecha_inicio','proyecto.fecha_fin')
+            ->select('proyecto.idProyecto', 'proyecto.nombre','proyecto.descripcion','proyecto.estado', 'proyecto.tipo_horas', 
+            'proyecto.cupos_act','proyecto.cupos', 'proyecto.horario', 'proyecto.encargado','proyecto.fecha_inicio',
+            'proyecto.fecha_fin','proyecto.estado_proyecto', 'proyecto.perfil_estudiante',
+            'proyecto.correo_encargado','proyecto.contraparte')
             ->where('proyecto.estado','=','1')
             // ->where('proyecto.fecha_inicio', '>=', date('Y-m-d'))
             ->where('proyectoxcarrera.limite_inf', '<=', $idPerfil)
@@ -59,7 +62,9 @@ class ProyectoController extends Controller
             ->whereRaw('(proyectoxestudiante.idUser !=' . $user->idUser . ' OR proyectoxestudiante.idUser IS NULL)')
             ->whereRaw('proyecto.idProyecto NOT IN (SELECT p.idProyecto FROM proyecto p, proyectoxestudiante pe WHERE p.idProyecto = pe.idProyecto AND pe.idUser = ' . $user->idUser . ')')
             ->whereRaw('proyecto.cupos_act < proyecto.cupos')
-            ->groupBy('proyecto.idProyecto', 'proyecto.nombre', 'proyecto.descripcion', 'proyecto.estado', 'proyecto.tipo_horas', 'proyecto.cupos_act', 'proyecto.cupos', 'proyecto.horario', 'proyecto.encargado','proyecto.fecha_inicio','proyecto.fecha_fin')
+            ->groupBy('proyecto.idProyecto', 'proyecto.nombre', 'proyecto.descripcion', 'proyecto.estado', 'proyecto.tipo_horas', 
+            'proyecto.cupos_act', 'proyecto.cupos', 'proyecto.horario', 'proyecto.encargado','proyecto.fecha_inicio','proyecto.fecha_fin',
+            'proyecto.estado_proyecto', 'proyecto.perfil_estudiante','proyecto.correo_encargado','proyecto.contraparte')
             ->orderBy('proyecto.created_at', 'desc')->get();
 
         $proyectos->load(['carreras', 'estudiantes.carrera.facultad']);
@@ -115,7 +120,7 @@ class ProyectoController extends Controller
         $validator = Validator::make($request->all(), [
             'idProyecto' => 'required',
             'estado' => 'required',
-            'estado_proyecto' => 'required'
+            'estadoProyecto' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -124,7 +129,7 @@ class ProyectoController extends Controller
 
         $proyecto = Proyecto::findOrFail($request->idProyecto);
             $proyecto->estado = $request->estado;
-            $proyecto->estado_proyecto = $request->estado_proyecto;
+            $proyecto->estado_proyecto = $request->estadoProyecto;
         $proyecto->save();
 
         return response()->json([

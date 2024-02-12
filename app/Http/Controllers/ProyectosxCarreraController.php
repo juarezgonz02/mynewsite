@@ -58,7 +58,8 @@ class ProyectosxCarreraController extends Controller
         ->leftJoin('proyectoxestudiante', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
         ->select('proyecto.idProyecto', 'proyecto.nombre','proyecto.descripcion','proyecto.estado',
         'proyecto.tipo_horas', 'proyecto.cupos_act','proyecto.cupos', 'proyecto.horario', 'proyecto.encargado',
-        'proyecto.fecha_inicio','proyecto.fecha_fin')
+        'proyecto.fecha_inicio','proyecto.fecha_fin','proyecto.estado_proyecto', 'proyecto.perfil_estudiante',
+        'proyecto.correo_encargado','proyecto.contraparte')
         ->where('proyecto.estado','=','1')
         ->where('proyecto.estado_proyecto','=','En curso')
         ->where('proyectoxcarrera.limite_inf', '<=', $user->idPerfil)
@@ -82,7 +83,10 @@ class ProyectosxCarreraController extends Controller
 
         }
         
-        $proyectos = $proyectos->groupBy('proyecto.idProyecto', 'proyecto.nombre', 'proyecto.descripcion', 'proyecto.estado', 'proyecto.tipo_horas', 'proyecto.cupos_act', 'proyecto.cupos', 'proyecto.horario', 'proyecto.encargado','proyecto.fecha_inicio','proyecto.fecha_fin')
+        $proyectos = $proyectos->groupBy('proyecto.idProyecto', 'proyecto.nombre', 'proyecto.descripcion', 'proyecto.estado', 
+        'proyecto.tipo_horas', 'proyecto.cupos_act', 'proyecto.cupos', 'proyecto.horario', 'proyecto.encargado',
+        'proyecto.fecha_inicio','proyecto.fecha_fin','proyecto.estado_proyecto', 'proyecto.perfil_estudiante',
+        'proyecto.correo_encargado','proyecto.contraparte')
         ->orderBy('proyecto.idProyecto', 'desc')->paginate(10);
 
         return [
