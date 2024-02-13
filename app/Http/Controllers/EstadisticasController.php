@@ -165,12 +165,41 @@ class EstadisticasController extends Controller
                          }
         }
         
+        // PROYECTOS TERMINADOS
+        // $numeroDeProyectosTerminados = Proyecto::where('estado_proyecto', '=', 'Terminado')->count();
+        $numeroDeProyectosTerminados = -1;
+
+        if($idCarrera != null || $idCarrera != 0){
+            $numeroDeProyectosTerminados = Proyecto::
+            join('proyectoxcarrera', 'proyecto.idProyecto', '=', 'proyectoxcarrera.idProyecto')
+            ->join('carrera', 'proyectoxcarrera.idCarrera', '=', 'carrera.idCarrera')
+            ->where('estado_proyecto', '=', 'Finalizado')
+            ->where('carrera.idFacultad', '=', $idFacultad)
+            ->where('carrera.idCarrera', '=', $idCarrera)->count();
+        }        
+        else{
+            if($idFacultad != null || $idFacultad != 0){
+                $numeroDeProyectosTerminados = ProyectoxCarrera::join('proyecto','proyectoxcarrera.idProyecto' , '=','proyecto.idProyecto' )
+                    ->join('carrera', 'proyectoxcarrera.idCarrera', '=', 'carrera.idCarrera')
+                    ->where('proyecto.estado_proyecto', '=', 'Finalizado')
+                    ->where('carrera.idFacultad', '=', $idFacultad)
+                    ->groupBy('proyectoxcarrera.idCarrera')->count();
+                
+            }
+            
+            else{
+                $numeroDeProyectosTerminados = Proyecto::
+            where('estado_proyecto', '=', 'Finalizado')->count();
+                         }
+        }
+
+
 
 
         return [
             'numeroDeEstudiantes' => $numeroDeEstudiantes,
             'numeroDeProyectosEnCurso' =>  $numeroDeProyectosEnCurso,
-            'numeroDeProyectosTerminados' => 0,
+            'numeroDeProyectosTerminados' => $numeroDeProyectosTerminados,
             'numeroDeEstudiantesInscritos' => $numeroDeEstudiantesInscritos,
             'totalNumeroDeProyectosActivos' => $totalNumeroDeProyectosActivos,
             'idCarrera' => $idCarrera,
