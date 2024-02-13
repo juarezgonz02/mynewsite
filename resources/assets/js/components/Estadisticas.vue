@@ -23,7 +23,6 @@
             <div class="dashboard">
                 <div class="statistic">
                     <div class="header">
-
                         <h3 >Proyectos en la Plataforma</h3>
                     </div>
                     <div class="body">
@@ -207,6 +206,17 @@ export default {
 .statistic {
     flex: 1;
     text-align: center;
+}
+
+@media screen and (max-width: 768px){
+    .statistic{
+        margin-bottom: 1vh;
+    }
+
+    .dashboard{
+        flex-direction: column;
+        gap: 0px;
+    }
 }
 
 .statistic .text{
