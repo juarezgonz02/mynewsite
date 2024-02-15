@@ -34,6 +34,9 @@ Route::middleware(['auth:api', ])->group(function () {
     Route::get('/getProyectosDisponibles', 'Api\ProyectoController@getProyectosDisponibles');
     Route::get('/getMisProyectos', 'Api\ProyectoController@getMisProyectos');
 
+    Route::get('/getAviableProjects', 'Api\ProyectoController@getAviableProjects');
+    Route::get('/getAllProjects', 'Api\ProyectoController@getAllProjects');
+
     Route::post('/postAplicarProyecto', 'ProyectoxEstudianteController@aplicar');
     Route::post('/postDesaplicarProyecto', 'ProyectoxEstudianteController@deleteRow');
 
