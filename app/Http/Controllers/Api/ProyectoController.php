@@ -246,4 +246,96 @@ class ProyectoController extends Controller
         }
         
     }
+
+    public function getAviableProjects(Request $request)
+    {
+
+
+        // Utilizando el método getProyectosDisponibles de Api\ProyectoController + paginacion
+        $user = Auth()->user();
+        $idPerfil = $user->idPerfil != null ? $user->idPerfil : 1;
+        $idCarrera = $user->idCarrera != null ? $user->idCarrera : Carrera::first()->idCarrera;
+
+        $proyectos = Proyecto::join('proyectoxcarrera', 'proyecto.idProyecto', '=','proyectoxcarrera.idProyecto')
+            ->leftJoin('proyectoxestudiante', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
+            ->select('proyecto.idProyecto', 'proyecto.nombre','proyecto.descripcion','proyecto.estado', 'proyecto.tipo_horas', 
+            'proyecto.cupos_act','proyecto.cupos', 'proyecto.horario', 'proyecto.encargado','proyecto.fecha_inicio',
+            'proyecto.fecha_fin','proyecto.estado_proyecto', 'proyecto.perfil_estudiante',
+            'proyecto.correo_encargado','proyecto.contraparte')
+            ->where('proyecto.estado','=','1')
+            // ->where('proyecto.fecha_inicio', '>=', date('Y-m-d'))
+            ->where('proyecto.estado_proyecto','=','En curso')
+            ->where('proyectoxcarrera.limite_inf', '<=', $idPerfil)
+            ->where('proyectoxcarrera.limite_sup', '>=', $idPerfil)
+            ->where('proyectoxcarrera.idCarrera', '=', $idCarrera)
+            ->whereRaw('(proyectoxestudiante.idUser !=' . $user->idUser . ' OR proyectoxestudiante.idUser IS NULL)')
+            ->whereRaw('proyecto.idProyecto NOT IN (SELECT p.idProyecto FROM proyecto p, proyectoxestudiante pe WHERE p.idProyecto = pe.idProyecto AND pe.idUser = ' . $user->idUser . ')')
+            ->whereRaw('proyecto.cupos_act < proyecto.cupos')
+            ->groupBy('proyecto.idProyecto', 'proyecto.nombre', 'proyecto.descripcion', 'proyecto.estado', 'proyecto.tipo_horas', 
+            'proyecto.cupos_act', 'proyecto.cupos', 'proyecto.horario', 'proyecto.encargado','proyecto.fecha_inicio','proyecto.fecha_fin',
+            'proyecto.estado_proyecto', 'proyecto.perfil_estudiante','proyecto.correo_encargado','proyecto.contraparte')
+            ->orderBy('proyecto.created_at', 'desc')->paginate(5);
+
+        $proyectos->load(['carreras', 'estudiantes.carrera.facultad']);
+
+
+
+
+
+        // ALTERNATIVA UTILIZANDO index de ProyectoController 
+
+
+        // $proyectos = $proyectos->paginate(5);
+        // return response()->json($proyectos);
+
+
+        // $proyectos = Proyecto::where('estado','=','1')->orderByRaw('created_at DESC')->paginate(5);
+        // $cupos = ProyectoxEstudiante::select('estado', 'idProyecto', 'idUser')->get();
+        // for($i = 0; $i < count($proyectos); $i++){
+        //     $proyectos[$i]->notificaciones = 0;
+        //     for($j = 0; $j < count($cupos) ; $j++){
+        //         if($proyectos[$i]->idProyecto == $cupos[$j]->idProyecto && $cupos[$j]->estado == '0'){
+        //             $proyectos[$i]->notificaciones = 1;
+        //             break;
+        //         }
+        //     }
+        // }
+        return [
+            'pagination' => [
+                'total'         => $proyectos->total(),
+                'current_page'  => $proyectos->currentPage(),
+                'per_page'      => $proyectos->perPage(),
+                'last_page'     => $proyectos->lastPage(),
+                'from'          => $proyectos->firstItem(),
+                'to'            => $proyectos->lastItem(),
+            ],
+            'proyectos' => $proyectos
+        ];
+
+
+        
+    }
+
+    public function getAllProjects(Request $request)
+    {
+        // $proyectos = $proyectos->paginate(5);
+        // return response()->json($proyectos);
+
+
+        $proyectos = Proyecto::where('estado','=','1')->orderByRaw('created_at DESC')->paginate(10);
+
+        return [
+            'pagination' => [
+                'total'         => $proyectos->total(),
+                'current_page'  => $proyectos->currentPage(),
+                'per_page'      => $proyectos->perPage(),
+                'last_page'     => $proyectos->lastPage(),
+                'from'          => $proyectos->firstItem(),
+                'to'            => $proyectos->lastItem(),
+            ],
+            'proyectos' => $proyectos
+        ];
+    }
+
+
 }
