@@ -24,7 +24,7 @@ class CarreraController extends Controller
         $carrera = Carrera::join('users', 'users.idCarrera', '=','carrera.idCarrera')
         ->join('facultad', 'carrera.idFacultad', '=', 'facultad.idFacultad')
         ->join('perfil' , 'perfil.idPerfil', '=', 'users.idPerfil')
-        ->select('carrera.nombre as nombre_c', 'facultad.nombre as nombre_f', 'perfil.descripcion as anio_carrera')
+        ->select('carrera.nombre as nombre_c', 'facultad.nombre as nombre_f', 'perfil.descripcion as anio_carrera', 'perfil.idPerfil')
         ->where('users.idUser','=', $id)->get();
         return $carrera;
     }

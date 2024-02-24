@@ -57,8 +57,38 @@
                             <tr>
                                 <th style="background-color: #dedede">Perfil</th>
                                 <td v-text="perfil"></td>
+                                
                             </tr>
                         </table>
+                        <button class="button button1" id="logout" @click="showModal">Cambiar año de carrera</button>
+                    </div>
+
+                    <div class="modal" id="myModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Cambiar año de carrera</h4>
+                                    <button type="button" class="close" data-dismiss="modal" @click="closeModal">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="sel1">Seleccione el año de carrera:</label>
+                                            
+                                            <select class="form-control" id="sel1" v-model="newPerfil" >
+                                                <!-- <option v-for="perfil in arrayPerfiles" v-text="perfil.anio_carrera"></option> -->
+                                                
+                                                <option v-for="p in arrayPerfiles" :value="p.idPerfil" :key="p.idPerfil" :selected="idPerfil == p.idPerfil " >{{p.perfil}}</option>
+                                            </select>
+
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal" @click="changePerfil">Guardar</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                 </div>
@@ -84,7 +114,10 @@ import {API_HOST} from '../constants/endpoint.js';
                 apellidos : '',
                 carrera : '',                
                 facultad : '',
-                perfil: ''
+                perfil: '',
+                arrayPerfiles: [''],
+                newPerfil: 0,
+                idPerfil: 0
             }
         },
         methods:{
@@ -107,6 +140,7 @@ import {API_HOST} from '../constants/endpoint.js';
                     me.carrera = res.nombre_c;
                     me.facultad = res.nombre_f;
                     me.perfil = res.anio_carrera;
+                    me.idPerfil = res.idPerfil;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -117,11 +151,42 @@ import {API_HOST} from '../constants/endpoint.js';
                 .catch(function (error) {
                     console.log(error);
                 });
+
+                axios.get(`${API_HOST}/perfil`).then(function (response) {
+                    me.arrayPerfiles = response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
             },
             logout(){
                 var url = `${API_HOST}/logout`;
                 axios.post(url).then(() => location.href = `${API_HOST}/`)
+            },
+            showModal(){
+                var modal = document.getElementById("myModal");
+                modal.style.display = "block";
+                this.newPerfil = this.idPerfil;
+
+            },
+            closeModal(){
+                var modal = document.getElementById("myModal");
+                modal.style.display = "none";
+            },
+            changePerfil(){
+                var me = this;
+                axios.put(`${API_HOST}/estudiante/actualizar/perfil`, {
+                    idPerfil: me.newPerfil,
+                    idUsuario: me.user_id
+                }).then(function (response) {
+                    me.bindData();
+                    me.closeModal();
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
             }
+
         },
         mounted() {
             this.bindData();

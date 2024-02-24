@@ -113,6 +113,7 @@
                     <div v-if="!loadTable">
                         <div style="margin: 20px 0px 0px 20px;" >
                             <p >{{user_info}}</p>
+                            <p>Si tu año de carrera no coincide, recuerda que puedes cambiarlo desde la pestaña <strong>Perfil</strong>. </p>
                         </div>
                     </div>
                 </div>
