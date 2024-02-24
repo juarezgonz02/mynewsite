@@ -26,6 +26,7 @@ class ProyectoController extends Controller
             ->first();
 
         $proyectoActivo = 0; 
+        
         if ($proyecto != null) {
             $proyectoActivo = 1; 
         }
@@ -247,60 +248,51 @@ class ProyectoController extends Controller
         
     }
 
-    public function getAviableProjects(Request $request)
+    public function getAllProjects(Request $request)
     {
 
+        // Request payload get 
+        $nombre = $request->query('nombre') ?: "";
+        
+        $buscandoPor = $request->query('filtro');
+        
+        $busquedaId = $request->query('id');
+        
+        $orden = "created_at DESC";
+        
+        switch($request->query('orden')) {
+            case 'antiguos': 
+                $orden = "created_at DESC";
+                break;
 
-        // Utilizando el método getProyectosDisponibles de Api\ProyectoController + paginacion
-        $user = Auth()->user();
-        $idPerfil = $user->idPerfil != null ? $user->idPerfil : 1;
-        $idCarrera = $user->idCarrera != null ? $user->idCarrera : Carrera::first()->idCarrera;
+            case 'recientes': 
+                $orden = "created_at ASC";
+                break;
+                
+            case 'mas_cupos':
+                $orden = 'cupos_act ASC'; 
+                break;
+                    
+            case 'menos_cupos':
+                $orden = 'cupos_act DESC';     
+                break;    
 
-        $proyectos = Proyecto::join('proyectoxcarrera', 'proyecto.idProyecto', '=','proyectoxcarrera.idProyecto')
-            ->leftJoin('proyectoxestudiante', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
-            ->select('proyecto.idProyecto', 'proyecto.nombre','proyecto.descripcion','proyecto.estado', 'proyecto.tipo_horas', 
-            'proyecto.cupos_act','proyecto.cupos', 'proyecto.horario', 'proyecto.encargado','proyecto.fecha_inicio',
-            'proyecto.fecha_fin','proyecto.estado_proyecto', 'proyecto.perfil_estudiante',
-            'proyecto.correo_encargado','proyecto.contraparte')
-            ->where('proyecto.estado','=','1')
-            // ->where('proyecto.fecha_inicio', '>=', date('Y-m-d'))
-            ->where('proyecto.estado_proyecto','=','En curso')
-            ->where('proyectoxcarrera.limite_inf', '<=', $idPerfil)
-            ->where('proyectoxcarrera.limite_sup', '>=', $idPerfil)
-            ->where('proyectoxcarrera.idCarrera', '=', $idCarrera)
-            ->whereRaw('(proyectoxestudiante.idUser !=' . $user->idUser . ' OR proyectoxestudiante.idUser IS NULL)')
-            ->whereRaw('proyecto.idProyecto NOT IN (SELECT p.idProyecto FROM proyecto p, proyectoxestudiante pe WHERE p.idProyecto = pe.idProyecto AND pe.idUser = ' . $user->idUser . ')')
-            ->whereRaw('proyecto.cupos_act < proyecto.cupos')
-            ->groupBy('proyecto.idProyecto', 'proyecto.nombre', 'proyecto.descripcion', 'proyecto.estado', 'proyecto.tipo_horas', 
-            'proyecto.cupos_act', 'proyecto.cupos', 'proyecto.horario', 'proyecto.encargado','proyecto.fecha_inicio','proyecto.fecha_fin',
-            'proyecto.estado_proyecto', 'proyecto.perfil_estudiante','proyecto.correo_encargado','proyecto.contraparte')
-            ->orderBy('proyecto.created_at', 'desc')->paginate(5);
+            case 'n_solicitudes':
+                $orden = 'cupos_act DESC';     
+                break;    
+            
+            default: 
+                $orden = 'created_at DESC';
+        }
 
-        $proyectos->load(['carreras', 'estudiantes.carrera.facultad']);
+        if($buscandoPor == "carrera"){
+            $proyectos = $this->obtener_todo_por_carrera($nombre, $busquedaId, $orden);
+        }else{
+            $proyectos = $this->obtener_todo_por_facultad($nombre, $busquedaId, $orden);
+        }
 
-
-
-
-
-        // ALTERNATIVA UTILIZANDO index de ProyectoController 
-
-
-        // $proyectos = $proyectos->paginate(5);
-        // return response()->json($proyectos);
-
-
-        // $proyectos = Proyecto::where('estado','=','1')->orderByRaw('created_at DESC')->paginate(5);
-        // $cupos = ProyectoxEstudiante::select('estado', 'idProyecto', 'idUser')->get();
-        // for($i = 0; $i < count($proyectos); $i++){
-        //     $proyectos[$i]->notificaciones = 0;
-        //     for($j = 0; $j < count($cupos) ; $j++){
-        //         if($proyectos[$i]->idProyecto == $cupos[$j]->idProyecto && $cupos[$j]->estado == '0'){
-        //             $proyectos[$i]->notificaciones = 1;
-        //             break;
-        //         }
-        //     }
-        // }
-        return [
+        
+            return [
             'pagination' => [
                 'total'         => $proyectos->total(),
                 'current_page'  => $proyectos->currentPage(),
@@ -316,13 +308,45 @@ class ProyectoController extends Controller
         
     }
 
-    public function getAllProjects(Request $request)
+
+    public function getAviableProjects(Request $request)
     {
-        // $proyectos = $proyectos->paginate(5);
-        // return response()->json($proyectos);
+        
+        $user = Auth()->user();
+        $proyectos = Proyecto::join('proyectoxcarrera', 'proyecto.idProyecto', '=','proyectoxcarrera.idProyecto')
+        ->leftJoin('proyectoxestudiante', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
+        ->select('proyecto.idProyecto', 'proyecto.nombre','proyecto.descripcion','proyecto.estado',
+        'proyecto.tipo_horas', 'proyecto.cupos_act','proyecto.cupos', 'proyecto.horario', 'proyecto.encargado',
+        'proyecto.fecha_inicio','proyecto.fecha_fin','proyecto.estado_proyecto', 'proyecto.perfil_estudiante',
+        'proyecto.correo_encargado','proyecto.contraparte')
+        ->where('proyecto.estado','=','1')
+        ->where('proyecto.estado_proyecto','=','En curso')
+        ->where('proyectoxcarrera.limite_inf', '<=', $user->idPerfil)
+        ->where('proyectoxcarrera.limite_sup', '>=', $user->idPerfil)
+        ->where('proyectoxcarrera.idCarrera', '=', $user->idCarrera)
+        // ->where('proyecto.fecha_inicio', '>=', date('Y-m-d'))// Se mostraran los proyectos que aun no han iniciado deacuerdo a la fecha de consulta
+        ->whereRaw('(proyectoxestudiante.idUser !=' . $user->idUser . ' OR proyectoxestudiante.idUser IS NULL)')
+        ->whereRaw('proyecto.idProyecto NOT IN (SELECT p.idProyecto FROM proyecto p, proyectoxestudiante pe WHERE p.idProyecto = pe.idProyecto AND pe.idUser = ' . $user->idUser . ')')
+        ->whereRaw('proyecto.cupos_act < proyecto.cupos');
+        
+        $name = $request -> query('nombre');
+        $tipo = $request -> query('tipo');
 
+        if($name != ''){
+            $proyectos = $proyectos->where('proyecto.nombre', "like", $name.'%');
+            
+        }
+        
+        if($tipo != 'todas'){
+            $proyectos = $proyectos->where('proyecto.tipo_horas', "=", $tipo);
 
-        $proyectos = Proyecto::where('estado','=','1')->orderByRaw('created_at DESC')->paginate(10);
+        }
+        
+        $proyectos = $proyectos->groupBy('proyecto.idProyecto', 'proyecto.nombre', 'proyecto.descripcion', 'proyecto.estado', 
+        'proyecto.tipo_horas', 'proyecto.cupos_act', 'proyecto.cupos', 'proyecto.horario', 'proyecto.encargado',
+        'proyecto.fecha_inicio','proyecto.fecha_fin','proyecto.estado_proyecto', 'proyecto.perfil_estudiante',
+        'proyecto.correo_encargado','proyecto.contraparte')
+        ->orderBy('proyecto.idProyecto', 'desc')->paginate(10);
 
         return [
             'pagination' => [
@@ -335,6 +359,58 @@ class ProyectoController extends Controller
             ],
             'proyectos' => $proyectos
         ];
+    }
+
+    private function obtener_todo_por_facultad(string $nombre, string $nfacultad, string $orden){
+        
+        $proyectos =  $proyectos = ProyectoXCarrera::join('proyecto', 'proyecto.idProyecto', '=', 'proyectoxcarrera.idProyecto')
+        ->leftJoin('carrera', 'carrera.idCarrera', '=', 'proyectoxcarrera.idCarrera')
+        ->select("proyecto.*", "carrera.idCarrera")->where('carrera.idFacultad', '=', $nfacultad) ->where('proyecto.nombre', 'like', $nombre.'%');
+
+        $proyectos = $proyectos->orderByRaw('proyecto.'.$orden)->paginate(5);
+        
+        $cupos = ProyectoxEstudiante::select('idProyecto')->where('estado', '=', '0')->get();
+        for($i = 0; $i < count($proyectos); $i++){
+            $proyectos[$i]->notificaciones = 0;
+            for($j = 0; $j < count($cupos) ; $j++){
+                if($proyectos[$i]->idProyecto == $cupos[$j]->idProyecto){
+                    $proyectos[$i]->notificaciones = 1;
+                    break;
+                }
+            }
+        }
+
+        return $proyectos;
+    }
+    
+    private function obtener_todo_por_carrera(string $nombre, string $ncarrera, string $orden)
+    {
+        if($ncarrera == "-1"){
+            $proyectos = Proyecto::where('proyecto.nombre' ,'like', $nombre."%")->where('proyecto.estado', '=', '1');
+        
+        }else if ($ncarrera == "-2"){
+            $proyectos = Proyecto::where('proyecto.nombre' ,'like', $nombre."%")->where('proyecto.estado', '=', '1');
+        }else{
+            $proyectos = ProyectoXCarrera::join('proyecto', 'proyecto.idProyecto', '=', 'proyectoxcarrera.idProyecto')
+            ->leftJoin('carrera', 'carrera.idCarrera', '=', 'proyectoxcarrera.idCarrera')
+            ->select("proyecto.*", "carrera.idCarrera")->where('carrera.idCarrera', '=', $ncarrera) ->where('proyecto.nombre', 'like', $nombre.'%');
+        }
+
+        $proyectos = $proyectos->orderByRaw('proyecto.'.$orden)->paginate(5);
+        
+        $cupos = ProyectoxEstudiante::select('idProyecto')->where('estado', '=', '0')->get();
+        for($i = 0; $i < count($proyectos); $i++){
+            $proyectos[$i]->notificaciones = 0;
+            for($j = 0; $j < count($cupos) ; $j++){
+                if($proyectos[$i]->idProyecto == $cupos[$j]->idProyecto){
+                    $proyectos[$i]->notificaciones = 1;
+                    break;
+                }
+            }
+        }
+
+        return $proyectos;
+        
     }
 
 

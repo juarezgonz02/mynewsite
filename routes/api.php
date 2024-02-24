@@ -29,7 +29,9 @@ Route::get('getCarrerasPorFacultad/{idFacultad}', 'Api\CarreraController@getCarr
 
 ////APP ENDPOINTS
 Route::middleware(['auth:api', ])->group(function () {
+    
     // ESTUDIANTES
+    Route::get('/getCarrerasYFacultades', 'Api\CarreraController@getCarrerasYFacultades');
     Route::get('/getPermisoAplicar', 'Api\ProyectoController@getPermisoAplicar');
     Route::get('/getProyectosDisponibles', 'Api\ProyectoController@getProyectosDisponibles');
     Route::get('/getMisProyectos', 'Api\ProyectoController@getMisProyectos');

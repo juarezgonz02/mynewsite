@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Carrera;
+use App\Facultad;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -26,5 +27,23 @@ class CarreraController extends Controller
         $carreras = Carrera::where('idFacultad', '=', $idFacultad)->get();
 
         return response()->json($carreras);
+    }
+    
+    /**
+     * Responde con todas las carreras y facultades
+     *
+     * @param $idFacultad
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getCarrerasYFacultades(){
+        $carreras = Carrera::get();
+        $facultades = Facultad::get();
+
+        return [
+            'data'=> [
+                'carreras' => $carreras,
+                'facultades' => $facultades
+            ]
+        ];
     }
 }
