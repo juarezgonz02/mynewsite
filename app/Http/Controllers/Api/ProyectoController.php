@@ -379,6 +379,8 @@ class ProyectoController extends Controller
                 }
             }
         }
+        $proyectos -> estudiantes = [];
+
 
         return $proyectos;
     }
@@ -386,14 +388,16 @@ class ProyectoController extends Controller
     private function obtener_todo_por_carrera(string $nombre, string $ncarrera, string $orden)
     {
         if($ncarrera == "-1"){
-            $proyectos = Proyecto::where('proyecto.nombre' ,'like', $nombre."%")->where('proyecto.estado', '=', '1');
-        
+            $proyectos = Proyecto::where('proyecto.nombre' ,'like', $nombre."%")->where('proyecto.estado', '=', '1')
+            ->with(['carreras', 'estudiantes.carrera.facultad']);
         }else if ($ncarrera == "-2"){
-            $proyectos = Proyecto::where('proyecto.nombre' ,'like', $nombre."%")->where('proyecto.estado', '=', '1');
+            $proyectos = Proyecto::where('proyecto.nombre' ,'like', $nombre."%")->where('proyecto.estado', '=', '1')
+            ->with(['carreras', 'estudiantes.carrera.facultad']);;
         }else{
-            $proyectos = ProyectoXCarrera::join('proyecto', 'proyecto.idProyecto', '=', 'proyectoxcarrera.idProyecto')
+            $proyectos = Proyecto::rightJoin('proyectoxcarrera', 'proyecto.idProyecto', '=', 'proyectoxcarrera.idProyecto')
             ->leftJoin('carrera', 'carrera.idCarrera', '=', 'proyectoxcarrera.idCarrera')
-            ->select("proyecto.*", "carrera.idCarrera")->where('carrera.idCarrera', '=', $ncarrera) ->where('proyecto.nombre', 'like', $nombre.'%');
+            ->select("proyecto.*", "carrera.idCarrera")->where('carrera.idCarrera', '=', $ncarrera)->where('proyecto.nombre', 'like', $nombre.'%')
+            ->with(['carreras', 'estudiantes.carrera.facultad']);
         }
 
         $proyectos = $proyectos->orderByRaw('proyecto.'.$orden)->paginate(5);
@@ -412,6 +416,5 @@ class ProyectoController extends Controller
         return $proyectos;
         
     }
-
 
 }
