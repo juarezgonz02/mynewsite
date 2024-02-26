@@ -32,10 +32,11 @@ class ProyectoController extends Controller
         }
         if($user->ya_aplico_hoy == date('d-m-Y') ) {
             return response()->json(
-                ['permiso' => 0, 'proyectoActivo' => $proyectoActivo],200);
+                ['timeout' =>  $user->timeout, 'permiso' => 0, 'proyectoActivo' => $proyectoActivo],200);
         }
         else{
-            return response()->json(['permiso' => 1, 'proyectoActivo' => $proyectoActivo],200);
+            
+            return response()->json(['timeout' =>  $user->timeout, 'permiso' => 1, 'proyectoActivo' => $proyectoActivo],201);
         }
     }
 
