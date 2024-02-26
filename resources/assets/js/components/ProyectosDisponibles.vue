@@ -23,7 +23,7 @@
                                 <p v-else>No puede aplicar a un nuevo proyecto. Ya se encuentra inscrito a un proyecto</p>
                             </b>
                             <b style="color:red" v-if="timeout != ''">
-                                <p>No puede aplicar a nuevos proyectos hasta</p>
+                                <p>Penalización: No puede aplicar a nuevos proyectos hasta</p>
                                 <p v-text="timeout"></p>
                                 
                             </b>
@@ -270,7 +270,9 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                 timeout : '',
                 filtrandoPorTipo: "todas",
                 filtrandoPorNombre: "",
-                ordenandoPor: "recientes"
+                modal_perfil_estudiante: '',
+                modal_correo_encargado: '',
+                modal_contraparte: '',
             }
         },
         computed:{
@@ -385,6 +387,13 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                     me.user_email = response.data.correo;
                     me.user_carrera = response.data.carrera;
                     me.user_perfil = response.data.perfil;
+                    
+                    console.log(response.data.timeout);
+                    if (me.fechaLegible(response.data.timeout))
+                        me.timeout = me.fechaLegible(response.data.timeout);
+                    else
+                        me.timeout = '';
+  
 
                     me.user_info = `Se muestran proyectos para ${me.user_carrera.toUpperCase()}, desde: ${me.user_perfil.toUpperCase()}`;
                 })
