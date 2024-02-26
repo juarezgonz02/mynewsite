@@ -28,8 +28,6 @@
                                 <td v-text="proyecto.nombre" data-toggle="modal" data-target="#modal-info"></td>
                                 <td v-text="proyecto.perfil_estudiante" data-toggle="modal" data-target="#modal-info"
                                     @click="abrirModal('info', proyecto)"></td>
-                                <td id="disappear" v-text="proyecto.descripcion" data-toggle="modal"
-                                    data-target="#modal-info" @click="abrirModal('info', proyecto)"></td>
                                 <td v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`" data-toggle="modal"
                                     data-target="#modal-info" @click="abrirModal('info', proyecto)"
                                     style="text-align: center;"></td>
