@@ -86,7 +86,7 @@ class ProyectoController extends Controller
         $proyecto->cupos_act = $request->cupos_act;
         $proyecto->cupos = $request->cupos;
         $proyecto->estado_proyecto = $request->estado_proyecto;
-        $proyecto->descripcion = $request->descripcion;
+        $proyecto->descripcion = $request->descripcion." ";
         $proyecto->perfil_estudiante = $request->perfil_estudiante;
         $proyecto->encargado = $request->encargado;
         $proyecto->fecha_inicio = $request->fecha_inicio;
@@ -154,7 +154,7 @@ class ProyectoController extends Controller
             $proyecto->contraparte = $request->contraparte;
             $proyecto->cupos = $request->cupos;
             $proyecto->estado_proyecto = $request->estado_proyecto;
-            $proyecto->descripcion = $request->descripcion;
+            $proyecto->descripcion = $request->descripcion." ";
             $proyecto->perfil_estudiante = $request->perfil_estudiante;
             $proyecto->encargado = $request->encargado;
             $proyecto->fecha_inicio = $request->fecha_inicio;

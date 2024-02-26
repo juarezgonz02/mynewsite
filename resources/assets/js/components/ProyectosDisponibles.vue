@@ -66,16 +66,18 @@
                         <table class="table table-bordered table-hover table-sm" style="font-size: 1.25em;">
                             <thead>
                                 <tr>
-                                    <th style="text-align: center; width: 10%;">Nombre del proyecto</th>
-                                    <th style="text-align: center;" id="disappear">Descripción del proyecto/actividad</th>
+                                    <th style="text-align: center; width: 10%;">Contraparte</th>
+                                    <th style="text-align: center; width: 10%;">Proyecto</th>
+                                    <th style="text-align: center;" id="disappear">Perfil estudiante</th>
                                     <th style="width: 10%; text-align: center;">Cupos</th>
-                                    <th style="width: 10%; text-align: center;">Opciones</th>
+                                    <th style="width: 10%; text-align: center;">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="proyecto in arrayProyectos" :key="proyecto.idProyecto">
+                                    <td v-text="proyecto.contraparte" id="name_p" data-toggle="modal" data-target="#modal-info" @click="abrirModal('info', proyecto)"></td>
                                     <td v-text="proyecto.nombre" id="name_p" data-toggle="modal" data-target="#modal-info" @click="abrirModal('info', proyecto)"></td>
-                                    <td id="disappear" v-text="proyecto.descripcion" data-toggle="modal" data-target="#modal-info" @click="abrirModal('info', proyecto)"></td>
+                                    <td id="disappear" v-text="proyecto.perfil_estudiante" data-toggle="modal" data-target="#modal-info" @click="abrirModal('info', proyecto)"></td>
                                     <td v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`" data-toggle="modal" data-target="#modal-info" @click="abrirModal('info', proyecto)" style="text-align: center;"></td>
                                     <td>
                                         <div class="button-container" style="margin: 8px 0px 8px 4px;">
@@ -166,37 +168,40 @@
                             <table class="table table-bordered table-sm" style="font-size: 1.35em; margin-top: 10px">
                                 <tbody>                                    
                                     <tr>
-                                        <th class="col-md-4" style="background-color: #dedede;">Descripción de proyecto/actividad</th>
-                                            <td v-text="modal_desc" style="padding-left: 12px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Contraparte</th>
+                                            <td v-text="modal_contraparte" style="padding-left: 12px;"></td>
                                     </tr>
+
                                     <tr>
                                         <th class="col-md-4" style="background-color: #dedede;">Perfil del estudiante</th>
                                             <td v-text="modal_perfil_estudiante" style="padding-left: 12px;"></td>
                                     </tr>
+
                                     <tr>
                                         <th class="col-md-4" style="background-color: #dedede;">Tipo de horas</th>
                                             <td v-text="modal_tipo_horas" style="padding-left: 12px;"></td>
                                     </tr>
+
                                     <tr>
                                         <th class="col-md-4" style="background-color: #dedede;">Cupos</th>
                                             <td v-text="`${modal_cupos_act}${'/'}${modal_cupos}`" style="padding-left: 12px;"></td>
                                     </tr>
+
                                     <tr>
                                         <th class="col-md-4" style="background-color: #dedede;">Horario</th>
                                             <td v-text="modal_horario" style="padding-left: 12px;"></td>
                                     </tr>
-                                    <tr>
-                                        <th class="col-md-4" style="background-color: #dedede;">Contraparte</th>
-                                            <td v-text="modal_contraparte" style="padding-left: 12px;"></td>
-                                    </tr>
+
                                     <tr>
                                         <th class="col-md-4" style="background-color: #dedede;">Encargado</th>
                                             <td v-text="modal_encargado" style="padding-left: 12px;"></td>
                                     </tr>
+
                                     <tr>
                                         <th class="col-md-4" style="background-color: #dedede;">Correo encargado</th>
                                             <td v-text="modal_correo_encargado" style="padding-left: 12px;"></td>
                                     </tr>
+                                    
                                     <tr>
                                         <th class="col-md-4" style="background-color: #dedede;">Fecha inicial</th>
                                             <td v-text="modal_fecha_in" style="padding-left: 12px;"></td>
@@ -204,6 +209,10 @@
                                     <tr>
                                         <th class="col-md-4" style="background-color: #dedede;">Fecha final</th>
                                             <td v-text="modal_fecha_fin" style="padding-left: 12px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <th v-if="modal_desc.length > 2" class="col-md-4" style="background-color: #dedede;">Descripcion adicional</th>
+                                            <td v-text="modal_desc" style="padding-left: 12px;"></td>
                                     </tr>
 
                                 </tbody>

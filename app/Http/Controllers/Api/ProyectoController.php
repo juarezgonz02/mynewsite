@@ -80,13 +80,15 @@ class ProyectoController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function getMisProyectos(Request $request) {
-        $user = Auth::user();
-        $proyectos = $user->proyectos()
-                            ->with(['carreras', 'estudiantes.carrera.facultad'])
-                            ->orderBy('created_at', 'desc')
-                            ->get();
-
-        return response()->json($proyectos);
+        $id = Auth()->user()->idUser;
+        $proyectos = ProyectoxEstudiante::join('proyecto', 'proyecto.idProyecto', '=','proyectoxestudiante.idProyecto')
+        ->join('users', 'proyectoxestudiante.idUser','=','users.idUser')
+        ->select('proyecto.idProyecto', 'proyecto.nombre','proyecto.descripcion','proyecto.estado',
+        'proyecto.tipo_horas', 'proyecto.cupos_act','proyecto.cupos', 'proyecto.horario', 'proyecto.encargado','proyecto.fecha_inicio','proyecto.fecha_fin','proyectoxestudiante.estado as estadoPxe')
+        ->where('proyectoxestudiante.idUser','=', $id)
+        ->orderBy('proyecto.idProyecto', 'desc')->get();
+        
+        return $proyectos;
     }
 
     /**
