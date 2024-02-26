@@ -731,6 +731,7 @@ import Swal from 'sweetalert2';
                 selectedFilter: "",
                 proyecto: "",
                 arrayFactultad: [],
+                estado_proyecto: '',
             }
         },
         computed:{
