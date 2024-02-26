@@ -171,30 +171,37 @@
                                         <th class="col-md-4" style="background-color: #dedede;">Contraparte</th>
                                             <td v-text="modal_contraparte" style="padding-left: 12px;"></td>
                                     </tr>
+
                                     <tr>
                                         <th class="col-md-4" style="background-color: #dedede;">Perfil del estudiante</th>
                                             <td v-text="modal_perfil_estudiante" style="padding-left: 12px;"></td>
                                     </tr>
+
                                     <tr>
                                         <th class="col-md-4" style="background-color: #dedede;">Tipo de horas</th>
                                             <td v-text="modal_tipo_horas" style="padding-left: 12px;"></td>
                                     </tr>
+
                                     <tr>
                                         <th class="col-md-4" style="background-color: #dedede;">Cupos</th>
                                             <td v-text="`${modal_cupos_act}${'/'}${modal_cupos}`" style="padding-left: 12px;"></td>
                                     </tr>
+
                                     <tr>
                                         <th class="col-md-4" style="background-color: #dedede;">Horario</th>
                                             <td v-text="modal_horario" style="padding-left: 12px;"></td>
                                     </tr>
+
                                     <tr>
                                         <th class="col-md-4" style="background-color: #dedede;">Encargado</th>
                                             <td v-text="modal_encargado" style="padding-left: 12px;"></td>
                                     </tr>
+
                                     <tr>
                                         <th class="col-md-4" style="background-color: #dedede;">Correo encargado</th>
                                             <td v-text="modal_correo_encargado" style="padding-left: 12px;"></td>
                                     </tr>
+                                    
                                     <tr>
                                         <th class="col-md-4" style="background-color: #dedede;">Fecha inicial</th>
                                             <td v-text="modal_fecha_in" style="padding-left: 12px;"></td>
@@ -202,6 +209,10 @@
                                     <tr>
                                         <th class="col-md-4" style="background-color: #dedede;">Fecha final</th>
                                             <td v-text="modal_fecha_fin" style="padding-left: 12px;"></td>
+                                    </tr>
+                                    <tr>
+                                        <th v-if="modal_desc.length > 2" class="col-md-4" style="background-color: #dedede;">Descripcion adicional</th>
+                                            <td v-text="modal_desc" style="padding-left: 12px;"></td>
                                     </tr>
 
                                 </tbody>
