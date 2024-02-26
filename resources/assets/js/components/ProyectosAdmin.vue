@@ -633,8 +633,8 @@
                                     <h6>de:  &nbsp; </h6>
                                     <h6 style="font-weight: 	bold;" v-text="nombre_proyecto"></h6>
                                 </div>
-                                <p>¿Estás seguro de que deseas remover a este estudiante? Al dar click en Confirmar el estudiante sera removido del proyecto 
-                                    y le sera aplicada una <b>penalización de 30 dias  </b>sin poder aplicar a otros proyectos.</p>
+                                <p>¿Estás seguro/a de que deseas remover a este estudiante? Al dar click en Confirmar el estudiante sera removido del proyecto 
+                                    y le sera aplicada una <b>penalización de 30 dias  </b>sin poder aplicar a otros proyectos. Esta penalización puede ser removida desde el panel <b>Buscar estudiante</b></p>
                                 
                             </div>
                             <div class="modal-footer">
@@ -731,6 +731,7 @@ import Swal from 'sweetalert2';
                 selectedFilter: "",
                 proyecto: "",
                 arrayFactultad: [],
+                estado_proyecto: '',
             }
         },
         computed:{
