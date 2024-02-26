@@ -55,8 +55,9 @@
                         <table class="table table-bordered table-hover table-sm" style="font-size: 1.25em;">
                             <thead>
                                 <tr>
-                                    <th style="text-align: center; width: 10%;">Nombre del proyecto</th>
-                                    <th id="disappear" style="text-align: center;">Descripción del proyecto/actividad</th>
+                                    <th style="text-align: center; width: 10%;">Contraparte</th>
+                                    <th style="text-align: center; width: 10%;">Proyecto</th>
+                                    <th id="disappear" style="text-align: center;">Perfil estudiante</th>
                                     <th style="text-align: center; width: 10%;">Estado del proyecto</th>
                                     <th style="text-align: center; width: 10%;">Cupos</th>
                                     <th style="text-align: center; width: 10%;">Acciones</th>
@@ -64,8 +65,9 @@
                             </thead>
                             <tbody>
                                 <tr id="fila" v-for="proyecto in arrayProyectos" :key="proyecto.idProyecto">
+                                    <td id="pos" v-text="proyecto.contraparte" data-toggle="modal" data-target="#projectDetailModal" @click="abrirModal('info', proyecto)"></td>
                                     <td id="pos" v-text="proyecto.nombre" data-toggle="modal" data-target="#projectDetailModal" @click="abrirModal('info', proyecto)"></td>
-                                    <td id="disappear" v-text="proyecto.descripcion" data-toggle="modal" data-target="#projectDetailModal" @click="abrirModal('info', proyecto)"></td>
+                                    <td id="disappear" v-text="proyecto.perfil_estudiante" data-toggle="modal" data-target="#projectDetailModal" @click="abrirModal('info', proyecto)"></td>
                                     <td v-text="proyecto.estado_proyecto" data-toggle="modal" data-target="#projectDetailModal" @click="abrirModal('info', proyecto)" style="text-align: center;"></td>
                                     <td v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`" data-toggle="modal" data-target="#projectDetailModal" @click="abrirModal('info', proyecto)" style="text-align: center;"></td>
                                     <td id="icons-pos" >
@@ -134,7 +136,14 @@
                         <div class="modal-body">
                             <form>
                                 <div class="form-group row div-form">
-                                    <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
+                                    <label class="col-md-3 form-control-label" for="text-input">Contraparte</label>
+                                    <div class="col-md-9">
+                                        <input type="text" v-model="modal_contraparte" class="form-control" placeholder="Contraparte">
+                                        <p :class="{show: errorProyecto[8] == 1, hide: errorProyecto[8] != 1}" class="error">La contraparte no puede ir vacía</p>
+                                    </div>
+                                </div>
+                                <div class="form-group row div-form">
+                                    <label class="col-md-3 form-control-label" for="text-input">Nombre del Proyecto/Actividad</label>
                                     <div class="col-md-9">
                                         <input type="text" v-model="modal_nombre" class="form-control inputs" placeholder="Nombre del proyecto">
                                         <p :class="{show: errorProyecto[0] == 1, hide: errorProyecto[0] != 1}" class="error">El nombre no puede ir vacío</p>
@@ -145,6 +154,31 @@
                                     <div class="col-md-9">
                                         <input type="text" v-model="modal_encargado" class="form-control" placeholder="Nombre del encargado">
                                         <p :class="{show: errorProyecto[1] == 1, hide: errorProyecto[1] != 1}" class="error">El nombre del encargado no puede ir vacío</p>
+                                    </div>
+                                </div>
+                                <div class="form-group row div-form">
+                                    <label class="col-md-3 form-control-label" for="text-input">Correo del encargado</label>
+                                    <div class="col-md-9">
+                                        <input type="text" v-model="modal_correo" class="form-control" placeholder="example@example.com">
+                                        <div v-if="errorProyecto[6] != 2">   
+                                            <p :class="{show: errorProyecto[6] == 1, hide: errorProyecto[6] != 1}" class="error">El correo del encargado no puede ir vacío</p>
+                                        </div>
+                                        <div v-else>
+                                            <p class="error">El correo no es válido</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row div-form">
+                                    <label class="col-md-3 form-control-label" for="text-input">Perfil del estudiante</label>
+                                    <div class="col-md-9">
+                                        <textarea type="text" v-model="modal_perfil_estudiante" class="form-control" placeholder="Perfil del estudiante"></textarea>
+                                        <span>{{modal_perfil_estudiante.length}}/2000</span>
+                                        <div v-if="errorProyecto[5] != 2">   
+                                            <p :class="{show: errorProyecto[5] == 1, hide: errorProyecto[5] != 1}" class="error">El perfil del estudiante que puede aplicar al proyecto no puede ir vacío</p>
+                                        </div>
+                                        <div v-else>
+                                            <p class="error">El perfil del estudiante no puede superar el número máximo de caracteres</p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row div-form">
@@ -170,43 +204,14 @@
                                     </div>
                                 </div>
                                 <div class="form-group row div-form">
-                                    <label class="col-md-3 form-control-label" for="text-input">Descripción</label>
+                                    <label class="col-md-3 form-control-label" for="text-input">Descripción Adicional</label>
                                     <div class="col-md-9">
                                         <textarea type="text" v-model="modal_desc" class="form-control" placeholder="Descripción"></textarea>
                                         <span>{{modal_desc.length}}/2000</span>
-                                        <div v-if="errorProyecto[4] != 2">   
-                                            <p :class="{show: errorProyecto[4] == 1, hide: errorProyecto[4] != 1}" class="error">La Descripción no puede ir vacía</p>
-                                        </div>
-                                        <div v-else>
-                                            <p class="error">La Descripción no puede superar el número máximo de caracteres</p>
-                                        </div>
                                     </div>
                                 </div>
-                                <div class="form-group row div-form">
-                                    <label class="col-md-3 form-control-label" for="text-input">Perfil del estudiante</label>
-                                    <div class="col-md-9">
-                                        <textarea type="text" v-model="modal_perfil_estudiante" class="form-control" placeholder="Perfil del estudiante"></textarea>
-                                        <span>{{modal_perfil_estudiante.length}}/2000</span>
-                                        <div v-if="errorProyecto[5] != 2">   
-                                            <p :class="{show: errorProyecto[5] == 1, hide: errorProyecto[5] != 1}" class="error">El perfil del estudiante que puede aplicar al proyecto no puede ir vacío</p>
-                                        </div>
-                                        <div v-else>
-                                            <p class="error">El perfil del estudiante no puede superar el número máximo de caracteres</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row div-form">
-                                    <label class="col-md-3 form-control-label" for="text-input">Correo del encargado</label>
-                                    <div class="col-md-9">
-                                        <input type="text" v-model="modal_correo" class="form-control" placeholder="example@example.com">
-                                        <div v-if="errorProyecto[6] != 2">   
-                                            <p :class="{show: errorProyecto[6] == 1, hide: errorProyecto[6] != 1}" class="error">El correo del encargado no puede ir vacío</p>
-                                        </div>
-                                        <div v-else>
-                                            <p class="error">El correo no es válido</p>
-                                        </div>
-                                    </div>
-                                </div>
+                                
+                                
                                 <div class="form-group row div-form">
                                     <label class="col-md-3 form-control-label" for="text-input">Horario</label>
                                     <div class="col-md-9">
@@ -214,13 +219,7 @@
                                         <p :class="{show: errorProyecto[7] == 1, hide: errorProyecto[7] != 1}" class="error">El horario no puede ir vacío</p>
                                     </div>
                                 </div>
-                                <div class="form-group row div-form">
-                                    <label class="col-md-3 form-control-label" for="text-input">Contraparte</label>
-                                    <div class="col-md-9">
-                                        <input type="text" v-model="modal_contraparte" class="form-control" placeholder="Contraparte">
-                                        <p :class="{show: errorProyecto[8] == 1, hide: errorProyecto[8] != 1}" class="error">La contraparte no puede ir vacía</p>
-                                    </div>
-                                </div>
+                                
                                 <div class="form-group row div-form">
                                     <label class="col-md-3 form-control-label" for="text-input">Fecha de inicio</label>
                                     <div class="col-md-9">
@@ -485,8 +484,8 @@
                             <table class="table table-bordered table-sm" style="font-size: 1.35em; margin-top: 10px">
                                 <tbody>                                    
                                     <tr>
-                                        <th class="col-md-4" style="background-color: #dedede;">Descripción de proyecto/actividad</th>
-                                            <td v-text="modal_desc" style="padding-left: 12px;"></td>
+                                        <th class="col-md-4" style="background-color: #dedede;">Contraparte</th>
+                                            <td v-text="modal_contraparte" style="padding-left: 12px;"></td>
                                     </tr>
                                     <tr>
                                         <th class="col-md-4" style="background-color: #dedede;">Perfil del estudiante</th>
@@ -503,10 +502,6 @@
                                     <tr>
                                         <th class="col-md-4" style="background-color: #dedede;">Horario</th>
                                             <td v-text="modal_horario" style="padding-left: 12px;"></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="col-md-4" style="background-color: #dedede;">Contraparte</th>
-                                            <td v-text="modal_contraparte" style="padding-left: 12px;"></td>
                                     </tr>
                                     <tr>
                                         <th class="col-md-4" style="background-color: #dedede;">Encargado</th>
@@ -927,9 +922,8 @@ import Swal from 'sweetalert2';
                 else this.errorProyecto.push(0);
                 if(!this.modal_tipo_horas) this.errorProyecto.push(1);
                 else this.errorProyecto.push(0)
-                if(!this.modal_desc) this.errorProyecto.push(1);
-                else if(this.modal_desc.length > 2000) this.errorProyecto.push(2);
-                else this.errorProyecto.push(0)
+                //Ya no se comprueba la descripción (pasa a ser extra)
+                this.errorProyecto.push(0)
                 if(!this.modal_perfil_estudiante) this.errorProyecto.push(1);
                 else if(this.modal_perfil_estudiante.length > 2000) this.errorProyecto.push(2);
                 else this.errorProyecto.push(0)

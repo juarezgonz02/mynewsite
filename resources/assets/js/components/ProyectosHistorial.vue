@@ -18,14 +18,16 @@
               <tr>
                 <!--<th>Opciones</th> -->
                 <!--<th>Numero</th>-->
-                <th style="text-align: center; width: 10%;">Nombre</th>
-                <th id="disappear" style="text-align: center;">Descripción</th>
+                <th style="text-align: center; width: 10%;">Contraparte</th>
+                <th style="text-align: center; width: 10%;">Proyecto</th>
+                <th id="disappear" style="text-align: center;">Perfil Estudiante</th>
                 <th id="resized" style="width: 10px; text-align: center;">Estado</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="proyecto in arrayProyectos" :key="proyecto.idProyecto">
                 <!--<td>{{ index + 1 }}</td>-->
+                <td v-text="proyecto.contraparte" @click="abrirModal('info', proyecto)" data-toggle="modal" data-target="#modal-info"></td>
                 <td v-text="proyecto.nombre" @click="abrirModal('info', proyecto)" data-toggle="modal" data-target="#modal-info"></td>
                 <td id="disappear" v-text="proyecto.descripcion" @click="abrirModal('info', proyecto)" data-toggle="modal" data-target="#modal-info"></td>
                 <td @click="abrirModal('info', proyecto)" style="text-align: center;">
@@ -70,8 +72,12 @@
             <table class="table table-bordered table-sm" style="font-size: 1.35em; margin-top: 10px">
               <tbody>                
                 <tr>
-                  <th style="background-color: #dedede;">Descripción</th>
-                  <td v-text="modal_desc" style="padding-left: 16px;"></td>
+                  <th style="background-color: #dedede;">Contraparte</th>
+                  <td v-text="modal_contraparte" style="padding-left: 16px;"></td>
+                </tr>
+                <tr>
+                  <th style="background-color: #dedede;">Perfil Estudiante</th>
+                  <td v-text="modal_perfil_estudiante" style="padding-left: 16px;"></td>
                 </tr>
                 <tr>
                   <th style="background-color: #dedede;">Tipo</th>
@@ -135,6 +141,8 @@ export default {
       modal_encargado: "",
       modal_nombre: "",
       modal_desc: "",
+      modal_perfil_estudiante: "",
+      modal_contraparte: "",
       modal_tipo_horas: "",
       modal_cupos_act : 0,
       modal_cupos: 0,
@@ -222,6 +230,8 @@ export default {
           this.modal_horario = data.horario;
           this.modal_fecha_in = data.fecha_inicio;
           this.modal_fecha_fin = data.fecha_fin;
+          this.modal_perfil_estudiante = data.perfil_estudiante;
+          this.modal_contraparte = data.contraparte;
           break;
         }
         default:
