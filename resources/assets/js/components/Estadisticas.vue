@@ -1,9 +1,9 @@
 <template>
     <main class="main" style="background-color: white;">
         <div class="container-dashboard">
-            <h1 style=" font-size: xx-large; margin-bottom: 10vh; margin-top: 8vh; font-weight: bold;" >Estadisticas Centro de Servicio Social</h1>
-            <div style="margin-bottom: 5vh; display: flex; flex-direction: column; align-items: center; gap: 20px;">
-                <h3>Aplicar Filtros</h3>
+            <h1 style=" font-size: xx-large; margin-bottom: 10vh; margin-top: 8vh; font-weight: bold;" >Estadísticas Centro de Servicio Social</h1>
+            <div style="margin-bottom: 5vh; display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%;">
+                <h4>Aplicar Filtros</h4>
                 <div class="contenedor-flex">
                     <label for="factultad" style="margin-right: 2vw; font-size: 1.1rem ;">Facultad</label>
                     <select class="form-control" id="factultad" name="factultad" v-model="idFacultadSeleccionada">
@@ -24,6 +24,9 @@
                 <div class="statistic">
                     <div class="header">
                         <h3 >Proyectos en la Plataforma</h3>
+                            <!-- <img src="../../img/icons/person.svg" alt="Icon" width="32px" height="32px" /> -->
+                            <img :src=" ruta + '/img/icons/user-shield-alt-svgrepo-com.svg'" alt="chevron-left" width="32px" height="32px">
+                          
                     </div>
                     <div class="body">
                         <p class="text">{{ totalOfProjects }}</p>
@@ -33,6 +36,7 @@
                     <div class="header">
 
                         <h3 >Proyectos en Curso</h3>
+                        <img :src=" ruta + '/img/icons/clipboard-list-alt-svgrepo-com.svg'" alt="chevron-left" width="32px" height="32px">
                     </div>
                     <div class="body">
                         <p class="text">{{ activeProjects }}</p>
@@ -42,7 +46,9 @@
                     <div class="header">
 
                         <h3 >Proyectos Finalizados</h3>
+                        <img :src=" ruta + '/img/icons/shield-check-svgrepo-com.svg'" alt="chevron-left" width="32px" height="32px">
                     </div>
+
                     <div class="body">
                         <p class="text">{{ projectsEnded }}</p>
                     </div>
@@ -50,6 +56,8 @@
                 <div class="statistic">
                     <div class="header">
                         <h3 >Estudiantes Registrados</h3>
+                        <img :src=" ruta + '/img/icons/user-check-svgrepo-com.svg'" alt="chevron-left" width="32px" height="32px">
+
                     </div>
                     <div class="body">
                         <p class="text">{{ registeredStudents }}</p>
@@ -59,6 +67,8 @@
                 <div class="statistic">
                     <div class="header">
                         <h3 >Estudiantes en Proyectos</h3>
+                        <img :src=" ruta + '/img/icons/user-shield-alt-svgrepo-com.svg'" alt="chevron-left" width="32px" height="32px">
+
                     </div>
                     <div class="body">
                         <p class="text">{{ studentsOnProjects }}</p>
@@ -72,9 +82,11 @@
 
 <script>
 import {API_HOST} from '../constants/endpoint.js';
+import {API_HOST_ASSETS} from '../constants/endpoint.js';
 export default {
     data() {
         return {
+            ruta : API_HOST_ASSETS,
             projectQuantity: 0,
             registeredStudents: 0,
             studentsOnProjects: 0,
@@ -94,11 +106,11 @@ export default {
     mounted() {
         // Fetch the statistics data from an API or calculate them
         // For example:
-        this.projectQuantity = -1;
-        this.activeProjects = -1;
-        this.registeredStudents = -1;
-        this.studentsOnProjects = -1;
-        this.totalOfProjects = -1;
+        this.projectQuantity = 0;
+        this.activeProjects = 0;
+        this.registeredStudents = 0;
+        this.studentsOnProjects = 0;
+        this.totalOfProjects = 0;
 
         this.bindData()
     },
@@ -189,53 +201,75 @@ export default {
     height: 100%;
 }
 .dashboard {
-    display: flex;
-    justify-content: space-between;
-       
-}
+    display: grid;
 
-.statistic .header{
-    background-color: rgb(163, 199, 253);
-    min-height: 10vh;
-    display: flex;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    margin-bottom: 10vh;
     justify-content: center;
     align-items: center;
-    border: 2px solid gray; 
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    padding: 0 5vw;
+    gap: 2vw;
+
+    }
+
+.statistic .header{
+    min-height: 5vh;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    justify-content: space-between;
+}
+
+.statistic h3{
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: #9b9b9b;
+    
 }
 
 .statistic {
     flex: 1;
     text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    
 }
 
 @media screen and (max-width: 768px){
-    .statistic{
-        margin-bottom: 1vh;
+    .dashboard{
+        grid-template-columns: 1fr;
     }
 
-    .dashboard{
-        flex-direction: column;
-        gap: 0px;
+    .statistic{
+        margin-bottom: 5vh;
     }
+    
 }
 
 .statistic .text{
-    font-size: 1.8rem;
+    font-size: 3.0rem;
     font-weight: bold;
     color: rgb(0, 0, 0);
 }
 
 .statistic .body{
-    background-color: rgb(255, 255, 255);
     min-height: 10vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid gray;}
+}
 
 .contenedor-flex {
     display: flex;
     align-items: baseline;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    padding-inline: 5vw;
 }
     
 </style>
