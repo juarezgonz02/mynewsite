@@ -39,7 +39,7 @@ Vue.use(VueSweetalert2);
 const app = new Vue({
     el: '#app',
     data :{
-        menu: 1,
+        menu: 0,
         amenu: 0
     }
 });

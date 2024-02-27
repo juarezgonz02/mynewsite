@@ -12,8 +12,12 @@ class UserController extends Controller
     public function getUser(Request $request){
         if(!$request->ajax()) return redirect('/home');
         $user = Auth()->user();
-        $user -> perfil = Perfil::find($user->idPerfil)->descripcion;
-        $user -> carrera = Carrera::find($user->idCarrera)->nombre;
+
+        if( $user -> idRol == 2 ){
+
+            $user -> perfil = Perfil::find($user->idPerfil)->descripcion;
+            $user -> carrera = Carrera::find($user->idCarrera)->nombre;
+        }
         return $user;
     }
 

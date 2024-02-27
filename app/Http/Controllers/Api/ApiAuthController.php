@@ -164,13 +164,21 @@ class ApiAuthController extends Controller
             return response()->json($validator->messages(), 400);
         }
 
-        $token = PasswordResetToken::where('token', $request->token)->firstOrFail();
-        if(Carbon::now() > $token->expires_at) {
-            return response()->json([
-                'error' => 'Token venció'
-            ], 400);
-        }
+        try{
 
+            $token = PasswordResetToken::where('token', $request->token)->firstOrFail();
+            if(Carbon::now() > $token->expires_at) {
+                return response()->json([
+                    'error' => 'Token venció'
+                ], 400);
+            }
+        
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Código Invalido.',
+            ], 404);
+        }
+            
         $usuario = User::where('idUser', '=', $token->idUser)->firstOrFail();
         $usuario->update([
             'password'      => $request->clave,
