@@ -84,7 +84,7 @@ class ProyectoController extends Controller
         $id = Auth()->user()->idUser;
         $proyectos = ProyectoxEstudiante::join('proyecto', 'proyecto.idProyecto', '=','proyectoxestudiante.idProyecto')
         ->join('users', 'proyectoxestudiante.idUser','=','users.idUser')
-        ->select('proyecto.idProyecto', 'proyecto.nombre','proyecto.descripcion','proyecto.estado',
+        ->select('proyecto.idProyecto', 'proyecto.nombre','proyecto.descripcion','proyecto.estado',"proyecto.correo_encargado", "proyecto.contraparte","proyecto.perfil_estudiante",
         'proyecto.tipo_horas', 'proyecto.cupos_act','proyecto.cupos', 'proyecto.horario', 'proyecto.encargado','proyecto.fecha_inicio','proyecto.fecha_fin','proyectoxestudiante.estado as estadoPxe')
         ->where('proyectoxestudiante.idUser','=', $id)
         ->orderBy('proyecto.idProyecto', 'desc')->get();
