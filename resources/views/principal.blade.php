@@ -14,7 +14,9 @@
       rel="stylesheet">
     <!-- Icons -->
     <link href="css/plantilla.css" rel="stylesheet">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
 </head>
 
 <body class="app sidebar-fixed aside-menu-fixed aside-menu-hidden">
