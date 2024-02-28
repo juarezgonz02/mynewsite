@@ -2,7 +2,7 @@
   <main class="main" style="background-color: white;">
     <div class="container-fluid">
       <div class="card recordatorio-container">
-        <img src="/css-proyecto/public/img/recordatorio.ae2960e4.png" />
+        <img :src="imgsrc" />
       </div>
     </div>
     <footer class="app-footer" id="footer" style="display: flex; flex-direction: column; justify-content: center; font-size: 15px; padding: 10px 0px">
@@ -11,7 +11,16 @@
     </footer>
   </main>
 </template>
+<script>
+ export default {
+    data() {
+        return {
+          imgsrc: "./img/recordatorio.ae2960e4.png"
+    }
+  }}
+</script>
 <style>
+
 .recordatorio-container {
     padding-bottom: 37.88%;
     padding-top: 60px;

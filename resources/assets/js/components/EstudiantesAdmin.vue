@@ -301,13 +301,10 @@ import {API_HOST} from '../constants/endpoint.js';
 </script>
 <style lang="scss">
 
-@font-face {
-    font-family: 'Abel';
-    src: url(/css-proyecto/public/fonts/Abel-Regular.ttf);
-}
+
 
 .main{
-    font-family: 'Abel';
+    font-family: "Abel", sans-serif;
     background-color: white;
 }
 

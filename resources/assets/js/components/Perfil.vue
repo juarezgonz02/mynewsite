@@ -120,6 +120,9 @@ import {API_HOST} from '../constants/endpoint.js';
                 idPerfil: 0
             }
         },
+        mounted(){
+            console.log("API", API_HOST)
+        },
         methods:{
             bindData(){
                 let me = this
@@ -196,13 +199,10 @@ import {API_HOST} from '../constants/endpoint.js';
 
 <style>
 
-@font-face {
-    font-family: 'Abel';
-    src: url(/css-proyecto/public/fonts/Abel-Regular.ttf);
-}
+
 
 .main{
-    font-family: 'Abel';
+    font-family: "Abel", sans-serif;
 }
 #footer{
     margin-left: 0px;

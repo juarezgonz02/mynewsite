@@ -457,14 +457,9 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
 </script>
 <style>
 
-@font-face {
-    font-family: 'Abel';
-    src: url(/css-proyecto/public/fonts/Abel-Regular.ttf);
-}
-
 
 .main{
-    font-family: 'Abel';
+    font-family: "Abel", sans-serif;
 }
 
 .sidebar {
