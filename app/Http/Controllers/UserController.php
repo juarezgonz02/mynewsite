@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Carrera;
 use App\Perfil;
+use Illuminate\Support\Facades\Auth;
+use App\ProyectoxEstudiante;
 
 class UserController extends Controller
 {
@@ -73,5 +75,45 @@ class UserController extends Controller
         // now + 30 days 
         $estudiante->timeout = date('Y-m-d', strtotime('+30 days'));
         $estudiante->save();
+    }
+
+
+
+    public function estadoAplicacionEstudiante(Request $request){
+
+        if(!$request->ajax()) return redirect('/home');
+        $user = Auth()->user();
+        $id = $user->idUser;
+        
+        // Estudiante en proyecto activo
+        // ->where('proyectoxestudiante.estado', '=', 1) hace referencia a proyectos Aceptados
+        $proyectos = ProyectoxEstudiante::join('proyecto', 'proyecto.idProyecto', '=','proyectoxestudiante.idProyecto')
+        ->join('users', 'proyectoxestudiante.idUser','=','users.idUser')
+        ->select('proyecto.idProyecto', 'proyecto.nombre','proyecto.descripcion','proyecto.estado', 'proyecto.contraparte', 'proyecto.perfil_estudiante',
+        'proyecto.tipo_horas', 'proyecto.cupos_act','proyecto.cupos', 'proyecto.horario', 'proyecto.encargado','proyecto.fecha_inicio','proyecto.fecha_fin','proyectoxestudiante.estado as estadoPxe')
+        ->where('proyectoxestudiante.idUser','=', $id)
+        ->where('proyectoxestudiante.estado', '=', 1)
+        ->orderBy('proyecto.idProyecto', 'desc')->count();
+        
+        
+        // $ya_aplico_hoy = $user->ya_aplico_hoy == date('d-m-Y')  ? 1 : 0;
+        $fechaUsuario = \DateTime::createFromFormat('d-m-Y', $user->ya_aplico_hoy);
+        $fechaActual = new \DateTime();
+        
+        $ya_aplico_hoy = $fechaUsuario->format('d-m-Y') == $fechaActual->format('d-m-Y') ? true : false;
+        
+        
+        $activeProject = $proyectos > 0 ? true : false;
+        
+        $isTimeout = $user->timeout != null ? true : false;
+        
+        // return $ya_aplico_hoy;
+
+        return(
+            ['ya_aplico_hoy' => $ya_aplico_hoy,
+            'activeProject' => $activeProject,
+            'isTimeout' => $isTimeout]
+        );
+
     }
 }

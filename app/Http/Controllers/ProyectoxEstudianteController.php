@@ -51,52 +51,64 @@ class ProyectoxEstudianteController extends Controller{
     }
 
     public function aceptarRechazarEstudiante(Request $request){
-        $idProyecto = $request->idProyecto;
-        $idUser = $request->idUser;
-        $estado = $request->estado;
+        try {
+            $idProyecto = $request->idProyecto;
+            $idUser = $request->idUser;
+    
+            // $proXEst = ProyectoxEstudiante::where('proyectoxestudiante.idProyecto', '=', $idProyecto)
+            // ->where('proyectoxestudiante.idUser', '=', $idUser)->first();
+            // $proXEst->estado = 1;
+            // $proXEst->save();
+    
+            // $allProXEst = ProyectoxEstudiante::where('proyectoxestudiante.idUser', '=', $idUser)->get();
+            // foreach($allProXEst as $proXEst){
+            //     if($proXEst->idProyecto != $idProyecto){
+            //         $proXEst->estado = 2;
+            //         $proXEst->save();
+            //     }
+            // }
+    
+            
+            
+            
+            // Eliminando el resto de solicitudes "pendientes"(estado = 0) del estudiante
+    
+            $allProyectosByEstudiante = ProyectoxEstudiante::where('proyectoxestudiante.idUser', '=', $idUser)
+            ->where('proyectoxestudiante.idProyecto','!=', $idProyecto)
+            ->where('proyectoxestudiante.estado','=', 0)->get();
 
-        $proXEst = ProyectoxEstudiante::where('proyectoxestudiante.idProyecto', '=', $idProyecto)
-        ->where('proyectoxestudiante.idUser', '=', $idUser)->first();
-        $proXEst->estado = $estado;
-        $proXEst->save();
-
-        $allProXEst = ProyectoxEstudiante::where('proyectoxestudiante.idUser', '=', $idUser)->get();
-        foreach($allProXEst as $proXEst){
-            if($proXEst->idProyecto != $idProyecto){
-                $proXEst->estado = 2;
-                $proXEst->save();
+            
+            foreach($allProyectosByEstudiante as $p){
+                if($p->idProyecto != $idProyecto){
+                    $p->delete();
+                }
             }
-        }
+    
+            // Actualizar estado de la solicitud "Aceptado"(estado = 1 )
+            $proyectoXestudiantes = ProyectoxEstudiante::where('proyectoxestudiante.idUser', '=', $idUser)
+            ->where('proyectoxestudiante.idProyecto', '=', $idProyecto)->first();
+            $proyectoXestudiantes->estado = 1;
+            $proyectoXestudiantes->save();
 
-        if($estado == 1){
+            // Actualiazar cupo de proyecto
             $restarCupo = Proyecto::where('proyecto.idProyecto', '=', $idProyecto)->first();
             $restarCupo->cupos_act = $restarCupo->cupos_act + 1;
             $restarCupo->save();
-        }
-        
-        // Eliminando el resto de solicitudes y actualizando cupos
-
-        $pxe = ProyectoxEstudiante::where('proyectoxestudiante.idUser', '=', $idUser)->get();
-        $allProyectosByEstudiante = Proyecto::join('proyectoxestudiante', 'proyecto.idProyecto', '=', 'proyectoxestudiante.idProyecto')
-        ->select('proyecto.idProyecto', 'proyecto.cupos_act')
-        ->where('proyectoxestudiante.idUser', '=', $idUser)->get();
-        
-        foreach($pxe as $p){
-            if($p->idProyecto != $idProyecto){
-
-                $p->delete();
-            }
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Error al actualizar proyecto']);
         }
 
 
-        $mailData = User::join('proyectoxestudiante', 'users.idUser', '=', 'proyectoxestudiante.idUser')
-        ->join('proyecto', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
-        ->select('users.nombres', 'users.apellidos', 'users.correo','proyecto.encargado','proyecto.nombre')
-        ->where('proyectoxestudiante.idUser', '=', $idUser)
-        ->where('proyectoxestudiante.idProyecto', '=', $idProyecto)
-        ->first();
 
-        $this->sendEmailAceptadoRechazado($mailData, $estado);
+
+        // $mailData = User::join('proyectoxestudiante', 'users.idUser', '=', 'proyectoxestudiante.idUser')
+        // ->join('proyecto', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
+        // ->select('users.nombres', 'users.apellidos', 'users.correo','proyecto.encargado','proyecto.nombre')
+        // ->where('proyectoxestudiante.idUser', '=', $idUser)
+        // ->where('proyectoxestudiante.idProyecto', '=', $idProyecto)
+        // ->first();
+
+        // $this->sendEmailAceptadoRechazado($mailData, $estado);
 
         return response()->json(['message' => 'Proyecto actualizado']);
     }
@@ -106,14 +118,14 @@ class ProyectoxEstudianteController extends Controller{
         $idProyecto = $request->idProyecto;
         $idUser = $request->idUser;
 
-        $rechazarEstudiante = ProyectoxEstudiante::where('proyectoxestudiante.idProyecto', '!=', $idProyecto)
-        ->where('proyectoxestudiante.idUser', '=', $idUser)->get();
+        
+        $solicitudProyecto = ProyectoxEstudiante::where('proyectoxestudiante.idProyecto', '=', $idProyecto)
+        ->where('proyectoxestudiante.idUser', '=', $idUser)->first();
 
-        if($rechazarEstudiante != null){
-            foreach($rechazarEstudiante as $rechazar){
-                $rechazar->estado = 2;
-                $rechazar->save();
-            }
+        // Actualizar estado de la solicitud "Rechazado"(estado = 2 )
+        if($solicitudProyecto != null){
+            $solicitudProyecto->estado = 2;
+            $solicitudProyecto->save();
         }
         
     }
@@ -241,6 +253,8 @@ class ProyectoxEstudianteController extends Controller{
     public function removerEstudiante(Request $request, $id_proyecto, $id_estudiante){
         $pxe = ProyectoxEstudiante::where('idProyecto','=', $id_proyecto)
         ->where('idUser','=', $id_estudiante)->first();
+
+
         if($pxe->estado == 1){
             $p = Proyecto::where('idProyecto', '=', $pxe->idProyecto)->first();
             $p->cupos_act = $p->cupos_act-1;
@@ -295,7 +309,7 @@ class ProyectoxEstudianteController extends Controller{
         ->leftJoin('users', 'users.idUser', '=', 'proyectoxestudiante.idUser')
         ->leftJoin('carrera', 'users.idCarrera', 'carrera.idCarrera')
         ->leftJoin('perfil', 'users.idPerfil', 'perfil.idPerfil')
-        ->select("users.nombres as u_nombre", "users.apellidos as u_apellido", 'carrera.idCarrera as id_c' , 'carrera.nombre as carrera', 'perfil.descripcion as ano',"proyecto.*", "users.nombres", "users.apellidos", "users.correo" )
+        ->select("users.nombres as u_nombre", "users.apellidos as u_apellido", 'carrera.idCarrera as id_c' , 'carrera.nombre as carrera', 'perfil.descripcion as ano',"proyecto.*", "users.nombres", "users.apellidos", "users.correo","users.idUser" )
         ->where('proyecto.nombre', 'like', $nombre.'%')
         ->where('carrera.idFacultad', '=', $nfacultad)
         ->where('proyectoxestudiante.estado', '=', '0')->paginate(15);
@@ -313,7 +327,7 @@ class ProyectoxEstudianteController extends Controller{
             ->leftJoin('users', 'users.idUser', '=', 'proyectoxestudiante.idUser')
             ->leftJoin('carrera', 'users.idCarrera', 'carrera.idCarrera')
             ->leftJoin('perfil', 'users.idPerfil', 'perfil.idPerfil')
-            ->select("users.nombres as u_nombre", "users.apellidos as u_apellido", 'carrera.idCarrera as id_c' , 'carrera.nombre as carrera', 'perfil.descripcion as ano',"proyecto.*", "users.nombres", "users.apellidos", "users.correo" )
+            ->select("users.nombres as u_nombre", "users.apellidos as u_apellido", 'carrera.idCarrera as id_c' , 'carrera.nombre as carrera', 'perfil.descripcion as ano',"proyecto.*", "users.nombres", "users.apellidos", "users.correo", "users.idUser" )
             ->where('proyecto.nombre', 'like', $nombre.'%')
             ->where('proyectoxestudiante.estado', '=', '0')->paginate(15);   
         }

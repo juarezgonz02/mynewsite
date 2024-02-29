@@ -54,7 +54,7 @@ export default {
             errorEstado : 0,
             flagError : false,
             flagErrorProyecto : false,
-            flagEstudiante : false,
+            flagEstudiante : null,
             flagErrorEstado : false,
             modal5 : 0,
             modal_user_carnet : "",
@@ -148,6 +148,7 @@ export default {
             
             axios.get(url).then(function (response) {
                 var respuesta = response.data;
+                // console.log(respuesta);
                 me.arraySolicitudes = respuesta.solicitudes.data;
                 me.pagination = respuesta.pagination;
                 me.loadTable = false;
@@ -635,32 +636,57 @@ export default {
             });
         },
         aceptarRechazarEstudiante(){
+            /*
+                WARNING: Existe duplicidad de codigo en el componente ProyectosAdmin 
+                en el metodo aceptarRechazarEstudiante, se debe de refactorizar el codigo si hay 
+                una modificacion en este metodo
+*/
+
+
+            // console.log("Aceptando o rechazando estudiante")
             let me = this;
             me.loading = 1;
-            var estadoEst = 2;
-            if(me.flagEstudiante){
-                axios.put(`${API_HOST}/rechazarestudiante`, {
+            // var estadoEst = 2;
+            // Si la flag del modal Aceptar / Rechazar es verdadera, entonces se acepta al estudiante
+            if(me.flagEstudiante == true){
+                // console.log("Aceptando estudiante")
+                axios.put(`${API_HOST}/aplicarestudiante`, {
+                'idUser' : me.id_estudiante,
+                'idProyecto' : me.id_proyecto,
+                // 'estado' : estadoEst
+                    }).then(function (response) {
+                        $('#confirmModal').modal('hide');
+                        me.loading = 2;
+                        me.cerrarModal();
+                        me.getEstudiantes();
+                        me.bindDataByFilters();
+                        me.loading = 0;
+                        me.flagEstudiante = null;
+                    }).catch(function (error) {
+                        console.log(error);
+                        me.flagEstudiante = null;
+                    }); 
+                return
+            }
+            else{
+                // console.log("Rechazando estudiante")
+            axios.put(`${API_HOST}/rechazarestudiante`, {
                     'idUser' : me.id_estudiante,
                     'idProyecto' : me.id_proyecto,
+                }).then(function(){
+                    me.flagEstudiante = null;
+                    $('#confirmModal').modal('hide');
+                    me.getEstudiantes();
+                    me.bindDataByFilters();
+                    me.loading = 0;
+
                 }).catch(function (error) {
                     console.log(error);
                 }); 
-                estadoEst = 1;
+                // estadoEst = 1;
+                return
             }
-            axios.put(`${API_HOST}/aplicarestudiante`, {
-                'idUser' : me.id_estudiante,
-                'idProyecto' : me.id_proyecto,
-                'estado' : estadoEst
-            }).then(function (response) {
-                $('#confirmModal').modal('hide');
-                me.loading = 2;
-                me.cerrarModal();
-                me.getEstudiantes();
-                me.bindDataByFilters();
-                me.loading = 0;
-            }).catch(function (error) {
-                console.log(error);
-            }); 
+            
         },
         logout(){
             var url = `${API_HOST}/logout`;

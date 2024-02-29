@@ -53,7 +53,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr id="fila" v-for="solicitud in arraySolicitudes" :key="solicitud.idProyecto">
+                                <tr id="fila" v-for="solicitud in arraySolicitudes" :key="solicitud.idProyecto +'-' + solicitud.idUser  " >
                                     <td id="pos" v-text="`${solicitud.u_nombre} ${solicitud.u_apellido}`" data-toggle="modal" data-target="#userDetailModal" @click="abrirModal('info_user', solicitud)"></td>
                                     <td id="disappear" v-text="solicitud.nombre" data-toggle="modal" data-target="#projectDetailModal" @click="abrirModal('info_proyecto', solicitud)"></td>
                                     <td id="disappear" v-text="solicitud.carrera" ></td>

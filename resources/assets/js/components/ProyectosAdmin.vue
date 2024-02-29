@@ -314,14 +314,22 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group row div-form">
+                            <div class="form-group row div-form mb-5">
+                               
                                 <label class="col-md-3 form-control-label" for="text-input">Estado del proyecto</label>
                                 <div class="col-md-9">
-                                    <select class="form-control" v-model="estado_proyecto">
-                                        <option value="En curso">En curso</option>
-                                        <option value="Finalizado">Finalizado</option>
-                                        <option value="Cancelado">Cancelado</option>
-                                    </select>
+                                    <!-- Checkbox  Finalizar , Cancelar-->
+                                    <div class="form-check" :style="{ backgroundColor: (modal_estado === '2' ? '#20a8d8' : ''), color : (modal_estado === '2' ? 'white' : 'black') }">
+                                        <input class="form-check-input" type="radio" v-model="modal_estado" value="2" id="finalizar" name="estado">
+                                        <label class="form-check-label" for="finalizar">Finalizar</label>
+
+                                    </div>
+                                    <div class="form-check" :style="{ backgroundColor: (modal_estado === '3' ? '#20a8d8' : ''), color : (modal_estado === '3' ? 'white' : 'black')}">
+                                        <input class="form-check-input" type="radio" v-model="modal_estado" value="3" id="cancelar" name="estado">
+                                        <label class="form-check-label" for="cancelar">Cancelar</label>
+                                    </div> 
+                                    <p :class="{show: errorEstado == 1, hide: errorEstado != 1}" class="error">Debe seleccionar un estado</p>
+                                    <label>Al seleccionar <strong>Cancelar</strong> el proyecto sera eliminado del registro.</label>
                                 </div>
                             </div>
                             <h5>Por favor escriba <b>{{ modal_nombre }}</b> para confirmar el cambio de estado de este proyecto</h5>
@@ -410,11 +418,12 @@
                                                         Rechazar
                                                     </button>  &nbsp;
                                                 </div>
-                                                <div v-else-if="estudiante.estado == 1">
-                                                    <span  class="badge badge-success" style="border-radius: 5px;"><p id="estadoap" style="display: inline;">ACEPTADO</p></span>
-                                                </div>
-                                                <div v-else>
+                                                
+                                                <div v-else-if="estudiante.estado == 2">
                                                     <span  class="badge badge-danger" style="border-radius: 5px;"><p id="estadorp" style="display: inline;">RECHAZADO</p></span>
+                                                </div>
+                                                <div v-else-if="estudiante.estado == 1 || estudiante.estado == 3">
+                                                    <span  class="badge badge-success" style="border-radius: 5px;"><p id="estadoap" style="display: inline;">ACEPTADO</p></span>
                                                 </div>
                                             </td>
                                             <td>
@@ -710,7 +719,7 @@ import Swal from 'sweetalert2';
                 errorEstado : 0,
                 flagError : false,
                 flagErrorProyecto : false,
-                flagEstudiante : false,
+                flagEstudiante : null,
                 flagErrorEstado : false,
                 pagination : {
                     'total' : 0,
@@ -725,6 +734,7 @@ import Swal from 'sweetalert2';
                 proyecto : '',
                 nombre_proyecto : '',
                 modal_estado_proyecto : '',
+                modal_estado : '2',
                 filtrandoPorNombre: "",
                 filtrandoPorCarrera: JSON.stringify({'por': 'carrera', 'id': -1}),
                 ordenandoPor: "recientes",
@@ -1031,39 +1041,66 @@ import Swal from 'sweetalert2';
                     me.errorEstado = 1
                 }
                 else {
-                    me.loading = 1
-                    var estado = (this.estado_proyecto == "En curso" ? 1 : 0);
-                    axios.get(`${API_HOST}/estudiantesxproyecto`, {
-                        params:{
-                            idProyecto: me.id_proyecto
-                        }
+                    // me.loading = 1
+                    // var estado = (this.estado_proyecto == "En curso" ? 1 : 0);
+                    // axios.get(`${API_HOST}/estudiantesxproyecto`, {
+                    //     params:{
+                    //         idProyecto: me.id_proyecto
+                    //     }
+                    // }).then(function (response){
+                    //     me.arrayEstudiantes = response.data;
+                    //     if (estado == 0) {
+                    //         me.arrayEstudiantes.forEach(function(element, index, array){
+                    //             axios.post(`${API_HOST}/proyecto/desaplicar`, {
+                    //                 'idProyecto' : me.id_proyecto,
+                    //                 'idUser' : me.arrayEstudiantes[index].idUser
+                    //             }).catch(function (error) {
+                    //                 console.log(error);
+                    //             });
+                    //         })
+                    //     }
+                    // }).catch(function (error) {
+                    //     console.log(error);
+                    // });
+                    // axios.put(`${API_HOST}/proyecto/estado`, {
+                    //     'idProyecto' : this.id_proyecto,
+                    //     'estado' : estado,
+                    //     'estado_proyecto' : this.estado_proyecto
+                    // }).then(function (response) {
+                    //     $('#statusModal').modal('hide');
+                    //     me.loading = 2;
+                    //     me.bindDataByFilters();
+                    //     me.cerrarModal();
+                    // }).catch(function (error) {
+                    //     console.log(error);
+                    // });
+                    
+                    me.loading = 1;
+
+                    axios.post(`${API_HOST}/proyecto/${me.modal_estado == '2' ? 'finalizar' : 'cancelar' }`,{
+                            idProyecto: this.id_proyecto    
                     }).then(function (response){
-                        me.arrayEstudiantes = response.data;
-                        if (estado == 0) {
-                            me.arrayEstudiantes.forEach(function(element, index, array){
-                                axios.post(`${API_HOST}/proyecto/desaplicar`, {
-                                    'idProyecto' : me.id_proyecto,
-                                    'idUser' : me.arrayEstudiantes[index].idUser
-                                }).catch(function (error) {
-                                    console.log(error);
-                                });
-                            })
-                        }
-                    }).catch(function (error) {
+                        console.log(response);
+                        
+                        // $('#statusModal').modal('hide');
+                        
+                        Swal.fire({
+                            icon: response.data.success ? 'success' : 'error',
+                            title: 'Estado del proyecto',
+                            text: response.data.message,
+                        });
+                    }).catch(function (error){
                         console.log(error);
-                    });
-                    axios.put(`${API_HOST}/proyecto/estado`, {
-                        'idProyecto' : this.id_proyecto,
-                        'estado' : estado,
-                        'estado_proyecto' : this.estado_proyecto
-                    }).then(function (response) {
+                    }).finally(function(){
                         $('#statusModal').modal('hide');
-                        me.loading = 2;
+                        me.loading = 0;
                         me.bindDataByFilters();
                         me.cerrarModal();
-                    }).catch(function (error) {
-                        console.log(error);
                     });
+                    
+
+
+
                 }
             },
             cerrarModal(){
@@ -1352,32 +1389,59 @@ import Swal from 'sweetalert2';
                 });
             },
             aceptarRechazarEstudiante(){
+
+
+/*
+                WARNING: Existe duplicidad de codigo en el componente TablaSolicitudes 
+                en el metodo aceptarRechazarEstudiante, se debe de refactorizar el codigo si hay 
+                una modificacion en este metodo
+*/
+
+
+                // console.log("Aceptando o rechazando estudiante")
                 let me = this;
                 me.loading = 1;
-                var estadoEst = 2;
-                if(me.flagEstudiante){
-                    axios.put(`${API_HOST}/rechazarestudiante`, {
+                // var estadoEst = 2;
+                // Si la flag del modal Aceptar / Rechazar es verdadera, entonces se acepta al estudiante
+                if(me.flagEstudiante == true){
+                    // console.log("Aceptando estudiante")
+                    axios.put(`${API_HOST}/aplicarestudiante`, {
+                    'idUser' : me.id_estudiante,
+                    'idProyecto' : me.id_proyecto,
+                    // 'estado' : estadoEst
+                        }).then(function (response) {
+                            $('#confirmModal').modal('hide');
+                            me.loading = 2;
+                            me.cerrarModal();
+                            me.getEstudiantes();
+                            me.bindDataByFilters();
+                            me.loading = 0;
+                            me.flagEstudiante = null;
+                        }).catch(function (error) {
+                            console.log(error);
+                            me.flagEstudiante = null;
+                        }); 
+                    return
+                }
+                else{
+                    // console.log("Rechazando estudiante")
+                axios.put(`${API_HOST}/rechazarestudiante`, {
                         'idUser' : me.id_estudiante,
                         'idProyecto' : me.id_proyecto,
+                    }).then(function(){
+                        me.flagEstudiante = null;
+                        $('#confirmModal').modal('hide');
+                        me.getEstudiantes();
+                        me.bindDataByFilters();
+                        me.loading = 0;
+
                     }).catch(function (error) {
                         console.log(error);
                     }); 
-                    estadoEst = 1;
+                    // estadoEst = 1;
+                    return
                 }
-                axios.put(`${API_HOST}/aplicarestudiante`, {
-                    'idUser' : me.id_estudiante,
-                    'idProyecto' : me.id_proyecto,
-                    'estado' : estadoEst
-                }).then(function (response) {
-                    $('#confirmModal').modal('hide');
-                    me.loading = 2;
-                    me.cerrarModal();
-                    me.getEstudiantes();
-                    me.bindDataByFilters();
-                    me.loading = 0;
-                }).catch(function (error) {
-                    console.log(error);
-                }); 
+                
             },
             logout(){
                 var url = `${API_HOST}/logout`;
@@ -1633,5 +1697,26 @@ import Swal from 'sweetalert2';
     flex: 2;
     height: 100%;
 }
+
+.form-check{
+    margin: 0;
+    padding: 0.5em;
+    border-radius: 0.5em;
+    margin-bottom: 10px;
+
+}
+
+
+
+.form-check-label{
+    margin-left: 0.5em;
+    font-size: 1.5em;
+}
+
+.form-check-input{
+    margin-left: 0.5em;
+}
+
+
 
 </style>

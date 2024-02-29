@@ -73,6 +73,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/users/admin/new', 'AdminUserController@createUser');
         Route::delete('/users/admin/delete', 'AdminUserController@deleteAdminUser');
         Route::get('/users/admin/all', 'AdminUserController@getAllAdmins');
+        Route::post('/proyecto/cancelar', 'ProyectoController@cancelProject');
+        Route::post('/proyecto/finalizar', 'ProyectoController@endProject');
     });
 
     Route::middleware(['NormalUser'])->group(function () {
@@ -86,6 +88,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/proyecto/aplicar', 'ProyectoxEstudianteController@aplicar');
         Route::post('/proyecto/desaplicar', 'ProyectoxEstudianteController@deleteRow');
         Route::put('/estudiante/actualizar/perfil', 'PerfilController@updateMyProfile');
+
+        Route::get('/estadoAplicacion', 'UserController@estadoAplicacionEstudiante');
     });
 });
 

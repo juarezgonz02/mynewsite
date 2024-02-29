@@ -19,6 +19,7 @@
                                     <th style="text-align: center; width: 10%;">Proyecto</th>
                                     <th style="text-align: center;" id="disappear">Perfil estudiante</th>
                                     <th style="width: 10%; text-align: center;">Cupos</th>
+                                    <th style="width: 10%; text-align: center;">Estado</th>
                                     <th style="width: 10%; text-align: center;">Acciones</th>
                                 </tr>
                         </thead>
@@ -35,11 +36,11 @@
                                     <div v-if="proyecto.estadoPxe === 0" style="margin: 8px -9px 8px -5px;">
                                         <div
                                             style="display: flex; flex-direction: row; justify-content: center; margin: 0px 10px;">
-                                            <button type="button" data-toggle="modal" data-target="#modal-eliminar"
-                                                @click="abrirModal('desaplicar', proyecto)" class="btn btn-warning btn-sm"
+                                            <button type="button" data-toggle="modal"  
+                                                class="btn btn-info btn-sm"
                                                 style="border-radius: 5px;">
-                                                <i class="icon-trash"></i>
-                                                <span class="btn-label">Desaplicar</span>
+                                                <i class="icon-check"></i>
+                                                <span class="btn-label">Solicitud enviada</span>
                                             </button> &nbsp;
                                         </div>
                                     </div>
@@ -60,6 +61,30 @@
                                                 style="border-radius: 5px;">
                                                 <i class="icon-close"></i>
                                                 <span class="btn-label">Rechazado</span>
+                                            </button> &nbsp;
+                                        </div>
+                                    </div>
+                                    <div v-if="proyecto.estadoPxe === 3 " style="margin: 8px -9px 8px -5px;">
+                                        <div
+                                            style="display: flex; flex-direction: row; justify-content: center; margin: 0px 10px;">
+                                            <button type="button" data-toggle="modal" class="btn btn-secondary btn-sm"
+                                                style="border-radius: 5px;">
+                                                <i class="icon-close"></i>
+                                                <span class="btn-label">Proyecto Finalizado</span>
+                                            </button> &nbsp;
+                                        </div>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <div v-if="proyecto.estadoPxe === 0" style="margin: 8px -9px 8px -5px;">
+                                        <div
+                                            style="display: flex; flex-direction: row; justify-content: center; margin: 0px 10px;">
+                                            <button type="button" data-toggle="modal" data-target="#modal-eliminar"
+                                                @click="abrirModal('desaplicar', proyecto)" class="btn btn-warning "
+                                                style="border-radius: 5px;">
+                                                <i class="icon-trash"></i>
+                                                
                                             </button> &nbsp;
                                         </div>
                                     </div>

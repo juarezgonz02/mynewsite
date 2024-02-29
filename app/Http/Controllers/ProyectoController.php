@@ -277,4 +277,59 @@ class ProyectoController extends Controller
 
         return response()->json($proyectos);
     }
+
+
+    public function endProject(Request $request) {
+        try {
+                $proyecto = Proyecto::findOrFail($request->idProyecto);
+                $proyecto->estado_proyecto = 'Finalizado';
+                $proyecto->save();
+
+            // $users = User::join('proyectoxestudiante', 'users.idUser', '=', 'proyectoxestudiante.idUser')
+            // ->join('proyecto', 'proyecto.idProyecto', '=', 'proyectoxestudiante.idProyecto')
+            // ->select('users.correo', 'proyecto.nombre')
+            // ->where('proyectoxestudiante.idProyecto', '=', $request->idProyecto)
+            // ->where('proyecto.estado_proyecto', '==', 'Finalizado')->get();
+
+            // if(count($users) > 0){
+            //     $mailArray = [];
+            //     for($i=0; $i<count($users); $i++){
+            //         $mailArray[$i] = $users[$i]->correo;
+            //     }
+            //     $this->sendEmailEndProject($mailArray, $users[0]);
+            // }
+
+            $proyectoXEstudiante = ProyectoxEstudiante::where('idProyecto', '=', $request->idProyecto)->get();
+            for($i = 0; $i < count($proyectoXEstudiante); $i++){
+                $proyectoXEstudiante[$i]->estado = 3;
+                $proyectoXEstudiante[$i]->save();
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => 'Error al finalizar el proyecto']);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Proyecto finalizado exitosamente']);
+    }
+
+    public function cancelProject(Request $request){
+        try{
+            $proyecto = Proyecto::findOrFail($request->idProyecto);
+            $proyecto->estado_proyecto = 'Cancelado';
+            $proyecto->estado = 0;
+            $proyecto->save();
+
+            // Al cancelar, se elimina el registro de estudiantes en el proyecto 
+            $proyectoXEstudiante = ProyectoxEstudiante::where('idProyecto', '=', $request->idProyecto)->get();
+            foreach($proyectoXEstudiante as $p){
+                // $p->estado = 2;
+                $p->delete();
+            }
+
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => 'Error al cancelar el proyecto']);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Proyecto cancelado exitosamente']);
+
+    }
 }

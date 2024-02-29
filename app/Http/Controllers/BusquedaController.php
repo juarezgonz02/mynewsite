@@ -28,11 +28,11 @@ class BusquedaController extends Controller
         
         switch($request->query('orden')) {
             case 'antiguos': 
-                $orden = "created_at DESC";
+                $orden = "created_at ASC";
                 break;
 
             case 'recientes': 
-                $orden = "created_at ASC";
+                $orden = "created_at DESC";
                 break;
                 
             case 'mas_cupos':

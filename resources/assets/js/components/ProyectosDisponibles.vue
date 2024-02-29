@@ -14,13 +14,11 @@
                 <div v-else class="card" style="border: none;">
                     <div style="margin: 20px 0px 0px 20px;" >
                             <b style="color:red">
-                                <p v-if="ya_aplico_hoy == 0">  </p>
-                                <p v-else>  No puede aplicar a otro proyecto este día. Inténtelo mañana nuevamente.  </p>
+                                <p v-if="ya_aplico_hoy">No puede aplicar a otro proyecto este día. Inténtelo mañana nuevamente.  </p>
                                 
                             </b>
                             <b style="color:red">
-                                <p v-if="ya_aplico_proyecto == 0">  </p>
-                                <p v-else>No puede aplicar a un nuevo proyecto. Ya se encuentra inscrito a un proyecto</p>
+                                <p v-if="ya_aplico_proyecto">No puede aplicar a un nuevo proyecto. Ya se encuentra inscrito a un proyecto  </p>
                             </b>
                             <b style="color:red" v-if="timeout != ''">
                                 <p>Penalización: No puede aplicar a nuevos proyectos hasta</p>
@@ -81,7 +79,7 @@
                                     <td v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`" data-toggle="modal" data-target="#modal-info" @click="abrirModal('info', proyecto)" style="text-align: center;"></td>
                                     <td>
                                         <div class="button-container" style="margin: 8px 0px 8px 4px;">
-                                            <div v-if="ya_aplico_hoy == 0 && ya_aplico_proyecto == 0 && !timeout" style="display: flex; margin: 0px 10px;">
+                                            <div v-if="!ya_aplico_hoy && !ya_aplico_proyecto && !timeout" style="display: flex; margin: 0px 10px;">
                                                 <button type="button" data-toggle="modal" data-target="#modal-aplicar" @click="abrirModal('aplicar', proyecto)" class="btn btn-success btn-sm" style="width: 100%; border-radius: 5px;">
                                                     <i class="icon-check"></i>
                                                     <span class="btn-label">Aplicar</span>
@@ -248,8 +246,8 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                 user_perfil: '',
                 user_carrera: '',
                 user_info: "",
-                ya_aplico_hoy : 0,
-                ya_aplico_proyecto : 0,
+                ya_aplico_hoy : false,
+                ya_aplico_proyecto : false,
                 descripcion : '',
                 arrayProyectos : [''],
                 arrayProyectosAplicados : [''],
@@ -391,6 +389,13 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
 
                 let me = this;
                 me.loadTable = true;
+
+                axios.get(`${API_HOST}/estadoAplicacion`).then(function( response){
+                    console.log(response)
+                    me.ya_aplico_hoy = response.data.ya_aplico_hoy;
+                    me.ya_aplico_proyecto = response.data.activeProject;
+                })
+
                 axios.get(`${API_HOST}/get_user`).then(function (response) {
                     me.user_id = response.data.idUser;
                     me.user_email = response.data.correo;
@@ -409,33 +414,33 @@ import {API_HOST_ASSETS} from '../constants/endpoint.js';
                 .catch(function (error) {
                     console.log(error);
                 });
-                axios.get(`${API_HOST}/ya_aplico`).then(function (response) {
-                    me.ya_aplico_hoy = response.data;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+                // axios.get(`${API_HOST}/ya_aplico`).then(function (response) {
+                //     me.ya_aplico_hoy = response.data;
+                // })
+                // .catch(function (error) {
+                //     console.log(error);
+                // });
                 // Si ya aplicó hoy, no se cargan los proyectos
-                var url = `${API_HOST}/proyectos_aplicados` /*?page=' + page*/;
-                axios.get(url).then(function (response) {
-                    me.arrayProyectosAplicados = response.data;
-                    // Si alguno de los proyectos ya aplicados, tiene estado aplicado (1), ya no puede aplicar a nuevo proyecto
-                    me.arrayProyectosAplicados.forEach(proyecto => {
-                        if(proyecto.estadoPxe == 1){
-                            me.ya_aplico_proyecto = 1;
-                        }
-                    });
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+                // var url = `${API_HOST}/proyectos_aplicados` /*?page=' + page*/;
+                // axios.get(url).then(function (response) {
+                //     me.arrayProyectosAplicados = response.data;
+                //     // Si alguno de los proyectos ya aplicados, tiene estado aplicado (1), ya no puede aplicar a nuevo proyecto
+                //     me.arrayProyectosAplicados.forEach(proyecto => {
+                //         if(proyecto.estadoPxe == 1){
+                //             me.ya_aplico_proyecto = 1;
+                //         }
+                //     });
+                // })
+                // .catch(function (error) {
+                //     console.log(error);
+                // });
 
-                axios.get(`${API_HOST}/pxe_estudiante`).then(function (response) {
-                    me.arrayPXE = response.data;
-                    //console.log(me.arrayPXE);
-                }).catch(function (error) {
-                    console.log(error);
-                });
+                // axios.get(`${API_HOST}/pxe_estudiante`).then(function (response) {
+                //     me.arrayPXE = response.data;
+                //     //console.log(me.arrayPXE);
+                // }).catch(function (error) {
+                //     console.log(error);
+                // });
 
                 var url = `${API_HOST}/proyectos_carrera?nombre=${this.filtrandoPorNombre}&tipo=${this.filtrandoPorTipo}&page=${page}`;
                 axios.get(url).then(function (response) {
