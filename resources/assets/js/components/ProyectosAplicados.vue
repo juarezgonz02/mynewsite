@@ -36,42 +36,40 @@
                                     <div v-if="proyecto.estadoPxe === 0" style="margin: 8px -9px 8px -5px;">
                                         <div
                                             style="display: flex; flex-direction: row; justify-content: center; margin: 0px 10px;">
-                                            <button type="button" data-toggle="modal"  
-                                                class="btn btn-info btn-sm"
-                                                style="border-radius: 5px;">
-                                                <i class="icon-check"></i>
-                                                <span class="btn-label">Solicitud enviada</span>
-                                            </button> &nbsp;
+                                            <span  class="badge badge-info" style="border-radius: 5px;">
+                                                <p id="estadoap" style="display: inline; font-weight: 300; font-size: 1.0rem; ">
+                                                    <i class="icon-check"></i>
+                                                    SOLICITUD ENVIADA
+                                                </p></span>
                                         </div>
                                     </div>
                                     <div v-if="proyecto.estadoPxe === 1" style="margin: 8px -9px 8px -5px;">
                                         <div
                                             style="display: flex; flex-direction: row; justify-content: center; margin: 0px 10px;">
-                                            <button type="button" data-toggle="modal" class="btn btn-success btn-sm"
-                                                style="border-radius: 5px;">
-                                                <i class="icon-check"></i>
-                                                <span class="btn-label">Aceptado</span>
-                                            </button> &nbsp;
+                                            <span  class="badge badge-success" style="border-radius: 5px;">
+                                                <p id="estadoap" style="display: inline; font-weight: 300; font-size: 1.0rem; ">
+                                                    <i class="icon-check"></i>
+                                                    ACEPTADO
+                                                </p></span>
                                         </div>
                                     </div>
                                     <div v-if="proyecto.estadoPxe === 2 " style="margin: 8px -9px 8px -5px;">
                                         <div
                                             style="display: flex; flex-direction: row; justify-content: center; margin: 0px 10px;">
-                                            <button type="button" data-toggle="modal" class="btn btn-danger btn-sm"
-                                                style="border-radius: 5px;">
-                                                <i class="icon-close"></i>
-                                                <span class="btn-label">Rechazado</span>
-                                            </button> &nbsp;
+                                            <span  class="badge badge-danger" style="border-radius: 5px;">
+                                                <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem;">
+                                                    <i class="icon-close"></i>
+                                                    RECHAZADO</p></span>                                            
                                         </div>
                                     </div>
                                     <div v-if="proyecto.estadoPxe === 3 " style="margin: 8px -9px 8px -5px;">
                                         <div
                                             style="display: flex; flex-direction: row; justify-content: center; margin: 0px 10px;">
-                                            <button type="button" data-toggle="modal" class="btn btn-secondary btn-sm"
-                                                style="border-radius: 5px;">
-                                                <i class="icon-close"></i>
-                                                <span class="btn-label">Proyecto Finalizado</span>
-                                            </button> &nbsp;
+                                            <span  class="badge badge-secondary" style="border-radius: 5px;">
+                                                <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem; ">
+                                                    <i class="icon-close"></i>
+                                                    PROYECTO FINALIZADO
+                                                </p></span>
                                         </div>
                                     </div>
 
