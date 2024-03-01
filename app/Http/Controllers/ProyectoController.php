@@ -47,7 +47,10 @@ class ProyectoController extends Controller
     public function proyectosNoDisponibles(Request $request)
     {
         if(!$request->ajax()) return redirect('/home');
-        $proyectos = Proyecto::where('estado','=','0')->paginate(5);
+
+        // where estado = 0 or estado_proyecto = 'Cancelado' or estado_proyecto = 'Finalizado'
+        $proyectos = Proyecto::where('estado','=','0')->orWhere('estado_proyecto', '=', 'Cancelado')->orWhere('estado_proyecto', '=', 'Finalizado')->orderByRaw('created_at DESC')->paginate(5);
+
         return [
             'pagination' => [
                 'total'         => $proyectos->total(),

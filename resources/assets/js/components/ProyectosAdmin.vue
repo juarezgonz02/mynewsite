@@ -399,7 +399,6 @@
                                             <th>Año de carrera</th>
                                             <th>Carrera</th>
                                             <th>Estado</th>
-                                            <th>Acción</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -424,17 +423,6 @@
                                                 </div>
                                                 <div v-else-if="estudiante.estado == 1 || estudiante.estado == 3">
                                                     <span  class="badge badge-success" style="border-radius: 5px;"><p id="estadoap" style="display: inline;">ACEPTADO</p></span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div v-if="estudiante.estado == 1">
-
-                                                    <button type="button" data-toggle="modal" data-target="#removeStudentModal" @click="
-                                                    abrirModal('remover_estudiante', estudiante)
-                                                    
-                                                    " class="btn btn-danger btn-sm">
-                                                    Remover
-                                                </button>  &nbsp;
                                                 </div>
                                             </td>
                                         </tr>

@@ -38,13 +38,6 @@
                   data-toggle="modal" data-target="#modal-info"></td>
                 <td @click="abrirModal('info', proyecto)" style="text-align: center;">
                   <div class="button-container">
-                    <button type="button" @click="abrirModal('estado', proyecto)" data-toggle="modal"
-                      data-target="#statusModal" class="btn btn-danger btn-sm" style="margin: 8px 0; width: 100%;">
-                      <i class="icon-lock"></i>
-                      <span class="btn-label">Cambiar estado</span>
-                    </button>
-                  </div>
-                  <div class="button-container">
                     <button type="button" @click="abrirModal('estudiantes', proyecto)" data-toggle="modal"
                       data-target="#membersModal" class="btn btn-info btn-sm" id="membersbutton"
                       style="margin-bottom: 8px; width: 100%;">
@@ -180,6 +173,73 @@
       <!-- /.modal-dialog -->
     </div>
 
+
+                <!--Fin del modal-->
+            <!--Inicio de modal de estudiantes por proyecto-->
+            <div class="modal fade" tabindex="-1" role="dialog" id="membersModal" aria-hidden="true">
+              <div v-if="loading == 1">
+                  <spinner></spinner>
+              </div>
+              <div v-if="loading == 0" class="modal-dialog modal-primary modal-lg modal-student" role="document" style=
+              "margin: 10px;">
+                  <div class="modal-content modal-student" style="font-size: 1.35em;">
+                      <div class="modal-header">
+                          <h4 class="modal-title">Estudiantes</h4>
+                          <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()" aria-label="Close">
+                              <span aria-hidden="true">×</span>
+                          </button>
+                      </div>
+                      <div class="modal-body">
+                      
+                          <div class="table-responsive">
+                              <table class="table" >
+                                  <thead>
+                                      <tr>
+                                          <th>Nombres</th>
+                                          <th>Apellidos</th>
+                                          <th>Carnet</th>
+                                          <th>Año de carrera</th>
+                                          <th>Carrera</th>
+                                          <th>Estado</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr v-for="estudiante in arrayEstudiantes" :key="estudiante.idUser" >
+                                          <td v-text="estudiante.nombres"></td>
+                                          <td v-text="estudiante.apellidos"></td>
+                                          <td v-text="estudiante.correo"></td>
+                                          <td v-text="estudiante.perfil"></td>
+                                          <td v-text="estudiante.carrera"></td>
+                                          <td>
+                                              <div v-if="estudiante.estado == 0" style="display: flex; flex-direction: row;">
+                                                  <button type="button" data-toggle="modal" data-target="#confirmModal" @click="abrirModal('confirmacion', estudiante, true)" class="btn btn-success btn-sm">
+                                                      Aceptar
+                                                  </button>  &nbsp;
+                                                  <button type="button" data-toggle="modal" data-target="#confirmModal" @click="abrirModal('confirmacion', estudiante, false)" class="btn btn-danger btn-sm">
+                                                      Rechazar
+                                                  </button>  &nbsp;
+                                              </div>
+                                              
+                                              <div v-else-if="estudiante.estado == 2">
+                                                  <span  class="badge badge-danger" style="border-radius: 5px;"><p id="estadorp" style="display: inline;">RECHAZADO</p></span>
+                                              </div>
+                                              <div v-else-if="estudiante.estado == 1 || estudiante.estado == 3">
+                                                  <span  class="badge badge-success" style="border-radius: 5px;"><p id="estadoap" style="display: inline;">ACEPTADO</p></span>
+                                              </div>
+                                          </td>                              
+                                      </tr>
+                                  </tbody>
+                              </table>
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="cerrarModal()">Cerrar</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <!--Fin del modal-->
+
     <!--Fin del modal-->
     <footer class="app-footer" id="footer"
       style="display: flex; flex-direction: column; justify-content: center; font-size: 15px; padding: 10px 0px">
@@ -230,6 +290,8 @@ export default {
       errorEstado: 0,
       flagErrorEstado: false,
       offset: 3,
+      arrayEstudiantes: [],
+      arrayPerfiles : [''],
     };
   },
   computed: {
@@ -341,10 +403,56 @@ export default {
             this.flagErrorEstado = false;
             break;
           }
+          case "estudiantes":
+                        {
+                            this.modal3 = 1;
+                            this.id_proyecto = data.idProyecto;
+                            this.modal_nombre = data.nombre;
+                            this.modal_cupos = data.cupos;
+                            this.carnet = '';
+                            this.nombre_completo = '';
+                            this.id_estudiante = 0;
+                            this.flagError = false;
+                            this.errorEstudianteMsg = '';
+                            this.getEstudiantes()
+                            this.proyectoInscrito = data;
+                            break;
+                        }
         default:
           break;
       }
     },
+    getEstudiantes(){
+                let me = this;
+                axios.get(`${API_HOST}/estudiantesxproyecto`, {
+                    params:{
+                        idProyecto: me.id_proyecto
+                    }
+                }).then(function (response){
+                    me.arrayEstudiantes = response.data;
+                    me.arrayEstudiantes.forEach(function(element, index, array){
+                        me.arrayEstudiantes[index].correoCompleto = element.correo;
+                        me.arrayEstudiantes[index].correo = element.correo.substr(0, 8);
+                        me.arrayEstudiantes[index].nombreCompleto = element.nombres + " " + element.apellidos;
+                        me.arrayEstudiantes[index].carrera = element.n_carrera;
+                        me.arrayEstudiantes[index].perfil = element.n_perfil;
+                        
+                    })
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+                axios.get(`${API_HOST}/cupos_actuales`, {
+                    params:{
+                        idProyecto: me.id_proyecto
+                    }
+                }).then(function (response){
+                    me.modal_cupos_act = response.data.cupos - response.data.cupos_act;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
     logout() {
       var url = `${API_HOST}/logout`;
       axios.post(url).then(() => location.href = `${API_HOST}/`)

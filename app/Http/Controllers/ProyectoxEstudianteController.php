@@ -44,7 +44,9 @@ class ProyectoxEstudianteController extends Controller{
         $idProyecto = $request->idProyecto;
         
         $estudiantes = User::join('proyectoxestudiante', 'users.idUser', '=', 'proyectoxestudiante.idUser')
-        ->select('users.nombres', 'users.apellidos', 'users.correo', 'users.genero', 'users.idPerfil', 'users.idCarrera', 'proyectoxestudiante.estado', 'users.idUser')
+        ->join('carrera', 'users.idCarrera', '=', 'carrera.idCarrera')
+        ->join('perfil', 'users.idPerfil', '=', 'perfil.idPerfil')
+        ->select('users.nombres', 'users.apellidos', 'users.correo', 'users.genero', 'users.idPerfil', 'users.idCarrera', 'proyectoxestudiante.estado', 'users.idUser', 'carrera.nombre AS n_carrera', 'perfil.descripcion AS n_perfil')
         ->where('proyectoxestudiante.idProyecto', '=', $idProyecto)
         ->orderBy('proyectoxestudiante.estado')->get();
         return $estudiantes;
