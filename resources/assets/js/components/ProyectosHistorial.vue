@@ -132,49 +132,6 @@
       <!-- /.modal-dialog -->
     </div>
 
-    <div class="modal fade" tabindex="-1" role="dialog" id="statusModal" aria-hidden="true">
-      <div v-if="loading == 1">
-        <spinner></spinner>
-      </div>
-      <div v-if="loading == 0" class="modal-dialog modal-primary modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">Cambiar estado al proyecto {{ modal_nombre }}</h4>
-            <button type="button" data-dismiss="modal" class="close" @click="cerrarModal()" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="form-group row div-form">
-              <label class="col-md-3 form-control-label" for="text-input">Estado del proyecto</label>
-              <div class="col-md-9">
-                <select class="form-control" v-model="estado_proyecto">
-                  <option value="En curso">En curso</option>
-                  <option value="Finalizado">Finalizado</option>
-                  <option value="Cancelado">Cancelado</option>
-                </select>
-              </div>
-            </div>
-            <h5>Por favor escriba <b>{{ modal_nombre }}</b> para confirmar el cambio de estado de este proyecto</h5>
-            <div class="col-md-9 -alt">
-              <input type="text" v-model="modal_confirmar" class="form-control">
-              <p :class="{ show: errorEstado == 1, hide: errorEstado != 1 }" class="error">El texto ingresado no coincide
-                con el solicitado</p>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" data-dismiss="modal" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-            <button type="button" class="btn btn-primary" v-bind:data-dismiss="flagErrorEstado ? '' : 'modal'"
-              @click="estadoProyecto()">Confirmar</button>
-          </div>
-        </div>
-        <!-- /.modal-content -->
-      </div>
-      <!-- /.modal-dialog -->
-    </div>
-
-
-                <!--Fin del modal-->
             <!--Inicio de modal de estudiantes por proyecto-->
             <div class="modal fade" tabindex="-1" role="dialog" id="membersModal" aria-hidden="true">
               <div v-if="loading == 1">

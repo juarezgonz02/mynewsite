@@ -176,8 +176,8 @@
                                             <td v-text="estudiante.nombres"></td>
                                             <td v-text="estudiante.apellidos"></td>
                                             <td v-text="estudiante.correo"></td>
-                                            <td v-text="arrayPerfiles[estudiante.idPerfil-1].perfil"></td>
-                                            <td v-text="arrayCarreras[estudiante.idCarrera-1].nombre"></td>
+                                            <td v-text="estudiante.perfil"></td>
+                                            <td v-text="estudiante.carrera"></td>
                                             <td>
                                                 <div v-if="estudiante.estado == 0" style="display: flex; flex-direction: row;">
                                                     <button type="button" data-toggle="modal" data-target="#confirmModal" @click="abrirModal('confirmacion', estudiante, true)" class="btn btn-success btn-sm">

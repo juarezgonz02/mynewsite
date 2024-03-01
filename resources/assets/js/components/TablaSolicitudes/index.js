@@ -13,7 +13,6 @@ export default {
             arrayCarreras : [''],
             arrayCarrerasSin : [''],
             arrayCarrerasCon : [''],
-            arrayPerfiles : [''],
             arrayCarreraPerfil : [[]],
             arrayEstudiantes : [],
             nombre_estudiante_msg : '',
@@ -520,13 +519,6 @@ export default {
                 console.log(error);
             });
 
-            axios.get(`${API_HOST}/perfil`).then(function (response) {
-                me.arrayPerfiles = response.data;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-
             axios.get(`${API_HOST}/facultad`).then(function (response) {
                 me.arrayFactultad = response.data;
             })
@@ -574,6 +566,9 @@ export default {
                     me.arrayEstudiantes[index].correoCompleto = element.correo;
                     me.arrayEstudiantes[index].correo = element.correo.substr(0, 8);
                     me.arrayEstudiantes[index].nombreCompleto = element.nombres + " " + element.apellidos;
+                    me.arrayEstudiantes[index].perfil = element.n_perfil;
+                    me.arrayEstudiantes[index].carrera = element.n_carrera;
+
                 })
             })
             .catch(function (error) {

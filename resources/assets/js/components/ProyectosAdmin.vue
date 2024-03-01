@@ -92,7 +92,7 @@
                                         </div>
                                         <div class="button-container">
                                             <button type="button" @click="abrirModal('reunion', proyecto)" data-toggle="modal" data-target="#meetingModal" class="btn btn-info btn-sm" id="meetingbutton" style="width: 100%;">
-                                                <i class="icon-people"></i>
+                                                <i class="icon-calendar"></i>
                                                 <span class="btn-label">Reunión</span>
                                             </button>
                                         </div>
@@ -406,8 +406,8 @@
                                             <td v-text="estudiante.nombres"></td>
                                             <td v-text="estudiante.apellidos"></td>
                                             <td v-text="estudiante.correo"></td>
-                                            <td v-text="arrayPerfiles[estudiante.idPerfil-1].perfil"></td>
-                                            <td v-text="arrayCarreras[estudiante.idCarrera-1].nombre"></td>
+                                            <td v-text="estudiante.perfil"></td>
+                                            <td v-text="estudiante.carrera"></td>
                                             <td>
                                                 <div v-if="estudiante.estado == 0" style="display: flex; flex-direction: row;">
                                                     <button type="button" data-toggle="modal" data-target="#confirmModal" @click="abrirModal('confirmacion', estudiante, true)" class="btn btn-success btn-sm">
@@ -1315,6 +1315,8 @@ import Swal from 'sweetalert2';
                         me.arrayEstudiantes[index].correoCompleto = element.correo;
                         me.arrayEstudiantes[index].correo = element.correo.substr(0, 8);
                         me.arrayEstudiantes[index].nombreCompleto = element.nombres + " " + element.apellidos;
+                        me.arrayEstudiantes[index].carrera = element.n_carrera;
+                        me.arrayEstudiantes[index].perfil = element.n_perfil;
                     })
                 })
                 .catch(function (error) {
