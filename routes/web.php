@@ -12,7 +12,7 @@
 */
 
 Route::middleware(['guest'])->group(function () {
-    Route::get('/', 'Auth\LoginController@showLoginForm');
+    Route::get('/', 'Auth\LoginController@showLoginForm')->name('lobby');
     Route::post('/login', 'Auth\LoginController@authenticate')->name('login');
 
     Route::get('/carreraxfacultad', 'CarreraController@carreraPorFact')->name('carreraxfact');
