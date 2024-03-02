@@ -366,10 +366,10 @@ class ProyectoController extends Controller
 
     private function obtener_todo_por_facultad(string $nombre, string $nfacultad, string $orden){
         
-        $proyectos =  $proyectos = ProyectoXCarrera::join('proyecto', 'proyecto.idProyecto', '=', 'proyectoxcarrera.idProyecto')
-        ->leftJoin('carrera', 'carrera.idCarrera', '=', 'proyectoxcarrera.idCarrera')
-        ->select("proyecto.*", "carrera.idCarrera")->where('carrera.idFacultad', '=', $nfacultad) ->where('proyecto.nombre', 'like', $nombre.'%');
-
+        $proyectos =  $proyectos = Proyecto::with(['carreras'=> function ($query) use ($nfacultad) {
+            $query -> where("idFacultad", $nfacultad);
+        } ] )->where("proyecto.estado", 1);
+        
         $proyectos = $proyectos->orderByRaw('proyecto.'.$orden)->paginate(5);
         
         $cupos = ProyectoxEstudiante::select('idProyecto')->where('estado', '=', '0')->get();
