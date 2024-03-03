@@ -50,6 +50,8 @@ Route::middleware(['auth:api', ])->group(function () {
             Route::get('/getHistorialDeProyectos', 'Api\ProyectoController@getHistorialDeProyectos');
             Route::put('/updateEstadoProyecto', 'Api\ProyectoController@updateEstadoProyecto');
             Route::put('/putUpdateProyecto', 'ProyectoController@update');
+            Route::post('/proyecto/cancelar', 'ProyectoController@cancelProject');
+            Route::post('/proyecto/finalizar', 'ProyectoController@endProject');
             Route::put('/putAplicarEnProyecto', 'ProyectoxEstudianteController@aceptarRechazarEstudiante');
             Route::post('/storeProyecto', 'ProyectoController@store');
             Route::post('/postApplyStudent', 'Api\ProyectoController@postApplyStudent');
