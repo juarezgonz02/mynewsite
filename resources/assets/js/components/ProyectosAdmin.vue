@@ -1068,7 +1068,7 @@ import Swal from 'sweetalert2';
                     axios.post(`${API_HOST}/proyecto/${me.modal_estado == '2' ? 'finalizar' : 'cancelar' }`,{
                             idProyecto: this.id_proyecto    
                     }).then(function (response){
-                        console.log(response);
+                        // console.log(response);
                         
                         // $('#statusModal').modal('hide');
                         
