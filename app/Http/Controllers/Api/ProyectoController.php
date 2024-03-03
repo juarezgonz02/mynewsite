@@ -112,10 +112,9 @@ class ProyectoController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function getHistorialDeProyectos() {
-        $proyectos = Proyecto::where('estado', 0)
-                                ->with(['carreras', 'estudiantes.carrera.facultad'])
-                                ->orderBy('created_at', 'desc')
-                                ->get();
+                                        // where estado = 0 or estado_proyecto = 'Cancelado' or estado_proyecto = 'Finalizado'
+        $proyectos = Proyecto::where('estado','=','0')->orWhere('estado_proyecto', '=', 'Cancelado')->orWhere('estado_proyecto', '=', 'Finalizado')->orderByRaw('created_at DESC')->paginate(5);
+
 
         return response()->json($proyectos);
     }
