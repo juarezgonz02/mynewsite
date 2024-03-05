@@ -286,6 +286,7 @@ class ProyectoController extends Controller
         try {
                 $proyecto = Proyecto::findOrFail($request->idProyecto);
                 $proyecto->estado_proyecto = 'Finalizado';
+                $proyecto->estado = '0';
                 $proyecto->save();
 
             // $users = User::join('proyectoxestudiante', 'users.idUser', '=', 'proyectoxestudiante.idUser')
@@ -304,8 +305,12 @@ class ProyectoController extends Controller
 
             $proyectoXEstudiante = ProyectoxEstudiante::where('idProyecto', '=', $request->idProyecto)->get();
             for($i = 0; $i < count($proyectoXEstudiante); $i++){
-                $proyectoXEstudiante[$i]->estado = 3;
-                $proyectoXEstudiante[$i]->save();
+                if($proyectoXEstudiante[$i]->estado == 1){
+                    $proyectoXEstudiante[$i]->estado = 3;
+                    $proyectoXEstudiante[$i]->save();
+                }else if($proyectoXEstudiante[$i]->estado == 0){
+                    $proyectoXEstudiante[$i]->delete();
+                }
             }
         } catch (\Throwable $th) {
             return response()->json(['success' => false, 'message' => 'Error al finalizar el proyecto']);
