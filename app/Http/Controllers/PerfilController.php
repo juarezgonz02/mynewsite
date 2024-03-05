@@ -111,8 +111,9 @@ class PerfilController extends Controller
             $estudiante = User::where('idUser', '=', $idEstudiante)->firstOrFail();
                 $estudiante->idPerfil = $request->idPerfil;
                 $estudiante->save();
-
-            return response()->json($estudiante);
+            // Se añade perfil para acutualizar localstorage de la app movil
+            $estudianteres = User::where('idUser', '=', $idEstudiante)->with(['perfil'])->firstOrFail();
+            return response()->json($estudianteres,200);
         } catch (\Throwable $th) {
             return response()->json($th, 400);
         }
