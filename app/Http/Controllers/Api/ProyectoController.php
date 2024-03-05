@@ -69,7 +69,7 @@ class ProyectoController extends Controller
             'proyecto.estado_proyecto', 'proyecto.perfil_estudiante','proyecto.correo_encargado','proyecto.contraparte')
             ->orderBy('proyecto.created_at', 'desc')->get();
 
-        $proyectos->load(['carreras', 'estudiantes.carrera.facultad']);
+        $proyectos->load(['carreras']);
 
         return response()->json($proyectos);
     }
@@ -90,20 +90,6 @@ class ProyectoController extends Controller
         ->orderBy('proyecto.idProyecto', 'desc')->get();
         
         return $proyectos;
-    }
-
-    /**
-     * Responde con todos los proyectos activos para admin
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getTodosLosProyectos() {
-        $proyectos = Proyecto::where('estado', 1)
-                                ->with(['carreras', 'estudiantes.carrera.facultad'])
-                                ->orderBy('created_at', 'desc')
-                                ->get();
-
-        return response()->json($proyectos);
     }
 
     /**
@@ -250,6 +236,12 @@ class ProyectoController extends Controller
         
     }
 
+    /**
+     * Responde con todos los proyectos activos para admin segun filtros
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+  
     public function getAllProjects(Request $request)
     {
 
@@ -391,7 +383,7 @@ class ProyectoController extends Controller
             'proyecto.correo_encargado',
             'proyecto.idProyecto'
             )
-        ->with(['carreras', 'estudiantes.carrera.facultad']);
+        ->with(['carreras']);
         
         $proyectos = $proyectos->orderByRaw('proyecto.'.$orden)->paginate(5);
         
@@ -415,14 +407,14 @@ class ProyectoController extends Controller
     {
         if($ncarrera == "-1"){
             $proyectos = Proyecto::where('proyecto.nombre', 'like', '%'.$nombre.'%')->where('proyecto.estado', '=', '1')
-            ->with(['carreras', 'estudiantes.carrera.facultad']);
+            ->with(['carreras']);
         }else if ($ncarrera == "-2"){
-            $proyectos = Proyecto::where('proyecto.nombre', 'like', '%'.$nombre.'%')->where('proyecto.estado', '=', '1')->with(['carreras', 'estudiantes.carrera.facultad']);
+            $proyectos = Proyecto::where('proyecto.nombre', 'like', '%'.$nombre.'%')->where('proyecto.estado', '=', '1')->with(['carreras']);
         }else{
             $proyectos = Proyecto::rightJoin('proyectoxcarrera', 'proyecto.idProyecto', '=', 'proyectoxcarrera.idProyecto')
             ->leftJoin('carrera', 'carrera.idCarrera', '=', 'proyectoxcarrera.idCarrera')
             ->select("proyecto.*", "carrera.idCarrera")->where('carrera.idCarrera', '=', $ncarrera)->where('proyecto.nombre', 'like', '%'.$nombre.'%')
-            ->with(['carreras', 'estudiantes.carrera.facultad']);
+            ->with(['carreras']);
         }
 
         $proyectos = $proyectos->orderByRaw('proyecto.'.$orden)->paginate(5);

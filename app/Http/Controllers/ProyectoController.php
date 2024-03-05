@@ -259,16 +259,7 @@ class ProyectoController extends Controller
 
         
     }
-    public function getMisProyectos(Request $request) {
-        $user = Auth::user();
-        $proyectos = $user->proyectos()
-                            ->with(['carreras', 'estudiantes.carrera.facultad'])
-                        ->orderBy('created_at', 'desc')
-                            ->get();
-
-        return response()->json($proyectos);
-    }
-
+   
     public function getEstudianteProyecto(Request $request, $idEstudiante ){
 
         $proyectos = Proyecto::join('proyectoxestudiante', 'proyecto.idProyecto', '=', 'proyectoxestudiante.idProyecto')

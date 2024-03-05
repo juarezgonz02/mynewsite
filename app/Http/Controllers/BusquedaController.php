@@ -75,7 +75,7 @@ class BusquedaController extends Controller
 
     private function obtener_por_facultad(string $nombre, string $nfacultad, string $orden){
         
-        // $proyectos =  $proyectos = ProyectoXCarrera::leftJoin('proyecto', 'proyecto.idProyecto', '=', 'proyectoxcarrera.idProyecto')
+        // $proyectos =  $proyectos = ProyectoxCarrera::leftJoin('proyecto', 'proyecto.idProyecto', '=', 'proyectoxcarrera.idProyecto')
         // ->leftJoin('carrera', 'carrera.idCarrera', '=', 'proyectoxcarrera.idCarrera')
         // ->select("proyecto.*", "carrera.idCarrera")->where('carrera.idFacultad', '=', $nfacultad) ->where('proyecto.nombre', 'like', '%'.$nombre.'%');
 
@@ -105,7 +105,7 @@ class BusquedaController extends Controller
             'proyecto.correo_encargado',
             'proyecto.idProyecto'
             )
-        ->with(['carreras', 'estudiantes.carrera.facultad']);
+        ->with(['carreras']);
 
         $proyectos = $proyectos->orderByRaw('proyecto.'.$orden)->paginate(5);
         
@@ -128,14 +128,14 @@ class BusquedaController extends Controller
         if($ncarrera == "-1"){
             // $proyectos = Proyecto::where('proyecto.nombre' ,'like', $nombre."%")
             $proyectos = Proyecto::where('proyecto.nombre', 'like', '%'.$nombre.'%')->where('proyecto.estado', '=', '1')
-            ->with(['carreras', 'estudiantes.carrera.facultad']);
+            ->with(['carreras']);
         }else if ($ncarrera == "-2"){
-            $proyectos = Proyecto::where('proyecto.nombre', 'like', '%'.$nombre.'%')->where('proyecto.estado', '=', '1')->with(['carreras', 'estudiantes.carrera.facultad']);
+            $proyectos = Proyecto::where('proyecto.nombre', 'like', '%'.$nombre.'%')->where('proyecto.estado', '=', '1')->with(['carreras']);
         }else{
             $proyectos = Proyecto::rightJoin('proyectoxcarrera', 'proyecto.idProyecto', '=', 'proyectoxcarrera.idProyecto')
             ->leftJoin('carrera', 'carrera.idCarrera', '=', 'proyectoxcarrera.idCarrera')
             ->select("proyecto.*", "carrera.idCarrera")->where('carrera.idCarrera', '=', $ncarrera)->where('proyecto.nombre', 'like', '%'.$nombre.'%')
-            ->with(['carreras', 'estudiantes.carrera.facultad']);
+            ->with(['carreras']);
         }
 
         $proyectos = $proyectos->orderByRaw('proyecto.'.$orden)->paginate(5);

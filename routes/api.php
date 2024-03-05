@@ -37,17 +37,16 @@ Route::middleware(['auth:api', ])->group(function () {
     Route::get('/getMisProyectos', 'Api\ProyectoController@getMisProyectos');
 
     Route::get('/getAviableProjects', 'Api\ProyectoController@getAviableProjects');
-    Route::get('/getAllProjects', 'Api\ProyectoController@getAllProjects');
-
+    
     Route::post('/postAplicarProyecto', 'ProyectoxEstudianteController@aplicar');
     Route::post('/postDesaplicarProyecto', 'ProyectoxEstudianteController@deleteRow');
     Route::put('/estudiante/actualizar/perfil', 'PerfilController@updateMyProfile');
-
+    
     // ADMIN ROUTES
     Route::middleware(['Administrador'])->group(function () {
         Route::prefix('admin')->group(function () {
             // PROYECTOS
-            Route::get('/getTodosLosProyectos', 'Api\ProyectoController@getTodosLosProyectos');
+            Route::get('/getAllProjects', 'Api\ProyectoController@getAllProjects');
             Route::get('/getHistorialDeProyectos', 'Api\ProyectoController@getHistorialDeProyectos');
             Route::put('/updateEstadoProyecto', 'Api\ProyectoController@updateEstadoProyecto');
             Route::put('/putUpdateProyecto', 'ProyectoController@update');
