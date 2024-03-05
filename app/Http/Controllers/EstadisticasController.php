@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Carrera;
 use App\Proyecto;
-use App\ProyectoXCarrera;
-use App\ProyectoXEstudiante;
+use App\ProyectoxCarrera;
+use App\ProyectoxEstudiante;
 use Illuminate\Support\Facades\Validator;
 
 class EstadisticasController extends Controller
