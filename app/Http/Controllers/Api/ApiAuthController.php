@@ -75,7 +75,7 @@ class ApiAuthController extends Controller
 
         $idPerfil = 1;
         if(str_contains($request->correo, '@uca.edu.sv')) {
-            $this->determinarPerfilDeAlumno($request->correo);
+            $idPerfil = $this->determinarPerfilDeAlumno($request->correo);
         }
 
         $usuario = User::create([
