@@ -66,18 +66,11 @@ class AdminUserController extends Controller
 
     public function getAllAdmins(Request $request) {
         
-        // $admins = $this->getAdminsExceptMe();
         $admins = User::select("nombres", "apellidos", "correo")->where("idRol", "=", "1")->get();
         
         return [
             'users' => $admins
         ];
-    }
-    
-    private function getAdminsExceptMe() {
-        $me = Auth() -> user() -> idUser;
-
-        return User::select("nombres", "apellidos", "correo")->where("idUser", "!=", $me)->where("idRol", "=", "1")->get();
     }
 
     private function valid(Request $request){
