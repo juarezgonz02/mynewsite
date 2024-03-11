@@ -91,7 +91,7 @@ class UserController extends Controller
         ->join('users', 'proyectoxestudiante.idUser','=','users.idUser')
         ->select('proyecto.idProyecto', 'proyecto.nombre','proyecto.descripcion','proyecto.estado', 'proyecto.contraparte', 'proyecto.perfil_estudiante',
         'proyecto.tipo_horas', 'proyecto.cupos_act','proyecto.cupos', 'proyecto.horario', 'proyecto.encargado','proyecto.fecha_inicio','proyecto.fecha_fin','proyectoxestudiante.estado as estadoPxe')
-        ->where('proyectoxestudiante.idUser','=', $id)
+        ->where('proyectoxestudiante.idUser','=', $user->idUser)
         ->where('proyectoxestudiante.estado', '=', 1)
         ->orderBy('proyecto.idProyecto', 'desc')->count();
         

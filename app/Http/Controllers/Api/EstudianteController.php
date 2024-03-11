@@ -16,7 +16,7 @@ class EstudianteController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function getAllStudents() {
-        $estudiantes = User::where('idRol', 2)->with(['rol', 'perfil', 'carrera.facultad'])->get();
+        $estudiantes = User::where('idRol', 2)->select("nombres", "apellidos", "genero", "correo", "idRol", "idPerfil", "idCarrera" )->with(['rol', 'perfil', 'carrera.facultad'])->get();
 
         return response()->json($estudiantes);
     }

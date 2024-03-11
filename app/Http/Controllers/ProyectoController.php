@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Proyecto;
 use App\ProyectoxCarrera;
 use App\Carrera;
@@ -82,56 +83,65 @@ class ProyectoController extends Controller
      */
     public function store(Request $request)
     {
-        $proyecto = new Proyecto();
-        $proyecto->nombre = $request->nombre;
-        $proyecto->estado = $request->estado;
-        $proyecto->contraparte = $request->contraparte;
-        $proyecto->cupos_act = $request->cupos_act;
-        $proyecto->cupos = $request->cupos;
-        $proyecto->estado_proyecto = $request->estado_proyecto;
-        $proyecto->descripcion = $request->descripcion." ";
-        $proyecto->perfil_estudiante = $request->perfil_estudiante;
-        $proyecto->encargado = $request->encargado;
-        $proyecto->fecha_inicio = $request->fecha_inicio;
-        $proyecto->fecha_fin = $request->fecha_fin;
-        $proyecto->horario = $request->horario;
-        $proyecto->tipo_horas = $request->tipo_horas;
-        $proyecto->correo_encargado = $request->correo_encargado;
-        $proyecto->save();
 
-        $arraycp = $request->carreraPerfil;
-
-        for($i = 0; $i < count($arraycp); $i++){
-            if($arraycp[$i][0] == -1 || $arraycp[$i][0] == -2){
-                $this->todasLasCarreras($proyecto->idProyecto, $arraycp[$i]);
-            }
-            else{
-                $pxc = new ProyectoxCarrera();
-                $pxc->idProyecto = $proyecto->idProyecto;
-                $pxc->idCarrera = $arraycp[$i][0];
-                $pxc->limite_inf = $arraycp[$i][1];
-                $pxc->limite_sup = $arraycp[$i][2];
-                $pxc->save();
-            }
-        }
-
-        return response()->json('Proyecto creado exitosamente');
-    }
-
-    private function todasLasCarreras(int $idProyecto, array $options){
-        $carreras = Carrera::all();
-        for($i = 0; $i < count($carreras); $i++){
-            if($options[0] == -1 || ($options[0] == -2 && ($carreras[$i]->idCarrera != 3 && $carreras[$i]->idCarrera != 9 && $carreras[$i]->idCarrera != 10))){
-                $pxc = new ProyectoxCarrera();
-                $pxc->idProyecto = $idProyecto; 
-                $pxc->idCarrera = $carreras[$i]->idCarrera;
-                $pxc->limite_inf = $options[1];
-                $pxc->limite_sup = $options[2];
-                $pxc->save();
-            }
+        try {
+            //code...
+            DB::transaction(function () use ($request) {
+                
+                $proyecto = new Proyecto();
+                $proyecto->nombre = $request->nombre;
+                $proyecto->estado = $request->estado;
+                $proyecto->contraparte = $request->contraparte;
+                $proyecto->cupos_act = $request->cupos_act;
+                $proyecto->cupos = $request->cupos;
+                $proyecto->estado_proyecto = $request->estado_proyecto;
+                $proyecto->descripcion = $request->descripcion." ";
+                $proyecto->perfil_estudiante = $request->perfil_estudiante;
+                $proyecto->encargado = $request->encargado;
+                $proyecto->fecha_inicio = $request->fecha_inicio;
+                $proyecto->fecha_fin = $request->fecha_fin;
+                $proyecto->horario = $request->horario;
+                $proyecto->tipo_horas = $request->tipo_horas;
+                $proyecto->correo_encargado = $request->correo_encargado;
+                $proyecto->save();
+                
+                $arraycp = $request->carreraPerfil;
+                
+                for($i = 0; $i < count($arraycp); $i++){
+                    if($arraycp[$i][0] == -1 || $arraycp[$i][0] == -2){
+                        $this->todasLasCarreras($proyecto->idProyecto, $arraycp[$i]);
+                    }
+                    else{
+                        $pxc = new ProyectoxCarrera();
+                        $pxc->idProyecto = $proyecto->idProyecto;
+                        $pxc->idCarrera = $arraycp[$i][0];
+                        $pxc->limite_inf = $arraycp[$i][1];
+                        $pxc->limite_sup = $arraycp[$i][2];
+                        $pxc->save();
+                    }
+                }
+                
+                return response()->json('Proyecto creado exitosamente');
+            });
+        } catch (\Throwable $th) {
+            return response()->json('Crear Proyecto Fallo', 400);
         }
     }
-
+        
+        private function todasLasCarreras(int $idProyecto, array $options){
+            $carreras = Carrera::all();
+            for($i = 0; $i < count($carreras); $i++){
+                if($options[0] == -1 || ($options[0] == -2 && ($carreras[$i]->idCarrera != 3 && $carreras[$i]->idCarrera != 9 && $carreras[$i]->idCarrera != 10))){
+                    $pxc = new ProyectoxCarrera();
+                    $pxc->idProyecto = $idProyecto; 
+                    $pxc->idCarrera = $carreras[$i]->idCarrera;
+                    $pxc->limite_inf = $options[1];
+                    $pxc->limite_sup = $options[2];
+                    $pxc->save();
+                }
+        }
+    }
+    
     /**
      * Display the specified resource.
      *
@@ -153,48 +163,57 @@ class ProyectoController extends Controller
 
     public function update(Request $request)
     {
-        $proyecto = Proyecto::findOrFail($request->idProyecto);
-            $proyecto->contraparte = $request->contraparte;
-            $proyecto->cupos = $request->cupos;
-            $proyecto->estado_proyecto = $request->estado_proyecto;
-            $proyecto->descripcion = $request->descripcion." ";
-            $proyecto->perfil_estudiante = $request->perfil_estudiante;
-            $proyecto->encargado = $request->encargado;
-            $proyecto->fecha_inicio = $request->fecha_inicio;
-            $proyecto->fecha_fin = $request->fecha_fin;
-            $proyecto->horario = $request->horario;
-            $proyecto->nombre = $request->nombre;
-            $proyecto->tipo_horas = $request->tipo_horas;
-            $proyecto->correo_encargado = $request->correo_encargado;
-            $proyecto->estado = $request->estado;
-        $proyecto->save();
-
-        ProyectoxCarrera::where('idProyecto', '=', $request->idProyecto)->delete();
-
-        $arraycp = $request->carreraPerfil;
-
-        for($i = 0; $i < count($arraycp); $i++){
-            if($arraycp[$i][0] == -1 || $arraycp[$i][0] == -2){
-                $this->todasLasCarreras($proyecto->idProyecto, $arraycp[$i]);
-            }
-            else{
-                $pxc = new ProyectoxCarrera();
-                $pxc->idProyecto = $proyecto->idProyecto;
-                $pxc->idCarrera = $arraycp[$i][0];
-                $pxc->limite_inf = $arraycp[$i][1];
-                $pxc->limite_sup = $arraycp[$i][2];
-                $pxc->save();
-            }
+        try {
+            //code...
+            DB::transaction(function () use ($request) {
+                
+                $proyecto = Proyecto::findOrFail($request->idProyecto);
+                $proyecto->contraparte = $request->contraparte;
+                $proyecto->cupos = $request->cupos;
+                $proyecto->estado_proyecto = $request->estado_proyecto;
+                $proyecto->descripcion = $request->descripcion." ";
+                $proyecto->perfil_estudiante = $request->perfil_estudiante;
+                $proyecto->encargado = $request->encargado;
+                $proyecto->fecha_inicio = $request->fecha_inicio;
+                $proyecto->fecha_fin = $request->fecha_fin;
+                $proyecto->horario = $request->horario;
+                $proyecto->nombre = $request->nombre;
+                $proyecto->tipo_horas = $request->tipo_horas;
+                $proyecto->correo_encargado = $request->correo_encargado;
+                $proyecto->estado = $request->estado;
+                $proyecto->save();
+                
+                ProyectoxCarrera::where('idProyecto', '=', $request->idProyecto)->delete();
+                
+                $arraycp = $request->carreraPerfil;
+                
+                for($i = 0; $i < count($arraycp); $i++){
+                    if($arraycp[$i][0] == -1 || $arraycp[$i][0] == -2){
+                        $this->todasLasCarreras($proyecto->idProyecto, $arraycp[$i]);
+                    }
+                    else{
+                        $pxc = new ProyectoxCarrera();
+                        $pxc->idProyecto = $proyecto->idProyecto;
+                        $pxc->idCarrera = $arraycp[$i][0];
+                        $pxc->limite_inf = $arraycp[$i][1];
+                        $pxc->limite_sup = $arraycp[$i][2];
+                        $pxc->save();
+                    }
+                }
+                
+                return response()->json('Proyecto actualizado exitosamente');
+            
+            });
+        } catch (\Throwable $th) {
+            return response()->json(['Fallo al actualizar'=>$th->getMessage()], 400);
         }
+}
 
-        return response()->json('Proyecto actualizado exitosamente');
-    }
-    
-    public function state(Request $request)
-    {
-        if(!$request->ajax()) return redirect('/home');
-        $proyecto = Proyecto::findOrFail($request->idProyecto);
-        $proyecto->estado = $request->estado;
+public function state(Request $request)
+{
+    if(!$request->ajax()) return redirect('/home');
+    $proyecto = Proyecto::findOrFail($request->idProyecto);
+    $proyecto->estado = $request->estado;
         $proyecto->estado_proyecto = $request->estado_proyecto;
         $proyecto->save();
 
@@ -275,6 +294,8 @@ class ProyectoController extends Controller
 
     public function endProject(Request $request) {
         try {
+            DB::transaction(function () use ($request) {
+
                 $proyecto = Proyecto::findOrFail($request->idProyecto);
                 $proyecto->estado_proyecto = 'Finalizado';
                 $proyecto->estado = '0';
@@ -303,6 +324,7 @@ class ProyectoController extends Controller
                     $proyectoXEstudiante[$i]->delete();
                 }
             }
+        });
         } catch (\Throwable $th) {
             return response()->json(['success' => false, 'message' => 'Error al finalizar el proyecto']);
         }
@@ -312,6 +334,8 @@ class ProyectoController extends Controller
 
     public function cancelProject(Request $request){
         try{
+            DB::transaction(function () use ($request) {
+
             $proyecto = Proyecto::findOrFail($request->idProyecto);
             $proyecto->estado_proyecto = 'Cancelado';
             $proyecto->estado = 0;
@@ -323,7 +347,7 @@ class ProyectoController extends Controller
                 // $p->estado = 2;
                 $p->delete();
             }
-
+            });
         } catch (\Throwable $th) {
             return response()->json(['success' => false, 'message' => 'Error al cancelar el proyecto']);
         }

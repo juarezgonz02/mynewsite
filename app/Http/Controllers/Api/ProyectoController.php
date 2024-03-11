@@ -65,9 +65,8 @@ class ProyectoController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function getHistorialDeProyectos() {
-                                        // where estado = 0 or estado_proyecto = 'Cancelado' or estado_proyecto = 'Finalizado'
+        // where estado = 0 or estado_proyecto = 'Cancelado' or estado_proyecto = 'Finalizado'
         $proyectos = Proyecto::where('estado','=','0')->orWhere('estado_proyecto', '=', 'Cancelado')->orWhere('estado_proyecto', '=', 'Finalizado')->orderByRaw('created_at DESC')->paginate(5);
-
 
         return response()->json($proyectos);
     }
@@ -336,7 +335,7 @@ class ProyectoController extends Controller
         ->leftjoin('carrera', 'carrera.idCarrera', '=', 'proyectoxcarrera.idCarrera')
         ->where('carrera.idFacultad', '=', $nfacultad)
         ->where('proyecto.estado', '=', '1')
-        ->where('proyecto.nombre', 'like', '%'.$nombre.'%')
+        ->where('proyecto.nombre', 'like', $nombre.'%')
         ->select("proyecto.*", "carrera.idFacultad")
         ->groupBy(
             'proyecto.nombre',
@@ -360,7 +359,7 @@ class ProyectoController extends Controller
             )
         ->with(['carreras']);
         
-        $proyectos = $proyectos->orderByRaw('proyecto.?',[$orden])->paginate(5);
+        $proyectos = $proyectos->orderByRaw('proyecto.'.$orden)->paginate(5);
         
         $cupos = ProyectoxEstudiante::select('idProyecto')->where('estado', '=', '0')->get();
         for($i = 0; $i < count($proyectos); $i++){
@@ -388,11 +387,11 @@ class ProyectoController extends Controller
         }else{
             $proyectos = Proyecto::rightJoin('proyectoxcarrera', 'proyecto.idProyecto', '=', 'proyectoxcarrera.idProyecto')
             ->leftJoin('carrera', 'carrera.idCarrera', '=', 'proyectoxcarrera.idCarrera')
-            ->select("proyecto.*", "carrera.idCarrera")->where('carrera.idCarrera', '=', $ncarrera)->where('proyecto.nombre', 'like', '%'.$nombre.'%')
+            ->select("proyecto.*", "carrera.idCarrera")->where('carrera.idCarrera', '=', $ncarrera)->where('proyecto.nombre', 'like', $nombre.'%')
             ->with(['carreras']);
         }
 
-        $proyectos = $proyectos->orderByRaw('proyecto.?',[$orden])->paginate(5);
+        $proyectos = $proyectos->orderByRaw('proyecto.'.$orden)->paginate(5);
         
         $cupos = ProyectoxEstudiante::select('idProyecto')->where('estado', '=', '0')->get();
         for($i = 0; $i < count($proyectos); $i++){
