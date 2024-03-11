@@ -291,11 +291,7 @@ class ProyectoController extends Controller
         ->where('proyectoxcarrera.idCarrera', '=', $user->idCarrera)
         ->whereRaw('(proyectoxestudiante.idUser != ? OR proyectoxestudiante.idUser IS NULL)', [$user->idUser])
         ->whereRaw('proyecto.idProyecto NOT IN (SELECT p.idProyecto FROM proyecto p, proyectoxestudiante pe WHERE p.idProyecto = pe.idProyecto AND pe.idUser = ?)', [$user->idUser])
-        ->where('proyecto.cupos_act', '<' , 'proyecto.cupos')
-        ->groupBy('proyecto.idProyecto', 'proyecto.nombre', 'proyecto.descripcion', 'proyecto.estado', 'proyecto.tipo_horas', 
-        'proyecto.cupos_act', 'proyecto.cupos', 'proyecto.horario', 'proyecto.encargado','proyecto.fecha_inicio','proyecto.fecha_fin',
-        'proyecto.estado_proyecto', 'proyecto.perfil_estudiante','proyecto.correo_encargado','proyecto.contraparte')
-        ->orderBy('proyecto.created_at', 'desc')->get();
+        ->where('proyecto.cupos_act', '<' , 'proyecto.cupos');
         
         $name = $request -> query('nombre');
         $tipo = $request -> query('tipo');
