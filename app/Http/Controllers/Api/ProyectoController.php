@@ -274,9 +274,10 @@ class ProyectoController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     
-    public function getAviableProjects(Request $request)
-    {
-        
+    public function getAviableProjects(Request $request){
+    
+        if(!$request->ajax()) return redirect('/home');
+
         $user = Auth()->user();
         $proyectos = Proyecto::join('proyectoxcarrera', 'proyecto.idProyecto', '=','proyectoxcarrera.idProyecto')
         ->leftJoin('proyectoxestudiante', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
@@ -289,9 +290,10 @@ class ProyectoController extends Controller
         ->where('proyectoxcarrera.limite_inf', '<=', $user->idPerfil)
         ->where('proyectoxcarrera.limite_sup', '>=', $user->idPerfil)
         ->where('proyectoxcarrera.idCarrera', '=', $user->idCarrera)
-        ->whereRaw('(proyectoxestudiante.idUser != ? OR proyectoxestudiante.idUser IS NULL)', [$user->idUser])
-        ->whereRaw('proyecto.idProyecto NOT IN (SELECT p.idProyecto FROM proyecto p, proyectoxestudiante pe WHERE p.idProyecto = pe.idProyecto AND pe.idUser = ?)', [$user->idUser])
-        ->where('proyecto.cupos_act', '<' , 'proyecto.cupos');
+        // ->where('proyecto.fecha_inicio', '>=', date('Y-m-d'))// Se mostraran los proyectos que aun no han iniciado deacuerdo a la fecha de consulta
+        ->whereRaw('(proyectoxestudiante.idUser !=' . $user->idUser . ' OR proyectoxestudiante.idUser IS NULL)')
+        ->whereRaw('proyecto.idProyecto NOT IN (SELECT p.idProyecto FROM proyecto p, proyectoxestudiante pe WHERE p.idProyecto = pe.idProyecto AND pe.idUser = ' . $user->idUser . ')')
+        ->whereRaw('proyecto.cupos_act < proyecto.cupos');
         
         $name = $request -> query('nombre');
         $tipo = $request -> query('tipo');
