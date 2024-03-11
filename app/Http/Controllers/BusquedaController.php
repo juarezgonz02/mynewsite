@@ -107,7 +107,7 @@ class BusquedaController extends Controller
             )
         ->with(['carreras']);
 
-        $proyectos = $proyectos->orderByRaw('proyecto.?',[$orden])->paginate(5);
+        $proyectos = $proyectos->orderByRaw('proyecto.'.$orden)->paginate(5);
         
         $cupos = ProyectoxEstudiante::select('idProyecto')->where('estado', '=', '0')->get();
         for($i = 0; $i < count($proyectos); $i++){
@@ -138,7 +138,7 @@ class BusquedaController extends Controller
             ->with(['carreras']);
         }
 
-        $proyectos = $proyectos->orderByRaw('proyecto.?',[$orden])->paginate(5);
+        $proyectos = $proyectos->orderByRaw('proyecto.'.$orden)->paginate(5);
         
         $cupos = ProyectoxEstudiante::select('idProyecto')->where('estado', '=', '0')->get();
         for($i = 0; $i < count($proyectos); $i++){
