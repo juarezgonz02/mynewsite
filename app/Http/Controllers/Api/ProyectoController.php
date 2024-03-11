@@ -40,39 +40,6 @@ class ProyectoController extends Controller
         }
     }
 
-    /**
-     * Responde con todos los proyectos disponibles para que estudiantes puedan aplicar
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getProyectosDisponibles(){
-        $user = Auth()->user();
-        $idPerfil = $user->idPerfil != null ? $user->idPerfil : 1;
-        $idCarrera = $user->idCarrera != null ? $user->idCarrera : Carrera::first()->idCarrera;
-
-        $proyectos = Proyecto::join('proyectoxcarrera', 'proyecto.idProyecto', '=','proyectoxcarrera.idProyecto')
-            ->leftJoin('proyectoxestudiante', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
-            ->select('proyecto.idProyecto', 'proyecto.nombre','proyecto.descripcion','proyecto.estado', 'proyecto.tipo_horas', 
-            'proyecto.cupos_act','proyecto.cupos', 'proyecto.horario', 'proyecto.encargado','proyecto.fecha_inicio',
-            'proyecto.fecha_fin','proyecto.estado_proyecto', 'proyecto.perfil_estudiante',
-            'proyecto.correo_encargado','proyecto.contraparte')
-            ->where('proyecto.estado','=','1')
-            // ->where('proyecto.fecha_inicio', '>=', date('Y-m-d'))
-            ->where('proyectoxcarrera.limite_inf', '<=', $idPerfil)
-            ->where('proyectoxcarrera.limite_sup', '>=', $idPerfil)
-            ->where('proyectoxcarrera.idCarrera', '=', $idCarrera)
-            ->whereRaw('(proyectoxestudiante.idUser !=' . $user->idUser . ' OR proyectoxestudiante.idUser IS NULL)')
-            ->whereRaw('proyecto.idProyecto NOT IN (SELECT p.idProyecto FROM proyecto p, proyectoxestudiante pe WHERE p.idProyecto = pe.idProyecto AND pe.idUser = ' . $user->idUser . ')')
-            ->whereRaw('proyecto.cupos_act < proyecto.cupos')
-            ->groupBy('proyecto.idProyecto', 'proyecto.nombre', 'proyecto.descripcion', 'proyecto.estado', 'proyecto.tipo_horas', 
-            'proyecto.cupos_act', 'proyecto.cupos', 'proyecto.horario', 'proyecto.encargado','proyecto.fecha_inicio','proyecto.fecha_fin',
-            'proyecto.estado_proyecto', 'proyecto.perfil_estudiante','proyecto.correo_encargado','proyecto.contraparte')
-            ->orderBy('proyecto.created_at', 'desc')->get();
-
-        $proyectos->load(['carreras']);
-
-        return response()->json($proyectos);
-    }
 
     /**
      * Retorna todos los proyectos en los que el estudiante autenticado aplicó
@@ -98,9 +65,8 @@ class ProyectoController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function getHistorialDeProyectos() {
-                                        // where estado = 0 or estado_proyecto = 'Cancelado' or estado_proyecto = 'Finalizado'
+        // where estado = 0 or estado_proyecto = 'Cancelado' or estado_proyecto = 'Finalizado'
         $proyectos = Proyecto::where('estado','=','0')->orWhere('estado_proyecto', '=', 'Cancelado')->orWhere('estado_proyecto', '=', 'Finalizado')->orderByRaw('created_at DESC')->paginate(5);
-
 
         return response()->json($proyectos);
     }
@@ -302,10 +268,16 @@ class ProyectoController extends Controller
         
     }
 
+    /**
+     * Responde con todos los proyectos disponibles para que estudiantes puedan aplicar
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    
+    public function getAviableProjects(Request $request){
+    
+        if(!$request->ajax()) return redirect('/home');
 
-    public function getAviableProjects(Request $request)
-    {
-        
         $user = Auth()->user();
         $proyectos = Proyecto::join('proyectoxcarrera', 'proyecto.idProyecto', '=','proyectoxcarrera.idProyecto')
         ->leftJoin('proyectoxestudiante', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
@@ -361,7 +333,7 @@ class ProyectoController extends Controller
         ->leftjoin('carrera', 'carrera.idCarrera', '=', 'proyectoxcarrera.idCarrera')
         ->where('carrera.idFacultad', '=', $nfacultad)
         ->where('proyecto.estado', '=', '1')
-        ->where('proyecto.nombre', 'like', '%'.$nombre.'%')
+        ->where('proyecto.nombre', 'like', $nombre.'%')
         ->select("proyecto.*", "carrera.idFacultad")
         ->groupBy(
             'proyecto.nombre',
@@ -413,7 +385,7 @@ class ProyectoController extends Controller
         }else{
             $proyectos = Proyecto::rightJoin('proyectoxcarrera', 'proyecto.idProyecto', '=', 'proyectoxcarrera.idProyecto')
             ->leftJoin('carrera', 'carrera.idCarrera', '=', 'proyectoxcarrera.idCarrera')
-            ->select("proyecto.*", "carrera.idCarrera")->where('carrera.idCarrera', '=', $ncarrera)->where('proyecto.nombre', 'like', '%'.$nombre.'%')
+            ->select("proyecto.*", "carrera.idCarrera")->where('carrera.idCarrera', '=', $ncarrera)->where('proyecto.nombre', 'like', $nombre.'%')
             ->with(['carreras']);
         }
 

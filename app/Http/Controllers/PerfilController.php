@@ -106,7 +106,7 @@ class PerfilController extends Controller
 
         try {
             
-            $idEstudiante = $request->idUsuario;
+            $idEstudiante = Auth()->user()->idUser;
             
             $estudiante = User::where('idUser', '=', $idEstudiante)->firstOrFail();
                 $estudiante->idPerfil = $request->idPerfil;

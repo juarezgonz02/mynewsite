@@ -54,48 +54,52 @@ class ProyectoxEstudianteController extends Controller{
 
     public function aceptarRechazarEstudiante(Request $request){
         try {
-            $idProyecto = $request->idProyecto;
-            $idUser = $request->idUser;
-    
-            // $proXEst = ProyectoxEstudiante::where('proyectoxestudiante.idProyecto', '=', $idProyecto)
-            // ->where('proyectoxestudiante.idUser', '=', $idUser)->first();
-            // $proXEst->estado = 1;
-            // $proXEst->save();
-    
-            // $allProXEst = ProyectoxEstudiante::where('proyectoxestudiante.idUser', '=', $idUser)->get();
-            // foreach($allProXEst as $proXEst){
-            //     if($proXEst->idProyecto != $idProyecto){
-            //         $proXEst->estado = 2;
-            //         $proXEst->save();
-            //     }
-            // }
-    
-            
-            
-            
-            // Eliminando el resto de solicitudes "pendientes"(estado = 0) del estudiante
-    
-            $allProyectosByEstudiante = ProyectoxEstudiante::where('proyectoxestudiante.idUser', '=', $idUser)
-            ->where('proyectoxestudiante.idProyecto','!=', $idProyecto)
-            ->where('proyectoxestudiante.estado','=', 0)->get();
 
-            
-            foreach($allProyectosByEstudiante as $p){
-                if($p->idProyecto != $idProyecto){
-                    $p->delete();
+            DB::transaction(function () use ($request) {
+
+                $idProyecto = $request->idProyecto;
+                $idUser = $request->idUser;
+        
+                // $proXEst = ProyectoxEstudiante::where('proyectoxestudiante.idProyecto', '=', $idProyecto)
+                // ->where('proyectoxestudiante.idUser', '=', $idUser)->first();
+                // $proXEst->estado = 1;
+                // $proXEst->save();
+        
+                // $allProXEst = ProyectoxEstudiante::where('proyectoxestudiante.idUser', '=', $idUser)->get();
+                // foreach($allProXEst as $proXEst){
+                //     if($proXEst->idProyecto != $idProyecto){
+                //         $proXEst->estado = 2;
+                //         $proXEst->save();
+                //     }
+                // }
+        
+                
+                
+                
+                // Eliminando el resto de solicitudes "pendientes"(estado = 0) del estudiante
+        
+                $allProyectosByEstudiante = ProyectoxEstudiante::where('proyectoxestudiante.idUser', '=', $idUser)
+                ->where('proyectoxestudiante.idProyecto','!=', $idProyecto)
+                ->where('proyectoxestudiante.estado','=', 0)->get();
+
+                
+                foreach($allProyectosByEstudiante as $p){
+                    if($p->idProyecto != $idProyecto){
+                        $p->delete();
+                    }
                 }
-            }
-    
-            // Actualizar estado de la solicitud "Aceptado"(estado = 1 )
-            $proyectoXestudiantes = ProyectoxEstudiante::where('proyectoxestudiante.idUser', '=', $idUser)
-            ->where('proyectoxestudiante.idProyecto', '=', $idProyecto)->first();
-            $proyectoXestudiantes->estado = 1;
-            $proyectoXestudiantes->save();
+        
+                // Actualizar estado de la solicitud "Aceptado"(estado = 1 )
+                $proyectoXestudiantes = ProyectoxEstudiante::where('proyectoxestudiante.idUser', '=', $idUser)
+                ->where('proyectoxestudiante.idProyecto', '=', $idProyecto)->first();
+                $proyectoXestudiantes->estado = 1;
+                $proyectoXestudiantes->save();
 
-            // Actualiazar cupo de proyecto
-            $restarCupo = Proyecto::where('proyecto.idProyecto', '=', $idProyecto)->first();
-            $restarCupo->cupos_act = $restarCupo->cupos_act + 1;
-            $restarCupo->save();
+                // Actualiazar cupo de proyecto
+                $restarCupo = Proyecto::where('proyecto.idProyecto', '=', $idProyecto)->first();
+                $restarCupo->cupos_act = $restarCupo->cupos_act + 1;
+                $restarCupo->save();
+            });
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Error al actualizar proyecto']);
         }
@@ -135,7 +139,7 @@ class ProyectoxEstudianteController extends Controller{
     public function aplicar(Request $request){
         $pXe = new ProyectoxEstudiante();
         $pXe->idProyecto = $request->idProyecto;
-        $pXe->idUser = $request->idUser;
+        $pXe->idUser = Auth()->user()->idUser;
         $pXe->estado = $request->estado;
         $pXe->save();
 
@@ -147,7 +151,7 @@ class ProyectoxEstudianteController extends Controller{
         ->join('proyecto', 'proyecto.idProyecto','=', 'proyectoxestudiante.idProyecto')
         ->join('carrera', 'carrera.idCarrera', '=', 'users.idCarrera')
         ->select('proyecto.correo_encargado', 'proyecto.encargado', 'proyecto.nombre', 'users.nombres', 'users.apellidos', 'users.correo', 'carrera.nombre AS n_carrera')
-        ->where('users.idUser', '=', $request->idUser)
+        ->where('users.idUser', '=', $user->idUser)
         ->where('proyecto.idProyecto','=', $request->idProyecto)->first();
         $this->sendEmail($proyecto, 1);
 
@@ -322,7 +326,6 @@ class ProyectoxEstudianteController extends Controller{
     
     private function obtener_solicitudes_por_carrera(string $nombre, string $ncarrera)
     {
-        $solicitudes;
 
         if($ncarrera == "-1" || $ncarrera == "-2"){
             $solicitudes = ProyectoxEstudiante::leftJoin('proyecto', 'proyecto.idProyecto', '=', 'proyectoxestudiante.idProyecto')

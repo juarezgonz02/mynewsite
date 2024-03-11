@@ -16,7 +16,7 @@ class EstudianteController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function getAllStudents() {
-        $estudiantes = User::where('idRol', 2)->with(['rol', 'perfil', 'carrera.facultad'])->get();
+        $estudiantes = User::where('idRol', 2)->select("nombres", "apellidos", "genero", "correo", "idRol", "idPerfil", "idCarrera" )->with(['rol', 'perfil', 'carrera.facultad'])->get();
 
         return response()->json($estudiantes);
     }
@@ -40,7 +40,6 @@ class EstudianteController extends Controller
      */
     public function updateEstudiante(Request $request) {
         $validator = Validator::make($request->all(), [
-            'idUsuario' => 'required',
             'correo'    => 'required|string',
             'carrera'   => 'required',
             'perfil'    => 'required',
@@ -50,7 +49,7 @@ class EstudianteController extends Controller
             return response()->json($validator->messages(), 400);
         }
 
-        $estudiante = User::where('idUser', '=', $request->idUsuario)->firstOrFail();
+        $estudiante = User::where('correo', '=', $request->correo)->firstOrFail();
             $estudiante->correo = $request->correo;
             $estudiante->idCarrera = $request->carrera;
             $estudiante->idPerfil = $request->perfil;

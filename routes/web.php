@@ -27,7 +27,9 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/contra_olvidada_correo', 'Auth\ForgotPasswordController@enviarCorreoContraOlvidada')->name('olvido_contrasenia'); 
 
     Route::get('/cambiar_contra_olvidada/{correo}', 'Auth\ForgotPasswordController@formularioOlvidoContrsenia');  
-    Route::post('/cambiar_contra_olvidada/{correo}', 'Auth\ForgotPasswordController@cambiarContraseniaOlvidada');
+    Route::post('/cambiar_contra_olvidada', 'Auth\ForgotPasswordController@cambiarClave');  
+    
+    //Route::post('/cambiar_contra_olvidada/{correo}', 'Auth\ForgotPasswordController@cambiarContraseniaOlvidada');
 });
 
 
