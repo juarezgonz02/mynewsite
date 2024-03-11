@@ -276,8 +276,6 @@ class ProyectoController extends Controller
     
     public function getAviableProjects(Request $request){
     
-        if(!$request->ajax()) return redirect('/home');
-
         $user = Auth()->user();
         $proyectos = Proyecto::join('proyectoxcarrera', 'proyecto.idProyecto', '=','proyectoxcarrera.idProyecto')
         ->leftJoin('proyectoxestudiante', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
