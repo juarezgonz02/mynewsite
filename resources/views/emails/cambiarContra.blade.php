@@ -16,12 +16,6 @@
                 <strong>{{ $token }}</strong>
                 para crear una nueva.
             </p>
-        @else
-            <p>
-                se solicitó un cambio de contraseña debido a que fue olvidada, por favor haga
-                <a href="{{ url('cambiar_contra_olvidada/'.$user->correo) }}"> click aquí</a>
-                para crear una nueva.
-            </p>
         @endif
 
         <p>

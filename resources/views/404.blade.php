@@ -7,8 +7,11 @@
     <script>
         
     </script>
-    
-</head>
+    <meta name="description" content="Centro de Servicio Social | UCA">
+    <meta name="author" content="">
+    <meta name="keyword" content="Sistema de inscripción de proyectos CSS UCA">
+    <title> Oops, 404! </title>
+</head>-
 <main>
   <div class="container">
       <div style="text-align: center;">
