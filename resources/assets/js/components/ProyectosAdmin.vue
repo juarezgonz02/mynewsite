@@ -40,6 +40,7 @@
                                     <select class="custom-select"  v-model="ordenandoPor" @change="bindDataByFilters(0)">
                                         <option value="" disabled selected>Ordenar por: </option>
                                         <option value="recientes" >Reciente</option>
+                                        <option value="antiguos" >Antiguos</option>
                                         <option value="menos_cupos"> Menos cupos libres </option>
                                         <option value="mas_cupos"> Más cupos libres </option>
                                         <option value="n_solicitudes"> Número solictudes  </option>
