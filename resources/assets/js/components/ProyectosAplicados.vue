@@ -18,24 +18,27 @@
                                     <th style="text-align: center; width: 10%;">Contraparte</th>
                                     <th style="text-align: center; width: 10%;">Proyecto</th>
                                     <th style="text-align: center;" id="disappear">Perfil estudiante</th>
-                                    <th style="width: 10%; text-align: center;">Cupos</th>
+                                    <th style="width: 10%; text-align: center;" id="disappear">Cupos</th>
                                     <th style="width: 10%; text-align: center;">Estado</th>
                                     <th style="width: 10%; text-align: center;">Acciones</th>
                                 </tr>
                         </thead>
                         <tbody>
                             <tr v-for="proyecto in arrayProyectos" :key="proyecto.idProyecto">
-                                <td v-text="proyecto.contraparte" data-toggle="modal" data-target="#modal-info"></td>
-                                <td v-text="proyecto.nombre" data-toggle="modal" data-target="#modal-info"></td>
-                                <td v-text="proyecto.perfil_estudiante" data-toggle="modal" data-target="#modal-info"
+                                <td v-text="proyecto.contraparte" data-toggle="modal" data-target="#modal-info"
                                     @click="abrirModal('info', proyecto)"></td>
+                                <td v-text="proyecto.nombre" data-toggle="modal" data-target="#modal-info"
+                                    @click="abrirModal('info', proyecto)"></td>
+                                <td v-text="proyecto.perfil_estudiante" data-toggle="modal" data-target="#modal-info"
+                                    @click="abrirModal('info', proyecto)" id="disappear"></td>
                                 <td v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`" data-toggle="modal"
                                     data-target="#modal-info" @click="abrirModal('info', proyecto)"
-                                    style="text-align: center;"></td>
+                                    style="text-align: center;" id="disappear"></td>
                                 <td>
                                     <div v-if="proyecto.estadoPxe === 0" style="margin: 8px -9px 8px -5px;">
                                         <div
-                                            style="display: flex; flex-direction: row; justify-content: center; margin: 0px 10px;">
+                                            style="display: flex; flex-direction: row; justify-content: center; margin: 0px 10px;"
+                                            @click="abrirModal('info', proyecto)">
                                             <span  class="badge badge-info" style="border-radius: 5px;">
                                                 <p id="estadoap" style="display: inline; font-weight: 300; font-size: 1.0rem; ">
                                                     <i class="icon-check"></i>
@@ -46,7 +49,7 @@
                                     <div v-if="proyecto.estadoPxe === 1" style="margin: 8px -9px 8px -5px;">
                                         <div
                                             style="display: flex; flex-direction: row; justify-content: center; margin: 0px 10px;">
-                                            <span  class="badge badge-success" style="border-radius: 5px;">
+                                            <span  class="badge badge-success" style="border-radius: 5px;" @click="abrirModal('info', proyecto)">
                                                 <p id="estadoap" style="display: inline; font-weight: 300; font-size: 1.0rem; ">
                                                     <i class="icon-check"></i>
                                                     ACEPTADO
