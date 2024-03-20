@@ -21,6 +21,7 @@ return [
     'ya_verificado' => 'El carnet ingresado ya existe en el registro.',
     'ya_cambio_contra' => 'Ya cambió la contraseña hoy, inténtelo de nuevo otro día. Este cambio se puede realizar una vez por día.',
     'cuenta_inexistente' => 'El correo ingresado no existe en el registro',
-    'carnet_invalido' => 'El carnet no puede exceder el año actual'
+    'carnet_invalido' => 'El carnet no puede exceder el año actual',
+    'recaptcha' => 'Demuestra que no eres un robot'
 
 ];

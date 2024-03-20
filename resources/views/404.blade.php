@@ -11,6 +11,8 @@
     <meta name="author" content="">
     <meta name="keyword" content="Sistema de inscripción de proyectos CSS UCA">
     <title> Oops, 404! </title>
+    <link rel="shortcut icon" type="image/jpg" href=" {{url('/').'/img/logo-uca.png'}}">
+
 </head>-
 <main>
   <div class="container">

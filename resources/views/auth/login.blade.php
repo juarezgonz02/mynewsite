@@ -21,7 +21,7 @@
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/login.css" rel="stylesheet">
   <title> Centro de Servicio Social </title> 
-  <link rel="icon" type="image/x-icon" href=" {{url('/').'/img/UCA.6b065e25.png'}}">
+  <link rel="shortcut icon" type="image/jpg" href=" {{url('/').'/img/logo-uca.png'}}">
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
@@ -64,7 +64,7 @@
                       {!! app('captcha')->display() !!}
                       @if ($errors->has('g-recaptcha-response'))
                       <span style="color: red">
-                        {{ $errors->first('g-recaptcha-response') }}
+                        {!!$errors->first('g-recaptcha-response','<span style="color: red">Demuestra que no eres un robot!</span>')!!}
                       </span>
                       @else
                       <span style="visibility: hidden;">.</span>

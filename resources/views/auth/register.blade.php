@@ -27,6 +27,8 @@
   <script src="js/jquery.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <title> Registrate </title>
+  <link rel="shortcut icon" type="image/jpg" href=" {{url('/').'/img/logo-uca.png'}}">
+
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <!-- <link href="css/plantilla.css" rel="stylesheet"> -->
 </head>
