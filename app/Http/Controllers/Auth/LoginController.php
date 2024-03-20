@@ -32,7 +32,7 @@ class LoginController extends Controller
                 }
                 else{
                     return back()
-                    ->withErrors(['password' => trans('auth.failedPass')])
+                    ->withErrors(['contraseña' => trans('auth.failedPass')])
                     ->withInput(request(['carnet']));
                 }
             }
@@ -71,17 +71,21 @@ class LoginController extends Controller
         
     }
     protected function validateLogin(Request $request){
-        $this->validate($request, [
+        $this->validate($request, $rules = [
             'carnet' => 'required|numeric|digits:8',
-            'contraseña' => 'required|string',
+            'contraseña' => 'required|string|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^#])[A-Za-z\d@$!%*?&^#]{8,}$/',
             'g-recaptcha-response' => 'required|captcha'
+        ], $messages = [
+            'g-recaptcha-response' => trans('auth.recaptcha'),
         ]);
     }
 
     protected function validateAdmin(Request $request){
-        $this->validate($request, [
-            'contraseña' => 'required|string',
+        $this->validate($request, $rules = [
+            'contraseña' => 'required|string|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^#])[A-Za-z\d@$!%*?&^#]{8,}$/',
             'g-recaptcha-response' => 'required|captcha'
+        ], $messages = [
+            'g-recaptcha-response' => trans('auth.recaptcha'),
         ]);
     }
 
