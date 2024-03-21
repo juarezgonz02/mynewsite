@@ -38,7 +38,7 @@ class ForgotPasswordController extends Controller
                 return view('auth.verificarCuenta')->with(['user'=>$user]);
             }
             else{
-                return redirect('/');
+                return redirect('/')->withErrors(['verified'=>'Cuenta ya verificada']);
             }
         }catch(\Throwable $e){
             return redirect('/');
@@ -58,7 +58,7 @@ class ForgotPasswordController extends Controller
             }else{
                 $user->update(['password'=> $request->contraseña, 'verificado' => 1]);
             }
-            return redirect('/');
+            return redirect('/')->withErrors(['verified'=>'Se verificó con exito!!']);
         }catch(\Throwable $e){
             return back()->withErrors(['error_token' => trans('auth.token_error')]);
         }

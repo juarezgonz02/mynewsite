@@ -23,6 +23,13 @@
   <title> Centro de Servicio Social </title> 
   <link rel="shortcut icon" type="image/jpg" href=" {{url('/').'/img/logo-uca.png'}}">
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <style>
+    .message_box{
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid blue;
+    }
+  </style>
 </head>
 
 <body>
@@ -35,6 +42,11 @@
               <div class="col-md-9 col-lg-8 mx-auto">
                 <img class="mx-auto d-block" src="img/UCA.6b065e25.png">
                 <h3 class="login-heading mb-5 text-center font-weight-bold">Centro de Servicio Social</h3>
+                @if($errors->first('verified'))
+                {!!$errors->first('verified','<div class="message_box"> <p style="color: blue">:message</p></div>')!!}
+                @else
+                <span style="visibility: hidden;">.</span>
+                @endif
                 <form class="was-validated" method="POST" action="{{ route('login') }}">
                   {{ csrf_field() }}
                   <div class="form-group">

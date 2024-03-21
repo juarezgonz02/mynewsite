@@ -65,6 +65,7 @@
                                     -Al menos 1 letra mayúscula. <br>
                                     -Al menos 1 caracter especial. <br>
                                     -Al menos 1 número. <br>
+                                    -Sin espacios. <br>  
                             </span>
                             <label for="password_confirm" class="label-form">Confirmar contraseña</label>
                             <input class="form-control" type="password" name="confirmar" id="confirmar">

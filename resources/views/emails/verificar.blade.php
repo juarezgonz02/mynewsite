@@ -15,6 +15,9 @@
                 <p style="color:red; font-size: 2em" > {{$user -> utoken -> token}}</p>
             <br>
         </p><br>
+        <p> Puede verificar su cuenta a traves de este enlace: 
+            <b style="font-size: 1.1em"><a href="{{ url('verificar_usuario/'.$user->correo) }}"> Click aquí </a></b>
+        </p>
         <p>
             Atentamente, Centro de Servicio Social.
         </p><br><br>

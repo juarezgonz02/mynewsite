@@ -44,6 +44,7 @@
                             -Al menos 1 letra mayúscula. <br>
                             -Al menos 1 caracter especial. <br>
                             -Al menos 1 número. <br>
+                            -Sin espacios. <br>  
                     </span>
                     <label id="lpassword" for="password" class="label-form">Contraseña</label>
                     <input class="form-control" type="password" name="contraseña" id="contraseña">
