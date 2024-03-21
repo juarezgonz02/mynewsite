@@ -100,23 +100,21 @@ class ProyectoxEstudianteController extends Controller{
                 $restarCupo->cupos_act = $restarCupo->cupos_act + 1;
                 $restarCupo->save();
             });
+            
+            $mailData = User::join('proyectoxestudiante', 'users.idUser', '=', 'proyectoxestudiante.idUser')
+            ->join('proyecto', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
+            ->select('users.nombres', 'users.apellidos', 'users.correo','proyecto.encargado','proyecto.nombre')
+            ->where('proyectoxestudiante.idUser', '=', $idUser)
+            ->where('proyectoxestudiante.idProyecto', '=', $idProyecto)
+            ->first();
+            
+            $this->sendEmailAceptadoRechazado($mailData, $estado);
+            
+            return response()->json(['message' => 'Proyecto actualizado']);
+            
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Error al actualizar proyecto']);
         }
-
-
-
-
-        // $mailData = User::join('proyectoxestudiante', 'users.idUser', '=', 'proyectoxestudiante.idUser')
-        // ->join('proyecto', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
-        // ->select('users.nombres', 'users.apellidos', 'users.correo','proyecto.encargado','proyecto.nombre')
-        // ->where('proyectoxestudiante.idUser', '=', $idUser)
-        // ->where('proyectoxestudiante.idProyecto', '=', $idProyecto)
-        // ->first();
-
-        // $this->sendEmailAceptadoRechazado($mailData, $estado);
-
-        return response()->json(['message' => 'Proyecto actualizado']);
     }
 
     public function rechazarEstudiante(Request $request){
@@ -133,6 +131,15 @@ class ProyectoxEstudianteController extends Controller{
             $solicitudProyecto->estado = 2;
             $solicitudProyecto->save();
         }
+
+        $mailData = User::join('proyectoxestudiante', 'users.idUser', '=', 'proyectoxestudiante.idUser')
+            ->join('proyecto', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
+            ->select('users.nombres', 'users.apellidos', 'users.correo','proyecto.encargado','proyecto.nombre')
+            ->where('proyectoxestudiante.idUser', '=', $idUser)
+            ->where('proyectoxestudiante.idProyecto', '=', $idProyecto)
+            ->first();
+            
+            $this->sendEmailAceptadoRechazado($mailData, $estado);
         
     }
 
