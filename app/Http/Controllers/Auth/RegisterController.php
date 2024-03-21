@@ -5,15 +5,21 @@ namespace App\Http\Controllers\Auth;
 use App\User;
 use App\Estudiante;
 use App\Facultad;
+use App\PasswordResetToken;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Mail;
 use App\Rules\Captcha;
 use Swift_TransportException;
+
 class RegisterController extends Controller
 {
     use RegistersUsers;
@@ -78,11 +84,17 @@ class RegisterController extends Controller
                 'api_token' => $this->generarApiToken()
             ]);
             $user = User::whereCorreo($email)->first();
+            $token = PasswordResetToken::create([
+                'idUser' => $user->idUser,
+                'token' => strtoupper(Str::random(5)),
+                'expires_at' => Carbon::now(),
+            ]);
+            $user -> utoken = $token; 
             if(!$this->sendEmail($user)){
                 $user->delete();
                 return (500);
             }
-            return redirect('/');
+            return redirect('/verificar_usuario/'.$email);
         }
         elseif($user != null && $user->verificado == 0){
             return back()

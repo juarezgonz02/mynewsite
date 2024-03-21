@@ -32,6 +32,13 @@
 
                     <label id="luser" for="user" class="label-form">Usuario</label>
                     <input class="form-control" type="text" name="user" id="user" value="{{$user->correo}}" readonly>
+                    <label id="luser" for="user" class="label-form">Código enviado a su correo</label>
+                    <input class="form-control" type="text" name="token" id="token" >
+                    @if($errors->first('error_token'))
+                        {!!$errors->first('error_token','<span style="color: red;">:message</span>')!!}
+                    @else
+                        <span style="visibility: hidden;">.</span>
+                    @endif
                     <span style="margin-top:8px;color:red"> <b>La contraseña debe de cumplir los siguientes requisitos:</b>    <br>
                             -Mínimo 8 caracteres. <br>
                             -Al menos 1 letra mayúscula. <br>

@@ -12,10 +12,9 @@
 
         @if(isset($token))
             <p>
-                se solicitó un cambio de contraseña debido a que fue olvidada, por favor ingrese el siguiente código
-                <strong>{{ $token }}</strong>
-                para crear una nueva.
+                se solicitó un cambio de contraseña debido a que fue olvidada, por favor ingrese el siguiente código para crear una nueva.
             </p>
+            <p style="color: red; font-size: 2em" >{{ $token }}</p>
         @endif
 
         <p>

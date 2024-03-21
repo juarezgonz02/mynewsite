@@ -47,11 +47,21 @@ class ForgotPasswordController extends Controller
 
     //se verifica la cuenta y redirige al login
     public function verificarUsuario(Request $request, $email){
-        $this->validatePassword($request);
+        try{
 
-        $user = User::whereCorreo($email)->first();
-        $user->update(['password'=> $request->contraseña, 'verificado' => 1]);
-        return redirect('/');
+            $this->validatePassword($request);
+            $token = PasswordResetToken::where('token', strtoupper($request->token))->firstOrFail();
+            $user = User::whereCorreo($email)->first();
+            
+            if($token -> idUser != $user -> idUser){
+                return back()->withErrors(['error_token' => trans('auth.token_error')]);
+            }else{
+                $user->update(['password'=> $request->contraseña, 'verificado' => 1]);
+            }
+            return redirect('/');
+        }catch(\Throwable $e){
+            return back()->withErrors(['error_token' => trans('auth.token_error')]);
+        }
     }
 
     //Se muestra el formulario para solicitar nueva contraseña
@@ -164,7 +174,7 @@ class ForgotPasswordController extends Controller
 
         try{
 
-            $token = PasswordResetToken::where('token', $request->token)->firstOrFail();
+            $token = PasswordResetToken::where('token',  strtoupper($request->token))->firstOrFail();
             if(Carbon::now() > $token->expires_at) {
                 return back()->withErrors([
                     'error' => 'Token venció'
@@ -224,6 +234,7 @@ class ForgotPasswordController extends Controller
 
     protected function validatePassword(Request $request){
         $this->validate($request, [
+            'token' => 'required|string|min:5',
             'contraseña' => 'required|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^#])[A-Za-z\d@$!%*?&^#]{8,}$/',
             'confirmar' => 'required|same:contraseña'
         ]);

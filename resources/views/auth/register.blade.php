@@ -140,7 +140,7 @@
                   {!! app('captcha')->display() !!}
                   @if ($errors->has('g-recaptcha-response'))
                   <span style="color: red">
-                    {{ $errors->first('g-recaptcha-response') }}
+                        Demuestra que no eres un robot!
                   </span>
                   @else
                   <span style="visibility: hidden;">.</span>
