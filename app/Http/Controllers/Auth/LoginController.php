@@ -20,20 +20,27 @@ class LoginController extends Controller
             $user = User::whereCorreo($request->carnet)->first();
             if($user == null){
                 return back()
-                ->withErrors(['email_inexistente' => trans('auth.cuenta_inexistente')])
+                ->withErrors(['email_inexistente' => trans('auth.carnet_inexistente')])
                 ->withInput(request(['carnet']));
             }
             else{
                 $this->validateAdmin($request);
-                $email = $request->carnet;
-                $psw = $request->contraseña;
-                if(Auth::attempt(['correo' => $email, 'password' => $psw])){
-                    return redirect()->intended('home');
+                if($user->verificado == 0){
+                    return back()
+                    ->withErrors(['no_verified' => trans('auth.aun_no_verificado')])
+                    ->withInput(request(['carnet']));
                 }
                 else{
-                    return back()
-                    ->withErrors(['contraseña' => trans('auth.failedPass')])
-                    ->withInput(request(['carnet']));
+                    $email = $request->carnet;
+                    $psw = $request->contraseña;
+                    if(Auth::attempt(['correo' => $email, 'password' => $psw])){
+                        return redirect()->intended('home');
+                    }
+                    else{
+                        return back()
+                        ->withErrors(['contraseña' => trans('auth.failedPass')])
+                        ->withInput(request(['carnet']));
+                    }
                 }
             }
             
@@ -52,7 +59,7 @@ class LoginController extends Controller
 
                 if($user->verificado == 0){
                     return back()
-                    ->withErrors(['email_inexistente' => trans('auth.aun_no_verificado')])
+                    ->withErrors(['no_verified' => trans('auth.aun_no_verificado')])
                     ->withInput(request(['carnet']));
                 }
                 else{
@@ -73,7 +80,7 @@ class LoginController extends Controller
     protected function validateLogin(Request $request){
         $this->validate($request, $rules = [
             'carnet' => 'required|numeric|digits:8',
-            'contraseña' => 'required|string|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^#])[A-Za-z\d@$!%*?&^#]{8,}$/',
+            'contraseña' => 'required|string',
             'g-recaptcha-response' => 'required|captcha'
         ], $messages = [
             'g-recaptcha-response' => trans('auth.recaptcha'),
@@ -82,7 +89,7 @@ class LoginController extends Controller
 
     protected function validateAdmin(Request $request){
         $this->validate($request, $rules = [
-            'contraseña' => 'required|string|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^#])[A-Za-z\d@$!%*?&^#]{8,}$/',
+            'contraseña' => 'required|string',
             'g-recaptcha-response' => 'required|captcha'
         ], $messages = [
             'g-recaptcha-response' => trans('auth.recaptcha'),

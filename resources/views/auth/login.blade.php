@@ -53,7 +53,10 @@
                     @if($errors->first('contraseña'))
                     {!!$errors->first('contraseña','<span style="color: red">:message</span>')!!}
                     @elseif($errors->first('email_inexistente'))
-                    {!!$errors->first('email_inexistente','<span style="color: red">:message</span>')!!}
+                    {!!$errors->first('email_inexistente','<span style="color: red">:message </span>')!!}
+                    <a href="{{ url('/register_form') }}">Puedes registrar tu cuenta aqui</a>
+                    @elseif($errors->first('no_verified'))
+                    {!!$errors->first('no_verified','<span style="color: red">:message </span>')!!}
                     @else
                     <span style="visibility: hidden;">.</span>
                     @endif
