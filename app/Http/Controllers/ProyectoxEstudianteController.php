@@ -59,7 +59,7 @@ class ProyectoxEstudianteController extends Controller{
 
                 $idProyecto = $request->idProyecto;
                 $idUser = $request->idUser;
-        
+                $estado = 1;
                 // $proXEst = ProyectoxEstudiante::where('proyectoxestudiante.idProyecto', '=', $idProyecto)
                 // ->where('proyectoxestudiante.idUser', '=', $idUser)->first();
                 // $proXEst->estado = 1;
@@ -99,18 +99,18 @@ class ProyectoxEstudianteController extends Controller{
                 $restarCupo = Proyecto::where('proyecto.idProyecto', '=', $idProyecto)->first();
                 $restarCupo->cupos_act = $restarCupo->cupos_act + 1;
                 $restarCupo->save();
+                
+                $mailData = User::join('proyectoxestudiante', 'users.idUser', '=', 'proyectoxestudiante.idUser')
+                ->join('proyecto', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
+                ->select('users.nombres', 'users.apellidos', 'users.correo','proyecto.encargado','proyecto.nombre')
+                ->where('proyectoxestudiante.idUser', '=', $idUser)
+                ->where('proyectoxestudiante.idProyecto', '=', $idProyecto)
+                ->first();
+                
+                $this->sendEmailAceptadoRechazado($mailData, $estado);
+                
+                return response()->json(['message' => 'Proyecto actualizado']);
             });
-            
-            $mailData = User::join('proyectoxestudiante', 'users.idUser', '=', 'proyectoxestudiante.idUser')
-            ->join('proyecto', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
-            ->select('users.nombres', 'users.apellidos', 'users.correo','proyecto.encargado','proyecto.nombre')
-            ->where('proyectoxestudiante.idUser', '=', $idUser)
-            ->where('proyectoxestudiante.idProyecto', '=', $idProyecto)
-            ->first();
-            
-            $this->sendEmailAceptadoRechazado($mailData, $estado);
-            
-            return response()->json(['message' => 'Proyecto actualizado']);
             
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Error al actualizar proyecto']);
@@ -121,7 +121,7 @@ class ProyectoxEstudianteController extends Controller{
         if(!$request->ajax()) return redirect('/home');
         $idProyecto = $request->idProyecto;
         $idUser = $request->idUser;
-
+        $estado = 2;
         
         $solicitudProyecto = ProyectoxEstudiante::where('proyectoxestudiante.idProyecto', '=', $idProyecto)
         ->where('proyectoxestudiante.idUser', '=', $idUser)->first();
