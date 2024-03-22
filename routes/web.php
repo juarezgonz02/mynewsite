@@ -35,9 +35,7 @@ Route::middleware(['guest'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     
-    Route::get('/home', function () {
-        return view('home/dashboard');
-    })->name('main');
+    Route::get('/home', 'Auth\LoginController@home')->name('main');
     
     Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
     Route::get('/get_user', 'UserController@getUser');

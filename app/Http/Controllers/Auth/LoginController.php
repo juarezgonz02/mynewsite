@@ -10,6 +10,10 @@ use App\Rules\Captcha;
 
 class LoginController extends Controller
 {
+    public function home () {
+        return view('home/dashboard');
+    }
+    
     public function showLoginForm(){
         return view('auth.login');
     }
