@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class ApiAuthController extends Controller
 {
@@ -73,6 +74,9 @@ class ApiAuthController extends Controller
             return response()->json($validator->messages(), 400);
         }
 
+        // Iniando transaccion
+        DB::beginTransaction();
+
         $idPerfil = 1;
         if(str_contains($request->correo, '@uca.edu.sv')) {
             $idPerfil = $this->determinarPerfilDeAlumno($request->correo);
@@ -94,16 +98,38 @@ class ApiAuthController extends Controller
             'api_token'             => $this->generarApiToken()
         ]);
 
-        Mail::send(
-            'emails.verificar',
-            ['user' => $usuario,],
-            function($message) use ($usuario){
-                $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                $message->to($usuario->correo);
-                $message->subject("Solicitud de creación de cuenta.");
-            }
-        );
+        // Generando tokens
+            $token = PasswordResetToken::create([
+                'idUser' => $usuario->idUser,
+                'token' => strtoupper(Str::random(5)),
+                'expires_at' => Carbon::now(),
+            ]);
+            $usuario -> utoken = $token; 
 
+
+
+        try{
+            Mail::send(
+                'emails.verificar',
+                ['user' => $usuario,],
+                function($message) use ($usuario){
+                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+                    $message->to($usuario->correo);
+                    $message->subject("Solicitud de creación de cuenta.");
+                }
+            );
+
+        }
+        catch (\Throwable $th) {
+            
+            DB::rollback();
+            
+            return response()->json([
+                'message' => 'Error al enviar correo de verificación.',
+            ], 500);
+        }
+        
+        DB::commit();
         return response()->json([
             'user' => $usuario,
         ], 200);
