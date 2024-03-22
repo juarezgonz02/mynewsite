@@ -209,7 +209,7 @@ class ForgotPasswordController extends Controller
             ]);
 
             $token -> update([
-                'expires_at' => Carbon::now()
+                'expires_at' => Carbon::now()->addMinutes(1)
             ]);
             
             return back()->with([
