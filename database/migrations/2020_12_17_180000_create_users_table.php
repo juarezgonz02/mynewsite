@@ -37,7 +37,7 @@ class CreateUsersTable extends Migration
         });
 
         DB::table('users')
-        ->insert(array('idUser'=>'1','nombres'=>'Oscar','apellidos'=>'Arias','correo'=>'admin@uca.edu.sv','estado'=>'1','genero'=>'M','verificado'=>'1',
+        ->insert(array('idUser'=>'1','nombres'=>'Oscar','apellidos'=>'Arias','correo'=>'oarias@uca.edu.sv','estado'=>'1','genero'=>'M','verificado'=>'1',
                 'idRol'=>'1','ultima_fecha_contra'=>'1-1-2021', 'password'=>bcrypt('temporal')));
     }
 
