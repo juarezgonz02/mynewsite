@@ -11,6 +11,8 @@
     <link href="{{ asset('js/plantilla.css') }}" >
     <link href="{{ asset('js/jquery.min.css') }}" >
     <link href="{{ asset('js/bootstrap.min.css') }}" >
+    <link rel="shortcut icon" type="image/jpg" href=" {{url('/').'/img/logo-uca.png'}}">
+
     <!--<script src="js/plantilla.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>-->
@@ -36,7 +38,7 @@
                     </div>
                     <div class="form-group row" id="form-group">
                         <label id="luser" for="user" class="label-form">Usuario</label>
-                        <input class="form-control" type="text" name="user" id="user" value="{{$user->correo}}" readonly>
+                        <input class="form-control" type="text" name="user"  id="user" value="{{$user->correo}}" readonly>
                         <span style="visibility: hidden;">.</span>
                         
                         @if($errors->first('ya_cambio'))
@@ -47,28 +49,27 @@
                             
                         @else
                         <label id="ltoken" for="user" class="label-form">Código de verificación</label>
-                            <small> Revise su correo </small>
-                            <input class="form-control" type="text" name="token" id="token">
-                            @if($errors->first('codigo'))
-                                {!!$errors->first('codigo','<span style="color: red;">:message</span>')!!}
+                            <input class="form-control" type="text" readonly value="{{$token}}" name="token" id="token" required>
+                            @if($errors->first('token'))
+                                {!!$errors->first('token','<span style="color: red;">:message</span>')!!}
+                            @else
+                                <span style="visibility: hidden;">.</span>
                             @endif
 
-                            <label id="lpassword" for="password" class="label-form">Contraseña</label>
-                            <input class="form-control" type="password" name="contrasena" id="contrasena">
+                            <div id="helper" style="padding: 0px">
+                                <template>
+                                    <password-validator></password-validator>
+                                </template>
+                            </div>
+
                             @if($errors->first('contrasena'))
                                 {!!$errors->first('contrasena','<span style="color: red;">:message</span>')!!}
                             @else
                                 <span style="visibility: hidden;">.</span>
                             @endif
-                            <span style="margin-top:8px;color:red"> <b>La contraseña debe de cumplir los siguientes requisitos:</b>    <br>
-                                    -Mínimo 8 caracteres. <br>
-                                    -Al menos 1 letra mayúscula. <br>
-                                    -Al menos 1 caracter especial. <br>
-                                    -Al menos 1 número. <br>
-                                    -Sin espacios. <br>  
-                            </span>
-                            <label for="password_confirm" class="label-form">Confirmar contraseña</label>
-                            <input class="form-control" type="password" name="confirmar" id="confirmar">
+                            
+                            <label for="password_confirm"  class="label-form">Confirmar contraseña</label>
+                            <input class="form-control" required type="password" name="confirmar" id="confirmar">
                             @if($errors->first('confirmar'))
                                 {!!$errors->first('confirmar','<span style="color: red;margin-bottom:0.5em">:message</span>')!!}
                             @else
@@ -83,6 +84,7 @@
             </div>
         @endif
     </div>
+    <script src="{{url('/js/helpers.js')}}"></script>
 </body>
 
 

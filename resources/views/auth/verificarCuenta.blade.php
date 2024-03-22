@@ -30,32 +30,30 @@
                 </div>
                 <div class="form-group row" id="form-group">
 
-                    <label id="luser" for="user" class="label-form">Usuario</label>
+                    <label for="user" class="label-form l">Usuario</label>
                     <input class="form-control" type="text" name="user" id="user" value="{{$user->correo}}" readonly>
-                    <label id="luser" for="user" class="label-form">Código enviado a su correo</label>
-                    <input class="form-control" type="text" name="token" id="token" >
-                    @if($errors->first('error_token'))
-                        {!!$errors->first('error_token','<span style="color: red;">:message</span>')!!}
-                    @else
-                        <span style="visibility: hidden;">.</span>
-                    @endif
-                    <span style="margin-top:8px;color:red"> <b>La contraseña debe de cumplir los siguientes requisitos:</b>    <br>
-                            -Mínimo 8 caracteres. <br>
-                            -Al menos 1 letra mayúscula. <br>
-                            -Al menos 1 caracter especial. <br>
-                            -Al menos 1 número. <br>
-                            -Sin espacios. <br>  
-                    </span>
-                    <label id="lpassword" for="password" class="label-form">Contraseña</label>
-                    <input class="form-control" type="password" name="contraseña" id="contraseña">
-                    @if($errors->first('contraseña'))
-                        {!!$errors->first('contraseña','<span style="color: red;">:message</span>')!!}
+                    <label for="token" class="label-form l">Código enviado a su correo</label>
+                    <input class="form-control" required type="text" value="{{old('token')}}"  name="token" id="token" >
+                    @if($errors->first('token'))
+                        {!!$errors->first('token','<span style="color: red;">:message</span>')!!}
                     @else
                         <span style="visibility: hidden;">.</span>
                     @endif
 
-                    <label for="password_confirm" class="label-form">Confirmar contraseña</label>
-                    <input class="form-control" type="password" name="confirmar" id="confirmar">
+                    <div id="helper" style="padding: 0px">
+                        <template>
+                            <password-validator></password-validator>
+                        </template>
+                    </div>
+                    
+                    @if($errors->first('contrasena'))
+                        {!!$errors->first('contrasena','<span style="color: red;">:message</span>')!!}
+                    @else
+                        <span style="visibility: hidden;">.</span>
+                    @endif
+
+                    <label for="confirmar" class="label-form">Confirmar contraseña</label>
+                    <input class="form-control" required type="password" name="confirmar" id="confirmar">
                     @if($errors->first('confirmar'))
                         {!!$errors->first('confirmar','<span style="color: red;margin-bottom:0.5em">:message</span>')!!}
                     @else
@@ -68,6 +66,8 @@
             </form>
         </div>
     </div>
+
+    <script src="{{url('/js/helpers.js')}}"></script>
 </body>
 
     <style>
@@ -76,4 +76,6 @@
     <style>
     <?php include "css/bootstrap.min.css" ?>
     </style>
+
+
 </html>

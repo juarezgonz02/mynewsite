@@ -24,4 +24,5 @@ mix.styles([
    'resources/assets/plantilla/js/pace.min.js',
    'resources/assets/plantilla/js/template.js'
 ], 'public/js/plantilla.js')
-.js(['resources/assets/js/app.js'],'public/js/app.js');
+.js(['resources/assets/js/app.js'],'public/js/app.js')
+.js(['resources/assets/js/helpers.js'],'public/js/helpers.js');
