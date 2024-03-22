@@ -18,38 +18,41 @@
                                     <th style="text-align: center; width: 10%;">Contraparte</th>
                                     <th style="text-align: center; width: 10%;">Proyecto</th>
                                     <th style="text-align: center;" id="disappear">Perfil estudiante</th>
-                                    <th style="width: 10%; text-align: center;">Cupos</th>
+                                    <th style="width: 10%; text-align: center;" id="disappear">Cupos</th>
                                     <th style="width: 10%; text-align: center;">Estado</th>
                                     <th style="width: 10%; text-align: center;">Acciones</th>
                                 </tr>
                         </thead>
                         <tbody>
                             <tr v-for="proyecto in arrayProyectos" :key="proyecto.idProyecto">
-                                <td v-text="proyecto.contraparte" data-toggle="modal" data-target="#modal-info"></td>
-                                <td v-text="proyecto.nombre" data-toggle="modal" data-target="#modal-info"></td>
-                                <td v-text="proyecto.perfil_estudiante" data-toggle="modal" data-target="#modal-info"
+                                <td v-text="proyecto.contraparte" data-toggle="modal" data-target="#modal-info"
                                     @click="abrirModal('info', proyecto)"></td>
+                                <td v-text="proyecto.nombre" data-toggle="modal" data-target="#modal-info"
+                                    @click="abrirModal('info', proyecto)"></td>
+                                <td v-text="proyecto.perfil_estudiante" data-toggle="modal" data-target="#modal-info"
+                                    @click="abrirModal('info', proyecto)" id="disappear"></td>
                                 <td v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`" data-toggle="modal"
                                     data-target="#modal-info" @click="abrirModal('info', proyecto)"
-                                    style="text-align: center;"></td>
+                                    style="text-align: center;" id="disappear"></td>
                                 <td>
                                     <div v-if="proyecto.estadoPxe === 0" style="margin: 8px -9px 8px -5px;">
                                         <div
-                                            style="display: flex; flex-direction: row; justify-content: center; margin: 0px 10px;">
+                                            style="display: flex; flex-direction: row; justify-content: center; margin: 0px 10px;"
+                                            @click="abrirModal('info', proyecto)">
                                             <span  class="badge badge-info" style="border-radius: 5px;">
                                                 <p id="estadoap" style="display: inline; font-weight: 300; font-size: 1.0rem; ">
-                                                    <i class="icon-check"></i>
-                                                    SOLICITUD ENVIADA
+                                                    <i class="icon-clock"></i>
+                                                    <span id="disappear">SOLICITUD ENVIADA</span> 
                                                 </p></span>
                                         </div>
                                     </div>
                                     <div v-if="proyecto.estadoPxe === 1" style="margin: 8px -9px 8px -5px;">
                                         <div
                                             style="display: flex; flex-direction: row; justify-content: center; margin: 0px 10px;">
-                                            <span  class="badge badge-success" style="border-radius: 5px;">
+                                            <span class="badge badge-success" style="border-radius: 5px;" @click="abrirModal('info', proyecto)">
                                                 <p id="estadoap" style="display: inline; font-weight: 300; font-size: 1.0rem; ">
                                                     <i class="icon-check"></i>
-                                                    ACEPTADO
+                                                    <span id="disappear"> ACEPTADO </span>
                                                 </p></span>
                                         </div>
                                     </div>
@@ -59,7 +62,8 @@
                                             <span  class="badge badge-danger" style="border-radius: 5px;">
                                                 <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem;">
                                                     <i class="icon-close"></i>
-                                                    RECHAZADO</p></span>                                            
+                                                    <span id="disappear">RECHAZADO</span>
+                                                </p></span>                                            
                                         </div>
                                     </div>
                                     <div v-if="proyecto.estadoPxe === 3 " style="margin: 8px -9px 8px -5px;">
@@ -67,8 +71,8 @@
                                             style="display: flex; flex-direction: row; justify-content: center; margin: 0px 10px;">
                                             <span  class="badge badge-secondary" style="border-radius: 5px;">
                                                 <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem; ">
-                                                    <i class="icon-close"></i>
-                                                    PROYECTO FINALIZADO
+                                                    <i class="icon-folder"></i>
+                                                    <span id="disappear">PROYECTO FINALIZADO</span>
                                                 </p></span>
                                         </div>
                                     </div>
@@ -90,6 +94,38 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div v-if="arrayProyectos.length === 0">
+                        <p style="color: red"> <b> No has aplicado a ningun proyecto </b> </p>
+                    </div>
+                </div>
+                <div>
+                    <div style="margin: 0px 0px 0px 20px;" id="appear">
+                        <p> Estado de las solicitudes: </p>
+                        <span class="badge badge-info" style="border-radius: 5px; margin: 0px 0.6em 0.6em 0px;">
+                            <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem;">
+                                <i class="icon-clock"></i>
+                                <span>SOLICITUD ENVIADA</span>
+                            </p>
+                        </span>
+                        <span class="badge badge-success" style="border-radius: 5px; margin: 0px 0.6em 0.6em 0px;">
+                            <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem;">
+                                <i class="icon-check"></i>
+                                <span>ACEPTADO</span>
+                            </p>
+                        </span>
+                        <span class="badge badge-danger" style="border-radius: 5px; margin: 0px 0.6em 0.6em 0px;">
+                            <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem;">
+                                <i class="icon-close"></i>
+                                <span>RECHAZADO</span>
+                            </p>
+                        </span>
+                        <span class="badge badge-secondary" style="border-radius: 5px; margin: 0px 0.6em 0.6em 0px;">
+                            <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem;">
+                                <i class="icon-folder"></i>
+                                <span>PROYECTO FINALIZADO</span>
+                            </p>
+                        </span>
+                    </div>
                 </div>
             </div>
             <!-- Fin ejemplo de tabla Listado -->
@@ -341,8 +377,10 @@ export default {
     width: 100% !important;
     position: absolute !important;
 }
-
-.mostrar {
+#appear {
+        display: none;
+}
+.mostrar  {
     display: list-item !important;
     opacity: 1 !important;
     background-color: #3c29297a !important;
@@ -363,6 +401,9 @@ export default {
 @media screen and (max-width: 500px) {
     #disappear {
         display: none;
+    }
+    #appear {
+        display: block;
     }
 
 }

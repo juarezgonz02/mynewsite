@@ -14,13 +14,22 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-  <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
-  <meta name="author" content="Łukasz Holeczek">
-  <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
+  <meta name="description" content="Centro de Servicio Social | UCA">
+  <meta name="author" content="">
+  <meta name="keyword" content="Sistema de inscripción de proyectos CSS UCA">
   <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/login.css" rel="stylesheet">
+  <title> Centro de Servicio Social </title> 
+  <link rel="shortcut icon" type="image/jpg" href=" {{url('/').'/img/logo-uca.png'}}">
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <style>
+    .message_box{
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid blue;
+    }
+  </style>
 </head>
 
 <body>
@@ -33,6 +42,11 @@
               <div class="col-md-9 col-lg-8 mx-auto">
                 <img class="mx-auto d-block" src="img/UCA.6b065e25.png">
                 <h3 class="login-heading mb-5 text-center font-weight-bold">Centro de Servicio Social</h3>
+                @if($errors->first('verified'))
+                {!!$errors->first('verified','<div class="message_box"> <p style="color: blue">:message</p></div>')!!}
+                @else
+                <span style="visibility: hidden;">.</span>
+                @endif
                 <form class="was-validated" method="POST" action="{{ route('login') }}">
                   {{ csrf_field() }}
                   <div class="form-group">
@@ -51,7 +65,10 @@
                     @if($errors->first('contraseña'))
                     {!!$errors->first('contraseña','<span style="color: red">:message</span>')!!}
                     @elseif($errors->first('email_inexistente'))
-                    {!!$errors->first('email_inexistente','<span style="color: red">:message</span>')!!}
+                    {!!$errors->first('email_inexistente','<span style="color: red">:message </span>')!!}
+                    <a href="{{ url('/register_form') }}">Puedes registrar tu cuenta aqui</a>
+                    @elseif($errors->first('no_verified'))
+                    {!!$errors->first('no_verified','<span style="color: red">:message </span>')!!}
                     @else
                     <span style="visibility: hidden;">.</span>
                     @endif
@@ -62,7 +79,7 @@
                       {!! app('captcha')->display() !!}
                       @if ($errors->has('g-recaptcha-response'))
                       <span style="color: red">
-                        {{ $errors->first('g-recaptcha-response') }}
+                        {!!$errors->first('g-recaptcha-response','<span style="color: red">Demuestra que no eres un robot!</span>')!!}
                       </span>
                       @else
                       <span style="visibility: hidden;">.</span>

@@ -96,7 +96,7 @@ class ApiAuthController extends Controller
 
         Mail::send(
             'emails.verificar',
-            ['user' => $usuario],
+            ['user' => $usuario,],
             function($message) use ($usuario){
                 $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
                 $message->to($usuario->correo);

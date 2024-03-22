@@ -10,6 +10,8 @@
     <link href="{{ asset('js/plantilla.css') }}" >
     <link href="{{ asset('js/jquery.min.css') }}" >
     <link href="{{ asset('js/bootstrap.min.css') }}" >
+    <link rel="shortcut icon" type="image/jpg" href=" {{url('/').'/img/logo-uca.png'}}">
+
     <!--<link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="./olvidec.css" rel="stylesheet">
     <script src="js/plantilla.js"></script>
@@ -30,11 +32,19 @@
 
                     <label id="luser" for="user" class="label-form">Usuario</label>
                     <input class="form-control" type="text" name="user" id="user" value="{{$user->correo}}" readonly>
+                    <label id="luser" for="user" class="label-form">Código enviado a su correo</label>
+                    <input class="form-control" type="text" name="token" id="token" >
+                    @if($errors->first('error_token'))
+                        {!!$errors->first('error_token','<span style="color: red;">:message</span>')!!}
+                    @else
+                        <span style="visibility: hidden;">.</span>
+                    @endif
                     <span style="margin-top:8px;color:red"> <b>La contraseña debe de cumplir los siguientes requisitos:</b>    <br>
                             -Mínimo 8 caracteres. <br>
                             -Al menos 1 letra mayúscula. <br>
                             -Al menos 1 caracter especial. <br>
                             -Al menos 1 número. <br>
+                            -Sin espacios. <br>  
                     </span>
                     <label id="lpassword" for="password" class="label-form">Contraseña</label>
                     <input class="form-control" type="password" name="contraseña" id="contraseña">

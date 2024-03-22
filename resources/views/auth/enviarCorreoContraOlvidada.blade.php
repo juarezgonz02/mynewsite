@@ -44,7 +44,7 @@
           <h1>Cambiar contraseña</h1>
         </div>
         <div style="padding: 0 16px;">
-          <p>Por favor ingrese su carnet y se le enviará un link al correo asociado para poder realizar el cambio de contraseña. 
+          <p>Por favor ingrese su carnet y se le enviará un Código de Verificación al correo asociado para poder realizar el cambio de contraseña. 
           <b> <a style="color:red">Se puede realizar el cambio de contraseña una vez por día.</a> </b></p>
         </div>
 
