@@ -23,6 +23,7 @@
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/forgottenPassword.css">
   <script src="js/jquery.min.js"></script>
+  <link rel="shortcut icon" type="image/jpg" href=" {{url('/').'/img/logo-uca.png'}}">
 
 </head>
 <script>

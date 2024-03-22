@@ -12,9 +12,9 @@
 
         @if(isset($token))
             <p>
-                se solicitó un cambio de contraseña debido a que fue olvidada, por favor ingrese el siguiente código para crear una nueva.
+                Se solicitó un cambio de contraseña debido a que fue olvidada, ingrese al siguiente enlace para restablecerla.
             </p>
-            <p style="color: red; font-size: 2em" >{{ $token }}</p>
+            <span style="color: blue; font-size: 1em" ><a href="{{ url('/cambiar_contra_olvidada/').'/'.$token }}"> Restablecer contraseña </a></span>
         @endif
 
         <p>
