@@ -153,7 +153,7 @@
                 </div>
               </div>
             </div>
-            <button type="submit" class="btn btn-primary" style="background-image: linear-gradient( 109.6deg,  rgba(39,142,255,1) 11.2%, rgba(98,113,255,0.78) 100.2% );" id="registrarbtn">Register</button>
+            <button type="submit" class="btn btn-primary" style="background-image: linear-gradient( 109.6deg,  rgba(39,142,255,1) 11.2%, rgba(98,113,255,0.78) 100.2% );" id="registrarbtn">Registrame</button>
           </div>
         </form>
       </div>
