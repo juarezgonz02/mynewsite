@@ -8,6 +8,11 @@
 
         <div class="container-fluid">
             <!-- Ejemplo de tabla Listado -->
+            <div style="margin: 20px 0px 0px 20px;" v-if="!loadTable">
+                    <div>
+                        <p class="mb-1">{{ user_info }}</p>
+                    </div>
+                </div>
             <div v-if="loadTable == true" class="card" style="border: none;">
                 <table-loader></table-loader>
             </div>
@@ -110,6 +115,9 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div v-if="arrayProyectos.length === 0">
+                        <p style="color: red"> <b> No hay proyectos para tu carrera y año en este momento </b> </p>
+                    </div>
                     <nav>
                         <ul class="pagination" style="float: right;">
                             <li class="page-item" v-if="pagination.current_page > 1">
@@ -131,22 +139,22 @@
                         </ul>
                     </nav>
                 </div>
-                <div style="margin: 20px 0px 0px 20px;" v-if="!loadTable">
-                    <div>
-                        <p>{{ user_info }}</p>
-                        <p>Si tu año de carrera no coincide, recuerda que puedes cambiarlo desde la pestaña
+                    <div style="margin: 20px 0px 0px 20px;" v-if="!loadTable">
+                        <div>
+                            <p class="mb-0" >Si tu año de carrera no coincide, recuerda que puedes cambiarlo desde la pestaña
                             <strong>Perfil</strong>. </p>
-                    </div>
+                        </div>
                     <div id="appear">
                         <p><b> Acciones: </b></p>
                         <span class="badge badge-info" style="border-radius: 5px; margin-left: 0.2em;">
                             <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem;">
                                 <i class="icon-envelope"></i>
-                                <span>APLICAR A PROYECTO</span>
+                                <span>Aplicar a proyecto</span>
                             </p>
                         </span>
                     </div>
                 </div>
+               
             </div>
             <!-- Fin ejemplo de tabla Listado -->
         </div>
@@ -294,7 +302,7 @@ export default {
             ya_aplico_hoy: false,
             ya_aplico_proyecto: false,
             descripcion: '',
-            arrayProyectos: [''],
+            arrayProyectos: [],
             arrayProyectosAplicados: [''],
             modal: 0,
             modal2: 0,
@@ -508,6 +516,12 @@ export default {
 <style>
 .main {
     font-family: "Abel", sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 95vh;
+}
+.container-fluid {
+    flex: 1;
 }
 
 .sidebar {

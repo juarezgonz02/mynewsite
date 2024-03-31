@@ -1,6 +1,5 @@
 <template>
     <div class="form-group">
-        <label class="label-form" style="padding-left: 1em;" for="contrasena">Contraseña</label>
         <input type="password" name="contrasena" class="form-control" placeholder="Ingrese una contraseña" v-model="password" required>
         <small id="passwordHelp" required class="form-text text-muted" :hidden="complete">La contraseña debe contener
             <span :class="has_minimum_lenth ? 'has_required' : ''">Al menos 8 caracteres, </span>

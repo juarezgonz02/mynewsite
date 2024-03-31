@@ -104,25 +104,31 @@
                         <span class="badge badge-info" style="border-radius: 5px; margin: 0px 0.6em 0.6em 0px;">
                             <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem;">
                                 <i class="icon-clock"></i>
-                                <span>SOLICITUD ENVIADA</span>
+                                <span>Solicitud Enviada</span>
                             </p>
                         </span>
                         <span class="badge badge-success" style="border-radius: 5px; margin: 0px 0.6em 0.6em 0px;">
                             <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem;">
                                 <i class="icon-check"></i>
-                                <span>ACEPTADO</span>
+                                <span>Aceptado</span>
                             </p>
                         </span>
                         <span class="badge badge-danger" style="border-radius: 5px; margin: 0px 0.6em 0.6em 0px;">
                             <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem;">
                                 <i class="icon-close"></i>
-                                <span>RECHAZADO</span>
+                                <span>Rechazado</span>
                             </p>
                         </span>
                         <span class="badge badge-secondary" style="border-radius: 5px; margin: 0px 0.6em 0.6em 0px;">
                             <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem;">
                                 <i class="icon-folder"></i>
-                                <span>PROYECTO FINALIZADO</span>
+                                <span>Proyecto finalizado</span>
+                            </p>
+                        </span>
+                        <span class="badge badge-danger" style="border-radius: 5px; margin: 0px 0.6em 0.6em 0px;">
+                            <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem;">
+                                <i class="icon-close"></i>
+                                <span>Proyecto Cancelado</span>
                             </p>
                         </span>
                     </div>

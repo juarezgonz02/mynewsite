@@ -1506,8 +1506,14 @@ import Swal from 'sweetalert2';
 .main{
     font-family: "Abel", sans-serif;
     background-color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 95vh;
 }
 
+.container-fluid {
+    flex: 1;
+}
 
 .modal-primary .modal-header{
     background-color: #003C71;
