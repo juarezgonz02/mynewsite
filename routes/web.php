@@ -29,7 +29,10 @@ Route::middleware(['guest'])->group(function () {
     Route::get('/cambiar_contra_olvidada/{correo}', 'Auth\ForgotPasswordController@formularioOlvidoContrsenia');  
     Route::post('/cambiar_contra_olvidada', 'Auth\ForgotPasswordController@cambiarClave');  
     
-    //Route::post('/cambiar_contra_olvidada/{correo}', 'Auth\ForgotPasswordController@cambiarContraseniaOlvidada');
+    Route::get('/oauth2Redirect', 'Auth\GoogleLoginController@redirectToGoogle')->name('google.redirect');
+    Route::post('/oauth2Callback', 'Auth\GoogleLoginController@handleGoogleCallback')->name('google.callback');
+    Route::get('/registrar_google', 'Auth\GoogleLoginController@showRegisterForm')->name('google.register');
+    Route::post('/registrar_google', 'Auth\GoogleLoginController@registrar')->name('google.register_google');
 });
 
 
