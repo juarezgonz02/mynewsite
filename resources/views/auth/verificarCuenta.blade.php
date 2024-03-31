@@ -40,6 +40,8 @@
                         <span style="visibility: hidden;">.</span>
                     @endif
 
+
+                    <label class="label-form" style="padding-left: 1em;" for="contrasena">Contraseña</label>
                     <div id="helper" style="padding: 0px">
                         <template>
                             <password-validator></password-validator>
