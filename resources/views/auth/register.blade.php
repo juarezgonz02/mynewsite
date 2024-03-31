@@ -88,6 +88,8 @@
                 <input id="carnet" type="text" class="form-control" name="carnet" value="{{ old('carnet') }}">
                 @if($errors->first('carnet'))
                 {!!$errors->first('carnet','<span style="color: red">:message</span>')!!}
+                @elseif($errors->first('email_existente'))
+                {!!$errors->first('email_existente','<span style="color: red">:message</span>')!!}
                 @else
                 <span style="visibility: hidden;">.</span>
                 @endif
@@ -129,15 +131,22 @@
               <div class="form-group mb-2">
                 <label for="carrera" class="label-form">Carrera</label>
                 <select class="form-control" id="carrera" name="carrera"></select>
-                @if($errors->first('email_existente'))
-                {!!$errors->first('email_existente','<span style="color: red">:message</span>')!!}
-                @else
-                <span style="visibility: hidden;">.</span>
-                @endif
               </div>
+              
+              <div class="form-group ">
+                <label for="carrera" class="label-form">Año de carrera</label>
+                <select class="form-control" id="perfil" name="perfil">
+                  <option value=1> Primer Año </option>
+                  <option value=2> Segundo Año </option>
+                  <option value=3> Tercer Año </option>
+                  <option value=4> Cuarto Año </option>
+                  <option value=5> Quinto Año </option>
+                  <option value=6> Egresado </option>
+                </select>
+              </div>
+
               <div class="form-group mb-2{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
                 <div class="col-md-12">
-                  {!! app('captcha')->display() !!}
                   @if ($errors->has('g-recaptcha-response'))
                   <span style="color: red">
                         Demuestra que no eres un robot!
@@ -153,7 +162,9 @@
                 </div>
               </div>
             </div>
-            <button type="submit" class="btn btn-primary" style="background-image: linear-gradient( 109.6deg,  rgba(39,142,255,1) 11.2%, rgba(98,113,255,0.78) 100.2% );" id="registrarbtn">Registrame</button>
+             {!! app('captcha')->displaySubmit('gform', 'Registrame', ['class' => 'btn btn-primary', 'id'=>'registrarbtn', 'style' => 'background-image: linear-gradient( 109.6deg,  rgba(39,142,255,1) 11.2%, rgba(98,113,255,0.78) 100.2% );']) !!}
+            <!--button type="submit" class="btn btn-primary" style="background-image: linear-gradient( 109.6deg,  rgba(39,142,255,1) 11.2%, rgba(98,113,255,0.78) 100.2% );" id="registrarbtn">Registrame</button>
+            -->
           </div>
         </form>
       </div>

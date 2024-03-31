@@ -10,104 +10,137 @@
 <html lang="es">
 
 <head>
-  <base href="./">
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-  <meta name="description" content="Centro de Servicio Social | UCA">
-  <meta name="author" content="">
-  <meta name="keyword" content="Sistema de inscripción de proyectos CSS UCA">
-  <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <link href="css/login.css" rel="stylesheet">
-  <title> Centro de Servicio Social </title> 
-  <link rel="shortcut icon" type="image/jpg" href=" {{url('/').'/img/logo-uca.png'}}">
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-  <style>
-    .message_box{
-      padding: 10px;
-      margin-bottom: 10px;
-      border: 1px solid blue;
-    }
-  </style>
+    <base href="./">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="description" content="Centro de Servicio Social | UCA">
+    <meta name="author" content="">
+    <meta name="keyword" content="Sistema de inscripción de proyectos CSS UCA">
+    <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/login.css" rel="stylesheet">
+    <title> Centro de Servicio Social </title>
+    <link rel="shortcut icon" type="image/jpg" href=" {{ url('/') . '/img/logo-uca.png' }}">
+    <script src="https://accounts.google.com/gsi/client" async></script>
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <style>
+        .message_box {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid blue;
+        }
+    </style>
 </head>
 
 <body>
-  <div class="container-fluid">
-    <div class="row no-gutter">
-      <div class="col-md-8 col-lg-8">
-        <div class="login d-flex align-items-center py-4">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-9 col-lg-8 mx-auto">
-                <img class="mx-auto d-block" src="img/UCA.6b065e25.png">
-                <h3 class="login-heading mb-5 text-center font-weight-bold">Centro de Servicio Social</h3>
-                
-                @if($errors->first('verified'))
-                {!!$errors->first('verified','<div class="message_box"> <p style="color: blue">:message</p></div>')!!}
-                @else
-                <span style="visibility: hidden;">.</span>
-                @endif
-                <form method="POST" action="{{ route('login') }}">
-                  {{ csrf_field() }}
-                  <div class="form-group">
-                    <label for="carnet" class="label-form">Carnet</label>
-                    <input class="form-control hijos" value="{{old('carnet')}}" id="carnet" name="carnet" type="text">
-                    @if($errors->first('carnet'))
-                    {!!$errors->first('carnet','<span style="color: red">:message</span>')!!}
-                    @else
-                    <span style="visibility: hidden;">.</span>
-                    @endif
-                  </div>
+    <div class="container-fluid">
+        <div class="row no-gutter">
+            <div class="col-md-8 col-lg-8">
+                <div class="login d-flex align-items-center py-4">
+                    <div class="container">
+                        <div class="row">
+                            <div class="d-flex flex-column align-items-center col-md-9 col-lg-8 mx-auto">
+                                <img class="mx-auto d-block login-logotype" src="img/logotype.svg" />
 
-                  <div class="form-group mb-2">
-                    <label for="con" class="label-form">Contraseña</label>
-                    <input class="form-control hijos" id="contraseña" name="contraseña" type="password">
-                    @if($errors->first('contraseña'))
-                    {!!$errors->first('contraseña','<span style="color: red">:message</span>')!!}
-                    @elseif($errors->first('email_inexistente'))
-                    {!!$errors->first('email_inexistente','<span style="color: red">:message </span>')!!}
-                    <a href="{{ url('/register_form') }}">Puedes registrar tu cuenta aqui</a>
-                    @elseif($errors->first('no_verified'))
-                    {!!$errors->first('no_verified','<span style="color: red">:message </span>')!!}
-                    @else
-                    <span style="visibility: hidden;">.</span>
-                    @endif
-                  </div>
+                                @if ($errors->first('verified'))
+                                    {!! $errors->first('verified', '<div class="message_box"> <p style="color: blue">:message</p></div>') !!}
+                                @else
+                                    <span style="visibility: hidden;">.</span>
+                                @endif
+                                <form method="POST" style="min-width: 70%" id="login_form" action="{{ route('login') }}">
+                                    {{ csrf_field() }}
+                                    <div class="form-group">
+                                        <label for="carnet" class="label-form">Carnet</label>
+                                        <input class="form-control hijos" value="{{ old('carnet') }}" id="carnet"
+                                            name="carnet" type="text">
+                                        @if ($errors->first('carnet'))
+                                            {!! $errors->first('carnet', '<span style="color: red">:message</span>') !!}
+                                        @else
+                                            <span style="visibility: hidden;">.</span>
+                                        @endif
+                                    </div>
 
-                  <div class="d-flex justify-content-center form-group mb-2{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
-                    <div class="col-md-12 text-center">
-                      {!! app('captcha')->display() !!}
-                      @if ($errors->has('g-recaptcha-response'))
-                      <span style="color: red">
-                        {!!$errors->first('g-recaptcha-response','<span style="color: red">Demuestra que no eres un robot!</span>')!!}
-                      </span>
-                      @else
-                      <span style="visibility: hidden;">.</span>
-                      @endif
+                                    <div class="form-group mb-2">
+                                        <div class="d-flex justify-content-between " style="gap: 24px;">
+                                            <label for="con" class="label-form">Contraseña</label>
+                                            <a class="small" href="{{ url('/contra_olvidada_form') }}">Olvidaste tu
+                                                contraseña?</a>
+                                        </div>
+                                        <input class="form-control hijos" id="contraseña" name="contraseña"
+                                            type="password">
+                                        @if ($errors->first('contraseña'))
+                                            {!! $errors->first('contraseña', '<span style="color: red">:message</span>') !!}
+                                        @elseif($errors->first('email_inexistente'))
+                                            {!! $errors->first('email_inexistente', '<span style="color: red">:message </span>') !!}
+                                            <a href="{{ url('/register_form') }}">Puedes registrar tu cuenta aqui</a>
+                                        @elseif($errors->first('no_verified'))
+                                            {!! $errors->first('no_verified', '<span style="color: red">:message </span>') !!}
+                                        @else
+                                            <span style="visibility: hidden;">.</span>
+                                        @endif
+                                    </div>
+
+                                    <div>
+                                        <div class="d-flex justify-content-center">
+                                            {!! app('captcha')->displaySubmit('login_form', 'Iniciar Sesion', [
+                                                'class' => 'btn btn-login btn-lg btn-primary btn-block font-weight-bold ',
+                                                'style' =>
+                                                    'background-image: linear-gradient( 109.6deg,  rgba(39,142,255,1) 11.2%, rgba(98,113,255,0.78) 100.2% );',
+                                            ]) !!}
+                                        </div>
+
+
+                                        <div style="text-align: center" class="d-flex flex-column mt-3 justify-content-center">
+                                            <span> ¿No tienes cuenta? </span> 
+                                              <span> <a
+                                                    href="{{ url('/register_form') }}"> Registrate aquí </a>
+                                              <span>
+                                              <p>
+                                                o
+                                              </p>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="d-flex justify-content-center">
+                                        <div id="g_id_onload"
+                                            data-client_id="906270140776-0eigrho9jc14fi00m8ebnhdm7sem0i02.apps.googleusercontent.com"
+                                            data-context="signin" data-ux_mode="redirect"
+                                            data-login_uri="{{ url('/google/callback') }}" data-auto_prompt="false">
+                                        </div>
+
+                                        <div class="g_id_signin" data-type="standard" data-shape="rectangular"
+                                            data-theme="filled_blue" data-text="signin_with" data-size="large"
+                                            data-logo_alignment="left" data-width="100" data-height="110">
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="d-flex justify-content-center form-group{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
+                                        <div class="col-md-12 text-center">
+                                            @if ($errors->has('g-recaptcha-response'))
+                                                <span style="color: red">
+                                                    {!! $errors->first('g-recaptcha-response', '<span style="color: red">Demuestra que no eres un robot!</span>') !!}
+                                                </span>
+                                            @else
+                                                <span style="visibility: hidden;">.</span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-
-                  <div class="d-flex justify-content-center">
-                    <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2 mx-auto" style="background-image: linear-gradient( 109.6deg,  rgba(39,142,255,1) 11.2%, rgba(98,113,255,0.78) 100.2% );" type="submit">Iniciar sesion</button>
-                  </div>
-
-                  <div class="d-flex mt-3 justify-content-center" >
-                  <p style="font-size: 1.5em;"> ¿Eres nuevo? <a href="{{ url('/register_form') }}"> Registrate aquí  </a> <p>
                 </div>
-                
-                  <div class="d-flex justify-content-center mt-4" style="gap: 24px;">
-                    <a class="small" href="{{ url('/contra_olvidada_form') }}">Olvidaste tu contraseña?</a>
-                  </div>
-                </form>
-              </div>
             </div>
-          </div>
+            <div class="d-none d-md-flex col-md-4 col-lg-4 bg-image image"></div>
         </div>
-      </div>
-      <div class="d-none d-md-flex col-md-4 col-lg-4 bg-image image"></div>
     </div>
-  </div>
 </body>
 
 </html>

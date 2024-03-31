@@ -24,14 +24,21 @@
   background-repeat: no-repeat;
 }
 
+.login-logotype{
+  width: 60%;
+  min-width: 275px;
+  padding-left: 2em;
+  height: auto;
+}
+
 .login-heading {
   font-weight: bold;
 }
 
 .btn-login {
   font-size: 0.9rem;
+  font-weight: bolder;
   letter-spacing: 0.05rem;
-  padding: 0.75rem 1rem;
 }
 
 .form-label-group {

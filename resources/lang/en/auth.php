@@ -15,9 +15,11 @@ return [
 
     'failedPass' => 'Carnet o contraseña incorrectos',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-    'carnet_no_verificado' => 'Su cuenta no se encuentra verificada. Por favor revise su correo.',
+    'carnet_faltante' => 'Ingrese su carnet',
+    'contraseña_faltante' => 'Ingrese su contraseña',
+    'carnet_no_verificado' => 'Su cuenta no se encuentra verificada. Por favor revise su correo, o termine el registro con Google',
     'carnet_inexistente' => 'El carnet ingresado no está registrado.',
-    'aun_no_verificado' => 'Cuenta no verificada. Por favor revise su correo.',
+    'aun_no_verificado' => 'Cuenta no verificada. Por favor revise su correo o termine el registro con Google',
     'ya_verificado' => 'El carnet ingresado ya existe en el registro.',
     'ya_cambio_contra' => 'Ya cambió la contraseña hoy, inténtelo de nuevo otro día. Este cambio se puede realizar una vez por día.',
     'cuenta_inexistente' => 'Parece que aún no has registrado tu correo ',
