@@ -87,6 +87,8 @@ class LoginController extends Controller
             'contraseña' => 'required|string',
             'g-recaptcha-response' => 'required|captcha'
         ], $messages = [
+            'carnet' => trans('auth.carnet_faltante'),
+            'contraseña' => trans('auth.contraseña_faltante'),
             'g-recaptcha-response' => trans('auth.recaptcha'),
         ]);
     }
@@ -96,6 +98,8 @@ class LoginController extends Controller
             'contraseña' => 'required|string',
             'g-recaptcha-response' => 'required|captcha'
         ], $messages = [
+            'carnet' => trans('auth.carnet_faltante'),
+            'contraseña' => trans('auth.contraseña_faltante'),
             'g-recaptcha-response' => trans('auth.recaptcha'),
         ]);
     }

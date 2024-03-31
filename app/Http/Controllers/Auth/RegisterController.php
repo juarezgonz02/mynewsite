@@ -56,17 +56,7 @@ class RegisterController extends Controller
             $carnet = $request->carnet;
             $genero = $request->genero;
             $carrera = $request->carrera;
-
-            if((substr($carnet, -2)) > date('y')){
-                return back()
-                ->withErrors(['carnet' => trans('auth.carnet_invalido')])
-                ->withInput(request(['carnet', 'apellidos', 'nombres']));
-            }
-            $perfil = (date('y') - (substr($carnet, -2))) + 1;
-
-            if($perfil >= 6){
-                $perfil = 6;
-            }
+            $perfil = $request->$perfil;
 
             User::create([
                 'nombres' => strtoupper($nombre),
@@ -83,6 +73,7 @@ class RegisterController extends Controller
                 'password' => bcrypt('temporal'),
                 'api_token' => $this->generarApiToken()
             ]);
+
             $user = User::whereCorreo($email)->first();
             $token = PasswordResetToken::create([
                 'idUser' => $user->idUser,
@@ -114,6 +105,7 @@ class RegisterController extends Controller
             'carnet' => 'required|numeric|digits:8',
             'nombres' => 'required|regex:/([a-zA-ZñÑáéíóúÁÉÍÓÚ])+((\s*)+([a-zA-ZñÑáéíóúÁÉÍÓÚ]*)*)+$/',
             'apellidos' => 'required|regex:/([a-zA-ZñÑáéíóúÁÉÍÓÚ])+((\s*)+([a-zA-ZñÑáéíóúÁÉÍÓÚ]*)*)+$/',
+            'perfil' => 'required|numeric|in:1,2,3,4,5,6',
             'g-recaptcha-response' => 'required|captcha'
         ]);
     }
