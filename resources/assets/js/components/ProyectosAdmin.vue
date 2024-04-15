@@ -247,9 +247,28 @@
                                 </div>
                                 <div class="form-group row div-form">
                                     <label class="col-md-3 form-control-label" for="text-input">Carreras</label>
-                                    <div class="col-md-9">
-                                        <button id="agregarCP" type="button" @click="agregarACP()" class="btn btn-primary mb-2"><i class="icon-plus"></i> Agregar</button>
-                                        <table class="table-sm table-borderless">
+
+                                    <div class="form-check" >
+                                            <input class="form-check-input " type="radio" id="checkboxTodasCarreras1" name="checkboxTodasCarreras"  v-model="flagTodasLasCarreras" value="1">
+                                            <label class="form-check-label font-lg" for="checkboxTodasCarreras1">Todas las carreras</label>
+                                        </div>
+                                        <div class="form-check" >
+                                            <input class="form-check-input " type="radio" id="checkboxTodasCarreras2"  v-model="flagTodasLasCarreras" value="2">
+                                            <label class="form-check-label font-lg" for="checkboxTodasCarreras2">Seleccionar carreras</label>
+                                        </div>
+
+
+
+                                    <div class="col-md-9" v-show='flagTodasLasCarreras == "2"'>
+
+                                        <div class="form-button-container">
+                                        <button id="agregarCP" :disabled="disabledBotonAgregarCarrera()" type="button" @click="agregarACP()" class="btn btn-primary mb-2"><i class="icon-plus"></i> Agregar</button>
+                                        <button type="button" @click="agregarTodasLasCarreras()" class="btn btn-outline-info mb-2"><i class="icon-plus"></i> Seleccionar todas las carreras</button>
+                                        <button type="button" @click="eliminarTodasLasCarreras()" class="btn btn-outline-danger mb-2"><i class="icon-trash"></i> Limpiar selección</button>
+                                        </div>
+                                        
+                                        
+                                        <table class="table-sm table-borderless" >
                                             <thead>
                                                 <tr>
                                                     <th>Carrera</th>
@@ -257,10 +276,10 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr v-for="acp in arrayCarreraPerfil" :key="acp.id">
+                                                <tr v-for="(acp, index) in arrayCarreraPerfil" :key="acp.id">
                                                     <td>
                                                         <select class="form-control custom-select" v-model="acp[0]">
-                                                            <option v-for="carrera in arrayCarreras" :value="carrera.idCarrera" :key="carrera.idCarrera">{{carrera.nombre}}</option>
+                                                            <option v-for="carrera in arrayCarrerasSelector" :value="carrera.idCarrera" :key="carrera.idCarrera">{{carrera.nombre}}</option>
                                                         </select>
                                                     </td>
                                                     <td>
@@ -293,7 +312,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="cerrarModal()">Cerrar</button>
-                            <button type="button" class="btn btn-primary" v-bind:data-dismiss="flagErrorProyecto ? '' : 'modal' " @click ="actualizarInsertarProyecto()">Guardar</button>
+                            <button type="button" class="btn btn-success" v-bind:data-dismiss="flagErrorProyecto ? '' : 'modal' " @click ="actualizarInsertarProyecto()">Guardar</button>
                         </div>
                     </div>
                     <!-- /.modal-content -->
@@ -743,6 +762,10 @@ import Swal from 'sweetalert2';
                 proyecto: "",
                 arrayFactultad: [],
                 estado_proyecto: '',
+                flagTodasLasCarreras: '1',
+                flagTodasLasCarrerasExcepto: false,
+                arrayCarrerasSelector: [],
+                arrayCarrerasSeleccionadas: [],
             }
         },
         computed:{
@@ -852,11 +875,33 @@ import Swal from 'sweetalert2';
                         'tipo_horas' : this.modal_tipo_horas,
                         'correo_encargado' : this.modal_correo,
                         'carreraPerfil' : this.arrayCarreraPerfil,
+                        'aplicarTodasCarreras' : this.flagTodasLasCarreras === '1' ? true : false,
                     }).then(function (response) {
                         me.cerrarModal();
+
+                        if(response.status == 200){
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Proyecto guardado',
+                                text: 'El proyecto fue guardado exitosamente.',
+                            });
+                            me.bindDataByFilters();
+                        }
+                        else{
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error al guardar proyecto',
+                                text: 'Ha ocurrido un error al guardar el proyecto. Intente nuevamente.',
+                            });
+                        }
                         me.bindDataByFilters();
                     }).catch(function (error) {
                         console.log(error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al guardar proyecto',
+                            text: 'Ha ocurrido un error al guardar el proyecto. Intente nuevamente.',
+                        });
                     }); 
                 }
                 else{
@@ -876,10 +921,31 @@ import Swal from 'sweetalert2';
                         'tipo_horas' : this.modal_tipo_horas,
                         'correo_encargado' : this.modal_correo,
                         'carreraPerfil' : this.arrayCarreraPerfil,
+                        'aplicarTodasCarreras' : this.flagTodasLasCarreras === '1' ? true : false,
                     }).then(function (response) {
                         me.cerrarModal();
+                        if(response.status == 200){
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Proyecto guardado',
+                                text: 'El proyecto fue guardado exitosamente.',
+                            });
+                            me.bindDataByFilters();
+                        }
+                        else{
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error al guardar proyecto',
+                                text: 'Ha ocurrido un error al guardar el proyecto. Intente nuevamente.',
+                            });
+                        }
                         me.bindDataByFilters();
                     }).catch(function (error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al guardar proyecto',
+                            text: 'Ha ocurrido un error al guardar el proyecto. Intente nuevamente.',
+                        });
                         console.log(error);
                     }); 
                 }
@@ -910,7 +976,7 @@ import Swal from 'sweetalert2';
                         Swal.fire({
                             icon: 'error',
                             title: 'Correos no enviados',
-                            text: 'Los correos con la información de la reunión no fue enviado. Intente nuevamente.',
+                            text: 'El proceso de envío de correos no se completó correctamente. Intente nuevamente.',
                         });
                         console.log(error);
                     });
@@ -963,13 +1029,14 @@ import Swal from 'sweetalert2';
                 var msg1 = "", msg2 = "", msg3 = "", msg4 = "";
                 var i = 0, j = 0;
 
-                if(this.arrayCarreraPerfil.length == 0){
+                if(this.arrayCarreraPerfil.length == 0 && this.flagTodasLasCarreras === '2'){
                     this.flagError = true
                     msg4 = "Debe agregar carreras"
                 }
                 
-                this.arrayCarreraPerfil.forEach(document => {
-                    if((!document[0] || !document[1] || !document[2]) && flagCP1){
+                if(this.flagTodasLasCarreras === '2' ){
+                    this.arrayCarreraPerfil.forEach(document => {
+                    if((!document[0] || !document[1] || !document[2]) && flagCP1 ){
                         msg1 = "Debe seleccionar todos los campos. ";
                         flagCP1 = false;
                         this.flagError = true;
@@ -990,6 +1057,9 @@ import Swal from 'sweetalert2';
                     })
                     i++;
                 })
+                }
+
+                
                 this.errorPerfilMsg += msg1 + msg2 + msg3 + msg4;
                 var tempFlag = false
                 if(this.errorProyecto.find(element => element > 0) == undefined){
@@ -1042,39 +1112,6 @@ import Swal from 'sweetalert2';
                     me.errorEstado = 1
                 }
                 else {
-                    // me.loading = 1
-                    // var estado = (this.estado_proyecto == "En curso" ? 1 : 0);
-                    // axios.get(`${API_HOST}/estudiantesxproyecto`, {
-                    //     params:{
-                    //         idProyecto: me.id_proyecto
-                    //     }
-                    // }).then(function (response){
-                    //     me.arrayEstudiantes = response.data;
-                    //     if (estado == 0) {
-                    //         me.arrayEstudiantes.forEach(function(element, index, array){
-                    //             axios.post(`${API_HOST}/proyecto/desaplicar`, {
-                    //                 'idProyecto' : me.id_proyecto,
-                    //                 'idUser' : me.arrayEstudiantes[index].idUser
-                    //             }).catch(function (error) {
-                    //                 console.log(error);
-                    //             });
-                    //         })
-                    //     }
-                    // }).catch(function (error) {
-                    //     console.log(error);
-                    // });
-                    // axios.put(`${API_HOST}/proyecto/estado`, {
-                    //     'idProyecto' : this.id_proyecto,
-                    //     'estado' : estado,
-                    //     'estado_proyecto' : this.estado_proyecto
-                    // }).then(function (response) {
-                    //     $('#statusModal').modal('hide');
-                    //     me.loading = 2;
-                    //     me.bindDataByFilters();
-                    //     me.cerrarModal();
-                    // }).catch(function (error) {
-                    //     console.log(error);
-                    // });
                     
                     me.loading = 1;
 
@@ -1103,6 +1140,29 @@ import Swal from 'sweetalert2';
 
 
                 }
+            },
+
+            agregarTodasLasCarreras(){
+                this.arrayCarreraPerfil = [];
+
+                var i = 0;
+                let me = this;
+
+                let carreras = this.arrayCarrerasSin;
+
+                carreras.forEach( carrera => {
+                    this.agregarCarrera(carrera);
+                    i++;
+                })
+                
+            },
+            eliminarTodasLasCarreras(){
+                this.arrayCarreraPerfil = [];
+                this.arrayCarrerasSelector = this.arrayCarreras;
+            },
+            agregarCarrera(carrera){
+                this.arrayCarreraPerfil.push([carrera.idCarrera, 1, 5]);
+                this.arrayCarrerasSeleccionadas.push(carrera.idCarrera);
             },
             cerrarModal(){
                 if(this.modal == 1 || this.modal4 == 1){
@@ -1145,6 +1205,7 @@ import Swal from 'sweetalert2';
                             this.flagError = false;
                             this.flagErrorProyecto = false;
                             this.arrayCarreraPerfil = [[]];
+                            this.flagTodasLasCarreras = '1';
                             break;
                         }
                     case "editar":
@@ -1170,6 +1231,7 @@ import Swal from 'sweetalert2';
                             this.errorPerfilMsg = "";
                             this.arrayCarreraPerfil = [[]];
                             this.updateCarrerasAndPerfil();
+                            this.flagTodasLasCarreras = '2';
                             break;
                         }
                     case "estado":
@@ -1266,9 +1328,11 @@ import Swal from 'sweetalert2';
                 axios.get(`${API_HOST}/carrera`).then(function (response) {
                     me.arrayCarrerasSin = response.data;
                     me.arrayCarreras = me.arrayCarrerasSin.slice();
-                    me.arrayCarreras.push({idCarrera : -1, idFacultad : -1, nombre : "Todas las carreras"});
-                    me.arrayCarreras.push({idCarrera : -2, idFacultad : -2, nombre : "Todas las carreras menos Psicología, Civil y Arquitectura"});
+                    // Mark to remove
+                    // me.arrayCarreras.push({idCarrera : -1, idFacultad : -1, nombre : "Todas las carreras"});
+                    // me.arrayCarreras.push({idCarrera : -2, idFacultad : -2, nombre : "Todas las carreras menos Psicología, Civil y Arquitectura"});
                     me.arrayCarrerasCon = me.arrayCarreras.slice();
+                    me.arrayCarrerasSelector = me.arrayCarreras.slice();
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -1467,31 +1531,58 @@ import Swal from 'sweetalert2';
                 }).catch(function (error) {
                     console.log(error);
                 });
+            },
+            disabledBotonAgregarCarrera(){
+                if(this.arrayCarreraPerfil.length > 0){
+                    if(this.arrayCarreraPerfil[this.arrayCarreraPerfil.length-1][0]){
+                        if(this.arrayCarreraPerfil[0][0] == -1 || this.arrayCarreraPerfil[0][0] == -2){
+                            // document.getElementById("agregarCP").disabled = true;
+                            return true;
+                        }
+                        else{
+                            // document.getElementById("agregarCP").disabled = false;
+                            // this.arrayCarreras = this.arrayCarrerasSin.slice();
+                            return false;
+                        }
+                    }
+                    else{
+                        // document.getElementById("agregarCP").disabled = true;
+                        return true;
+                    }
+                }
+                else{
+                    // document.getElementById("agregarCP").disabled = false;
+                    // this.arrayCarreras = this.arrayCarrerasCon.slice();
+                    return false;
+                }
             }
         },
         watch:{
             arrayCarreraPerfil:function(val){
-                if(this.arrayCarreraPerfil.length > 0){
-                    if(this.arrayCarreraPerfil[this.arrayCarreraPerfil.length-1][0]){
-                        if(this.arrayCarreraPerfil[0][0] == -1 || this.arrayCarreraPerfil[0][0] == -2){
-                            document.getElementById("agregarCP").disabled = true;
-                        }
-                        else{
-                            document.getElementById("agregarCP").disabled = false;
-                            this.arrayCarreras = this.arrayCarrerasSin.slice();
-                        }
-                    }
-                    else{
-                        document.getElementById("agregarCP").disabled = true;
-                    }
-                }
-                else{
-                    document.getElementById("agregarCP").disabled = false;
-                    this.arrayCarreras = this.arrayCarrerasCon.slice();
-                }
+                // if(this.arrayCarreraPerfil.length > 0){
+                //     if(this.arrayCarreraPerfil[this.arrayCarreraPerfil.length-1][0]){
+                //         if(this.arrayCarreraPerfil[0][0] == -1 || this.arrayCarreraPerfil[0][0] == -2){
+                //             document.getElementById("agregarCP").disabled = true;
+                //         }
+                //         else{
+                //             document.getElementById("agregarCP").disabled = false;
+                //             // this.arrayCarreras = this.arrayCarrerasSin.slice();
+                //         }
+                //     }
+                //     else{
+                //         document.getElementById("agregarCP").disabled = true;
+                //     }
+                // }
+                // else{
+                //     document.getElementById("agregarCP").disabled = false;
+                //     // this.arrayCarreras = this.arrayCarrerasCon.slice();
+                // }
             },
             flagErrorEstado:function(){
                 console.log("Hola")
+            },
+            arrayCarreras:function(val){
+                console.log("Carreras", val)
             }
         },
         mounted() {
@@ -1573,6 +1664,12 @@ import Swal from 'sweetalert2';
 
 .-alt {
     padding-left: 0;
+}
+
+.form-button-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 @media screen and (max-width: 450px) {

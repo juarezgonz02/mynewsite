@@ -38,15 +38,15 @@ class ProyectosxCarreraController extends Controller
     public function proyectosPorCarreraEdit(Request $request){
         $proyxcarrera = ProyectoxCarrera::where('idProyecto', '=', $request->idProyecto)->get();
         
-        if($this->totalCarreras() == sizeof($proyxcarrera) || $this->totalCarreras()-3 == sizeof($proyxcarrera)){
-            $protemp = new ProyectoxCarrera();
-            if($this->totalCarreras() == sizeof($proyxcarrera)) $protemp->idCarrera = -1;
-            else $protemp->idCarrera = -2;
-            $protemp->idFacultad = -1;
-            $protemp->limite_inf = $proyxcarrera[0]->limite_inf;
-            $protemp->limite_sup = $proyxcarrera[0]->limite_sup;
-            $proyxcarrera = array($protemp);
-        }
+        // if($this->totalCarreras() == sizeof($proyxcarrera) || $this->totalCarreras()-3 == sizeof($proyxcarrera)){
+        //     $protemp = new ProyectoxCarrera();
+        //     if($this->totalCarreras() == sizeof($proyxcarrera)) $protemp->idCarrera = -1;
+        //     else $protemp->idCarrera = -2;
+        //     $protemp->idFacultad = -1;
+        //     $protemp->limite_inf = $proyxcarrera[0]->limite_inf;
+        //     $protemp->limite_sup = $proyxcarrera[0]->limite_sup;
+        //     $proyxcarrera = array($protemp);
+        // }
 
         return $proyxcarrera;
     }

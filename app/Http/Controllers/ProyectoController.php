@@ -107,27 +107,38 @@ class ProyectoController extends Controller
                 
                 $arraycp = $request->carreraPerfil;
                 
-                for($i = 0; $i < count($arraycp); $i++){
-                    if($arraycp[$i][0] == -1 || $arraycp[$i][0] == -2){
-                        $this->todasLasCarreras($proyecto->idProyecto, $arraycp[$i]);
-                    }
-                    else{
-                        $pxc = new ProyectoxCarrera();
-                        $pxc->idProyecto = $proyecto->idProyecto;
-                        $pxc->idCarrera = $arraycp[$i][0];
-                        $pxc->limite_inf = $arraycp[$i][1];
-                        $pxc->limite_sup = $arraycp[$i][2];
-                        $pxc->save();
+                if($request->aplicarTodasCarreras){
+                    $this->aplicarTodasCarrerasAlProyecto($proyecto->idProyecto);
+                }
+                else{
+                    for($i = 0; $i < count($arraycp); $i++){
+                            $pxc = new ProyectoxCarrera();
+                            $pxc->idProyecto = $proyecto->idProyecto;
+                            $pxc->idCarrera = $arraycp[$i][0];
+                            $pxc->limite_inf = $arraycp[$i][1];
+                            $pxc->limite_sup = $arraycp[$i][2];
+                            $pxc->save();
                     }
                 }
                 
                 return response()->json('Proyecto creado exitosamente');
             });
         } catch (\Throwable $th) {
-            return response()->json('Crear Proyecto Fallo', 400);
+            // return response()->json('Crear Proyecto Fallo', 400);
+            return response()->json(['Crear Proyecto Fallo'=>$th->getMessage()], 400);
         }
     }
-        
+    private function aplicarTodasCarrerasAlProyecto($idProyecto){
+        $carreras = Carrera::all();
+        for($i = 0; $i < count($carreras); $i++){
+            $pxc = new ProyectoxCarrera();
+            $pxc->idProyecto = $idProyecto; 
+            $pxc->idCarrera = $carreras[$i]->idCarrera;
+            $pxc->limite_inf = 1;
+            $pxc->limite_sup = 6;
+            $pxc->save();
+        }
+    }
         private function todasLasCarreras(int $idProyecto, array $options){
             $carreras = Carrera::all();
             for($i = 0; $i < count($carreras); $i++){
@@ -164,6 +175,9 @@ class ProyectoController extends Controller
     public function update(Request $request)
     {
         try {
+
+            
+            
             //code...
             DB::transaction(function () use ($request) {
                 
@@ -186,24 +200,22 @@ class ProyectoController extends Controller
                 ProyectoxCarrera::where('idProyecto', '=', $request->idProyecto)->delete();
                 
                 $arraycp = $request->carreraPerfil;
-                
-                for($i = 0; $i < count($arraycp); $i++){
-                    if($arraycp[$i][0] == -1 || $arraycp[$i][0] == -2){
-                        $this->todasLasCarreras($proyecto->idProyecto, $arraycp[$i]);
-                    }
-                    else{
-                        $pxc = new ProyectoxCarrera();
-                        $pxc->idProyecto = $proyecto->idProyecto;
-                        $pxc->idCarrera = $arraycp[$i][0];
-                        $pxc->limite_inf = $arraycp[$i][1];
-                        $pxc->limite_sup = $arraycp[$i][2];
-                        $pxc->save();
+                if($request->aplicarTodasCarreras){
+                    $this->aplicarTodasCarrerasAlProyecto($proyecto->idProyecto);                    
+                }
+                else{
+                    for($i = 0; $i < count($arraycp); $i++){
+                            $pxc = new ProyectoxCarrera();
+                            $pxc->idProyecto = $proyecto->idProyecto;
+                            $pxc->idCarrera = $arraycp[$i][0];
+                            $pxc->limite_inf = $arraycp[$i][1];
+                            $pxc->limite_sup = $arraycp[$i][2];
+                            $pxc->save();
                     }
                 }
-                
                 return response()->json('Proyecto actualizado exitosamente');
-            
             });
+            
         } catch (\Throwable $th) {
             return response()->json(['Fallo al actualizar'=>$th->getMessage()], 400);
         }
