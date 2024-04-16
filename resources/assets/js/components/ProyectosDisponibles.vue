@@ -133,7 +133,7 @@
                 </div>
                 <div style="margin: 20px 0px 0px 20px;" v-if="!loadTable">
                     <div>
-                        <p>{{ user_info }}</p>
+                        <p>Se muestran proyectos para <strong>{{user_carrera.toUpperCase()}}</strong>, desde <strong>{{user_perfil.toUpperCase()}}</strong></p>
                         <p>Si tu año de carrera no coincide, recuerda que puedes cambiarlo desde la pestaña
                             <strong>Perfil</strong>. </p>
                     </div>
@@ -290,7 +290,7 @@ export default {
             user_email: '',
             user_perfil: '',
             user_carrera: '',
-            user_info: "",
+            user_info: {},
             ya_aplico_hoy: false,
             ya_aplico_proyecto: false,
             descripcion: '',
@@ -455,6 +455,7 @@ export default {
 
 
                 me.user_info = `Se muestran proyectos para ${me.user_carrera.toUpperCase()}, desde: ${me.user_perfil.toUpperCase()}`;
+                me.user_info.career 
             })
                 .catch(function (error) {
                     console.log(error);

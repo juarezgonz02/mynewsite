@@ -56,7 +56,6 @@ Route::middleware(['auth'])->group(function () {
 
         Route::put('/proyecto/actualizar', 'ProyectoController@update'); 
         Route::put('/proyecto/estado', 'ProyectoController@state');
-        Route::get('/carrera', 'CarreraController@index');
         
         Route::get('/proyectosxcarrera', 'ProyectosxCarreraController@proyectosPorCarreraEdit');
         Route::get('/estudiantesxproyecto', 'ProyectoxEstudianteController@estudiantesPorProyecto');
@@ -93,8 +92,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/proyecto/aplicar', 'ProyectoxEstudianteController@aplicar');
         Route::post('/proyecto/desaplicar', 'ProyectoxEstudianteController@deleteRow');
         Route::put('/estudiante/actualizar/perfil', 'PerfilController@updateMyProfile');
-
+        Route::put('/estudiante/actualizar/carrera', 'PerfilController@updateMyCareer');
         Route::get('/estadoAplicacion', 'UserController@estadoAplicacionEstudiante');
+        Route::get('/carrera', 'CarreraController@index');
     });
 });
 

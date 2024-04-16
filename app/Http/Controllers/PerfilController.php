@@ -112,8 +112,8 @@ class PerfilController extends Controller
                 $estudiante->idPerfil = $request->idPerfil;
                 $estudiante->save();
             // Se añade perfil para acutualizar localstorage de la app movil
-            $estudianteres = User::where('idUser', '=', $idEstudiante)->with(['perfil'])->firstOrFail();
-            return response()->json($estudianteres,200);
+            $estudianteRes = User::where('idUser', '=', $idEstudiante)->with(['perfil'])->firstOrFail();
+            return response()->json($estudianteRes,200);
         } catch (\Throwable $th) {
             return response()->json($th, 400);
         }
@@ -125,6 +125,31 @@ class PerfilController extends Controller
 
         // return response()->json($estudiante);
         
+    }
+
+    public function updateMyCareer(Request $request){
+        $validator = Validator::make($request->all(), [
+            'idUsuario' => 'required',
+            'idCarrera'    => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+
+        try {
+            
+            $idEstudiante = Auth()->user()->idUser;
+            
+            $estudiante = User::where('idUser', '=', $idEstudiante)->firstOrFail();
+                $estudiante->idCarrera = $request->idCarrera;
+                $estudiante->save();
+            // Se añade perfil para acutualizar localstorage de la app movil
+            $estudianteRes = User::where('idUser', '=', $idEstudiante)->with(['carrera'])->firstOrFail();
+            return response()->json($estudianteRes,200);
+        } catch (\Throwable $th) {
+            return response()->json($th, 400);
+        }
     }
 
     
