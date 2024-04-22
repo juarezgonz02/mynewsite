@@ -409,7 +409,7 @@ export default {
                         this.modal_fecha_in = data.fecha_inicio;
                         this.modal_fecha_fin = data.fecha_fin;
                         this.modal_contraparte = data.contraparte;
-                        console.log(data);
+                        
                         break;
                     }
                 default:
