@@ -334,34 +334,23 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group row div-form mb-5">
-                               
-                                <label class="col-md-3 form-control-label" for="text-input">Estado del proyecto</label>
-                                <div class="col-md-9">
-                                    <!-- Checkbox  Finalizar , Cancelar-->
-                                    <div class="form-check" :style="{ backgroundColor: (modal_estado === '2' ? '#20a8d8' : ''), color : (modal_estado === '2' ? 'white' : 'black') }">
-                                        <input class="form-check-input" type="radio" v-model="modal_estado" value="2" id="finalizar" name="estado">
-                                        <label class="form-check-label" for="finalizar">Finalizar</label>
-
-                                    </div>
-                                    <div class="form-check" :style="{ backgroundColor: (modal_estado === '3' ? '#20a8d8' : ''), color : (modal_estado === '3' ? 'white' : 'black')}">
-                                        <input class="form-check-input" type="radio" v-model="modal_estado" value="3" id="cancelar" name="estado">
-                                        <label class="form-check-label" for="cancelar">Cancelar</label>
-                                    </div> 
-                                    <p :class="{show: errorEstado == 1, hide: errorEstado != 1}" class="error">Debe seleccionar un estado</p>
-                                    <label>Al seleccionar <strong>Cancelar</strong> el proyecto sera eliminado del registro.</label>
-                                </div>
-                            </div>
+                            
                             <h5>Por favor escriba <b>{{ modal_nombre }}</b> para confirmar el cambio de estado de este proyecto</h5>
                             <div class="col-md-9 -alt">
                                 <input type="text" v-model="modal_confirmar" class="form-control">
                                 <p :class="{show: errorEstado == 1, hide: errorEstado != 1}" class="error">El texto ingresado no coincide con el solicitado</p>
                             </div>
+
+                            <div class="state-btn-container" disabled>
+                                <button type="button" class="btn btn-success btn-lg" @click="showChangeStatusConfirm('finalizar')"><i class="icon-check"></i> Finalizar proyecto</button>
+                                <button type="button" class="btn btn-danger btn-lg" @click="showChangeStatusConfirm('cancelar')"><i class="icon-close"></i> Cancelar proyecto</button> 
+                                <button type="button" class="btn btn-secondary btn-lg" @click="showChangeStatusConfirm('eliminar')"><i class="icon-trash"></i> Eliminar Proyecto</button>
+                            </div>
                         </div>
-                        <div class="modal-footer">
+                        <!-- <div class="modal-footer">
                             <button type="button" data-dismiss="modal" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
                             <button type="button" class="btn btn-primary" v-bind:data-dismiss="flagErrorEstado ? '' : 'modal' " @click="estadoProyecto()">Confirmar</button>
-                        </div>
+                        </div> -->
                     </div>
                     <!-- /.modal-content -->
                 </div>
@@ -662,8 +651,7 @@
                                     <h6>de:  &nbsp; </h6>
                                     <h6 style="font-weight: 	bold;" v-text="nombre_proyecto"></h6>
                                 </div>
-                                <p>¿Estás seguro/a de que deseas remover a este estudiante? Al dar click en Confirmar el estudiante sera removido del proyecto 
-                                    y le sera aplicada una <b>penalización de 30 dias  </b>sin poder aplicar a otros proyectos. Esta penalización puede ser removida desde el panel <b>Buscar estudiante</b></p>
+                                <p>¿Estás seguro/a de que deseas remover a este estudiante?</p>
                                 
                             </div>
                             <div class="modal-footer">
@@ -1532,6 +1520,70 @@ import Swal from 'sweetalert2';
                     console.log(error);
                 });
             },
+            showChangeStatusConfirm(estado){
+
+                if(estado != 'finalizar' && estado != 'cancelar' && estado != 'eliminar'){
+                    console.log("Estado no valido")
+                    return
+                }
+
+                if(this.modal_confirmar != this.modal_nombre){
+                    this.flagErrorEstado = true
+                    this.errorEstado = 1
+                    return
+                }
+
+                Swal.fire({
+                    title: `¿Estas seguro? de ${estado} el proyecto`,
+                    text: `No podras deshacer esta acción\n ${estado == 'eliminar' ? 'Se eliminara el registro completo de este proyecto.' : ''}`,
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Confirmar",
+                    cancelButtonText: "Cancelar",
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.cambiarEstadoProyecto(estado);
+                    }
+                    this.cerrarModal();
+                    });
+            },
+            cambiarEstadoProyecto(estado){
+                if(estado != 'finalizar' && estado != 'cancelar' && estado != 'eliminar'){
+                    console.log("Estado no valido")
+                    return
+                }
+                let me = this;
+                if(me.modal_confirmar != me.modal_nombre){
+                    me.flagErrorEstado = true
+                    me.errorEstado = 1
+                }
+                else{
+                    me.loading = 1;
+                    axios.post(`${API_HOST}/proyecto/${estado}`,{
+                            idProyecto: this.id_proyecto    
+                    }).then(function (response){
+                        // console.log(response);
+                        
+                        // $('#statusModal').modal('hide');
+                        
+                        Swal.fire({
+                            icon: response.data.success ? 'success' : 'error',
+                            title: 'Estado del proyecto',
+                            text: response.data.message,
+                        });
+                    }).catch(function (error){
+                        console.log(error);
+                    }).finally(function(){
+                        $('#statusModal').modal('hide');
+                        me.loading = 0;
+                        me.bindDataByFilters();
+                        me.cerrarModal();
+                    });
+
+                }
+            },
             disabledBotonAgregarCarrera(){
                 if(this.arrayCarreraPerfil.length > 0){
                     if(this.arrayCarreraPerfil[this.arrayCarreraPerfil.length-1][0]){
@@ -1817,6 +1869,10 @@ import Swal from 'sweetalert2';
     margin-left: 0.5em;
 }
 
-
+.state-btn-container{
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
 
 </style>

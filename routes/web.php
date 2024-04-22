@@ -76,7 +76,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/users/admin/all', 'AdminUserController@getAllAdmins');
         Route::post('/proyecto/cancelar', 'ProyectoController@cancelProject');
         Route::post('/proyecto/finalizar', 'ProyectoController@endProject');
-
+        Route::post('/proyecto/eliminar', 'ProyectoController@deleteProject');
 
         Route::get('/estadisticas/dashboard', 'EstadisticasController@getDashboardData');
     });

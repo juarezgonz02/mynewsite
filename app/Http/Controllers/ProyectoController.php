@@ -310,23 +310,15 @@ public function state(Request $request)
 
                 $proyecto = Proyecto::findOrFail($request->idProyecto);
                 $proyecto->estado_proyecto = 'Finalizado';
-                $proyecto->estado = '0';
+                $proyecto->estado = 0;
                 $proyecto->save();
 
-            // $users = User::join('proyectoxestudiante', 'users.idUser', '=', 'proyectoxestudiante.idUser')
-            // ->join('proyecto', 'proyecto.idProyecto', '=', 'proyectoxestudiante.idProyecto')
-            // ->select('users.correo', 'proyecto.nombre')
-            // ->where('proyectoxestudiante.idProyecto', '=', $request->idProyecto)
-            // ->where('proyecto.estado_proyecto', '==', 'Finalizado')->get();
-
-            // if(count($users) > 0){
-            //     $mailArray = [];
-            //     for($i=0; $i<count($users); $i++){
-            //         $mailArray[$i] = $users[$i]->correo;
-            //     }
-            //     $this->sendEmailEndProject($mailArray, $users[0]);
-            // }
-
+            // EstudianteXProyecto
+            //     Estado 0: Pendiente
+            //     Estado 1: Aceptado / En curso
+            //     Estado 2: Rechazado
+            //     Estado 3: Aceptado / Finalizado
+            //     Estado 4: Aceptado / Cancelado
             $proyectoXEstudiante = ProyectoxEstudiante::where('idProyecto', '=', $request->idProyecto)->get();
             for($i = 0; $i < count($proyectoXEstudiante); $i++){
                 if($proyectoXEstudiante[$i]->estado == 1){
@@ -355,16 +347,60 @@ public function state(Request $request)
 
             // Al cancelar, se elimina el registro de estudiantes en el proyecto 
             $proyectoXEstudiante = ProyectoxEstudiante::where('idProyecto', '=', $request->idProyecto)->get();
-            foreach($proyectoXEstudiante as $p){
-                // $p->estado = 2;
-                $p->delete();
+
+            // EstudianteXProyecto
+            //     Estado 0: Pendiente
+            //     Estado 1: Aceptado / En curso
+            //     Estado 2: Rechazado
+            //     Estado 3: Aceptado / Finalizado
+            //     Estado 4: Aceptado / Cancelado
+            for($i = 0; $i < count($proyectoXEstudiante); $i++){
+                if($proyectoXEstudiante[$i]->estado == 1){
+                    $proyectoXEstudiante[$i]->estado = 4;
+                    $proyectoXEstudiante[$i]->save();
+                }else if($proyectoXEstudiante[$i]->estado == 0){
+                    $proyectoXEstudiante[$i]->delete();
+                }
             }
-            });
+        });
+
+
         } catch (\Throwable $th) {
-            return response()->json(['success' => false, 'message' => 'Error al cancelar el proyecto']);
+            return response()->json(['success' => false, 'message' => 'Error al cancelar el proyecto', 'error' => $th->getMessage()	]);
         }
 
         return response()->json(['success' => true, 'message' => 'Proyecto cancelado exitosamente']);
+
+    }
+
+
+    public function deleteProject(Request $request){
+        try{
+            DB::transaction(function () use ($request) {
+
+            
+
+                // Al cancelar, se elimina el registro de estudiantes en el proyecto 
+                $proyectoXEstudiante = ProyectoxEstudiante::where('idProyecto', '=', $request->idProyecto)->get();
+                foreach($proyectoXEstudiante as $p){
+                    // $p->estado = 2;
+                    $p->delete();
+                }
+
+                $proyecto = Proyecto::findOrFail($request->idProyecto);
+                // $proyecto->estado = 0;
+                // $proyecto->save();
+                $proyecto->delete();
+           
+            });
+
+            
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => 'Error al eliminar el proyecto', 'error' => $th->getMessage()], 400);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Proyecto eliminado exitosamente'],200);
+        
 
     }
 }

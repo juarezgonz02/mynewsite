@@ -23,7 +23,7 @@
                             proyecto </p>
                     </b>
                     <b style="color:red" v-if="timeout != ''">
-                        <p>Penalización: No puede aplicar a nuevos proyectos hasta</p>
+                        <p>Podra aplicar a un nuevo proyectos el dia</p>
                         <p v-text="timeout"></p>
 
                     </b>
