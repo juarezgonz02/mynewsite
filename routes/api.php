@@ -16,10 +16,13 @@ use Illuminate\Http\Request;
 
 
 //AUTH ENDPOINTS
-Route::post('/login',               'Api\ApiAuthController@login'       );
-Route::post('/registro',            'Api\ApiAuthController@registro'    );
-Route::post('/olvide-clave',        'Api\ApiAuthController@olvideClave' );
-Route::post('/cambiar-clave',       'Api\ApiAuthController@cambiarClave');
+Route::post('/login', 'Api\ApiAuthController@login');
+Route::post('/registro', 'Api\ApiAuthController@registro');
+Route::post('/googleauth', 'Auth\GoogleLoginController@handleAPICallback');
+Route::post('/registrar_google', 'Auth\GoogleLoginController@registrar_api')->name('google.register_google');
+
+Route::post('/olvide-clave', 'Api\ApiAuthController@olvideClave' );
+Route::post('/cambiar-clave', 'Api\ApiAuthController@cambiarClave');
 
 
 Route::get('getFacultades', 'Api\FacultadController@getFacultades');

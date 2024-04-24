@@ -12,4 +12,10 @@ class PasswordResetToken extends Model
     protected $fillable = [
         'idToken', 'idUser', 'token', 'expires_at'
     ];
+
+    
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'idUser', 'idUser');
+    }    
 }

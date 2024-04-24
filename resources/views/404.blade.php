@@ -29,5 +29,6 @@
         <a href="{{url('/')}}" id="errortext"> regresar</a>    
     </button>
     
+    <script src="js/plantilla.js"></script>
 </div>
 </main>
