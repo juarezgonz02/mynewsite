@@ -44,6 +44,7 @@ Route::middleware(['auth:api', ])->group(function () {
     Route::post('/postAplicarProyecto', 'ProyectoxEstudianteController@aplicar');
     Route::post('/postDesaplicarProyecto', 'ProyectoxEstudianteController@deleteRow');
     Route::put('/estudiante/actualizar/perfil', 'PerfilController@updateMyProfile');
+    Route::put('/estudiante/actualizar/carrera', 'PerfilController@updateMyCareer');
     
     // ADMIN ROUTES
     Route::middleware(['Administrador'])->group(function () {

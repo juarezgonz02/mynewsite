@@ -193,6 +193,12 @@ export default {
 
 <style>
   /* Estilos generales para mejorar la apariencia de la tabla y los elementos */
+
+  .main{
+    display: flex;
+    flex-direction: column;
+    min-height: 95vh;
+  }
   
   .container {
     padding-top: 5vh;

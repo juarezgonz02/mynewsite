@@ -28,7 +28,7 @@
                             proyecto </p>
                     </b>
                     <b style="color:red" v-if="timeout != ''">
-                        <p>Penalización: No puede aplicar a nuevos proyectos hasta</p>
+                        <p>Podra aplicar a un nuevo proyectos el dia</p>
                         <p v-text="timeout"></p>
 
                     </b>
@@ -139,9 +139,11 @@
                         </ul>
                     </nav>
                 </div>
-                    <div style="margin: 20px 0px 0px 20px;" v-if="!loadTable">
-                        <div>
-                            <p class="mb-0" >Si tu año de carrera no coincide, recuerda que puedes cambiarlo desde la pestaña
+                <div style="margin: 20px 0px 0px 20px;" v-if="!loadTable">
+                    <div class="mb-0">
+                        <p>Se muestran proyectos para <strong>{{user_carrera.toUpperCase()}}</strong>, desde <strong>{{user_perfil.toUpperCase()}}</strong></p>
+                        <p>Si tu año de carrera no coincide, recuerda que puedes cambiarlo desde la pestaña
+
                             <strong>Perfil</strong>. </p>
                         </div>
                     <div id="appear">
@@ -298,7 +300,7 @@ export default {
             user_email: '',
             user_perfil: '',
             user_carrera: '',
-            user_info: "",
+            user_info: {},
             ya_aplico_hoy: false,
             ya_aplico_proyecto: false,
             descripcion: '',
@@ -417,7 +419,7 @@ export default {
                         this.modal_fecha_in = data.fecha_inicio;
                         this.modal_fecha_fin = data.fecha_fin;
                         this.modal_contraparte = data.contraparte;
-                        console.log(data);
+                        
                         break;
                     }
                 default:
@@ -463,6 +465,7 @@ export default {
 
 
                 me.user_info = `Se muestran proyectos para ${me.user_carrera.toUpperCase()}, desde: ${me.user_perfil.toUpperCase()}`;
+                me.user_info.career 
             })
                 .catch(function (error) {
                     console.log(error);

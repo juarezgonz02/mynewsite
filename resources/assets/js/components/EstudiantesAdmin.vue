@@ -38,7 +38,7 @@
                             </div>
                             <div v-if="nombre_completo != ''">
                                 <!-- icon button  -->
-                                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editarEstudiante" style="margin-right: 15px;" @click="toggleEditDisabled()" >Editar</button>
+                                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editarEstudiante" style="margin-right: 15px;" @click="toggleEditDisabled(!editDisabled)" >Editar</button>
                             </div>
                         
                     </div>
@@ -68,7 +68,8 @@
                                     <option v-for="perfil in arrayPerfil" :value="perfil.idPerfil" :key="perfil.idPerfil">{{perfil.perfil}}</option>
                                 </select>
                             </div>
-                            <div v-if="timeout">
+                            <!-- Hide timeout feature -->
+                            <div v-if="timeout" hide>
 
                                 <div class="form-group row">
                                     <label for="perfil" class="form-control-label">Penalizado hasta:</label>
@@ -81,22 +82,33 @@
                                 <div>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label for="perfil" class="form-control-label" >Inscrito en:</label>
+                            <div style="display:flex; margin-inline:30px; padding:0; margin-top:30px;">
+                                <table class="table table-bordered m-0 p-0" v-if="proyectoInscritoFlag" >
+                                    <thead>
+                                        <tr>
+                                            <th>Proyecto inscrito</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td v-if="proyectoInscritoFlag" v-text="proyectoInscrito"></td>
+                                        </tr>
+                                    </tbody>            
+                                </table>
                             </div>
-                            <div class="form-group row">
-                                <label for="perfil" class="label" style="font-weight: bold;" v-text="proyectoInscrito"></label>
-                            </div>
-                            <div v-if="!proyectoInscritoFlag" id="message" style="margin-bottom:0" class="alert alert-info row" role="alert">
+                                <!-- <div class="form-group row">
+                                    <label for="perfil" class="label" style="font-weight: bold;" v-text="proyectoInscrito"></label>
+                                </div> -->
+                            <div v-if="!proyectoInscritoFlag" id="message" style="margin-bottom:10" class="alert alert-info row" role="alert">
                                 No se encuentra inscrito en ningun proyecto.
                             </div>
-                            <div v-if="errorActualizar == 1" id="message" style="margin-bottom:0" class="alert alert-success row" role="alert">
+                            <div v-if="errorActualizar == 1" id="message" style="margin-bottom:10" class="alert alert-success row" role="alert">
                                 Estudiante actualizado correctamente
                             </div>
-                            <div v-else-if="errorActualizar == 2" id="message" style="margin-bottom:0" class="alert alert-danger row" role="alert">
+                            <div v-else-if="errorActualizar == 2" id="message" style="margin-bottom:10" class="alert alert-danger row" role="alert">
                                 Busque un estudiante
                             </div>
-                            <div v-else-if="errorActualizar == 3" id="message" style="margin-bottom:0" class="alert alert-danger row" role="alert">
+                            <div v-else-if="errorActualizar == 3" id="message" style="margin-bottom:10" class="alert alert-danger row" role="alert">
                                 Seleccione una carrera
                             </div>
                             <div v-else style="visibility:hidden; margin-bottom:0"  class="alert row" role="alert">.</div>
@@ -116,6 +128,7 @@
 
 <script>
 import {API_HOST} from '../constants/endpoint.js';
+import Swal from 'sweetalert2'
     export default {
         data(){
             return{
@@ -124,8 +137,11 @@ import {API_HOST} from '../constants/endpoint.js';
                 nombres : '',
                 apellidos : '',
                 idCarrera : 0,
-                idFacultad : 1,
-                idPerfil : 1,
+                idCarreraAux: 0,
+                idFacultad : 0,
+                idFacultadAux: 0,
+                idPerfil : 0,
+                idPerfilAux: 0,
                 nombre_completo : '',
                 arrayFacultad : [],
                 arrayCarrera : [],
@@ -149,7 +165,7 @@ import {API_HOST} from '../constants/endpoint.js';
                 })
                 axios.get(`${API_HOST}/carrera`).then(function (response) {
                     me.arrayCarrera = response.data;
-                    me.getCarreras(false)
+                    // me.getCarreras(false)
                 })
                 axios.get(`${API_HOST}/perfil`).then(function (response) {
                     me.arrayPerfil = response.data;
@@ -176,11 +192,13 @@ import {API_HOST} from '../constants/endpoint.js';
                         var carrera = response.data[1];
                         me.nombres = estudiante.nombres;
                         me.apellidos = estudiante.apellidos;
-                        me.idCarrera = estudiante.idCarrera;
                         me.idPerfil = estudiante.idPerfil;
+                        me.idPerfilAux = estudiante.idPerfil;
                         me.nombre_completo = estudiante.nombres + " " + estudiante.apellidos;
+                        me.idCarrera = estudiante.idCarrera;  
+                        me.idCarreraAux = estudiante.idCarrera;  
                         me.idFacultad = carrera.idFacultad;
-                        me.getCarreras(true)
+                        me.idFacultadAux = carrera.idFacultad;
                         me.timeout = me.fechaLegible(estudiante.timeout);
                         me.idUser = estudiante.idUser;
                         me.getUserProyectos()
@@ -201,15 +219,25 @@ import {API_HOST} from '../constants/endpoint.js';
             },
             getCarreras(flag){
                 let me = this
-                if(!flag) this.idCarrera = 0
+                if(flag) this.idCarrera = 0
+                else this.idCarrera = this.idCarreraAux
                 this.arrayCarreraFact = []
                 this.arrayCarrera.forEach(function(element){
                     if(element.idFacultad == me.idFacultad) me.arrayCarreraFact.push(element)
                 })
+                    console.log("Exec get carreras", flag)
+                    console.log(this.idCarrera)
             },
             actualizarEstudiante(){
                 let me = this
-                if(this.carnet != ''){
+                if(this.carnet == '' && this.idPerfil == 0){
+                    this.errorActualizar = 2
+                    return;
+                }
+                if(this.idCarrera == this.idCarreraAux && this.idPerfil == this.idPerfilAux){
+                    this.errorActualizar = 1
+                    return;
+                }
                     if(this.idCarrera != null && this.idCarrera != 0){
                         axios.put(`${API_HOST}/estudiante/actualizar`, {
                             'carnet' : this.carnet,
@@ -217,18 +245,37 @@ import {API_HOST} from '../constants/endpoint.js';
                             'idPerfil' : this.idPerfil
                         }).then(function (response) {
                             me.errorActualizar = 1
+                            console.log(response)
+                            if(response.status == 200)
+                            {
+                                Swal.fire({
+                                    title: 'Estudiante actualizado',
+                                    text: 'El estudiante ha sido actualizado correctamente',
+                                    icon: 'success',
+                                    timer: 2000
+                                });
+                                me.idCarreraAux = me.idCarrera
+                                me.idFacultadAux = me.idFacultad
+                                me.idPerfilAux = me.idPerfil
+                            }
+                        }).
+                        finally(function(){
+                            me.toggleEditDisabled(true);
+                            me.buscarEstudiante()
                         })
                         .catch(function (error) {
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Ha ocurrido un error al actualizar el estudiante',
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar'
+                            })
                             console.log(error);
                         });
                     }
                     else{
                         this.errorActualizar = 3
                     }
-                }
-                else{
-                    this.errorActualizar = 2;
-                }
             },
             removerTimeOut(){
                 let me = this
@@ -266,8 +313,13 @@ import {API_HOST} from '../constants/endpoint.js';
             cerrarModal(){
                 
             },
-            toggleEditDisabled(){
-                this.editDisabled = !this.editDisabled
+            toggleEditDisabled(disabled){
+                if(disabled){
+                    this.idCarrera = this.idCarreraAux
+                    this.idFacultad = this.idFacultadAux
+                    this.idPerfil = this.idPerfilAux
+                }
+                    this.editDisabled = disabled
             },
             abrirModal(modelo, data = []){
                 switch (modelo) {
@@ -291,7 +343,8 @@ import {API_HOST} from '../constants/endpoint.js';
         },
         watch:{
             idFacultad:function(val){
-                this.getCarreras(false);
+                console.log("Facultad", val)
+                this.getCarreras(val != this.idFacultadAux);
             }
         },
         mounted(){

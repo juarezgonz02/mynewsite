@@ -193,8 +193,7 @@ class EstadisticasController extends Controller
                          }
         }
 
-
-
+        $estudiantes = $this->getGendersByFacultadCarrera($idFacultad, $idCarrera);
 
         return [
             'numeroDeEstudiantes' => $numeroDeEstudiantes,
@@ -204,9 +203,249 @@ class EstadisticasController extends Controller
             'totalNumeroDeProyectosActivos' => $totalNumeroDeProyectosActivos,
             'idCarrera' => $idCarrera,
             'idFacultad' => $idFacultad,
+            'estudiantes' => $estudiantes
         ];
 
     }
+
+    public function getGendersByFacultadCarrera($idFacultad = null, $idCarrera = 0){
+        if($idCarrera != null || $idCarrera != 0){
+            $numeroDeEstudiantesMasculinos = User::join('carrera', 'users.idCarrera', '=', 'carrera.idCarrera')
+                ->join('facultad', 'carrera.idFacultad', '=', 'facultad.idFacultad')
+                ->where('users.estado', '=', 1)
+                ->where('users.idRol','=', 2)
+                ->where('users.genero', '=', 'M')
+                ->where('carrera.idCarrera', '=', $idCarrera)
+                ->count();
+                    
+        }
+        
+        else{
+            if($idFacultad != null || $idFacultad != 0){
+                // $numeroDeEstudiantes = User::where('estado', '=', 1)->where('idRol','=', 2)->count();
+                $numeroDeEstudiantesMasculinos = User::join('carrera', 'users.idCarrera', '=', 'carrera.idCarrera')
+                    ->join('facultad', 'carrera.idFacultad', '=', 'facultad.idFacultad')
+                    ->where('users.estado', '=', 1)
+                    ->where('users.idRol','=', 2)
+                    ->where('users.genero', '=', 'M')
+                    ->where('facultad.idFacultad', '=', $idFacultad)
+                    ->count();
+                
+                
+                
+            }       
+            else{
+                $numeroDeEstudiantesMasculinos = User::join('carrera', 'users.idCarrera', '=', 'carrera.idCarrera')
+                ->join('facultad', 'carrera.idFacultad', '=', 'facultad.idFacultad')
+                ->where('users.estado', '=', 1)
+                ->where('users.idRol','=', 2)
+                ->where('users.genero', '=', 'M')
+                ->count();
+                
+            }
+        }
+
+        if($idCarrera != null || $idCarrera != 0){
+            $numeroDeEstudiantesFemeninos = User::join('carrera', 'users.idCarrera', '=', 'carrera.idCarrera')
+                ->join('facultad', 'carrera.idFacultad', '=', 'facultad.idFacultad')
+                ->where('users.estado', '=', 1)
+                ->where('users.idRol','=', 2)
+                ->where('users.genero', '=', 'F')
+                ->where('carrera.idCarrera', '=', $idCarrera)
+                ->count();
+                    
+        }
+        
+        else{
+            if($idFacultad != null || $idFacultad != 0){
+                // $numeroDeEstudiantes = User::where('estado', '=', 1)->where('idRol','=', 2)->count();
+                $numeroDeEstudiantesFemeninos = User::join('carrera', 'users.idCarrera', '=', 'carrera.idCarrera')
+                    ->join('facultad', 'carrera.idFacultad', '=', 'facultad.idFacultad')
+                    ->where('users.estado', '=', 1)
+                    ->where('users.idRol','=', 2)
+                ->where('users.genero', '=', 'F')
+                    ->where('facultad.idFacultad', '=', $idFacultad)
+                    ->count();
+                
+                
+                
+            }       
+            else{
+                $numeroDeEstudiantesFemeninos = User::join('carrera', 'users.idCarrera', '=', 'carrera.idCarrera')
+                ->join('facultad', 'carrera.idFacultad', '=', 'facultad.idFacultad')
+                ->where('users.estado', '=', 1)
+                ->where('users.idRol','=', 2)
+                ->where('users.genero', '=', 'F')
+
+                ->count();
+                
+            }
+        }
+
+
+        return [
+            'masculinos' => $numeroDeEstudiantesMasculinos,
+            'femeninos' => $numeroDeEstudiantesFemeninos,
+        ];
+
+
+    }
+
+    public function getDashboardData(Request $request){
+        if(!$request->ajax()) return redirect('/home');
+        
+        
+        $validator = Validator::make($request->all(), [
+            'idCarrera' => 'nullable|integer',
+            'idFacultad' => 'nullable|integer',
+        ]);
+
+        if ($validator->fails()) {
+            // Manejo personalizado de errores de validación
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $idFacultad = (int)$request->idFacultad;
+        $idCarrera = (int)$request->idCarrera;
+        $year = (int)$request->year ?? 2024;
+
+        
+        $estudiantes = $this->getGendersByFacultadCarrera($idFacultad, $idCarrera);
+        $arrayEstudiantesRegistradorPorMes = $this->parseObjectToArrayYear($this->getStudentsRegisteredByMonth($year), $year);
+        $arrayEstudiantesPorCarrera = $this->getTotalStudentsGroupByCareer();
+        $arrayProyectosRegistradosPorMes = $this->parseObjectToArrayYear($this->getProjectsRegisteredByMonth($year), $year);
+        
+        return [
+            'estudiantes' => $estudiantes,
+            'estudiantesRegistradosPorMes' => $arrayEstudiantesRegistradorPorMes,
+            'meses' => $this->getMonths($year),
+            'estudiantesPorCarrera' => $arrayEstudiantesPorCarrera,
+            'proyectosRegistradosPorMes' => $arrayProyectosRegistradosPorMes,
+        ];
+    }
+
+
+
+    // Arreglo con los estudiantes registrados por mes en un año en específico
+    public function getStudentsRegisteredByMonth($year){
+        $students = User::where('estado', '=', 1)
+            ->where('idRol','=', 2)
+            ->whereYear('created_at', '=', $year)
+            ->get()
+            ->groupBy(function($date) {
+                return $date->created_at->format('m');
+            });
+        $studentsCount = [];
+            
+        
+        foreach ($students as $key => $value) {
+            $studentsCount[(int)$key] = count($value);
+        }
+
+
+        return $studentsCount;
+    }
+
+    public function getProjectsRegisteredByMonth($year){
+        $projects = Proyecto::whereYear('created_at', '=', $year)
+            ->get()
+            ->groupBy(function($date) {
+                return $date->created_at->format('m');
+            });
+        $projectsCount = [];
+            
+        
+        foreach ($projects as $key => $value) {
+            $projectsCount[(int)$key] = count($value);
+        }
+        return $projectsCount;
+    }
+    public function parseObjectToArrayYear($object, $year = null){
+        $array = [];
+        for($i = 0; $i < 12; $i++){
+            if(array_key_exists($i, $object)){
+
+                // push the value
+                $array[$i] = $object[$i];
+            }
+            else{
+                $array[$i] = 0;
+            }
+        }
+
+        if($year == date('Y')){
+
+            $currentMonth = date('m');
+            $array = array_slice($array, 0, $currentMonth);
+        }
+
+        return $array;
+    }
+
+
+    public function getMonths($year = null){
+
+        $months = [
+            'Enero',
+            'Febrero',
+            'Marzo',
+            'Abril',
+            'Mayo',
+            'Junio',
+            'Julio',
+            'Agosto',
+            'Septiembre',
+            'Octubre',
+            'Noviembre',
+            'Diciembre'
+        ];
+
+        // if year is current year then get months until current month
+        if($year == date('Y')){
+
+            $currentMonth = date('m');
+            $months = array_slice($months, 0, $currentMonth);
+        }
+
+
+
+        return $months;	
+
+    }
+
+
+    public function getTotalStudentsGroupByCareer(){
+        // if(!$request->ajax()) return redirect('/home');
+        
+        $students = User::where('estado', '=', 1)
+            ->where('idRol','=', 2)
+            ->get()
+            ->groupBy('idCarrera')
+            ->map(function ($item) {
+                return count($item);
+            });
+
+        $careers = Carrera::all();
+
+        $arrayCareers = [];
+        $arrayTotalStudentsCareers = [];
+
+
+        $careers->map(function($career) use ($students){
+            $career->estudiantes = $students[$career->idCarrera] ?? 0;
+            // $arrayCareers->array_push($career->nombre);
+            // $arrayTotalStudentsCareers->array_push($students[$career->idCarrera] ?? 0);
+
+
+        });
+
+        
+
+
+
+
+        return $careers;
+        }
 
 }
 

@@ -57,7 +57,6 @@ Route::middleware(['auth'])->group(function () {
 
         Route::put('/proyecto/actualizar', 'ProyectoController@update'); 
         Route::put('/proyecto/estado', 'ProyectoController@state');
-        Route::get('/carrera', 'CarreraController@index');
         
         Route::get('/proyectosxcarrera', 'ProyectosxCarreraController@proyectosPorCarreraEdit');
         Route::get('/estudiantesxproyecto', 'ProyectoxEstudianteController@estudiantesPorProyecto');
@@ -78,6 +77,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/users/admin/all', 'AdminUserController@getAllAdmins');
         Route::post('/proyecto/cancelar', 'ProyectoController@cancelProject');
         Route::post('/proyecto/finalizar', 'ProyectoController@endProject');
+        Route::post('/proyecto/eliminar', 'ProyectoController@deleteProject');
+
+        Route::get('/estadisticas/dashboard', 'EstadisticasController@getDashboardData');
     });
 
     Route::middleware(['NormalUser'])->group(function () {
@@ -91,8 +93,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/proyecto/aplicar', 'ProyectoxEstudianteController@aplicar');
         Route::post('/proyecto/desaplicar', 'ProyectoxEstudianteController@deleteRow');
         Route::put('/estudiante/actualizar/perfil', 'PerfilController@updateMyProfile');
-
+        Route::put('/estudiante/actualizar/carrera', 'PerfilController@updateMyCareer');
         Route::get('/estadoAplicacion', 'UserController@estadoAplicacionEstudiante');
+        Route::get('/carrera', 'CarreraController@index');
     });
 });
 

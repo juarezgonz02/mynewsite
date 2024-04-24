@@ -168,6 +168,17 @@
                                           <td v-text="estudiante.perfil"></td>
                                           <td v-text="estudiante.carrera"></td>
                                           <td>
+
+                                              <!-- 
+                                                EstudianteXProyecto
+                                                Estado 0: Pendiente
+                                                Estado 1: Aceptado / En curso
+                                                Estado 2: Rechazado
+                                                Estado 3: Aceptado / Finalizado
+                                                Estado 4: Aceptado / Cancelado
+                                                  -->
+
+
                                               <div v-if="estudiante.estado == 0" style="display: flex; flex-direction: row;">
                                                   <button type="button" data-toggle="modal" data-target="#confirmModal" @click="abrirModal('confirmacion', estudiante, true)" class="btn btn-success btn-sm">
                                                       Aceptar
@@ -180,9 +191,13 @@
                                               <div v-else-if="estudiante.estado == 2">
                                                   <span  class="badge badge-danger" style="border-radius: 5px;"><p id="estadorp" style="display: inline;">RECHAZADO</p></span>
                                               </div>
-                                              <div v-else-if="estudiante.estado == 1 || estudiante.estado == 3">
+
+                                
+                                              <div v-else-if="estudiante.estado == 1 || estudiante.estado == 3 || estudiante.estado == 4">
                                                   <span  class="badge badge-success" style="border-radius: 5px;"><p id="estadoap" style="display: inline;">ACEPTADO</p></span>
                                               </div>
+                                              
+
                                           </td>                              
                                       </tr>
                                   </tbody>

@@ -275,11 +275,19 @@ class ProyectoxEstudianteController extends Controller{
         }
         $pxe->delete();
 
-        // add 30 days timeout to user
-        $user = User::where('idUser', '=', $id_estudiante)->first();
-        $user->timeout = date('Y-m-d', strtotime('+30 days'));
-        $user->save();
+        /*
+        ==================================================================================================
+        Funcionalidad para aplicar timeout a estudiante
+         Funcionalidad deshabilitada por el momento, se espera controlar el tiempo de aplicacion de los estudiantes
+         de forma administrativa. 
+        ==================================================================================================
+         */
 
+        // ========================`
+        // $user = User::where('idUser', '=', $id_estudiante)->first();
+        // $user->timeout = date('Y-m-d', strtotime('+1 days'));
+        // $user->save();
+        // ========================
         
 
         return response()->json([

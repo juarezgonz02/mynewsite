@@ -49,7 +49,7 @@
                                     <div v-if="proyecto.estadoPxe === 1" style="margin: 8px -9px 8px -5px;">
                                         <div
                                             style="display: flex; flex-direction: row; justify-content: center; margin: 0px 10px;">
-                                            <span class="badge badge-success" style="border-radius: 5px;" @click="abrirModal('info', proyecto)">
+                                            <span class="badge badge-primary" style="border-radius: 5px;" @click="abrirModal('info', proyecto)">
                                                 <p id="estadoap" style="display: inline; font-weight: 300; font-size: 1.0rem; ">
                                                     <i class="icon-check"></i>
                                                     <span id="disappear"> ACEPTADO </span>
@@ -69,10 +69,21 @@
                                     <div v-if="proyecto.estadoPxe === 3 " style="margin: 8px -9px 8px -5px;">
                                         <div
                                             style="display: flex; flex-direction: row; justify-content: center; margin: 0px 10px;">
-                                            <span  class="badge badge-secondary" style="border-radius: 5px;">
+                                            <span  class="badge badge-success" style="border-radius: 5px;">
                                                 <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem; ">
                                                     <i class="icon-folder"></i>
                                                     <span id="disappear">PROYECTO FINALIZADO</span>
+                                                </p></span>
+                                        </div>
+                                    </div>
+
+                                    <div v-if="proyecto.estadoPxe === 4 " style="margin: 8px -9px 8px -5px;">
+                                        <div
+                                            style="display: flex; flex-direction: row; justify-content: center; margin: 0px 10px;">
+                                            <span  class="badge badge-danger" style="border-radius: 5px;">
+                                                <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem; ">
+                                                    <i class="icon-info"></i>
+                                                    <span id="disappear">PROYECTO CANCELADO</span>
                                                 </p></span>
                                         </div>
                                     </div>
