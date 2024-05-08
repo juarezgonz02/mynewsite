@@ -251,7 +251,7 @@ class ForgotPasswordController extends Controller
             'contrasena.required' => 'Debes establecer una contraseña',
             'contrasena.regex' => 'La contraseña no cumple con el formato requerido',
             //'confirmar' => 'required|same:contraseña'
-        ], );
+        ]);
     }
     /**
      * Create a new controller instance.
