@@ -32,7 +32,6 @@ class ForgotPasswordController extends Controller
     //se muestra el formulario para verificar la cuenta, solo se puede usar 1 vez
     public function formularioVerificar($email){
         try{
-
             $user = User::whereCorreo($email)->firstOrFail();
             if($user->verificado == 0){
                 return view('auth.verificarCuenta')->with(['user'=>$user]);
@@ -47,20 +46,25 @@ class ForgotPasswordController extends Controller
 
     //se verifica la cuenta y redirige al login
     public function verificarUsuario(Request $request, $email){
-        try{
 
-            $this->validatePassword($request);
-            $token = PasswordResetToken::where('token', strtoupper($request->token))->firstOrFail();
+        $this->validatePassword($request);
+        try{
             $user = User::whereCorreo($email)->first();
             
-            if($token -> idUser != $user -> idUser){
-                return back()->withErrors(['error_token' => trans('auth.token_error')]);
-            }else{
-                $user->update(['password'=> $request->contraseña, 'verificado' => 1]);
+            if($user -> verificado == 1){
+                return redirect('/')->withErrors(['verified'=>'No se aplicaron los cambios, usuario ya verificado']);
             }
-            return redirect('/')->withErrors(['verified'=>'Se verificó con exito!!']);
+            
+            $token = PasswordResetToken::where('token', strtoupper(trim($request->token)))->firstOrFail();
+
+            if($token -> idUser != $user -> idUser){
+                return back()->withErrors(['token' => trans('auth.token_error')]);
+            }else{
+                $user->update(['password'=> $request->contrasena, 'verificado' => 1]);
+            }
+            return redirect('/')->withErrors(['verified'=>'Se verificó con exito']);
         }catch(\Throwable $e){
-            return back()->withErrors(['error_token' => trans('auth.token_error')]);
+            return back()->withErrors(['token' => trans('auth.token_error')]);
         }
     }
 
@@ -72,7 +76,6 @@ class ForgotPasswordController extends Controller
     //Se envía al correo ingresado un link para cambiar la contraseña
     public function enviarCorreoContraOlvidada(Request $request){
         try{
-
         
         if(strpos($request->carnet, '@') == true){
             $user = User::whereCorreo($request->carnet)->firstOrFail();
@@ -91,14 +94,17 @@ class ForgotPasswordController extends Controller
                 ->withInput(request(['carnet'])); 
             }
             else{
-                $token = PasswordResetToken::create([
-                    'idUser' => $user->idUser,
-                    'token' => strtoupper(Str::random(5)),
-                    'expires_at' => Carbon::now()->addHour(),
-                ]);
+                $token = PasswordResetToken::where('idUser', $user->idUser)->where('expires_at', '>', Carbon::now())->first();
 
-                $this->sendEmail($user, $token);
-                return redirect('/cambiar_contra_olvidada/'.$request->carnet);
+                if($token == null){
+                    $token = PasswordResetToken::create([
+                        'idUser' => $user->idUser,
+                        'token' => strtoupper(Str::random(10)),
+                        'expires_at' => Carbon::now()->addHour(),
+                    ]);
+                    $this->sendEmail($user, $token);
+                }
+                return view('auth.enviadoCorreoContraOlvidada');
             }
         }
         else{
@@ -122,14 +128,19 @@ class ForgotPasswordController extends Controller
                 ->withInput(request(['carnet'])); 
             }
             else{
-                $token = PasswordResetToken::create([
-                    'idUser' => $user->idUser,
-                    'token' => strtoupper(Str::random(5)),
-                    'expires_at' => Carbon::now()->addHour(),
-                ]);
 
-                $this->sendEmail($user, $token);
-                return redirect('/cambiar_contra_olvidada/'.$email);
+                $token = PasswordResetToken::where('idUser', $user->idUser)->where('expires_at', '>', Carbon::now())->first();
+                
+
+                if($token == null){
+                    $token = PasswordResetToken::create([
+                        'idUser' => $user->idUser,
+                        'token' => strtoupper(Str::random(10)),
+                        'expires_at' => Carbon::now()->addHour(),
+                    ]);
+                    $this->sendEmail($user, $token);
+                }
+                return view('auth.enviadoCorreoContraOlvidada');
             }
 
            
@@ -143,48 +154,42 @@ class ForgotPasswordController extends Controller
     }
 
     //Se muestra el formulario para cambiar la contraseña olvidada
-    public function formularioOlvidoContrsenia($email){
+    public function formularioOlvidoContrsenia($token){
         try{
+            $pass_token = PasswordResetToken::where('token', $token)->with(['user'])->firstOrFail();
+            
+            if($pass_token -> expires_at < Carbon::now()){
+                return view('auth.failContraOlvidada');
+            }
 
-            $user = User::whereCorreo($email)->firstOrFail();
-            if($user->ultima_fecha_contra == date('d-m-Y')){
-                return view('auth.contraOlvidada')->with(['user'=>$user])->withErrors([
+            if($pass_token -> user -> ultima_fecha_contra == date('d-m-Y')){
+                return view('auth.contraOlvidada')->withInput(request(['token']))->with(['user'=> $pass_token -> user])->withErrors([
                     'ya_cambio' => 'Ya cambio su contraseña hoy.'
                 ]);
             }
             else {
-                return view('auth.contraOlvidada')->with(['user'=>$user]);
+                return view('auth.contraOlvidada')->with(['token'=>$token, 'user'=> $pass_token -> user]);
             }
-        }catch(\Throwable $e){
-            return view('404');
+        }
+        catch (\Throwable $th) {
+            return view('auth.failContraOlvidada');
+
         }
     }
 
 
     public function cambiarClave(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'token'       => 'required|string',
-            'contrasena'  => 'required|string|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^#])[A-Za-z\d@$!%*?&^#]{8,}$/',
-            'confirmar'   => 'required|same:contrasena'
-        ]);
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator->messages());
-        }
+        $this->validatePassword($request);
 
         try{
 
-            $token = PasswordResetToken::where('token',  strtoupper($request->token))->firstOrFail();
+            $token = PasswordResetToken::where('token', strtoupper(trim($request->token)))->firstOrFail();
             if(Carbon::now() > $token->expires_at) {
-                return back()->withErrors([
-                    'error' => 'Token venció'
-                ]);
+                return view('auth.failContraOlvidada');
             }
         
         } catch (\Throwable $th) {
-            return back()->withErrors([
-                'codigo' => 'Código Invalido.'
-            ]);
+            return view('auth.failContraOlvidada');
         }
             
         try{
@@ -201,6 +206,10 @@ class ForgotPasswordController extends Controller
                 'password'      => $request->contrasena,
                 'verificado'    => 1,
                 'ultima_fecha_contra' => date('d-m-Y')
+            ]);
+
+            $token -> update([
+                'expires_at' => Carbon::now()->addMinutes(1)
             ]);
             
             return back()->with([
@@ -234,10 +243,15 @@ class ForgotPasswordController extends Controller
 
     protected function validatePassword(Request $request){
         $this->validate($request, [
-            'token' => 'required|string|min:5',
-            'contraseña' => 'required|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^#])[A-Za-z\d@$!%*?&^#]{8,}$/',
-            'confirmar' => 'required|same:contraseña'
-        ]);
+            'token' => 'required|string',
+            'contrasena' => 'required|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^#])[A-Za-z\d@$!%*?&^#]{8,}$/',
+            'confirmar' => 'required|same:contrasena'
+        ], [
+            'token.required' => 'Revisa tu correo para obtener tu código',
+            'contrasena.required' => 'Debes establecer una contraseña',
+            'contrasena.regex' => 'La contraseña no cumple con el formato requerido',
+            //'confirmar' => 'required|same:contraseña'
+        ], );
     }
     /**
      * Create a new controller instance.

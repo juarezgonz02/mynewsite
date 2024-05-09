@@ -26,6 +26,7 @@
   <script src="js/plantilla.js"></script>
   <script src="js/jquery.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
+
   <title> Registrate </title>
   <link rel="shortcut icon" type="image/jpg" href=" {{url('/').'/img/logo-uca.png'}}">
 
@@ -46,6 +47,7 @@
           $.each(res, function(key) {
             $('#carrera').append($("<option></option>").val(res[key]['idCarrera']).text(res[key]['nombre']));
           })
+
         },
         error: function() {
           console.log("No se ha seleccionado facultad");
@@ -73,44 +75,31 @@
     <div class="container">
       <div class="card-group">
         <div class="titulo">
-          <h1 id="titulo">Registrate</h1>
+          <h1 id="titulo">Completa tu información</h1>
         </div>
         <div class="card p-4">
-          <form id="gform" class="form-horizontal" method="POST" action="{{ route('registrar') }}">
+          <form id="gform" class="form-horizontal" method="POST" action="{{ route('google.register_google') }}">
             {{ csrf_field() }}
             <div class="form-group">
-                <span> Una vez haya completado este formulario, <b><a style="color:red">por favor revise su correo institucional para completar el registro</a></b> </span>  
+                <span> Una vez haya completado este formulario, podrá acceder directamente con su cuenta de Google, luego, podrá cambiar su información en la pestaña perfil</b> </span>  
             </div>
             <div class="card-body">
               
+              <input id="userId" type="text" hidden value="{{$userId}}" class="form-control" name="userId">
               <div class="form-group">
                 <label for="carnet" class="label-form">Carnet</label>
-                <input id="carnet" type="text" class="form-control" name="carnet" value="{{ old('carnet') }}">
-                @if($errors->first('carnet'))
-                {!!$errors->first('carnet','<span style="color: red">:message</span>')!!}
-                @elseif($errors->first('email_existente'))
-                {!!$errors->first('email_existente','<span style="color: red">:message</span>')!!}
-                @else
+                <input id="carnet" type="text" readOnly value="{{$correo}}" class="form-control" name="correo">
                 <span style="visibility: hidden;">.</span>
-                @endif
               </div>
               <div class="form-group">
                 <label for="nombres" class="label-form">Nombres</label>
-                <input id="nombres" type="text" class="form-control" name="nombres" value="{{ old('nombres') }}">
-                @if($errors->first('nombres'))
-                {!!$errors->first('nombres','<span style="color: red">:message</span>')!!}
-                @else
+                <input id="nombres" type="text" readOnly value="{{$nombres}}" class="form-control" name="nombres" >
                 <span style="visibility: hidden;">.</span>
-                @endif
               </div>
               <div class="form-group">
                 <label for="apellidos" class="label-form">Apellidos</label>
-                <input id="apellidos" type="text" class="form-control" name="apellidos" value="{{ old('apellidos') }}">
-                @if($errors->first('apellidos'))
-                {!!$errors->first('apellidos','<span style="color: red">:message</span>')!!}
-                @else
+                <input id="apellidos" type="text" readOnly value="{{$apellidos}}" class="form-control" name="apellidos">
                 <span style="visibility: hidden;">.</span>
-                @endif
               </div>
               <div class="form-group mb-3">
                 <label for="genero" class="label-form">Genero</label>
@@ -128,11 +117,16 @@
                 </select>
               </div>
 
-              <div class="form-group mb-2">
+              <div class="form-group ">
                 <label for="carrera" class="label-form">Carrera</label>
                 <select class="form-control" id="carrera" name="carrera"></select>
+                @if($errors->first('email_existente'))
+                {!!$errors->first('email_existente','<span style="color: red">:message</span>')!!}
+                @else
+                <span style="visibility: hidden;">.</span>
+                @endif
               </div>
-              
+
               <div class="form-group ">
                 <label for="carrera" class="label-form">Año de carrera</label>
                 <select class="form-control" id="perfil" name="perfil">
@@ -143,6 +137,33 @@
                   <option value=5> Quinto Año </option>
                   <option value=6> Egresado </option>
                 </select>
+                 <span style="visibility: hidden;">.</span>
+
+              </div>
+              <!--
+              <div class="form-group">
+                    <label for="contrasena" class="label-form">Contraseña</label>
+                    <div id="helper" style="padding: 0px">
+                        <template>
+                            <password-validator></password-validator>
+                        </template>
+                    </div>
+                    
+                    @if($errors->first('contrasena'))
+                        {!!$errors->first('contrasena','<span style="color: red;">:message</span>')!!}
+                    @else
+                        <span style="visibility: hidden;">.</span>
+                    @endif
+              </div>
+
+              <div class="form-group">
+                    <label for="confirmar" class="label-form">Confirmar contraseña</label>
+                    <input class="form-control" required type="password" name="confirm_contra" id="confirmar">
+                    @if($errors->first('confirm_contra'))
+                        {!!$errors->first('confirm_contra','<span style="color: red;margin-bottom:0.5em">:message</span>')!!}
+                    @else
+                        <span style="visibility: hidden;">.</span>
+                    @endif
               </div>
 
               <div class="form-group mb-2{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
@@ -151,11 +172,10 @@
                   <span style="color: red">
                         Demuestra que no eres un robot!
                   </span>
-                  @else
-                  <span style="visibility: hidden;">.</span>
                   @endif
                 </div>
               </div>
+            -->
               <div style="display:none;" id="loading">
                 <div style=" display: flex;  flex-direction:column; justify-content: center; align-items: center;">
                   <img src="<?php echo $ruta; ?>/img/snake.gif" alt="Loading" /><span  > Cargando....</span>
@@ -170,6 +190,8 @@
       </div>
     </div>
   </div>
+  <script src="{{url('/js/helpers.js')}}"></script>
+
 </body>
 
 </html>

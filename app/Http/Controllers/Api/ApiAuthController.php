@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ApiAuthController extends Controller
 {
@@ -67,7 +68,8 @@ class ApiAuthController extends Controller
             'nombres' => 'required|string|regex:/([a-zA-ZñÑáéíóúÁÉÍÓÚ])+((\s*)+([a-zA-ZñÑáéíóúÁÉÍÓÚ]*)*)+$/',
             'apellidos' => 'required|string|regex:/([a-zA-ZñÑáéíóúÁÉÍÓÚ])+((\s*)+([a-zA-ZñÑáéíóúÁÉÍÓÚ]*)*)+$/',
             'genero' => 'required|in:F,M',
-            'carrera' => 'required'
+            'carrera' => 'required',
+            'perfil' => 'required|numeric|in:1,2,3,4,5,6',
         ]);
 
         if ($validator->fails()) {
@@ -76,11 +78,6 @@ class ApiAuthController extends Controller
 
         // Iniando transaccion
         DB::beginTransaction();
-
-        $idPerfil = 1;
-        if(str_contains($request->correo, '@uca.edu.sv')) {
-            $idPerfil = $this->determinarPerfilDeAlumno($request->correo);
-        }
 
         $usuario = User::create([
             'nombres'               => strtoupper($request->nombres),
@@ -92,7 +89,7 @@ class ApiAuthController extends Controller
             'ultima_fecha_contra'   => '1-1-2000',
             'ya_aplico_hoy'         => '1-1-2000',
             'idRol'                 => 2,
-            'idPerfil'              => $idPerfil,
+            'idPerfil'              => $request->perfil,
             'idCarrera'             => $request->carrera,
             'password'              => bcrypt('temporal'),
             'api_token'             => $this->generarApiToken()

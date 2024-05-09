@@ -10,6 +10,10 @@ use App\Rules\Captcha;
 
 class LoginController extends Controller
 {
+    public function home () {
+        return view('home/dashboard');
+    }
+    
     public function showLoginForm(){
         return view('auth.login');
     }
@@ -83,6 +87,8 @@ class LoginController extends Controller
             'contraseña' => 'required|string',
             'g-recaptcha-response' => 'required|captcha'
         ], $messages = [
+            'carnet' => trans('auth.carnet_faltante'),
+            'contraseña' => trans('auth.contraseña_faltante'),
             'g-recaptcha-response' => trans('auth.recaptcha'),
         ]);
     }
@@ -92,6 +98,8 @@ class LoginController extends Controller
             'contraseña' => 'required|string',
             'g-recaptcha-response' => 'required|captcha'
         ], $messages = [
+            'carnet' => trans('auth.carnet_faltante'),
+            'contraseña' => trans('auth.contraseña_faltante'),
             'g-recaptcha-response' => trans('auth.recaptcha'),
         ]);
     }
