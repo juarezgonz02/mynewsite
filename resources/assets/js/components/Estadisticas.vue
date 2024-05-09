@@ -283,7 +283,7 @@ export default {
                     }
                 }
                 ).then(function (response){
-                    console.log(response.data)
+                    // console.log(response.data)
                     me.registeredStudents = response.data.numeroDeEstudiantes
                     me.studentsOnProjects = response.data.numeroDeEstudiantesInscritos
                     me.activeProjects = response.data.numeroDeProyectosEnCurso
@@ -339,7 +339,7 @@ export default {
                     // console.log(carrera.idCarrera, me.idCarreraSeleccionada)
                 if(carrera.idCarrera == me.idCarreraSeleccionada){
                     me.filterAppliedName = carrera.nombre +  " - "
-                    console.log(me.filterAppliedName)
+                    // console.log(me.filterAppliedName)
                     return
                 }
                 })
