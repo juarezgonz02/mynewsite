@@ -261,7 +261,7 @@
 
                                     <div class="col-md-9" v-show='flagTodasLasCarreras == "2"'>
 
-                                        <div class="form-button-container">
+                                        <div class="container">
                                         <button id="agregarCP" :disabled="disabledBotonAgregarCarrera()" type="button" @click="agregarACP()" class="btn btn-primary mb-2"><i class="icon-plus"></i> Agregar</button>
                                         <button type="button" @click="agregarTodasLasCarreras()" class="btn btn-outline-info mb-2"><i class="icon-plus"></i> Seleccionar todas las carreras</button>
                                         <button type="button" @click="eliminarTodasLasCarreras()" class="btn btn-outline-danger mb-2"><i class="icon-trash"></i> Limpiar selección</button>
@@ -341,10 +341,10 @@
                                 <p :class="{show: errorEstado == 1, hide: errorEstado != 1}" class="error">El texto ingresado no coincide con el solicitado</p>
                             </div>
 
-                            <div class="state-btn-container" disabled>
-                                <button type="button" class="btn btn-success btn-lg" @click="showChangeStatusConfirm('finalizar')"><i class="icon-check"></i> Finalizar proyecto</button>
-                                <button type="button" class="btn btn-danger btn-lg" @click="showChangeStatusConfirm('cancelar')"><i class="icon-close"></i> Cancelar proyecto</button> 
-                                <button type="button" class="btn btn-secondary btn-lg" @click="showChangeStatusConfirm('eliminar')"><i class="icon-trash"></i> Eliminar Proyecto</button>
+                            <div class="state-btn-container">
+                                <button type="button" class="btn btn-success    btn-lg btn-block m-0" @click="showChangeStatusConfirm('finalizar')"><i class="icon-check"></i> Finalizar proyecto</button>
+                                <button type="button" class="btn btn-danger     btn-lg btn-block m-0" @click="showChangeStatusConfirm('cancelar')"><i class="icon-close"></i> Cancelar proyecto</button> 
+                                <button type="button" class="btn btn-secondary  btn-lg btn-block m-0" @click="showChangeStatusConfirm('eliminar')"><i class="icon-trash"></i> Eliminar proyecto</button>
                             </div>
                         </div>
                         <!-- <div class="modal-footer">
@@ -1752,6 +1752,13 @@ import Swal from 'sweetalert2';
     .main{
         overflow: scroll;
     }
+
+    .state-btn-container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1em;
+    }
     
 }
 
@@ -1790,12 +1797,15 @@ import Swal from 'sweetalert2';
     #student-button{
         font-size: .75em;
     }
+
+    
 }
 
 @media screen and (max-width: 450px) {
     #student-button{
         font-size: .5em;
     }
+    
 }
 
 @media screen and (max-width: 500px) {
@@ -1873,6 +1883,9 @@ import Swal from 'sweetalert2';
     display: flex;
     align-items: center;
     gap: 1em;
+    
 }
+
+
 
 </style>
