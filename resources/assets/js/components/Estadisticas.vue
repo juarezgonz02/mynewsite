@@ -96,6 +96,12 @@
                     <div class="dashboard-content">
                         <users-by-year :data="estudiantesXanio" :years="aniosEstudiantesRegistrados"></users-by-year>
                     </div>
+                    <div class="dashboard-content">
+                        <students-by-career :students-by-career="studentsData.studentsByCareer"></students-by-career>
+                    </div>
+                    <div class="dashboard-content">
+                        <genders :male-total="male" :female-total="female" :filtro="filterAppliedName"></genders>
+                    </div>
                 </div>
 
 
@@ -115,12 +121,6 @@
                     </div>
                     <div class="dashboard-content">
                         <users-registered :months="studentsData.months" :data="studentsData.data" :year="yearSelected.toString()"></users-registered>
-                    </div>
-                    <div class="dashboard-content">
-                        <students-by-career :students-by-career="studentsData.studentsByCareer"></students-by-career>
-                    </div>
-                    <div class="dashboard-content">
-                        <genders :male-total="male" :female-total="female" :filtro="filterAppliedName"></genders>
                     </div>
             </div>
             
