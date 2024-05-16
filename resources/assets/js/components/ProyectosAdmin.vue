@@ -1634,7 +1634,7 @@ import Swal from 'sweetalert2';
                 console.log("Hola")
             },
             arrayCarreras:function(val){
-                console.log("Carreras", val)
+                //console.log("Carreras", val)
             }
         },
         mounted() {

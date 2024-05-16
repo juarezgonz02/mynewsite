@@ -65,6 +65,10 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/aplicarporadmin', 'ProyectoxEstudianteController@aplicarPorAdmin');
         Route::get('/estudiante_por_carnet', 'UserController@estudiantePorCarnet');
         Route::get('/facultad', 'FacultadController@index');
+        Route::get('/carreras', 'CarreraController@getCarrerasConFacultades');
+        Route::post('/carreras/insertar', 'CarreraController@crearCarrera');
+        Route::delete('/carreras/eliminar/{idCarrera}', 'CarreraController@eliminarCarrera');
+        Route::put('/carreras/actualizar', 'CarreraController@actualizarCarrera');
         Route::put('/estudiante/actualizar', 'UserController@actualizarEstudiante');
         Route::get('/cupos_actuales', 'ProyectoController@cuposActuales');
         Route::delete('/proyectos/{id_proyecto}/estudiante/{id_estudiante}', 'ProyectoxEstudianteController@removerEstudiante' );

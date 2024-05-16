@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Carrera;
 
 class CarreraController extends Controller
@@ -33,6 +34,55 @@ class CarreraController extends Controller
         if(!$request->ajax()) return redirect('/home');
         $carreras = Carrera::where('idFacultad', '=', $request->idFact)->get();
         return $carreras;
+    }
+
+    public function getCarrerasConFacultades(){
+        $carreras = Carrera::join('facultad', 'carrera.idFacultad', '=', 'facultad.idFacultad')
+            ->select('carrera.idCarrera', 'carrera.nombre as nombre_carrera', 'facultad.idFacultad', 'facultad.nombre as nombre_facultad')
+            ->get();
+
+        return $carreras;
+    }
+
+    public function crearCarrera(Request $request){
+        try {
+            DB::transaction(function () use ($request) {
+                
+                $carrera = new Carrera();
+                $carrera->idFacultad = $request->idFacultad;
+                $carrera->nombre = $request->nombre;
+                $carrera->save();
+                
+                return response()->json('Carrera creada exitosamente');
+            });
+        } catch (\Throwable $th) {
+            return response()->json(['Crear Carrera Falló'=>$th->getMessage()], 400);
+        }
+    }
+
+    public function actualizarCarrera(Request $request){
+        
+        try {
+            DB::transaction(function () use ($request) {
+                
+                $carrera = Carrera::findOrFail($request->idCarrera);
+                $carrera->idFacultad = $request->idFacultad;
+                $carrera->nombre = $request->nombre;
+                $carrera->save();
+                
+                return response()->json('Carrera actualizada exitosamente');
+            });
+        } catch (\Throwable $th) {
+            return response()->json(['Actualizar Carrera Falló'=>$th->getMessage()], 400);
+        }
+    }
+
+    public function eliminarCarrera(Request $request, $idCarrera){
+        $carrera = Carrera::where('idCarrera','=', $idCarrera);
+
+        $carrera->delete();
+
+        return response()->json(['success' => true, 'message' => 'Carrera eliminada exitosamente'],200);
     }
 
     /**

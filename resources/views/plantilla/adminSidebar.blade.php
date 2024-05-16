@@ -29,6 +29,9 @@
                         <a style="font-family: 'Abel', sans-serif;" class="nav-link active" href="#"><i><img src="<?php echo $ruta; ?>/img/icons/stats.svg" alt="Estadisticas"></i> Estadisticas</a>
                     </li>
                     <li @click='menu=6' class="nav-item">
+                        <a style="font-family: 'Abel', sans-serif;" class="nav-link active" href="#"><i><img src="<?php echo $ruta; ?>/img/icons/coordinadores.svg" alt="Carreras"></i> Carreras</a>
+                    </li>
+                    <li @click='menu=7' class="nav-item">
                         <a style="font-family: 'Abel', sans-serif;" class="nav-link active" href="#"><i><img src="<?php echo $ruta; ?>/img/icons/coordinadores.svg" alt="Coordinadores"></i> Coordinadores</a>
                     </li>
                 </ul>

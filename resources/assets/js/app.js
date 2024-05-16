@@ -8,6 +8,7 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+import Vue from 'vue';
 //import Vue from 'vue';
 import VueSweetalert2 from 'vue-sweetalert2';
 //import Swal from 'sweetalert2'
@@ -31,6 +32,7 @@ Vue.component('spinner', require('./components/Spinner.vue'));
 Vue.component('table-loader', require('./components/TableLoader.vue'));
 Vue.component('estadisticas', require('./components/Estadisticas.vue'));
 Vue.component('todas-solicitudes', require('./components/TablaSolicitudes/index.vue'));
+Vue.component('carreras', require('./components/Carreras.vue'));
 Vue.component('coordinadores', require('./components/Coordinadores.vue'))
 Vue.use(VueSweetalert2);
 

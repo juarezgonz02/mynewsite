@@ -21,6 +21,9 @@
                 <estadisticas></estadisticas>
             </template>
             <template v-if="menu==6">
+                <carreras></carreras>
+            </template>
+            <template v-if="menu==7">
                 <coordinadores></coordinadores>
             </template>
         @elseif(Auth::user()->idRol == 2)
