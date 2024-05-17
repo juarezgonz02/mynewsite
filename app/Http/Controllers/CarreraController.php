@@ -15,7 +15,8 @@ class CarreraController extends Controller
      */
     public function index()
     {
-        $carreras = Carrera::all();
+        //$carreras = Carrera::all();
+        $carreras = Carrera::where('carrera.estado', '=', 1)->get();;
         return $carreras;
     }
 
@@ -32,13 +33,15 @@ class CarreraController extends Controller
 
     public function carreraPorFact(Request $request){
         if(!$request->ajax()) return redirect('/home');
-        $carreras = Carrera::where('idFacultad', '=', $request->idFact)->get();
+        $carreras = Carrera::where('idFacultad', '=', $request->idFact)
+        ->where('carrera.estado', '=', 1)->get();
         return $carreras;
     }
 
     public function getCarrerasConFacultades(){
         $carreras = Carrera::join('facultad', 'carrera.idFacultad', '=', 'facultad.idFacultad')
             ->select('carrera.idCarrera', 'carrera.nombre as nombre_carrera', 'facultad.idFacultad', 'facultad.nombre as nombre_facultad')
+            ->where('carrera.estado', '=', 1)
             ->get();
 
         return $carreras;
@@ -77,12 +80,19 @@ class CarreraController extends Controller
         }
     }
 
-    public function eliminarCarrera(Request $request, $idCarrera){
-        $carrera = Carrera::where('idCarrera','=', $idCarrera);
-
-        $carrera->delete();
-
-        return response()->json(['success' => true, 'message' => 'Carrera eliminada exitosamente'],200);
+    public function inactivarCarrera(Request $request){
+        try {
+            DB::transaction(function () use ($request) {
+                
+                $carrera = Carrera::findOrFail($request->idCarrera);
+                $carrera->estado = $request->estado;
+                $carrera->save();
+                
+                return response()->json('Carrera inactivada exitosamente');
+            });
+        } catch (\Throwable $th) {
+            return response()->json(['Inactivar Carrera Falló'=>$th->getMessage()], 400);
+        }
     }
 
     /**

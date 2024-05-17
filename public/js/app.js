@@ -51757,6 +51757,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             ruta: __WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__["b" /* API_HOST_ASSETS */],
+            arrayCarreras: [''],
+            arrayCarrerasSin: [''],
+            arrayCarrerasCon: [''],
             projectQuantity: 0,
             registeredStudents: 0,
             studentsOnProjects: 0,
@@ -51833,8 +51836,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 // console.log(error)
             });
             axios.get(__WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__["a" /* API_HOST */] + '/carrera').then(function (response) {
-                // console.log(response.data)
+                console.log(response.data);
                 me.carreras = response.data;
+                me.arrayCarrerasSin = response.data;
+                me.arrayCarreras = me.arrayCarrerasSin.slice();
+                // Mark to remove
+                // me.arrayCarreras.push({idCarrera : -1, idFacultad : -1, nombre : "Todas las carreras"});
+                // me.arrayCarreras.push({idCarrera : -2, idFacultad : -2, nombre : "Todas las carreras menos Psicología, Civil y Arquitectura"});
+                me.arrayCarrerasCon = me.arrayCarreras.slice();
+                me.arrayCarrerasSelector = me.arrayCarreras.slice();
             }).catch(function (error) {
                 console.log(error);
             });
@@ -55812,7 +55822,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Estilos generales para mejorar la apariencia de la tabla y los elementos */\n.main{\n  display: flex;\n  flex-direction: column;\n  min-height: 95vh;\n}\n.container {\n  padding-top: 5vh;\n  max-width: 700px;\n  margin: 0 auto;\n}\n.newCarreerContainer{\n  padding: 5vh;\n  max-width: 700px;\n  margin: 0 auto;\n  background-color: #f2f2f2;\n  border-radius: 20px;\n}\nh1 {\n  text-align: center;\n}\ntable {\n  width: 100%;\n  border-collapse: collapse;\n  margin-top: 20px;\n}\nth, td {\n  border: 1px solid #ddd;\n  padding: 8px;\n  text-align: left;\n}\nth {\n  background-color: #f2f2f2;\n}\ntr:nth-child(even) {\n  background-color: #f9f9f9;\n}\nbutton {\n  display: block;\n  margin-top: 20px;\n  padding: 10px;\n  background-color: #4CAF50;\n  color: white;\n  border: none;\n  cursor: pointer;\n  max-width: 200px;\n  margin: 10px 0;\n  font-size: 1rem;\n}\n\n\n/* Estilos para el modal */\ninput, select {\n  display: block;\n  margin: 10px 0;\n  width: 300px;\n}\np{\n  font-size: 1rem;\n  font-weight: 300;\n  color: #666;\n}\n\n/* Agregar estilos adicionales según sea necesario */\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* Estilos generales para mejorar la apariencia de la tabla y los elementos */\n.main{\n  display: flex;\n  flex-direction: column;\n  min-height: 95vh;\n}\n.container {\n  padding-top: 5vh;\n  max-width: 700px;\n  margin: 0 auto;\n}\n.newCarreerContainer{\n  padding: 5vh;\n  max-width: 700px;\n  margin: 0 auto;\n  background-color: #f2f2f2;\n  border-radius: 20px;\n}\nh1 {\n  text-align: center;\n}\ntable {\n  width: 100%;\n  border-collapse: collapse;\n  margin-top: 20px;\n}\nth, td {\n  border: 1px solid #ddd;\n  padding: 8px;\n  text-align: left;\n}\nth {\n  background-color: #f2f2f2;\n}\ntr:nth-child(even) {\n  background-color: #f9f9f9;\n}\nbutton {\n  display: block;\n  margin-top: 20px;\n  padding: 10px;\n  background-color: #4CAF50;\n  color: white;\n  border: none;\n  cursor: pointer;\n  max-width: 200px;\n  margin: 10px 0;\n  font-size: 1rem;\n}\n\n\n/* Estilos para el modal */\ninput, select {\n  display: block;\n  margin: 10px 0;\n  width: 300px;\n}\np{\n  font-size: 1rem;\n  font-weight: 300;\n  color: #666;\n}\n\n/* Agregar estilos adicionales según sea necesario */\n", ""]);
 
 // exports
 
@@ -55935,7 +55945,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 axios.post(__WEBPACK_IMPORTED_MODULE_0__constants_endpoint__["a" /* API_HOST */] + '/carreras/insertar', {
                     'idCarrera': this.idCarrera,
                     'idFacultad': this.modal_facultad,
-                    'nombre': this.nombre_carrera
+                    'nombre': this.nombre_carrera,
+                    'estado': 1
                 }).then(function (response) {
                     me.cerrarModal();
                     if (response.status == 200) {
@@ -55954,7 +55965,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 axios.put(__WEBPACK_IMPORTED_MODULE_0__constants_endpoint__["a" /* API_HOST */] + '/carreras/actualizar', {
                     'idCarrera': this.idCarrera,
                     'idFacultad': this.modal_facultad,
-                    'nombre': this.nombre_carrera
+                    'nombre': this.nombre_carrera,
+                    'estado': 1
                 }).then(function (response) {
                     me.cerrarModal();
                     console.log(response);
@@ -56024,7 +56036,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             cancelButtonText: "Cancelar"
                         }).then(function (result) {
                             if (result.isConfirmed) {
-                                _this.eliminarCarrera(data.idCarrera);
+                                _this.inactivarCarrera(data.idCarrera);
                             }
                         });
                         break;
@@ -56032,17 +56044,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 default:
                     break;
             }
-            console.log(this.add_edit_flag);
-            console.log(this.idCarrera);
         },
-        eliminarCarrera: function eliminarCarrera(idCarrera) {
+        inactivarCarrera: function inactivarCarrera(idCarrera) {
+            var estado = 0;
             var me = this;
-            axios.delete(__WEBPACK_IMPORTED_MODULE_0__constants_endpoint__["a" /* API_HOST */] + '/carreras/eliminar/' + idCarrera).then(function (response) {
-                console.log(response);
+
+            axios.put(__WEBPACK_IMPORTED_MODULE_0__constants_endpoint__["a" /* API_HOST */] + '/carreras/inactivar', {
+                'idCarrera': idCarrera,
+                'estado': estado
+            }).then(function (response) {
                 __WEBPACK_IMPORTED_MODULE_1_sweetalert2___default.a.fire({
-                    icon: response.data.success ? 'success' : 'error',
-                    title: 'Carrera eliminada',
-                    text: response.data.message
+                    icon: 'success',
+                    title: 'Carrera inactivada',
+                    text: 'La carrera se ha inactivado exitosamente'
                 });
                 me.bindData();
             }).catch(function (error) {

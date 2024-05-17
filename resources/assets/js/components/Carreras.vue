@@ -106,7 +106,8 @@ export default {
                 axios.post(`${API_HOST}/carreras/insertar`, {
                     'idCarrera' : this.idCarrera,
                     'idFacultad' : this.modal_facultad,
-                    'nombre' : this.nombre_carrera
+                    'nombre' : this.nombre_carrera,
+                    'estado' : 1
                 }).then(function (response) {
                     me.cerrarModal();
                     if (response.status == 200) {
@@ -126,7 +127,8 @@ export default {
                 axios.put(`${API_HOST}/carreras/actualizar`, {
                     'idCarrera' : this.idCarrera,
                     'idFacultad' : this.modal_facultad,
-                    'nombre' : this.nombre_carrera
+                    'nombre' : this.nombre_carrera,
+                    'estado' : 1
                 }).then(function (response) {
                     me.cerrarModal();
                     console.log(response);
@@ -191,7 +193,7 @@ export default {
                             cancelButtonText: "Cancelar",
                             }).then((result) => {
                             if (result.isConfirmed) {
-                                this.eliminarCarrera(data.idCarrera);
+                                this.inactivarCarrera(data.idCarrera);
                             }
                         });
                         break;
@@ -199,24 +201,26 @@ export default {
                 default:
                     break;
             }
-            console.log(this.add_edit_flag);
-            console.log(this.idCarrera)
         },
-        eliminarCarrera(idCarrera){
+        inactivarCarrera(idCarrera) {
+            let estado = 0;
             let me = this;
-            axios.delete(`${API_HOST}/carreras/eliminar/${idCarrera}`)
-                .then(response => {
-                    console.log(response);
-                    Swal.fire({
-                        icon: response.data.success ? 'success' : 'error',
-                        title: 'Carrera eliminada',
-                        text: response.data.message,
-                    });
-                    me.bindData();
-                })
-                .catch(error => {
-                    console.log(error);
+
+            axios.put(`${API_HOST}/carreras/inactivar`, {
+                    'idCarrera' : idCarrera,
+                    'estado' : estado
+            })
+            .then(function (response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Carrera inactivada',
+                    text: 'La carrera se ha inactivado exitosamente',
                 });
+                me.bindData();
+            })
+            .catch(error => {
+                console.log(error);
+            });
         },
         cerrarModal(){
             if(this.modal == 1){
