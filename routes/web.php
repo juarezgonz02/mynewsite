@@ -64,8 +64,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/rechazarestudiante', 'ProyectoxEstudianteController@rechazarEstudiante');
         Route::post('/aplicarporadmin', 'ProyectoxEstudianteController@aplicarPorAdmin');
         Route::get('/estudiante_por_carnet', 'UserController@estudiantePorCarnet');
-        Route::get('/facultad', 'FacultadController@index');
-        Route::get('/carreras', 'CarreraController@getCarrerasConFacultades');
+
         Route::post('/carreras/insertar', 'CarreraController@crearCarrera');
         Route::put('/carreras/inactivar', 'CarreraController@inactivarCarrera');
         Route::put('/carreras/actualizar', 'CarreraController@actualizarCarrera');
@@ -100,6 +99,8 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/estudiante/actualizar/carrera', 'PerfilController@updateMyCareer');
         Route::get('/estadoAplicacion', 'UserController@estadoAplicacionEstudiante');
         Route::get('/carrera', 'CarreraController@index');
+        Route::get('/facultad', 'FacultadController@index');
+
     });
 });
 
