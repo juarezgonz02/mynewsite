@@ -8,16 +8,11 @@
 
         <div class="container-fluid">
             <!-- Ejemplo de tabla Listado -->
-            <div style="margin: 20px 0px 0px 20px;" v-if="!loadTable">
-                    <div>
-                        <p class="mb-1">{{ user_info }}</p>
-                    </div>
-                </div>
             <div v-if="loadTable == true" class="card" style="border: none;">
                 <table-loader></table-loader>
             </div>
             <div v-else class="card" style="border: none;">
-                <div style="margin: 20px 0px 0px 20px;">
+                <div v-if="ya_aplico_hoy || ya_aplico_proyecto || timeout != ''" style="margin: 20px 0px 0px 20px;">
                     <b style="color:red">
                         <p v-if="ya_aplico_hoy">No puede aplicar a otro proyecto este día. Inténtelo mañana nuevamente.
                         </p>
@@ -48,14 +43,109 @@
                                         Buscar</button>
                                 </div>
                             </form>
-                            <div class="filter-selector">
 
-                                <select class="custom-select" v-model="filtrandoPorTipo" @change="bindDataByFilters(0)">
-                                    <option value="todas" disabled selected>Filtrar por tipo: </option>
-                                    <option value="Externas"> Externa </option>
-                                    <option value="Internas"> Interna </option>
-                                </select>
+                            <div class="filter-group">
+
+                                <div class="filter-selector">
+
+                                    <div class="btn-group">
+
+                                        <button type="button" class="btn btn-default dropdown-toggle"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Filtrar <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <!-- v-model="filtrandoPorCarrera"> -->
+                                            <!-- @change="bindDataByFilters(0)"> -->
+
+                                            <li @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -1 }))"
+                                                disabled>
+                                                <b> Filtrar por: </b>
+                                            </li>
+
+                                            <li @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -1 }))">
+                                                <button class="text-button"> Todas las carreras </button>
+                                            </li>
+
+                                            <li role="separator" class="divider"></li>
+                                            <li @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -2 }))">
+                                                <button class="text-button">
+                                                    Todas las carreras excepto Psicologia e Ing. Civil
+                                                </button>
+                                            </li>
+                                            <!-- <optgroup label="Factultad"> -->
+                                            <li role="separator" class="divider"></li>
+                                            <li>
+                                                <b> Facultad: </b>
+                                            </li>
+                                            <li v-for="facultad in arrayFactultad">
+                                                <!-- :value="JSON.stringify({ por: 'facultad', id: facultad.idFacultad })" -->
+                                                <!-- :key="facultad.idFacultad"> -->
+                                                <button
+                                                    @click="cambiarFiltro(JSON.stringify({ por: 'facultad', id: facultad.idFacultad }))"
+                                                    class="text-button"> {{ facultad.nombre }} </button>
+                                            </li>
+
+                                            <li role="separator" class="divider"></li>
+                                            <li :value="JSON.stringify({ por: 'carrera', id: -1 })" disabled>
+                                                <b> Carrera: </b>
+                                            </li>
+                                            <li v-for="carrera in arrayCarreras">
+                                                <!-- :value="JSON.stringify({ por: 'carrera', id: carrera.idCarrera })"
+                                            :key="carrera.idCarrera"> -->
+                                                <button
+                                                    @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: carrera.idCarrera }))"
+                                                    class="text-button"> {{ carrera.nombre }} </button>
+                                            </li>
+                                            <!-- </optgroup> -->
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="filter-selector">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                        Año <span class="caret"></span>
+                                    </button>
+
+                                    <ul class="dropdown-menu">
+                                        <li role="separator" class="divider"></li>
+                                        <li value="0" disabled selected> <b> Año: </b> </li>
+                                        <li @click="cambiarAno(1)"> <button class="text-button"> Primer Año </button>
+                                        </li>
+                                        <li @click="cambiarAno(2)"> <button class="text-button"> Segundo Año </button>
+                                        </li>
+                                        <li @click="cambiarAno(3)"> <button class="text-button"> Tercer Año </button>
+                                        </li>
+                                        <li @click="cambiarAno(4)"> <button class="text-button"> Cuarto Año </button>
+                                        </li>
+                                        <li @click="cambiarAno(5)"> <button class="text-button"> Quinto Año </button>
+                                        </li>
+                                        <li @click="cambiarAno(6)"> <button class="text-button"> Egresado </button>
+                                        </li>
+                                    </ul>
+
+
+                                </div>
+
+                                <div class="filter-selector">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                        Tipo <span class="caret"></span>
+                                    </button>
+
+                                    <ul class="dropdown-menu">
+                                        <li role="separator" class="divider"></li>
+                                        <li value="0" disabled selected> <b> Tipo: </b> </li>
+                                        <li @click="cambiarTipo('Externas')"> <button class="text-button"> Externa
+                                            </button> </li>
+                                        <li @click="cambiarTipo('Internas')"> <button class="text-button"> Interna
+                                            </button> </li>
+                                    </ul>
+                                </div>
+
                             </div>
+
 
                             <!--  
                                 <div class="filter-selector">
@@ -71,7 +161,27 @@
                         </div>
                     </div>
                     <!---->
-                    <table class="table table-bordered table-hover table-sm" style="font-size: 1.25em;">
+                    <div style="font-size: 1.1em; font-weight: normal">
+                        <div class="d-flex flex-wrap my-3">
+                            <div class="d-flex mr-4" style="gap: 5px">
+                                <span> Mostrando: </span>
+                                <span class="badge badge-pill badge-light"> Ingenieria Informatica </span>
+                                <button type="button" class="close" aria-label="Close">
+                                    <span aria-hidden="true" style="color: #000000">×</span>
+                                </button>
+                            </div>
+                            <div class="d-flex" style="gap: 5px">
+                                <span> Orden: </span>
+                                <span class="badge badge-pill badge-light"> Menos cupos </span>
+                                <button type="button" class="close" aria-label="Close">
+                                    <span aria-hidden="true" style="color: #000000">×</span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--  -->
+                    <table v-if="arrayProyectos.length > 0" class="table table-bordered table-hover table-sm">
                         <thead>
                             <tr>
                                 <th style="text-align: center; width: 10%;">Contraparte</th>
@@ -115,50 +225,52 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div v-if="arrayProyectos.length === 0">
-                        <p style="color: red"> <b> No hay proyectos para tu carrera y año en este momento </b> </p>
-                    </div>
-                    <nav>
-                        <ul class="pagination" style="float: right;">
-                            <li class="page-item" v-if="pagination.current_page > 1">
-                                <a class="page-link" href="#"
-                                    @click.prevent="cambiarPagina(pagination.current_page - 1)"
-                                    style="display: flex; justify-content: center; align-items: center; width: 32px; height: 35px;"><img
-                                        :src="ruta + '/img/icons/chevron_left_black_24dp.svg'" alt="chevron-left"></a>
-                            </li>
-                            <li class="page-item" v-for="page in pagesNumber" :key="page"
-                                :class="[page == isActived ? 'active' : '']">
-                                <a class="page-link" href="#" @click.prevent="cambiarPagina(page)" v-text="page"></a>
-                            </li>
-                            <li class="page-item" v-if="pagination.current_page < pagination.last_page">
-                                <a class="page-link" href="#"
-                                    @click.prevent="cambiarPagina(pagination.current_page + 1)"
-                                    style="display: flex; justify-content: center; align-items: center; width: 32px; height: 35px;"><img
-                                        :src="ruta + '/img/icons/chevron_right_black_24dp.svg'" alt="chevron-left"></a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-                <div style="margin: 20px 0px 0px 20px;" v-if="!loadTable">
-                    <div class="mb-0">
-                        <p>Se muestran proyectos para <strong>{{user_carrera.toUpperCase()}}</strong>, desde <strong>{{user_perfil.toUpperCase()}}</strong></p>
-                        <p>Si tu año de carrera no coincide, recuerda que puedes cambiarlo desde la pestaña
-
-                            <strong>Perfil</strong>. </p>
-                        </div>
-                    <div id="appear">
-                        <p><b> Acciones: </b></p>
-                        <span class="badge badge-info" style="border-radius: 5px; margin-left: 0.2em;">
-                            <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem;">
-                                <i class="icon-envelope"></i>
-                                <span>Aplicar a proyecto</span>
-                            </p>
-                        </span>
+                    <div v-else class="alert alert-danger" role="alert">
+                        Parece que no se encontró proyectos para la busqueda de carrera, año, tipo y nombre seleccionado
                     </div>
                 </div>
-               
+                <nav>
+                    <ul class="pagination" style="float: right;">
+                        <li class="page-item" v-if="pagination.current_page > 1">
+                            <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page - 1)"
+                                style="display: flex; justify-content: center; align-items: center; width: 32px; height: 35px;"><img
+                                    :src="ruta + '/img/icons/chevron_left_black_24dp.svg'" alt="chevron-left"></a>
+                        </li>
+                        <li class="page-item" v-for="page in pagesNumber" :key="page"
+                            :class="[page == isActived ? 'active' : '']">
+                            <a class="page-link" href="#" @click.prevent="cambiarPagina(page)" v-text="page"></a>
+                        </li>
+                        <li class="page-item" v-if="pagination.current_page < pagination.last_page">
+                            <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1)"
+                                style="display: flex; justify-content: center; align-items: center; width: 32px; height: 35px;"><img
+                                    :src="ruta + '/img/icons/chevron_right_black_24dp.svg'" alt="chevron-left"></a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
-            <!-- Fin ejemplo de tabla Listado -->
+            <div style="margin: 20px 0px 0px 20px;" v-if="!loadTable">
+                <div class="mb-0">
+                    <p>Tu perfil es: <strong>{{ user_carrera.toUpperCase() }}</strong>, en
+                        <strong>{{ user_perfil.toUpperCase() }}</strong>
+                    </p>
+                    <p>Si tu año o carrera no coincide, recuerda que puedes cambiarlo desde la pestaña
+
+                        <strong>Perfil</strong>.
+                    </p>
+                </div>
+                <div id="appear">
+                    <p><b> Acciones: </b></p>
+                    <span class="badge badge-info" style="border-radius: 5px; margin-left: 0.2em;">
+                        <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem;">
+                            <i class="icon-envelope"></i>
+                            <span>Aplicar a proyecto</span>
+                        </p>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+        <!-- Fin ejemplo de tabla Listado -->
         </div>
         <!--Inicio del modal aplicar a proyecto-->
         <div class="modal fade" tabindex="-1" id="modal-aplicar" role="dialog" aria-labelledby="myModalLabel"
@@ -172,7 +284,7 @@
                         <h4 class="modal-title">Aplicar a proyecto</h4>
                         <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()"
                             aria-label="Close">
-                            <span aria-hidden="true">×</span>
+                            <span aria-hidden="true" style="color: #ffffff">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
@@ -209,11 +321,11 @@
                         <h4 class="modal-title" v-text="modal_nombre">Aplicar a proyecto</h4>
                         <button type="button" class="close" data-dismiss="modal" @click="cerrarModalDos()"
                             aria-label="Close">
-                            <span aria-hidden="true">×</span>
+                            <span aria-hidden="true" style="color: #ffffff">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <table class="table table-bordered table-sm" style="font-size: 1.35em; margin-top: 10px">
+                        <table class="table table-bordered table-sm" style=" margin-top: 10px">
                             <tbody>
                                 <tr>
                                     <th class="col-md-4" style="background-color: #dedede;">Contraparte</th>
@@ -281,7 +393,7 @@
         <footer class="app-footer" id="footer"
             style="display: flex; flex-direction: column; justify-content: center; font-size: 15px; padding: 10px 0px">
             <span><a target="_blank" href="http://www.uca.edu.sv/servicio-social/">Centro de Servicio Social | UCA</a>
-                &copy; 2021</span>
+                &copy; 2024</span>
             <span>Desarrollado por <a href="#"></a>Grupo de Horas Sociales</span>
         </footer>
     </main>
@@ -299,7 +411,11 @@ export default {
             user_id: 0,
             user_email: '',
             user_perfil: '',
+            user_perfil_id: 0,
             user_carrera: '',
+            user_carrera_id: 0,
+            search_carrera_id: 0,
+            search_perfil_id: 0,
             user_info: {},
             ya_aplico_hoy: false,
             ya_aplico_proyecto: false,
@@ -320,6 +436,8 @@ export default {
             modal_fecha_fin: '',
             modal_estado: '',
             arrayPXE: [''],
+            arrayCarreras: [],
+            arrayFactultad: [],
             pagination: {
                 'total': 0,
                 'current_page': 0,
@@ -367,6 +485,24 @@ export default {
             let me = this;
             me.pagination.current_page = page;
             me.bindDataByFilters(page);
+        },
+        cambiarTipo(tipo) {
+            let me = this;
+            me.filtrandoPorTipo = tipo;
+            me.bindDataByFilters(0);
+
+        },
+        cambiarAno(ano) {
+            let me = this;
+            me.user_perfil_id = ano;
+            me.bindDataByFilters(0);
+
+        },
+        cambiarFiltro(filtro) {
+            let me = this;
+            me.user_carrera_id = filtro;
+            me.bindDataByFilters(0);
+
         },
         aplicarProyecto() {
             let me = this
@@ -419,7 +555,7 @@ export default {
                         this.modal_fecha_in = data.fecha_inicio;
                         this.modal_fecha_fin = data.fecha_fin;
                         this.modal_contraparte = data.contraparte;
-                        
+
                         break;
                     }
                 default:
@@ -440,6 +576,53 @@ export default {
             var year = date.getFullYear();
             return day + "/" + month + "/" + year;
         },
+        async getFacultadesCarrerasAndPerfils() {
+            let me = this
+
+            const response = await axios.get(`${API_HOST}/get_user`)
+            me.user_id = response.data.idUser;
+            me.user_email = response.data.correo;
+            me.user_carrera = response.data.carrera;
+            me.user_carrera_id = response.data.idCarrera;
+            me.user_perfil = response.data.perfil;
+            me.user_perfil_id = response.data.idPerfil;
+
+            me.search_carrera_id = response.data.idCarrera;
+            me.search_pefil_id = response.data.idPerfil;
+
+            console.log(response.data.timeout);
+            if (me.fechaLegible(response.data.timeout))
+                me.timeout = me.fechaLegible(response.data.timeout);
+            else
+                me.timeout = '';
+
+            axios.get(`${API_HOST}/carrera`).then(function (response) {
+                me.arrayCarrerasSin = response.data;
+                me.arrayCarreras = me.arrayCarrerasSin.slice();
+                // Mark to remove
+                // me.arrayCarreras.push({idCarrera : -1, idFacultad : -1, nombre : "Todas las carreras"});
+                // me.arrayCarreras.push({idCarrera : -2, idFacultad : -2, nombre : "Todas las carreras menos Psicología, Civil y Arquitectura"});
+                me.arrayCarrerasCon = me.arrayCarreras.slice();
+                me.arrayCarrerasSelector = me.arrayCarreras.slice();
+            })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+            axios.get(`${API_HOST}/perfil`).then(function (response) {
+                me.arrayPerfiles = response.data;
+            })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+            axios.get(`${API_HOST}/facultad`).then(function (response) {
+                me.arrayFactultad = response.data;
+            })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
         bindDataByFilters(page) {
 
             let me = this;
@@ -451,54 +634,7 @@ export default {
                 me.ya_aplico_proyecto = response.data.activeProject;
             })
 
-            axios.get(`${API_HOST}/get_user`).then(function (response) {
-                me.user_id = response.data.idUser;
-                me.user_email = response.data.correo;
-                me.user_carrera = response.data.carrera;
-                me.user_perfil = response.data.perfil;
-
-                console.log(response.data.timeout);
-                if (me.fechaLegible(response.data.timeout))
-                    me.timeout = me.fechaLegible(response.data.timeout);
-                else
-                    me.timeout = '';
-
-
-                me.user_info = `Se muestran proyectos para ${me.user_carrera.toUpperCase()}, desde: ${me.user_perfil.toUpperCase()}`;
-                me.user_info.career 
-            })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            // axios.get(`${API_HOST}/ya_aplico`).then(function (response) {
-            //     me.ya_aplico_hoy = response.data;
-            // })
-            // .catch(function (error) {
-            //     console.log(error);
-            // });
-            // Si ya aplicó hoy, no se cargan los proyectos
-            // var url = `${API_HOST}/proyectos_aplicados` /*?page=' + page*/;
-            // axios.get(url).then(function (response) {
-            //     me.arrayProyectosAplicados = response.data;
-            //     // Si alguno de los proyectos ya aplicados, tiene estado aplicado (1), ya no puede aplicar a nuevo proyecto
-            //     me.arrayProyectosAplicados.forEach(proyecto => {
-            //         if(proyecto.estadoPxe == 1){
-            //             me.ya_aplico_proyecto = 1;
-            //         }
-            //     });
-            // })
-            // .catch(function (error) {
-            //     console.log(error);
-            // });
-
-            // axios.get(`${API_HOST}/pxe_estudiante`).then(function (response) {
-            //     me.arrayPXE = response.data;
-            //     //console.log(me.arrayPXE);
-            // }).catch(function (error) {
-            //     console.log(error);
-            // });
-
-            var url = `${API_HOST}/proyectos_carrera?nombre=${this.filtrandoPorNombre}&tipo=${this.filtrandoPorTipo}&page=${page}`;
+            var url = `${API_HOST}/proyectos_carrera?nombre=${this.filtrandoPorNombre}&carrera=${this.user_carrera_id}&ano=${this.user_perfil_id}&tipo=${this.filtrandoPorTipo}&page=${page}`;
             axios.get(url).then(function (response) {
                 var respuesta = response.data;
                 var proyectos = respuesta.proyectos.data;
@@ -511,20 +647,54 @@ export default {
                 });
         },
     },
-    mounted() {
+    async mounted() {
+        await this.getFacultadesCarrerasAndPerfils();
         this.bindDataByFilters(1);
     }
 }
 </script>
 <style>
+body {
+    font-size: 1em;
+}
+
 .main {
     font-family: "Abel", sans-serif;
     display: flex;
     flex-direction: column;
     min-height: 95vh;
 }
+
 .container-fluid {
     flex: 1;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #ff7f00;
+    border-color: #ff7f00;
+}
+
+.btn-primary:disabled {
+    color: #fff;
+    background-color: #f7b16b;
+    border-color: #f7b16b;
+}
+
+.btn-primary:focus {
+    color: #fff;
+    background-color: #f7b16b;
+    border-color: #f7b16b;
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: #f7b16b;
+    border-color: #f7b16b;
+}
+
+.btn {
+    border-radius: 6px;
 }
 
 .sidebar {
@@ -550,6 +720,8 @@ export default {
 
 .modal-primary .modal-header {
     background-color: #003C71;
+    border: none;
+
 }
 
 .modal-content {
@@ -571,10 +743,24 @@ export default {
     display: none;
 }
 
+.text-button {
+    background: none;
+    border: none;
+}
+
+.text-button:hover {
+    background: #c2c2c2;
+}
+
+
+.dropdown-menu {
+    min-width: max-content;
+    max-height: 250px;
+    overflow: auto;
+    margin-top: 1em;
+    padding: 5px;
+}
 @media screen and (max-width: 991px) {
-    .breadcrumb {
-        margin-top: 55px;
-    }
 
     #sidebarMenu {
         margin-top: 55px;
@@ -583,11 +769,11 @@ export default {
     #logout {
         margin-right: 30px;
     }
-
+    
     .main {
         overflow: scroll;
     }
-
+    
 }
 
 @media screen and (max-width: 500px) {
@@ -625,16 +811,24 @@ export default {
     flex: 2;
     display: flex;
     gap: 1em;
+    max-width: 60%;
     height: fit-content;
     flex-wrap: nowrap;
 }
 
 .filter-selector {
-    max-width: 20%;
+    max-width: 40%;
 }
 
 .search-input {
     flex: 2;
     height: 100%;
 }
+@media screen and (max-width: 991px) {
+
+    .search-group {
+        max-width: 100%;
+    }
+}
+    
 </style>

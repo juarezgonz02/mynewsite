@@ -31,10 +31,10 @@
                 <div class="card">
                     <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; ">
                             <div v-if="nombre_completo == ''">
-                                <h2 style="visibility:hidden; margin-bottom:0">Nada</h2>
+                                <p style="visibility:hidden; margin-bottom:0">Nada</p>
                             </div>
                             <div v-else>
-                                <h2 v-text="nombre_completo" style="margin-bottom:0"></h2>
+                                <p v-text="nombre_completo" style="margin-bottom:0"></p>
                             </div>
                             <div v-if="nombre_completo != ''">
                                 <!-- icon button  -->
@@ -120,7 +120,7 @@
                 </div>
             </div>
             <footer class="app-footer" id="footer" style="display: flex; flex-direction: column; justify-content: center; font-size: 15px; padding: 10px 0px">
-                <span><a target="_blank" href="http://www.uca.edu.sv/servicio-social/">Centro de Servicio Social | UCA</a> &copy; 2021</span>
+                <span><a target="_blank" href="http://www.uca.edu.sv/servicio-social/">Centro de Servicio Social | UCA</a> &copy; 2024</span>
                 <span>Desarrollado por <a href="#"></a>Grupo de Horas Sociales</span>
             </footer>
         </main>
@@ -437,9 +437,6 @@ import Swal from 'sweetalert2'
 }
 
 @media screen and (max-width: 991px) {
-    .breadcrumb {
-        margin-top: 55px;
-    }
 
     #sidebarMenu {
         margin-top: 55px;

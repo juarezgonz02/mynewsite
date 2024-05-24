@@ -13,7 +13,7 @@
       </div>
       <div v-else class="card" style="border: none;">
         <div class="card-body">
-          <table class="table table-bordered table-hover table-sm" style="font-size: 1.25em;">
+          <table class="table table-bordered table-hover table-sm">
             <thead>
               <tr>
                 <!--<th>Opciones</th> -->
@@ -81,11 +81,11 @@
               Aplicar a proyecto
             </h4>
             <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()" aria-label="Close">
-              <span aria-hidden="true">×</span>
+              <span aria-hidden="true" style="color: #ffffff">×</span>
             </button>
           </div>
           <div class="modal-body">
-            <table class="table table-bordered table-sm" style="font-size: 1.35em; margin-top: 10px">
+            <table class="table table-bordered table-sm" style=" margin-top: 10px">
               <tbody>
                 <tr>
                   <th style="background-color: #dedede;">Contraparte</th>
@@ -138,12 +138,12 @@
                   <spinner></spinner>
               </div>
               <div v-if="loading == 0" class="modal-dialog modal-primary modal-lg modal-student" role="document" style=
-              "margin: 10px;">
-                  <div class="modal-content modal-student" style="font-size: 1.35em;">
+                "max-width: 70vw;">
+                  <div class="modal-content modal-student" style="">
                       <div class="modal-header">
                           <h4 class="modal-title">Estudiantes</h4>
                           <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()" aria-label="Close">
-                              <span aria-hidden="true">×</span>
+                              <span aria-hidden="true" style="color: #ffffff">×</span>
                           </button>
                       </div>
                       <div class="modal-body">

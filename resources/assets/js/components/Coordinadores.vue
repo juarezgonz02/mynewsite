@@ -1,55 +1,68 @@
 <template>
     <main class="main">
+        <ol class="breadcrumb" style="padding-left: 30px;">
+                <li class="breadcrumb-item">Inicio</li>
+                <li class="breadcrumb-item active">Administración de Coordinadores</li>
+            </ol>
+        <div class="container container-fluid">
 
-        <div class="container">
-            <h1>Coordinadores</h1>
-
-            <div v-if="showSuccess" style="color: green; border: 1px solid green; background-color: rgb(242, 255, 242); padding: 10px; font-weight: 400;">
+            <div v-if="showSuccess"
+                style="color: green; border: 1px solid green; background-color: rgb(242, 255, 242); padding: 10px; font-weight: 400;">
                 <p>Coordinador registrado con exito</p>
             </div>
-        <table>
+            <table class="table table-bordered table-hover table-sm">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="coordinador in coordinadores" :key="coordinador.id">
+                        <td>{{ coordinador.nombres + ' ' + coordinador.apellidos }}</td>
+                        <td>{{ coordinador.correo }}</td>
+                    </tr>
+                </tbody>
+            </table>
 
-            
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Correo</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="coordinador in coordinadores" :key="coordinador.id">
-                    <td>{{ coordinador.nombres + ' ' + coordinador.apellidos }}</td>
-                    <td>{{ coordinador.correo }}</td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <button @click="showModal">Nuevo Coordinador</button>
-        
-        <div class="newCoordContainer" v-if="showRegisterModal">
-            <h2>Nuevo Coordinador</h2>
-            <p v-if="errorMessage" style="color: red; border: 1px solid red; background-color: rgb(255, 242, 242); padding: 10px; font-weight: 400;">{{ errorMessage }}</p>
+            <button @click="showModal">Nuevo Coordinador</button>
+
+            <div class="newCoordContainer" v-if="showRegisterModal">
+                <h2>Nuevo Coordinador</h2>
+                <p v-if="errorMessage"
+                    style="color: red; border: 1px solid red; background-color: rgb(255, 242, 242); padding: 10px; font-weight: 400;">
+                    {{ errorMessage }}</p>
 
 
-            <input class="form-control" type="text" v-model="newCoordinador.nombre" placeholder="Nombre" required>
-            <input class="form-control" type="text" v-model="newCoordinador.apellido" placeholder="Apellido" required>
-            <input class="form-control" type="email" v-model="newCoordinador.correo" placeholder="Correo" required>
-            <input class="form-control" type="password" v-model="newCoordinador.contrasena" placeholder="Contraseña" required>
-            <input class="form-control" type="password" v-model="confirmPassword" placeholder="Confirmar Contraseña" required>
-            <select class="form-control custom-select" v-model="newCoordinador.genero" required >
-                <option value="" disabled selected>Seleccione su genero</option>
-                <option value="M">Masculino</option>
-                <option value="F">Femenito</option>
-            </select>
-            <p>*Verifica los datos del coordinador, recuerda que una vez registrado no podras realizar ningun tipo de cambio. </p>
-            <button @click="registerCoordinador">Registrar</button>
+                <input class="form-control" type="text" v-model="newCoordinador.nombre" placeholder="Nombre" required>
+                <input class="form-control" type="text" v-model="newCoordinador.apellido" placeholder="Apellido"
+                    required>
+                <input class="form-control" type="email" v-model="newCoordinador.correo" placeholder="Correo" required>
+                <input class="form-control" type="password" v-model="newCoordinador.contrasena" placeholder="Contraseña"
+                    required>
+                <input class="form-control" type="password" v-model="confirmPassword" placeholder="Confirmar Contraseña"
+                    required>
+                <select class="form-control custom-select" v-model="newCoordinador.genero" required>
+                    <option value="" disabled selected>Seleccione su genero</option>
+                    <option value="M">Masculino</option>
+                    <option value="F">Femenito</option>
+                </select>
+                <p>*Verifica los datos del coordinador, recuerda que una vez registrado no podras realizar ningun tipo
+                    de cambio. </p>
+                <button @click="registerCoordinador">Registrar</button>
+            </div>
+            <!-- Confirm modal -->
+
+
+
         </div>
-        <!-- Confirm modal -->
-
-        
-
-    </div>
-</main>
+        <footer class="app-footer" id="footer"
+            style="display: flex; flex-direction: column; justify-content: center; font-size: 15px; padding: 10px 0px">
+            <span><a target="_blank" href="http://www.uca.edu.sv/servicio-social/">Centro de Servicio Social | UCA</a>
+                &copy; 2024</span>
+            <span>Desarrollado por <a href="#"></a>Grupo de Horas Sociales</span>
+        </footer>
+    </main>
 </template>
 
 <script>
@@ -109,31 +122,31 @@ export default {
             }
 
             // validate email format with regex includes domain @uca.edu.sv
-            
+
             var email = this.newCoordinador.correo;
             var regexCorreo = /^[a-zA-Z0-9._-]+@uca\.edu\.sv$/;
-            if (!regexCorreo.test(email)  ) {
+            if (!regexCorreo.test(email)) {
                 this.errorMessage = 'El correo no es un correo UCA valido';
                 return;
             }
-            
+
             var passregex = /^(?=.*[0-9])(?=.*[- ?!@#$%^&*\/\\])(?=.*[A-Z])(?=.*[a-z])[a-zA-Z0-9- ?!@#$%^&*\/\\]{8,30}$/
-            
-            if(!passregex.test(this.newCoordinador.contrasena)){
+
+            if (!passregex.test(this.newCoordinador.contrasena)) {
                 this.errorMessage = 'La contraseña debe tener almenos 8 caracteres, una mayuscula, un simbolo especial y un número';
-                return;    
+                return;
             }
-            
-            if ( this.newCoordinador.contrasena != this.confirmPassword ) {
+
+            if (this.newCoordinador.contrasena != this.confirmPassword) {
                 this.errorMessage = 'Las contraseñas no coinciden';
                 return;
             }
 
-            
+
             console.log(this.newCoordinador)
-            
+
             let me = this;
-            
+
             // /users/admin/new
             axios.post(`${API_HOST}/users/admin/new`, {
                 nombre: this.newCoordinador.nombre,
@@ -143,17 +156,17 @@ export default {
                 genero: this.newCoordinador.genero
 
             })
-            .then(function (response) {
-                // console.log(response.status);
-                if (response.status == 200) {
-                    me.showSuccess = true
-                }
-                me.bindData();
-            })
-            .catch(function (error) {
-                console.log(error.response);
-                this.errorMessage = error.response
-            });
+                .then(function (response) {
+                    // console.log(response.status);
+                    if (response.status == 200) {
+                        me.showSuccess = true
+                    }
+                    me.bindData();
+                })
+                .catch(function (error) {
+                    console.log(error.response);
+                    this.errorMessage = error.response
+                });
 
 
 
@@ -191,55 +204,34 @@ export default {
 };
 </script>
 
-<style>
-  /* Estilos generales para mejorar la apariencia de la tabla y los elementos */
+<style scoped>
+/* Estilos generales para mejorar la apariencia de la tabla y los elementos */
 
-  .main{
+.main {
     display: flex;
     flex-direction: column;
     min-height: 95vh;
-  }
-  
-  .container {
-    padding-top: 5vh;
-    max-width: 700px;
-    margin: 0 auto;
-  }
+}
 
-  .newCoordContainer{
+.container {
+    max-width: 90vw;
+    margin: 0 auto;
+}
+
+.newCoordContainer {
     padding: 5vh;
-    max-width: 700px;
     margin: 0 auto;
     background-color: #f2f2f2;
     border-radius: 20px;
-    
-  }
 
-  h1 {
+}
+
+h1 {
     text-align: center;
-  }
+}
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
 
-  th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-  }
-
-  th {
-    background-color: #f2f2f2;
-  }
-
-  tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-
-  button {
+button {
     display: block;
     margin-top: 20px;
     padding: 10px;
@@ -247,25 +239,30 @@ export default {
     color: white;
     border: none;
     cursor: pointer;
+    border-radius: 6px;
     max-width: 200px;
     margin: 10px 0;
     font-size: 1rem;
-  }
+}
 
 
-  /* Estilos para el modal */
-  input, select {
+/* Estilos para el modal */
+input,
+select {
     display: block;
     margin: 10px 0;
     width: 300px;
-    
-  }
 
-  p{
+}
+
+p {
     font-size: 1rem;
     font-weight: 300;
     color: #666;
-  }
+}
 
-  /* Agregar estilos adicionales según sea necesario */
+.container-fluid {
+    flex: 1;
+}
+/* Agregar estilos adicionales según sea necesario */
 </style>

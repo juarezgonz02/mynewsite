@@ -156,6 +156,12 @@ export default {
                 console.log(error);
             });
         },
+        cambiarFiltro(filtro) {
+            let me = this;
+            me.filtrandoPorCarrera = filtro;
+            me.bindDataByFilters(0);
+
+        },
         cambiarPagina(page){
             let me = this;
             me.pagination.current_page = page;

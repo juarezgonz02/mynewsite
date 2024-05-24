@@ -1,32 +1,41 @@
 <template>
     <main class="main" style="background-color: white;">
+        <ol class="breadcrumb" style="padding-left: 30px;">
+                <li class="breadcrumb-item">Inicio</li>
+                <li class="breadcrumb-item active">Estadisticas</li>
+            </ol>
         <div class="container-dashboard">
-            <h1 style=" font-size: xx-large; margin-bottom: 2vh; margin-top: 5vh; font-weight: bold;" >Estadísticas Centro de Servicio Social</h1>
-            <div style="margin-bottom: 5vh; display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%;">
+            <h1 style=" font-size: xx-large; margin-bottom: 2vh; margin-top: 5vh; font-weight: bold;">Estadísticas
+                Centro de Servicio Social</h1>
+            <div
+                style="margin-bottom: 5vh; display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%;">
                 <h4>Aplicar Filtros</h4>
                 <div class="contenedor-flex">
                     <label for="factultad" style="margin-right: 2vw; font-size: 1.6rem ;">Facultad</label>
                     <select class="form-control" id="factultad" name="factultad" v-model="idFacultadSeleccionada">
                         <option :value=0>Todas</option>
-                        <option v-for="facultad in facultades" :value="facultad.idFacultad">{{ facultad.nombre }}</option>
-                        
+                        <option v-for="facultad in facultades" :value="facultad.idFacultad">{{ facultad.nombre }}
+                        </option>
+
                     </select>
 
                     <label for="carrera" style="margin-right: 2vw; margin-left: 2vw; font-size: 1.6rem">Carrera</label>
                     <select class="form-control" id="carrera" name="carrera" v-model="idCarreraSeleccionada">
                         <option :value=0>Todas</option>
-                        <option v-for="carrera in carrerasFacultad" :value="carrera.idCarrera">{{ carrera.nombre }}</option>
-                        
+                        <option v-for="carrera in carrerasFacultad" :value="carrera.idCarrera">{{ carrera.nombre }}
+                        </option>
+
                     </select>
                 </div>
             </div>
             <div class="dashboard">
                 <div class="statistic">
                     <div class="header">
-                        <h3 >Proyectos en la Plataforma</h3>
-                            <!-- <img src="../../img/icons/person.svg" alt="Icon" width="32px" height="32px" /> -->
-                            <img :src=" ruta + '/img/icons/user-shield-alt-svgrepo-com.svg'" alt="chevron-left" width="32px" height="32px">
-                          
+                        <h3>Proyectos en la Plataforma</h3>
+                        <!-- <img src="../../img/icons/person.svg" alt="Icon" width="32px" height="32px" /> -->
+                        <img :src="ruta + '/img/icons/user-shield-alt-svgrepo-com.svg'" alt="chevron-left" width="32px"
+                            height="32px">
+
                     </div>
                     <div class="body">
                         <p class="text">{{ totalOfProjects }}</p>
@@ -35,8 +44,9 @@
                 <div class="statistic">
                     <div class="header">
 
-                        <h3 >Proyectos en Curso</h3>
-                        <img :src=" ruta + '/img/icons/clipboard-list-alt-svgrepo-com.svg'" alt="chevron-left" width="32px" height="32px">
+                        <h3>Proyectos en Curso</h3>
+                        <img :src="ruta + '/img/icons/clipboard-list-alt-svgrepo-com.svg'" alt="chevron-left"
+                            width="32px" height="32px">
                     </div>
                     <div class="body">
                         <p class="text">{{ activeProjects }}</p>
@@ -45,8 +55,9 @@
                 <div class="statistic">
                     <div class="header">
 
-                        <h3 >Proyectos Finalizados</h3>
-                        <img :src=" ruta + '/img/icons/shield-check-svgrepo-com.svg'" alt="chevron-left" width="32px" height="32px">
+                        <h3>Proyectos Finalizados</h3>
+                        <img :src="ruta + '/img/icons/shield-check-svgrepo-com.svg'" alt="chevron-left" width="32px"
+                            height="32px">
                     </div>
 
                     <div class="body">
@@ -55,19 +66,21 @@
                 </div>
                 <div class="statistic">
                     <div class="header">
-                        <h3 >Estudiantes Registrados</h3>
-                        <img :src=" ruta + '/img/icons/user-check-svgrepo-com.svg'" alt="chevron-left" width="32px" height="32px">
+                        <h3>Estudiantes Registrados</h3>
+                        <img :src="ruta + '/img/icons/user-check-svgrepo-com.svg'" alt="chevron-left" width="32px"
+                            height="32px">
 
                     </div>
                     <div class="body">
                         <p class="text">{{ registeredStudents }}</p>
                     </div>
-                    
+
                 </div>
                 <div class="statistic">
                     <div class="header">
-                        <h3 >Estudiantes en Proyectos</h3>
-                        <img :src=" ruta + '/img/icons/user-shield-alt-svgrepo-com.svg'" alt="chevron-left" width="32px" height="32px">
+                        <h3>Estudiantes en Proyectos</h3>
+                        <img :src="ruta + '/img/icons/user-shield-alt-svgrepo-com.svg'" alt="chevron-left" width="32px"
+                            height="32px">
 
                     </div>
                     <div class="body">
@@ -77,8 +90,9 @@
                 <div class="statistic">
                     <div class="header">
 
-                        <h3 >Proyectos Cancelados</h3>
-                        <img :src=" ruta + '/img/icons/shield-check-svgrepo-com.svg'" alt="chevron-left" width="32px" height="32px">
+                        <h3>Proyectos Cancelados</h3>
+                        <img :src="ruta + '/img/icons/shield-check-svgrepo-com.svg'" alt="chevron-left" width="32px"
+                            height="32px">
                     </div>
 
                     <div class="body">
@@ -86,40 +100,48 @@
                     </div>
                 </div>
 
-                
+
             </div>
-            
-            
-                <div class="year-select">
-                    <h3>Año de registro</h3>
-                    <select class="form-control font-lg" id="year" name="year" v-model="yearSelected">
-                        <option v-for="year in years" :value="year">{{ year }}</option>
-                    </select>
+
+
+            <div class="year-select">
+                <h3>Año de registro</h3>
+                <select class="form-control font-lg" id="year" name="year" v-model="yearSelected">
+                    <option v-for="year in years" :value="year">{{ year }}</option>
+                </select>
+            </div>
+            <div class="dashboard-2">
+
+                <div class="dashboard-content">
+                    <!-- <apex-chart :chart-type="type" :chart-options="options" :chart-series="series"></apex-chart> -->
+                    <projects-registered :data="proyectosRegistradosPorMes"
+                        :year="yearSelected.toString()"></projects-registered>
                 </div>
-                <div class="dashboard-2">
-                
-                    <div class="dashboard-content">
-                        <!-- <apex-chart :chart-type="type" :chart-options="options" :chart-series="series"></apex-chart> -->
-                        <projects-registered :data="proyectosRegistradosPorMes" :year="yearSelected.toString()"></projects-registered>
-                    </div>
-                    <div class="dashboard-content">
-                        <users-registered :months="studentsData.months" :data="studentsData.data" :year="yearSelected.toString()"></users-registered>
-                    </div>
-                    <div class="dashboard-content">
-                        <students-by-career :students-by-career="studentsData.studentsByCareer"></students-by-career>
-                    </div>
-                    <div class="dashboard-content">
-                        <genders :male-total="male" :female-total="female" :filtro="filterAppliedName"></genders>
-                    </div>
+                <div class="dashboard-content">
+                    <users-registered :months="studentsData.months" :data="studentsData.data"
+                        :year="yearSelected.toString()"></users-registered>
+                </div>
+                <div class="dashboard-content">
+                    <students-by-career :students-by-career="studentsData.studentsByCareer"></students-by-career>
+                </div>
+                <div class="dashboard-content">
+                    <genders :male-total="male" :female-total="female" :filtro="filterAppliedName"></genders>
+                </div>
             </div>
-            
-    </div>
+
+        </div>
+        <footer class="app-footer" id="footer"
+            style="display: flex; flex-direction: column; justify-content: center; font-size: 15px; padding: 10px 0px">
+            <span><a target="_blank" href="http://www.uca.edu.sv/servicio-social/">Centro de Servicio Social | UCA</a>
+                &copy; 2024</span>
+            <span>Desarrollado por <a href="#"></a>Grupo de Horas Sociales</span>
+        </footer>
     </main>
 </template>
 
 <script>
-import {API_HOST} from '../constants/endpoint.js';
-import {API_HOST_ASSETS} from '../constants/endpoint.js';
+import { API_HOST } from '../constants/endpoint.js';
+import { API_HOST_ASSETS } from '../constants/endpoint.js';
 // import VueApexCharts from 'vue-apexcharts';
 import Genders from './graphs/Genders'
 import UsersRegistered from './graphs/UsersRegistered.vue'
@@ -127,7 +149,7 @@ import StudentsByCareer from './graphs/StudentsByCareer.vue'
 import ApexChart from './graphs/ApexChart.vue';
 import ProjectsRegistered from './ProjectsRegistered.vue';
 export default {
-    
+
     components: {
         // apexchart: VueApexCharts, 
         ApexChart,
@@ -138,7 +160,7 @@ export default {
     },
     data() {
         return {
-            ruta : API_HOST_ASSETS,
+            ruta: API_HOST_ASSETS,
             projectQuantity: 0,
             registeredStudents: 0,
             studentsOnProjects: 0,
@@ -155,35 +177,35 @@ export default {
             proyectosRegistradosPorMes: [],
             carreraSeleccionada: {},
             filterAppliedName: "Todas las carreras",
-            studentsData:{
+            studentsData: {
                 male: 0,
-                female:0,
-                months:[],
-                data:[],
+                female: 0,
+                months: [],
+                data: [],
                 studentsByCareer: []
             },
             years: [],
             yearSelected: 2023,
-            
+
             // ApexChart settings
-      type: 'line',
-      options: {
-        chart: {
-          id: 'vuechart-example'
-        },
-        xaxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep']
-        }
-      },
-      series: [{
-        name: 'series-1',
-        data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
-      }],
+            type: 'line',
+            options: {
+                chart: {
+                    id: 'vuechart-example'
+                },
+                xaxis: {
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep']
+                }
+            },
+            series: [{
+                name: 'series-1',
+                data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
+            }],
 
-      male: 0,
-      female: 0
+            male: 0,
+            female: 0
 
-      
+
 
         };
     },
@@ -207,26 +229,26 @@ export default {
         }
 
     },
-    methods:{
-        bindData(){
+    methods: {
+        bindData() {
             let me = this
-                axios.get(`${API_HOST}/facultad`).then(function (response){
-                    // console.log(response.data)
-                    me.facultades = response.data
-                }).catch(function (error){
-                    // console.log(error)
-                })
-                axios.get(`${API_HOST}/carrera`).then(function (response){
-                    // console.log(response.data)
-                    me.carreras = response.data
-                }).catch(function (error){
-                    console.log(error)
-                })
-                me.bindEstadisticas()
+            axios.get(`${API_HOST}/facultad`).then(function (response) {
+                // console.log(response.data)
+                me.facultades = response.data
+            }).catch(function (error) {
+                // console.log(error)
+            })
+            axios.get(`${API_HOST}/carrera`).then(function (response) {
+                // console.log(response.data)
+                me.carreras = response.data
+            }).catch(function (error) {
+                console.log(error)
+            })
+            me.bindEstadisticas()
 
-                
+
         },
-        bindCarrerasSeleccionadas(){
+        bindCarrerasSeleccionadas() {
             let me = this
             // console.log(this.idFacultadSeleccionada)
             this.carrerasFacultad = []
@@ -234,8 +256,8 @@ export default {
             // if(this.idFacultadSeleccionada == 0){
             //     return
             // }
-            this.carreras.forEach(function (carrera){
-                if(carrera.idFacultad == me.idFacultadSeleccionada){
+            this.carreras.forEach(function (carrera) {
+                if (carrera.idFacultad == me.idFacultadSeleccionada) {
                     me.carrerasFacultad.push(carrera)
                 }
             })
@@ -250,38 +272,38 @@ export default {
         //         }
         //     })
         // },
-        bindEstadisticas(){
+        bindEstadisticas() {
             let me = this
             axios.get(`${API_HOST}/estadisticas`,
                 {
-                    params:{
+                    params: {
                         idFacultad: me.idFacultadSeleccionada,
                         idCarrera: me.idCarreraSeleccionada
                     }
                 }
-                ).then(function (response){
-                    console.log(response.data)
-                    me.registeredStudents = response.data.numeroDeEstudiantes
-                    me.studentsOnProjects = response.data.numeroDeEstudiantesInscritos
-                    me.activeProjects = response.data.numeroDeProyectosEnCurso
-                    me.projectsEnded = response.data.numeroDeProyectosTerminados
-                    me.totalOfProjects = response.data.totalNumeroDeProyectosActivos
-                    me.male = response.data.estudiantes.masculinos
-                    me.female = response.data.estudiantes.femeninos
-                    me.projectsCanceled = response.data.numeroDeProyectosCancelados || 0
-                }).catch(function (error){
-                    console.log(error)
-                })
+            ).then(function (response) {
+                console.log(response.data)
+                me.registeredStudents = response.data.numeroDeEstudiantes
+                me.studentsOnProjects = response.data.numeroDeEstudiantesInscritos
+                me.activeProjects = response.data.numeroDeProyectosEnCurso
+                me.projectsEnded = response.data.numeroDeProyectosTerminados
+                me.totalOfProjects = response.data.totalNumeroDeProyectosActivos
+                me.male = response.data.estudiantes.masculinos
+                me.female = response.data.estudiantes.femeninos
+                me.projectsCanceled = response.data.numeroDeProyectosCancelados || 0
+            }).catch(function (error) {
+                console.log(error)
+            })
         },
-        bindDashboardData(){
+        bindDashboardData() {
             let me = this;
-            axios.get(`${API_HOST}/estadisticas/dashboard`,{
-                params:{
+            axios.get(`${API_HOST}/estadisticas/dashboard`, {
+                params: {
                     idFacultad: me.idFacultadSeleccionada,
                     idCarrera: me.idCarreraSeleccionada,
                     year: me.yearSelected || 2020
                 }
-            }).then(function (response){
+            }).then(function (response) {
                 console.log(response.data)
                 me.studentsData.months = response.data.meses
                 me.studentsData.data = response.data.estudiantesRegistradosPorMes
@@ -289,51 +311,51 @@ export default {
                 me.proyectosRegistradosPorMes = response.data.proyectosRegistradosPorMes
             })
         },
-        setFilterName(){
+        setFilterName() {
             let me = this
 
-            if(this.idFacultadSeleccionada == 0){
+            if (this.idFacultadSeleccionada == 0) {
                 this.filterAppliedName = "Todas"
                 return
             }
 
             this.filterAppliedName = ""
 
-            if(this.idCarreraSeleccionada != 0){
+            if (this.idCarreraSeleccionada != 0) {
 
                 // console.log(this.carrerasFacultad)
-                this.carrerasFacultad.forEach(function (carrera){
+                this.carrerasFacultad.forEach(function (carrera) {
                     // console.log(carrera.idCarrera, me.idCarreraSeleccionada)
-                if(carrera.idCarrera == me.idCarreraSeleccionada){
-                    me.filterAppliedName = carrera.nombre +  " - "
-                    console.log(me.filterAppliedName)
-                    return
-                }
+                    if (carrera.idCarrera == me.idCarreraSeleccionada) {
+                        me.filterAppliedName = carrera.nombre + " - "
+                        console.log(me.filterAppliedName)
+                        return
+                    }
                 })
             }
 
-            this.facultades.forEach(function (facultad){
-            if(facultad.idFacultad == me.idFacultadSeleccionada){
-                me.filterAppliedName += facultad.nombre
-            }
+            this.facultades.forEach(function (facultad) {
+                if (facultad.idFacultad == me.idFacultadSeleccionada) {
+                    me.filterAppliedName += facultad.nombre
+                }
             })
             return
-    
-            
+
+
         }
-        
+
     },
-    watch:{
-        idFacultadSeleccionada: function(){
+    watch: {
+        idFacultadSeleccionada: function () {
             this.bindCarrerasSeleccionadas()
             this.bindEstadisticas()
             this.setFilterName()
         },
-        idCarreraSeleccionada: function(){
+        idCarreraSeleccionada: function () {
             this.bindEstadisticas()
             this.setFilterName()
         },
-        yearSelected: function(){
+        yearSelected: function () {
             this.bindDashboardData()
         }
     }
@@ -342,13 +364,14 @@ export default {
 
 <style scoped>
 .container-dashboard {
-    
+
     display: flex;
     flex-direction: column;
     padding-bottom: 10vh;
     align-items: center;
     height: 100%;
 }
+
 .dashboard {
     display: grid;
 
@@ -362,7 +385,7 @@ export default {
     padding: 0 5vw;
     gap: 2vw;
 
-    }
+}
 
 .dashboard-2 {
     display: grid;
@@ -376,15 +399,15 @@ export default {
     padding: 0 5vw;
     gap: 2vw;
 
-    }
-
-.dashboard-content{
-    padding: 0 5vw;
-    min-height: 45vh;
-    
 }
 
-.statistic .header{
+.dashboard-content {
+    padding: 0 5vw;
+    min-height: 45vh;
+
+}
+
+.statistic .header {
     min-height: 5vh;
     display: flex;
     align-items: center;
@@ -392,11 +415,11 @@ export default {
     justify-content: space-between;
 }
 
-.statistic h3{
+.statistic h3 {
     font-weight: 600;
     font-size: 1.5rem;
     color: #9b9b9b;
-    
+
 }
 
 .statistic {
@@ -405,10 +428,10 @@ export default {
     border: 1px solid #ddd;
     border-radius: 10px;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-    
+
 }
 
-.year-select{
+.year-select {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -418,28 +441,30 @@ export default {
     padding-inline: 5vw;
 
 }
-@media screen and (max-width: 768px){
-    .dashboard{
+
+@media screen and (max-width: 768px) {
+    .dashboard {
         grid-template-columns: 1fr;
     }
 
-    .statistic{
+    .statistic {
         margin-bottom: 5vh;
     }
-    .dashboard-2{
+
+    .dashboard-2 {
         grid-template-columns: 1fr;
     }
-    
+
 }
 
-.statistic .text{
+.statistic .text {
     font-size: 3.0rem;
     font-weight: bold;
     color: rgb(0, 0, 0);
 }
 
-.statistic .body{
-    
+.statistic .body {
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -453,5 +478,4 @@ export default {
     width: 100%;
     padding-inline: 5vw;
 }
-    
 </style>
