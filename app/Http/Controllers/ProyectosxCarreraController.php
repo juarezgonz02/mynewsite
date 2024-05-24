@@ -53,7 +53,19 @@ class ProyectosxCarreraController extends Controller
 
     public function proyectosPorCarrera(Request $request){
         if(!$request->ajax()) return redirect('/home');
-        $user = Auth()->user();
+        
+        $this->validate($request, [
+            'carrera' => 'required|numeric',
+            'ano' => 'required|numeric|in:1,2,3,4,5,6',
+            'tipo'=> 'required|string|in:todas,Externas,Internas'
+        ]);
+
+        $name = $request -> query('nombre');
+        $tipo = $request -> query('tipo');
+        $user_perfil = $request -> query('ano');
+        $user_carrera = $request -> query('carrera');
+        $user = Auth() -> user();
+
         $proyectos = Proyecto::join('proyectoxcarrera', 'proyecto.idProyecto', '=','proyectoxcarrera.idProyecto')
         ->leftJoin('proyectoxestudiante', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
         ->select('proyecto.idProyecto', 'proyecto.nombre','proyecto.descripcion','proyecto.estado',
@@ -62,16 +74,15 @@ class ProyectosxCarreraController extends Controller
         'proyecto.correo_encargado','proyecto.contraparte')
         ->where('proyecto.estado','=','1')
         ->where('proyecto.estado_proyecto','=','En curso')
-        ->where('proyectoxcarrera.limite_inf', '<=', $user->idPerfil)
-        ->where('proyectoxcarrera.limite_sup', '>=', $user->idPerfil)
-        ->where('proyectoxcarrera.idCarrera', '=', $user->idCarrera)
+        ->where('proyectoxcarrera.limite_inf', '<=', $user_perfil)
+        ->where('proyectoxcarrera.limite_sup', '>=', $user_perfil)
+        ->where('proyectoxcarrera.idCarrera', '=', $user_carrera)
         // ->where('proyecto.fecha_inicio', '>=', date('Y-m-d'))// Se mostraran los proyectos que aun no han iniciado deacuerdo a la fecha de consulta
         ->whereRaw('(proyectoxestudiante.idUser !=' . $user->idUser . ' OR proyectoxestudiante.idUser IS NULL)')
         ->whereRaw('proyecto.idProyecto NOT IN (SELECT p.idProyecto FROM proyecto p, proyectoxestudiante pe WHERE p.idProyecto = pe.idProyecto AND pe.idUser = ' . $user->idUser . ')')
         ->whereRaw('proyecto.cupos_act < proyecto.cupos');
         
-        $name = $request -> query('nombre');
-        $tipo = $request -> query('tipo');
+
 
         if($name != ''){
             $proyectos = $proyectos->where('proyecto.nombre', "like", $name.'%');
