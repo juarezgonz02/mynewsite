@@ -628,13 +628,13 @@ export default {
             let me = this;
             me.loadTable = true;
 
-            axios.get(`${API_HOST}/estadoAplicacion`).then(function (response) {
+            axios.get(`${API_HOST}/estudiante/aplica/estado`).then(function (response) {
                 console.log(response)
                 me.ya_aplico_hoy = response.data.ya_aplico_hoy;
                 me.ya_aplico_proyecto = response.data.activeProject;
             })
 
-            var url = `${API_HOST}/proyectos_carrera?nombre=${this.filtrandoPorNombre}&carrera=${this.user_carrera_id}&ano=${this.user_perfil_id}&tipo=${this.filtrandoPorTipo}&page=${page}`;
+            var url = `${API_HOST}/proyecto?nombre=${this.filtrandoPorNombre}&carrera=${this.user_carrera_id}&ano=${this.user_perfil_id}&tipo=${this.filtrandoPorTipo}&page=${page}`;
             axios.get(url).then(function (response) {
                 var respuesta = response.data;
                 var proyectos = respuesta.proyectos.data;

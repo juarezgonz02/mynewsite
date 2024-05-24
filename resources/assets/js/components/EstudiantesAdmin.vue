@@ -180,7 +180,7 @@ import Swal from 'sweetalert2'
             buscarEstudiante(){
                 let me = this
                 this.errorActualizar = false
-                var url = `${API_HOST}/estudiante_por_carnet`
+                var url = `${API_HOST}/estudiante/carnet`
                 axios.get(url, {
                     params:{
                         carnet: me.carnet

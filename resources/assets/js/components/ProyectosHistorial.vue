@@ -294,8 +294,7 @@ export default {
     bindData(page) {
       let me = this;
       me.loadTable = true;
-      //var url2 = '/public/proyecto?page=' + page;
-      var url = `${API_HOST}/historial_proyectos?page=${page}`;
+      var url = `${API_HOST}/proyecto/historial?page=${page}`;
       axios.get(url).then(function (response) {
         var respuesta = response.data;
         var proyectos = respuesta.proyectos.data;
@@ -376,27 +375,27 @@ export default {
             break;
           }
           case "estudiantes":
-                        {
-                            this.modal3 = 1;
-                            this.id_proyecto = data.idProyecto;
-                            this.modal_nombre = data.nombre;
-                            this.modal_cupos = data.cupos;
-                            this.carnet = '';
-                            this.nombre_completo = '';
-                            this.id_estudiante = 0;
-                            this.flagError = false;
-                            this.errorEstudianteMsg = '';
-                            this.getEstudiantes()
-                            this.proyectoInscrito = data;
-                            break;
-                        }
+          {
+              this.modal3 = 1;
+              this.id_proyecto = data.idProyecto;
+              this.modal_nombre = data.nombre;
+              this.modal_cupos = data.cupos;
+              this.carnet = '';
+              this.nombre_completo = '';
+              this.id_estudiante = 0;
+              this.flagError = false;
+              this.errorEstudianteMsg = '';
+              this.getEstudiantes()
+              this.proyectoInscrito = data;
+              break;
+          }
         default:
           break;
       }
     },
     getEstudiantes(){
                 let me = this;
-                axios.get(`${API_HOST}/estudiantesxproyecto`, {
+                axios.get(`${API_HOST}/proyecto/estudiantes`, {
                     params:{
                         idProyecto: me.id_proyecto
                     }
@@ -414,7 +413,7 @@ export default {
                 .catch(function (error) {
                     console.log(error);
                 });
-                axios.get(`${API_HOST}/cupos_actuales`, {
+                axios.get(`${API_HOST}/proyecto/cupos_actuales`, {
                     params:{
                         idProyecto: me.id_proyecto
                     }

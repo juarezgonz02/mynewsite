@@ -307,7 +307,7 @@ export default {
         bindData(page) {
             let me = this
             me.loadTable = true;
-            var url = `${API_HOST}/proyectos_aplicados` /*?page=' + page*/;
+            var url = `${API_HOST}/proyecto/aplicado` /*?page=' + page*/;
             axios.get(url).then(function (response) {
                 me.arrayProyectos = response.data;
                 console.log(me.arrayProyectos)

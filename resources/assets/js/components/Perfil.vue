@@ -171,7 +171,7 @@ import Swal from 'sweetalert2';
                     console.log(error);
                 });
 
-                axios.get(`${API_HOST}/mi_carrera`).then(function (response) {
+                axios.get(`${API_HOST}/estudiante`).then(function (response) {
                     var res = response.data[0];
                     me.carrera = res.nombre_c;
                     me.facultad = res.nombre_f;
