@@ -91,7 +91,7 @@
                                                 class="text-button"> Antiguos </button> </li>
                                         <li value="menos_cupos"> <button @click="cambiarOrden('menos_cupos', 'Menos cupos libres')"
                                                 class="text-button"> Menos cupos libres </button> </li>
-                                        <li value="mas_cupos"> <button @click="cambiarOrden('mas_cupos')"
+                                        <li value="mas_cupos"> <button @click="cambiarOrden('mas_cupos', 'Más cupos')"
                                                 class="text-button"> Más cupos libres </button> </li>
                                         <li value="n_solicitudes"> <button @click="cambiarOrden('n_solicitudes', 'Más solicitudes')"
                                                 class="text-button"> Número solictudes </button> </li>
@@ -103,7 +103,6 @@
                                         Nuevo</button>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                     <!---->
@@ -871,12 +870,11 @@
 
 <script>
 import { API_HOST } from '../constants/endpoint.js';
-import { API_HOST_ASSETS } from '../constants/endpoint.js';
 import Swal from 'sweetalert2';
 export default {
     data() {
         return {
-            ruta: API_HOST_ASSETS,
+            ruta: API_HOST,
             loading: 0,
             loadTable: false,
             user_email: '',
@@ -2025,6 +2023,13 @@ body {
         overflow: scroll;
     }
 
+    .state-btn-container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1em;
+    }
+    
 }
 
 @media screen and (min-width: 991px) {
@@ -2063,12 +2068,15 @@ body {
     #student-button {
         font-size: .75em;
     }
+
+    
 }
 
 @media screen and (max-width: 450px) {
     #student-button {
         font-size: .5em;
     }
+    
 }
 
 @media screen and (max-width: 500px) {
@@ -2148,6 +2156,7 @@ body {
     display: flex;
     align-items: center;
     gap: 1em;
+    
 }
 
 @media screen and (max-width: 1000px) {

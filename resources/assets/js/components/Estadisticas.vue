@@ -102,31 +102,40 @@
 
 
             </div>
+            
+                <div class="dashboard-2">
+                    <div class="dashboard-content">
+                        <projects-by-year :data="proyectosXanio" :years="aniosProyectosRegistrados"></projects-by-year>
+                    </div>
+                    <div class="dashboard-content">
+                        <users-by-year :data="estudiantesXanio" :years="aniosEstudiantesRegistrados"></users-by-year>
+                    </div>
+                    <div class="dashboard-content">
+                        <students-by-career :students-by-career="studentsData.studentsByCareer"></students-by-career>
+                    </div>
+                    <div class="dashboard-content">
+                        <genders :male-total="male" :female-total="female" :filtro="filterAppliedName"></genders>
+                    </div>
+                </div>
 
 
-            <div class="year-select">
-                <h3>Año de registro</h3>
-                <select class="form-control font-lg" id="year" name="year" v-model="yearSelected">
-                    <option v-for="year in years" :value="year">{{ year }}</option>
-                </select>
-            </div>
-            <div class="dashboard-2">
+                <div class="container d-flex align-items-center flex-column">
+                    <h3>Año de registro</h3>
+                    <select class="form-control font-lg w-50" id="year" name="year" v-model="yearSelected">
+                        <option v-for="year in years" :value="year">{{ year }}</option>
+                    </select>
+                </div>
+                <div class="dashboard-2">
+                
+                    
 
-                <div class="dashboard-content">
-                    <!-- <apex-chart :chart-type="type" :chart-options="options" :chart-series="series"></apex-chart> -->
-                    <projects-registered :data="proyectosRegistradosPorMes"
-                        :year="yearSelected.toString()"></projects-registered>
-                </div>
-                <div class="dashboard-content">
-                    <users-registered :months="studentsData.months" :data="studentsData.data"
-                        :year="yearSelected.toString()"></users-registered>
-                </div>
-                <div class="dashboard-content">
-                    <students-by-career :students-by-career="studentsData.studentsByCareer"></students-by-career>
-                </div>
-                <div class="dashboard-content">
-                    <genders :male-total="male" :female-total="female" :filtro="filterAppliedName"></genders>
-                </div>
+                    <div class="dashboard-content">
+                        <!-- <apex-chart :chart-type="type" :chart-options="options" :chart-series="series"></apex-chart> -->
+                        <projects-registered :data="proyectosRegistradosPorMes" :year="yearSelected.toString()"></projects-registered>
+                    </div>
+                    <div class="dashboard-content">
+                        <users-registered :months="studentsData.months" :data="studentsData.data" :year="yearSelected.toString()"></users-registered>
+                    </div>
             </div>
 
         </div>
@@ -141,13 +150,15 @@
 
 <script>
 import { API_HOST } from '../constants/endpoint.js';
-import { API_HOST_ASSETS } from '../constants/endpoint.js';
 // import VueApexCharts from 'vue-apexcharts';
 import Genders from './graphs/Genders'
 import UsersRegistered from './graphs/UsersRegistered.vue'
 import StudentsByCareer from './graphs/StudentsByCareer.vue'
 import ApexChart from './graphs/ApexChart.vue';
-import ProjectsRegistered from './ProjectsRegistered.vue';
+import ProjectsRegistered from './graphs/ProjectsRegistered.vue';
+import ProjectsByYear from './graphs/ProjectsByYear.vue';
+import UsersByYear from './graphs/UsersByYear.vue';
+
 export default {
 
     components: {
@@ -156,7 +167,9 @@ export default {
         Genders,
         UsersRegistered,
         StudentsByCareer,
-        ProjectsRegistered
+        ProjectsRegistered,
+        ProjectsByYear,
+        UsersByYear
     },
     data() {
         return {
@@ -186,7 +199,12 @@ export default {
             },
             years: [],
             yearSelected: 2023,
-
+            proyectosRegistradosPorAnio: {},
+            aniosProyectosRegistrados: [],
+            aniosEstudiantesRegistrados: [],
+            proyectosXanio: [],
+            estudiantesXanio: [],
+            
             // ApexChart settings
             type: 'line',
             options: {
@@ -224,9 +242,11 @@ export default {
         let datimeNow = new Date()
         let yearNow = datimeNow.getFullYear()
 
-        for (let i = 2023; i <= yearNow; i++) {
-            this.years.push(i);
-        }
+        // for (let i = 2023; i <= yearNow; i++) {
+        //     this.years.push(i);
+        // }
+
+        // this.years = ["2022", "2023", "2024"]
 
     },
     methods: {
@@ -281,19 +301,19 @@ export default {
                         idCarrera: me.idCarreraSeleccionada
                     }
                 }
-            ).then(function (response) {
-                console.log(response.data)
-                me.registeredStudents = response.data.numeroDeEstudiantes
-                me.studentsOnProjects = response.data.numeroDeEstudiantesInscritos
-                me.activeProjects = response.data.numeroDeProyectosEnCurso
-                me.projectsEnded = response.data.numeroDeProyectosTerminados
-                me.totalOfProjects = response.data.totalNumeroDeProyectosActivos
-                me.male = response.data.estudiantes.masculinos
-                me.female = response.data.estudiantes.femeninos
-                me.projectsCanceled = response.data.numeroDeProyectosCancelados || 0
-            }).catch(function (error) {
-                console.log(error)
-            })
+                ).then(function (response){
+                    // console.log(response.data)
+                    me.registeredStudents = response.data.numeroDeEstudiantes
+                    me.studentsOnProjects = response.data.numeroDeEstudiantesInscritos
+                    me.activeProjects = response.data.numeroDeProyectosEnCurso
+                    me.projectsEnded = response.data.numeroDeProyectosTerminados
+                    me.totalOfProjects = response.data.totalNumeroDeProyectosActivos
+                    me.male = response.data.estudiantes.masculinos
+                    me.female = response.data.estudiantes.femeninos
+                    me.projectsCanceled = response.data.numeroDeProyectosCancelados || 0
+                }).catch(function (error){
+                    console.log(error)
+                })
         },
         bindDashboardData() {
             let me = this;
@@ -303,12 +323,22 @@ export default {
                     idCarrera: me.idCarreraSeleccionada,
                     year: me.yearSelected || 2020
                 }
-            }).then(function (response) {
-                console.log(response.data)
+            }).then(function (response){
+                
                 me.studentsData.months = response.data.meses
                 me.studentsData.data = response.data.estudiantesRegistradosPorMes
                 me.studentsData.studentsByCareer = response.data.estudiantesPorCarrera
                 me.proyectosRegistradosPorMes = response.data.proyectosRegistradosPorMes
+                // me.proyectosRegistradosPorAnio = response.data.proyectosRegistradosPorAnio
+
+
+                me.aniosProyectosRegistrados = Object.keys(response.data.proyectosRegistradosPorAnio)
+                me.aniosEstudiantesRegistrados = Object.keys(response.data.estudiantesRegistradosPorAnio)
+                me.years = me.aniosProyectosRegistrados
+                me.proyectosXanio = Object.values(response.data.proyectosRegistradosPorAnio)
+                me.estudiantesXanio = Object.values(response.data.estudiantesRegistradosPorAnio)
+                
+
             })
         },
         setFilterName() {
@@ -326,11 +356,11 @@ export default {
                 // console.log(this.carrerasFacultad)
                 this.carrerasFacultad.forEach(function (carrera) {
                     // console.log(carrera.idCarrera, me.idCarreraSeleccionada)
-                    if (carrera.idCarrera == me.idCarreraSeleccionada) {
-                        me.filterAppliedName = carrera.nombre + " - "
-                        console.log(me.filterAppliedName)
-                        return
-                    }
+                if(carrera.idCarrera == me.idCarreraSeleccionada){
+                    me.filterAppliedName = carrera.nombre +  " - "
+                    // console.log(me.filterAppliedName)
+                    return
+                }
                 })
             }
 
@@ -450,11 +480,10 @@ export default {
     .statistic {
         margin-bottom: 5vh;
     }
-
-    .dashboard-2 {
+    
+    .dashboard-2{
         grid-template-columns: 1fr;
     }
-
 }
 
 .statistic .text {

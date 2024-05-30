@@ -224,12 +224,11 @@
 
 <script>
 import { API_HOST } from "../constants/endpoint.js";
-import { API_HOST_ASSETS } from '../constants/endpoint.js';
 
 export default {
   data() {
     return {
-      ruta: API_HOST_ASSETS,
+      ruta: API_HOST,
       loadTable: false,
       loading: 0,
       user_email: '',
