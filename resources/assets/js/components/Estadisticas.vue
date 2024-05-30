@@ -160,7 +160,7 @@ export default {
     },
     data() {
         return {
-            ruta: API_HOST_ASSETS,
+            ruta: API_HOST,
             projectQuantity: 0,
             registeredStudents: 0,
             studentsOnProjects: 0,

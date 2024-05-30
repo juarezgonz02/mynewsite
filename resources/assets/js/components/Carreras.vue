@@ -1,8 +1,10 @@
 <template>
     <main class="main">
-
+        <ol class="breadcrumb" style="padding-left: 30px;">
+            <li class="breadcrumb-item">Inicio</li>
+            <li class="breadcrumb-item active">Administración de Carreras</li>
+        </ol>
         <div class="container">
-            <h1>Carreras</h1>
         <table>
 
             <thead>
@@ -24,9 +26,13 @@
                             </button>
                         </div>
                         <div class="button-container">
-                            <button type="button" @click="abrirModal('eliminar', carrera)" data-toggle="modal" data-target="#statusModal" class="btn btn-danger btn-sm" style="margin: 2px 0; width: 100%;">
+                            <button v-if="carrera.estado == 1" type="button" @click="abrirModal('eliminar', carrera)" data-toggle="modal" data-target="#statusModal" class="btn btn-danger btn-sm" style="margin: 2px 0; width: 100%;">
                                 <i class="icon-lock"></i>
                                 <span class="btn-label">Eliminar</span>
+                            </button>
+                            <button v-else type="button" @click="abrirModal('activar', carrera)" data-toggle="modal" data-target="#statusModal" class="btn btn-success btn-sm" style="margin: 2px 0; width: 100%;">
+                                <i class="icon-check"></i>
+                                <span class="btn-label">Activar</span>
                             </button>
                         </div>
                     </td>
@@ -92,7 +98,9 @@ export default {
             idCarrera: 0,
             nombre_carrera: '',
             errorMessage: '',
-            showSuccess: false
+            showSuccess: false,
+            modal_facultad: '',
+            flagErrorProyecto: false
         };
     },
     methods: {
@@ -254,7 +262,7 @@ export default {
             this.carreras = [];
             this.getFacultades();
             let me = this;
-            axios.get(`${API_HOST}/carreras`)
+            axios.get(`${API_HOST}/facultad/carreras`)
                 .then(response => {
                     me.carreras = response.data;
                 })
@@ -269,7 +277,8 @@ export default {
 };
 </script>
 
-<style>
+
+<style scoped>
   /* Estilos generales para mejorar la apariencia de la tabla y los elementos */
 
   .main{
@@ -279,8 +288,7 @@ export default {
   }
   
   .container {
-    padding-top: 5vh;
-    max-width: 700px;
+    max-width: 90%;
     margin: 0 auto;
   }
 

@@ -214,7 +214,7 @@ export default {
 }
 
 .container {
-    max-width: 90vw;
+    max-width: 90%;
     margin: 0 auto;
 }
 
