@@ -33,6 +33,8 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/oauth2Callback', 'Auth\GoogleLoginController@handleGoogleCallback')->name('google.callback');
     Route::get('/registrar_google', 'Auth\GoogleLoginController@showRegisterForm')->name('google.register');
     Route::post('/registrar_google', 'Auth\GoogleLoginController@registrar')->name('google.register_google');
+    Route::get('/carrera', 'CarreraController@index');
+    Route::get('/facultad', 'FacultadController@index');
 });
 
 
@@ -43,27 +45,29 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
     Route::get('/get_user', 'UserController@getUser');
     Route::get('/perfil', 'PerfilController@index');
+    Route::get('/carrera', 'CarreraController@index');
+    Route::get('/facultad/carreras', 'CarreraController@getCarrerasConFacultades');
+    Route::get('/facultad', 'FacultadController@index');
+
 
     Route::middleware(['Administrador'])->group(function () {
-        Route::get('/todos_proyectos', 'ProyectoController@index');
-        Route::get('/buscar_nombre', 'ProyectoController@buscar_nombre');
         Route::get('/buscar_filtros', 'BusquedaController@buscar_filtros');
-        Route::get('/historial_proyectos', 'ProyectoController@proyectosNoDisponibles');
+        Route::get('/proyecto/historial', 'ProyectoController@proyectosNoDisponibles');
         Route::post('/proyecto/insertar', 'ProyectoController@store');
          // REUNION 
-        Route::post('/sendMeetingMail', 'ProyectoController@postSendMeetingEmails');
+        Route::post('/reunion', 'ProyectoController@postSendMeetingEmails');
 
         Route::get('/estudiante/{idEstudiante}/proyectos', 'ProyectoController@getEstudianteProyecto');
 
         Route::put('/proyecto/actualizar', 'ProyectoController@update'); 
         Route::put('/proyecto/estado', 'ProyectoController@state');
         
-        Route::get('/proyectosxcarrera', 'ProyectosxCarreraController@proyectosPorCarreraEdit');
-        Route::get('/estudiantesxproyecto', 'ProyectoxEstudianteController@estudiantesPorProyecto');
-        Route::put('/aplicarestudiante', 'ProyectoxEstudianteController@aceptarRechazarEstudiante');
-        Route::put('/rechazarestudiante', 'ProyectoxEstudianteController@rechazarEstudiante');
-        Route::post('/aplicarporadmin', 'ProyectoxEstudianteController@aplicarPorAdmin');
-        Route::get('/estudiante_por_carnet', 'UserController@estudiantePorCarnet');
+        Route::get('/proyectos/carreras', 'ProyectosxCarreraController@proyectosPorCarreraEdit');
+        Route::get('/proyecto/estudiantes', 'ProyectoxEstudianteController@estudiantesPorProyecto');
+        Route::put('/proyecto/estudiantes/aceptar', 'ProyectoxEstudianteController@aceptarRechazarEstudiante');
+        Route::put('/proyecto/estudiantes/rechazar', 'ProyectoxEstudianteController@rechazarEstudiante');
+        Route::post('/proyecto/estudiantes/add', 'ProyectoxEstudianteController@aplicarPorAdmin');
+        Route::get('/estudiante/carnet', 'UserController@estudiantePorCarnet');
 
         Route::post('/carreras/insertar', 'CarreraController@crearCarrera');
         Route::put('/carreras/inactivar', 'CarreraController@inactivarCarrera');
@@ -87,19 +91,16 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['NormalUser'])->group(function () {
         
-        Route::get('/ya_aplico', 'UserController@yaAplico');
-        Route::get('/pxe_estudiante', 'ProyectoxEstudianteController@pxePorId');
-        Route::get('/proyectos_aplicados', 'ProyectoxEstudianteController@proyectosAplicados');
-        Route::get('/mi_carrera', 'CarreraController@miCarrera');
-        Route::get('/proyectos_carrera', 'ProyectosxCarreraController@proyectosPorCarrera');
+        Route::get('/proyecto', 'ProyectosxCarreraController@proyectosPorCarrera');
+        Route::get('/proyecto/aplicado', 'ProyectoxEstudianteController@proyectosAplicados');
+        Route::get('/estudiante', 'CarreraController@miCarrera');
 
         Route::post('/proyecto/aplicar', 'ProyectoxEstudianteController@aplicar');
         Route::post('/proyecto/desaplicar', 'ProyectoxEstudianteController@deleteRow');
         Route::put('/estudiante/actualizar/perfil', 'PerfilController@updateMyProfile');
         Route::put('/estudiante/actualizar/carrera', 'PerfilController@updateMyCareer');
-        Route::get('/estadoAplicacion', 'UserController@estadoAplicacionEstudiante');
-        Route::get('/carrera', 'CarreraController@index');
-        Route::get('/facultad', 'FacultadController@index');
+        Route::get('/estudiante/aplica/estado', 'UserController@estadoAplicacionEstudiante');
+
 
     });
 });

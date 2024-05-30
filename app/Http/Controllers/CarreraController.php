@@ -40,8 +40,7 @@ class CarreraController extends Controller
 
     public function getCarrerasConFacultades(){
         $carreras = Carrera::join('facultad', 'carrera.idFacultad', '=', 'facultad.idFacultad')
-            ->select('carrera.idCarrera', 'carrera.nombre as nombre_carrera', 'facultad.idFacultad', 'facultad.nombre as nombre_facultad')
-            ->where('carrera.estado', '=', 1)
+            ->select('carrera.idCarrera', 'carrera.nombre as nombre_carrera', 'facultad.idFacultad', 'facultad.nombre as nombre_facultad', 'estado')
             ->get();
 
         return $carreras;
