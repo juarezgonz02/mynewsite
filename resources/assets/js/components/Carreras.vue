@@ -191,8 +191,8 @@ export default {
                         this.errorEstado = 0;
                         this.flagErrorEstado = false;
                         Swal.fire({
-                            title: `¿Desea eliminar la carrera?`,
-                            text: `Esta acción no se puede deshacer.\n Se eliminará completamente esta carrera.`,
+                            title: `¿Desea desactivar esta carrera?`,
+                            text: `Se desactivará esta carrera\n No se podrán inscribir proyectos ni estudiantes con esta carrera.`,
                             icon: "warning",
                             showCancelButton: true,
                             confirmButtonColor: "#3085d6",
@@ -202,6 +202,28 @@ export default {
                             }).then((result) => {
                             if (result.isConfirmed) {
                                 this.inactivarCarrera(data.idCarrera);
+                            }
+                        });
+                        break;
+                    }
+                case "activar":
+                    {
+                        this.idCarrera = data.idCarrera;
+                        this.modal_nombre = data.nombre;
+                        this.errorEstado = 0;
+                        this.flagErrorEstado = false;
+                        Swal.fire({
+                            title: `¿Desea activar la carrera?`,
+                            text: `La carrera se activará y se podrá registrar proyectos y estudiantes con ella`,
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Confirmar",
+                            cancelButtonText: "Cancelar",
+                            }).then((result) => {
+                            if (result.isConfirmed) {
+                                this.activarCarrera(data.idCarrera);
                             }
                         });
                         break;
@@ -221,8 +243,28 @@ export default {
             .then(function (response) {
                 Swal.fire({
                     icon: 'success',
-                    title: 'Carrera inactivada',
-                    text: 'La carrera se ha inactivado exitosamente',
+                    title: 'Carrera desactivado',
+                    text: 'La carrera se ha desactivado exitosamente',
+                });
+                me.bindData();
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        },
+        activarCarrera(idCarrera) {
+            let estado = 1;
+            let me = this;
+
+            axios.put(`${API_HOST}/carreras/inactivar`, {
+                    'idCarrera' : idCarrera,
+                    'estado' : estado
+            })
+            .then(function (response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Carrera activada',
+                    text: 'La carrera se ha activada exitosamente',
                 });
                 me.bindData();
             })
@@ -324,20 +366,6 @@ export default {
   tr:nth-child(even) {
     background-color: #f9f9f9;
   }
-
-  button {
-    display: block;
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-    max-width: 200px;
-    margin: 10px 0;
-    font-size: 1rem;
-  }
-
 
   /* Estilos para el modal */
   input, select {
