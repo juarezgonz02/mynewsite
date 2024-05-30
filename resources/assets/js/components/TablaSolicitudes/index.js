@@ -75,7 +75,9 @@ export default {
             ordenandoPor: "recientes",
             selectedFilter: "",
             proyecto: "",
-            arrayFactultad: []
+            arrayFactultad: [],
+            default_filter: true,
+            filter_label: "Todas las carreras"
         }
     },
     computed:{
@@ -595,7 +597,7 @@ export default {
         aplicarPorAdmin(){
             let me = this
             me.loading = 1;
-            var url = `${API_HOST}/proyecto/add_student`
+            var url = `${API_HOST}/proyecto/estudiantes/add`
             axios.post(url, {
                 'idProyecto' : me.id_proyecto,
                 'idUser' : me.id_estudiante,

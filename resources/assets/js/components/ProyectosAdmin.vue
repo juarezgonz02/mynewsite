@@ -42,7 +42,7 @@
                                                 <b> Filtrar por: </b>
                                             </li>
 
-                                            <li @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -1 }), ' Todas las carreras')">
+                                            <li @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -1 }), ' Todas las carreras', true)">
                                                 <button class="text-button"> Todas las carreras </button>
                                             </li>
 
@@ -85,7 +85,7 @@
                                         <!-- v-model="filtrandoPorCarrera"> -->
                                         <!-- <select class="custom-select" v-model="ordenandoPor" @change="bindDataByFilters(0)"> -->
                                         <li value="" disabled selected> <b> Ordenar por: </b> </li>
-                                        <li value="recientes"> <button @click="cambiarOrden('recientes', 'Recientes', 'true')"
+                                        <li value="recientes"> <button @click="cambiarOrden('recientes', 'Recientes', true)"
                                                 class="text-button"> Reciente </button> </li>
                                         <li value="antiguos"> <button @click="cambiarOrden('antiguos', 'Antiguos')"
                                                 class="text-button"> Antiguos </button> </li>
@@ -113,14 +113,14 @@
                                 <span> Mostrando: </span>
                                 <span class="badge badge-pill badge-light"> {{ filter_label }} </span>
                                 <button v-if="!default_filter" type="button" class="close" aria-label="Close">
-                                    <span aria-hidden="true" style="color: #000000">×</span>
+                                    <span @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -1 }), ' Todas las carreras', true)" aria-hidden="true" style="color: #000000">×</span>
                                 </button>
                             </div>
-                            <div class="d-flex" style="gap: 5px">
+                            <div class="d-flex mr-4 mb-1" style="gap: 5px">
                                 <span> Orden: </span>
                                 <span class="badge badge-pill badge-light"> {{order_label}} </span>
                                 <button v-if="!default_order" type="button" class="close" aria-label="Close">
-                                    <span aria-hidden="true" style="color: #000000">×</span>
+                                    <span @click="cambiarOrden('recientes', 'Reciente', true)" aria-hidden="true" style="color: #000000">×</span>
                                 </button>
                             </div>
 
@@ -1561,7 +1561,7 @@ export default {
         },
         updateCarrerasAndPerfil() {
             let me = this
-            axios.get(`${API_HOST}/proyectosxcarrera`, {
+            axios.get(`${API_HOST}/proyectos/carreras`, {
                 params: {
                     idProyecto: me.id_proyecto
                 }
@@ -1644,7 +1644,7 @@ export default {
         aplicarPorAdmin() {
             let me = this
             me.loading = 1;
-            var url = `${API_HOST}/aplicarporadmin`
+            var url = `${API_HOST}/proyecto/estudiantes/add`
             axios.post(url, {
                 'idProyecto': me.id_proyecto,
                 'idUser': me.id_estudiante,
@@ -1863,7 +1863,7 @@ export default {
 </script>
 <style lang="scss">
 body {
-    font-size: 0.95em;
+    font-size: 1em;
 }
 
 .btn-primary {

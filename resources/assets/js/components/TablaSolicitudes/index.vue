@@ -104,17 +104,10 @@
                 <div style="font-size: 1.1em; font-weight: normal">
                         <div class="d-flex flex-wrap my-3">
                             <div class="d-flex mr-4" style="gap: 5px">
-                                <span> Mostrando: </span>
-                                <span class="badge badge-pill badge-light"> Ingenieria Informatica </span>
+                                <span> Carrera: </span>
+                                <span class="badge badge-pill badge-light"> {{filter_label}} </span>
                                 <button type="button" class="close" aria-label="Close">
-                                    <span aria-hidden="true" style="color: #000000">×</span>
-                                </button>
-                            </div>
-                            <div class="d-flex" style="gap: 5px">
-                                <span> Orden: </span>
-                                <span class="badge badge-pill badge-light"> Menos cupos </span>
-                                <button type="button" class="close" aria-label="Close">
-                                    <span aria-hidden="true" style="color: #000000">×</span>
+                                    <span v-if="!default_filter" aria-hidden="true" style="color: #000000">×</span>
                                 </button>
                             </div>
 

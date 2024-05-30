@@ -58,43 +58,30 @@
                                             <!-- v-model="filtrandoPorCarrera"> -->
                                             <!-- @change="bindDataByFilters(0)"> -->
 
-                                            <li @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -1 }))"
-                                                disabled>
+                                            <li>
                                                 <b> Filtrar por: </b>
                                             </li>
 
-                                            <li @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -1 }))">
+                                            <li @click="cambiarFiltro(-1, 'Todas las carreras')">
                                                 <button class="text-button"> Todas las carreras </button>
                                             </li>
 
                                             <li role="separator" class="divider"></li>
-                                            <li @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -2 }))">
+                                            <li @click="cambiarFiltro(-2, 'Todas las carreras excepto Psicologia e Ing. Civil')">
                                                 <button class="text-button">
                                                     Todas las carreras excepto Psicologia e Ing. Civil
                                                 </button>
                                             </li>
-                                            <!-- <optgroup label="Factultad"> -->
-                                            <li role="separator" class="divider"></li>
-                                            <li>
-                                                <b> Facultad: </b>
-                                            </li>
-                                            <li v-for="facultad in arrayFactultad">
-                                                <!-- :value="JSON.stringify({ por: 'facultad', id: facultad.idFacultad })" -->
-                                                <!-- :key="facultad.idFacultad"> -->
-                                                <button
-                                                    @click="cambiarFiltro(JSON.stringify({ por: 'facultad', id: facultad.idFacultad }))"
-                                                    class="text-button"> {{ facultad.nombre }} </button>
-                                            </li>
 
                                             <li role="separator" class="divider"></li>
-                                            <li :value="JSON.stringify({ por: 'carrera', id: -1 })" disabled>
+                                            <li>
                                                 <b> Carrera: </b>
                                             </li>
                                             <li v-for="carrera in arrayCarreras">
                                                 <!-- :value="JSON.stringify({ por: 'carrera', id: carrera.idCarrera })"
                                             :key="carrera.idCarrera"> -->
                                                 <button
-                                                    @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: carrera.idCarrera }))"
+                                                    @click="cambiarFiltro(carrera.idCarrera, carrera.nombre)"
                                                     class="text-button"> {{ carrera.nombre }} </button>
                                             </li>
                                             <!-- </optgroup> -->
@@ -111,17 +98,17 @@
                                     <ul class="dropdown-menu">
                                         <li role="separator" class="divider"></li>
                                         <li value="0" disabled selected> <b> Año: </b> </li>
-                                        <li @click="cambiarAno(1)"> <button class="text-button"> Primer Año </button>
+                                        <li @click="cambiarAno(1, 'Primer Año')"> <button class="text-button"> Primer Año </button>
                                         </li>
-                                        <li @click="cambiarAno(2)"> <button class="text-button"> Segundo Año </button>
+                                        <li @click="cambiarAno(2, 'Segundo Año')"> <button class="text-button"> Segundo Año </button>
                                         </li>
-                                        <li @click="cambiarAno(3)"> <button class="text-button"> Tercer Año </button>
+                                        <li @click="cambiarAno(3, 'Tercer Año')"> <button class="text-button"> Tercer Año </button>
                                         </li>
-                                        <li @click="cambiarAno(4)"> <button class="text-button"> Cuarto Año </button>
+                                        <li @click="cambiarAno(4, 'Cuarto Año')"> <button class="text-button"> Cuarto Año </button>
                                         </li>
-                                        <li @click="cambiarAno(5)"> <button class="text-button"> Quinto Año </button>
+                                        <li @click="cambiarAno(5, 'Quinto Año')"> <button class="text-button"> Quinto Año </button>
                                         </li>
-                                        <li @click="cambiarAno(6)"> <button class="text-button"> Egresado </button>
+                                        <li @click="cambiarAno(6, 'Egresado')"> <button class="text-button"> Egresado </button>
                                         </li>
                                     </ul>
 
@@ -137,9 +124,11 @@
                                     <ul class="dropdown-menu">
                                         <li role="separator" class="divider"></li>
                                         <li value="0" disabled selected> <b> Tipo: </b> </li>
-                                        <li @click="cambiarTipo('Externas')"> <button class="text-button"> Externa
+                                        <li @click="cambiarTipo('todas', 'Todas')"> <button class="text-button"> Todas
                                             </button> </li>
-                                        <li @click="cambiarTipo('Internas')"> <button class="text-button"> Interna
+                                        <li @click="cambiarTipo('Externas', 'Externas')"> <button class="text-button"> Externa
+                                            </button> </li>
+                                        <li @click="cambiarTipo('Internas', 'Internas')"> <button class="text-button"> Interna
                                             </button> </li>
                                     </ul>
                                 </div>
@@ -163,18 +152,25 @@
                     <!---->
                     <div style="font-size: 1.1em; font-weight: normal">
                         <div class="d-flex flex-wrap my-3">
-                            <div class="d-flex mr-4" style="gap: 5px">
+                            <div class="d-flex mr-4 mb-1" style="gap: 5px">
                                 <span> Mostrando: </span>
-                                <span class="badge badge-pill badge-light"> Ingenieria Informatica </span>
-                                <button type="button" class="close" aria-label="Close">
-                                    <span aria-hidden="true" style="color: #000000">×</span>
+                                <span class="badge badge-pill badge-light"> {{search_carrera}} </span>
+                                <button v-if="!default_filter" type="button" class="close" aria-label="Close">
+                                    <span @click="cambiarFiltro(user_carrera_id, user_carrera , true)" aria-hidden="true" style="color: #000000">×</span>
                                 </button>
                             </div>
-                            <div class="d-flex" style="gap: 5px">
-                                <span> Orden: </span>
-                                <span class="badge badge-pill badge-light"> Menos cupos </span>
-                                <button type="button" class="close" aria-label="Close">
-                                    <span aria-hidden="true" style="color: #000000">×</span>
+                            <div class="d-flex mr-4 mb-1" style="gap: 5px">
+                                <span> Año: </span>
+                                <span class="badge badge-pill badge-light"> {{search_perfil}} </span>
+                                <button v-if="!default_year" type="button" class="close" aria-label="Close">
+                                    <span @click="cambiarAno(user_perfil_id, user_perfil, true)" aria-hidden="true" style="color: #000000">×</span>
+                                </button>
+                            </div>
+                            <div class="d-flex mr-4 mb-1" style="gap: 5px">
+                                <span> Tipo: </span>
+                                <span class="badge badge-pill badge-light"> {{type_label}} </span>
+                                <button v-if="!default_type" type="button" class="close" aria-label="Close">
+                                    <span @click="cambiarTipo('todas', 'Todas', true)" aria-hidden="true" style="color: #000000">×</span>
                                 </button>
                             </div>
 
@@ -416,6 +412,8 @@ export default {
             user_carrera_id: 0,
             search_carrera_id: 0,
             search_perfil_id: 0,
+            search_carrera: '',
+            search_perfil: '',
             user_info: {},
             ya_aplico_hoy: false,
             ya_aplico_proyecto: false,
@@ -453,6 +451,11 @@ export default {
             modal_perfil_estudiante: '',
             modal_correo_encargado: '',
             modal_contraparte: '',
+            type_label: "Todas",
+            year_label: '',
+            default_filter: true,
+            default_year: true,
+            default_type: true
         }
     },
     computed: {
@@ -486,21 +489,27 @@ export default {
             me.pagination.current_page = page;
             me.bindDataByFilters(page);
         },
-        cambiarTipo(tipo) {
+        cambiarTipo(tipo, label, defaultFilter=false) {
             let me = this;
             me.filtrandoPorTipo = tipo;
+            me.type_label = label;
+            me.default_type = defaultFilter
             me.bindDataByFilters(0);
 
         },
-        cambiarAno(ano) {
+        cambiarAno(ano, label, defaultFilter=false) {
             let me = this;
-            me.user_perfil_id = ano;
+            me.search_perfil_id = ano;
+            me.search_perfil = label;
+            me.default_year = defaultFilter
             me.bindDataByFilters(0);
 
         },
-        cambiarFiltro(filtro) {
+        cambiarFiltro(filtro, label, defaultFilter=false) {
             let me = this;
-            me.user_carrera_id = filtro;
+            me.search_carrera = label;
+            me.search_carrera_id = filtro;
+            me.default_filter = defaultFilter
             me.bindDataByFilters(0);
 
         },
@@ -649,6 +658,10 @@ export default {
     },
     async mounted() {
         await this.getFacultadesCarrerasAndPerfils();
+        this.search_carrera = this.user_carrera
+        this.search_carrera_id = this.user_carrera_id
+        this.search_perfil = this.user_perfil
+        this.search_perfil_id = this.user_perfil_id
         this.bindDataByFilters(1);
     }
 }
@@ -667,6 +680,11 @@ body {
 
 .container-fluid {
     flex: 1;
+}
+
+.badge-pill {
+    border-radius: 6px;
+    padding: 6px;
 }
 
 .btn-primary {
