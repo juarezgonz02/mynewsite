@@ -104,7 +104,7 @@
 
                                     <div class="d-flex justify-content-center">
                                         <div id="g_id_onload"
-                                            data-client_id="906270140776-2mu590prtgmi7or3fl4hop6j2c3njdvd.apps.googleusercontent.com"
+                                            data-client_id="{{env('GOOGLE_CLIENT_ID')}}"
                                             data-context="signin" data-ux_mode="redirect"
                                             data-login_uri="{{ url('/oauth2Callback') }}" data-auto_prompt="false">
                                         </div>
