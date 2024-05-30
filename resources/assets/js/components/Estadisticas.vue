@@ -150,7 +150,6 @@
 
 <script>
 import { API_HOST } from '../constants/endpoint.js';
-import { API_HOST_ASSETS } from '../constants/endpoint.js';
 // import VueApexCharts from 'vue-apexcharts';
 import Genders from './graphs/Genders'
 import UsersRegistered from './graphs/UsersRegistered.vue'

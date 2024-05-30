@@ -91,7 +91,7 @@
                                                 class="text-button"> Antiguos </button> </li>
                                         <li value="menos_cupos"> <button @click="cambiarOrden('menos_cupos', 'Menos cupos libres')"
                                                 class="text-button"> Menos cupos libres </button> </li>
-                                        <li value="mas_cupos"> <button @click="cambiarOrden('mas_cupos')"
+                                        <li value="mas_cupos"> <button @click="cambiarOrden('mas_cupos', 'Más cupos')"
                                                 class="text-button"> Más cupos libres </button> </li>
                                         <li value="n_solicitudes"> <button @click="cambiarOrden('n_solicitudes', 'Más solicitudes')"
                                                 class="text-button"> Número solictudes </button> </li>
@@ -102,12 +102,6 @@
                                         data-target="#editModal" class="btn btn-primary"><i class="icon-plus"></i>
                                         Nuevo</button>
                                 </div>
-                            </div>
-
-                            <div class="state-btn-container">
-                                <button type="button" class="btn btn-success    btn-lg btn-block m-0" @click="showChangeStatusConfirm('finalizar')"><i class="icon-check"></i> Finalizar proyecto</button>
-                                <button type="button" class="btn btn-danger     btn-lg btn-block m-0" @click="showChangeStatusConfirm('cancelar')"><i class="icon-close"></i> Cancelar proyecto</button> 
-                                <button type="button" class="btn btn-secondary  btn-lg btn-block m-0" @click="showChangeStatusConfirm('eliminar')"><i class="icon-trash"></i> Eliminar proyecto</button>
                             </div>
                         </div>
                     </div>
@@ -876,12 +870,11 @@
 
 <script>
 import { API_HOST } from '../constants/endpoint.js';
-import { API_HOST_ASSETS } from '../constants/endpoint.js';
 import Swal from 'sweetalert2';
 export default {
     data() {
         return {
-            ruta: API_HOST_ASSETS,
+            ruta: API_HOST,
             loading: 0,
             loadTable: false,
             user_email: '',

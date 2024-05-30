@@ -54,7 +54,7 @@ class UserController extends Controller
 
     public static function ruta($flag){
         if($flag == 1){
-            return env("API_HOST_ASSETS", "/public");
+            return env("API_HOST", "/public");
         }
         else{
             return 'https://uca.edu.sv/css-proyecto/public/';
