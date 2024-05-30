@@ -494,13 +494,13 @@
                         </div>
 
                         <div class="state-btn-container" disabled>
-                            <button type="button" class="btn btn-success btn-lg"
+                            <button type="button" class="btn btn-success"
                                 @click="showChangeStatusConfirm('finalizar')"><i class="icon-check"></i> Finalizar
                                 proyecto</button>
-                            <button type="button" class="btn btn-danger btn-lg"
+                            <button type="button" class="btn btn-danger"
                                 @click="showChangeStatusConfirm('cancelar')"><i class="icon-close"></i> Cancelar
                                 proyecto</button>
-                            <button type="button" class="btn btn-secondary btn-lg"
+                            <button type="button" class="btn btn-secondary"
                                 @click="showChangeStatusConfirm('eliminar')"><i class="icon-trash"></i> Eliminar
                                 Proyecto</button>
                         </div>
