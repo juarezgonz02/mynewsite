@@ -14,8 +14,7 @@ class AddColumnEstadoToCarreersTable extends Migration
     public function up()
     {
         Schema::table('carrera', function (Blueprint $table) {
-            $table->tinyInteger('estado')->after('nombre');
-            
+            $table->tinyInteger('estado')->default(1)->after('nombre');
         });
     }
 
