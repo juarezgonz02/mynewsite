@@ -12,7 +12,7 @@
             </div>
             <div v-else class="card" style="border: none;">
                 <div class="card-body">
-                    <table class="table table-bordered table-hover table-sm" style="font-size: 1.25em;">
+                    <table v-if="arrayProyectos.length > 0" class="table table-bordered table-hover table-sm">
                         <thead>
                             <tr>
                                     <th style="text-align: center; width: 10%;">Contraparte</th>
@@ -94,9 +94,10 @@
                                         <div
                                             style="display: flex; flex-direction: row; justify-content: center; margin: 0px 10px;">
                                             <button type="button" data-toggle="modal" data-target="#modal-eliminar"
-                                                @click="abrirModal('desaplicar', proyecto)" class="btn btn-warning "
+                                                @click="abrirModal('desaplicar', proyecto)" class="btn btn-danger "
                                                 style="border-radius: 5px;">
                                                 <i class="icon-trash"></i>
+                                                <span id="disappear">Desaplicar</span>
                                                 
                                             </button> &nbsp;
                                         </div>
@@ -105,8 +106,8 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div v-if="arrayProyectos.length === 0">
-                        <p style="color: red"> <b> No has aplicado a ningun proyecto </b> </p>
+                    <div v-else class="alert alert-warning" role="alert">
+                        No has aplicado a ningun proyecto
                     </div>
                 </div>
                 <div>
@@ -155,11 +156,11 @@
                     <div class="modal-header">
                         <h4 class="modal-title" v-text="modal_nombre"></h4>
                         <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()" aria-label="Close">
-                            <span aria-hidden="true">×</span>
+                            <span aria-hidden="true" style="color: #ffffff">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <table class="table table-bordered table-sm" style="font-size: 1.35em; margin-top: 10px">
+                        <table class="table table-bordered table-sm" style=" margin-top: 10px">
                             <tbody>
                                 <tr>
                                     <th style="background-color: #dedede; width: 15%;">Contraparte</th>
@@ -213,7 +214,7 @@
                     <div class="modal-header">
                         <h4 class="modal-title" v-text="nombre"></h4>
                         <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()" aria-label="Close">
-                            <span aria-hidden="true">×</span>
+                            <span aria-hidden="true" style="color: #ffffff">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
@@ -234,7 +235,7 @@
         <footer class="app-footer" id="footer"
             style="display: flex; flex-direction: column; justify-content: center; font-size: 15px; padding: 10px 0px">
             <span><a target="_blank" href="http://www.uca.edu.sv/servicio-social/">Centro de Servicio Social | UCA</a>
-                &copy; 2021</span>
+                &copy; 2024</span>
             <span>Desarrollado por <a href="#"></a>Grupo de Horas Sociales</span>
         </footer>
     </main>
@@ -306,7 +307,7 @@ export default {
         bindData(page) {
             let me = this
             me.loadTable = true;
-            var url = `${API_HOST}/proyectos_aplicados` /*?page=' + page*/;
+            var url = `${API_HOST}/proyecto/aplicado` /*?page=' + page*/;
             axios.get(url).then(function (response) {
                 me.arrayProyectos = response.data;
                 console.log(me.arrayProyectos)

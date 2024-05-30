@@ -5,10 +5,7 @@
             <nav class="sidebar-nav">
                 <ul class="nav">
                     <li class="nav-title">
-                        <span style="display: flex; flex-direction: column; justify-content: center; align-items: center">
-                            <img src="<?php echo $ruta; ?>/img/UCA.6b065e25.png" alt="uca" style="width: 41px; height: 55px;">
-                            <p style="font-family: 'Abel', sans-serif; font-size: 10px; color: white">Centro de Servicio Social</p>
-                        </span>
+                            <img alt="uca" style="color: white, width: auto; height: 55px;" src="img/logotype_white.svg" />
                     </li>
                     <li @click='menu=0' class="nav-item">
                       <a style="font-family: 'Abel', sans-serif;" class="nav-link active" href="#"><i><img src="<?php echo $ruta; ?>/img/icons/assignment_white_24dp.svg" alt="proyectos"></i> Proyectos </a>
@@ -22,13 +19,13 @@
                     <li @click='menu=2' class="nav-item">
                         <a style="font-family: 'Abel', sans-serif;" class="nav-link active" href="#"><i><img src="<?php echo $ruta; ?>/img/icons/history_white_24dp.svg" alt="historial"></i> Historial de proyectos </a>
                     </li>
-                    <li @click='menu=3' class="nav-item">
-                        <a style="font-family: 'Abel', sans-serif;" class="nav-link active" href="#"><i><img src="<?php echo $ruta; ?>/img/icons/lightbulb_white_24dp.svg" alt="recordatorio"></i> Recordatorio </a>
-                    </li>
                     <li @click='menu=5' class="nav-item">
                         <a style="font-family: 'Abel', sans-serif;" class="nav-link active" href="#"><i><img src="<?php echo $ruta; ?>/img/icons/stats.svg" alt="Estadisticas"></i> Estadisticas</a>
                     </li>
                     <li @click='menu=6' class="nav-item">
+                        <a style="font-family: 'Abel', sans-serif;" class="nav-link active" href="#"><i><img src="<?php echo $ruta; ?>/img/icons/coordinadores.svg" alt="Carreras"></i> Carreras</a>
+                    </li>
+                    <li @click='menu=7' class="nav-item">
                         <a style="font-family: 'Abel', sans-serif;" class="nav-link active" href="#"><i><img src="<?php echo $ruta; ?>/img/icons/coordinadores.svg" alt="Coordinadores"></i> Coordinadores</a>
                     </li>
                 </ul>

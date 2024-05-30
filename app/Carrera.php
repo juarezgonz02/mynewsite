@@ -8,7 +8,7 @@ class Carrera extends Model
 {
     protected $table = 'carrera';
     protected $primaryKey = 'idCarrera';
-    protected $fillable = ['idFacultad', 'nombre'];
+    protected $fillable = ['idFacultad', 'nombre', 'estado'];
 
 
     public function proyectos()

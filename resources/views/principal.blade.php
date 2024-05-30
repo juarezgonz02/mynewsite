@@ -50,7 +50,7 @@
             </ul>
         </header>
 
-        <div class="app-body" style="margin-top: 0;">
+        <div class="app-body">
 
         @if(Auth::check())
             @if(Auth::user()->idRol == 1)

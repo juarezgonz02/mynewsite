@@ -75,7 +75,9 @@ export default {
             ordenandoPor: "recientes",
             selectedFilter: "",
             proyecto: "",
-            arrayFactultad: []
+            arrayFactultad: [],
+            default_filter: true,
+            filter_label: "Todas las carreras"
         }
     },
     computed:{
@@ -103,29 +105,6 @@ export default {
         }
     },
     methods:{
-        bindData(page){
-
-            let me = this;
-            me.loadTable = true;
-
-            var url = `${API_HOST}/todos_proyectos?page=${page}`;
-            me.getFacultadesCarrerasAndPerfils();
-            axios.get(`${API_HOST}/get_user`).then(function (response) {
-                me.user_email = response.data.correo;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-            axios.get(url).then(function (response) {
-                var respuesta = response.data;
-                me.arrayProyectos = respuesta.proyectos.data;
-                me.pagination = respuesta.pagination;
-                me.loadTable = false;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        },
         bindDataByFilters(page){
 
             let me = this;
@@ -155,6 +134,12 @@ export default {
             .catch(function (error) {
                 console.log(error);
             });
+        },
+        cambiarFiltro(filtro) {
+            let me = this;
+            me.filtrandoPorCarrera = filtro;
+            me.bindDataByFilters(0);
+
         },
         cambiarPagina(page){
             let me = this;
@@ -219,7 +204,7 @@ export default {
             }
             let me = this;
             if(this.id_proyecto){
-                axios.post(`${API_HOST}/sendMeetingMail`, {
+                axios.post(`${API_HOST}/reunion`, {
                     'nombre_proyecto' : this.proyecto,
                     'descripcion' : this.modal_descripcion,
                     'encargado' : this.modal_encargado,
@@ -443,7 +428,7 @@ export default {
                         this.flagErrorProyecto = false;
                         this.errorPerfilMsg = "";
                         this.arrayCarreraPerfil = [[]];
-                        this.updateCarrerasAndPerfil();
+                        this.getCarrerasAndPerfil();
                         break;
                     }
                 case "estado":
@@ -526,9 +511,9 @@ export default {
                 console.log(error);
             });
         },
-        updateCarrerasAndPerfil(){
+        getCarrerasAndPerfil(){
             let me = this
-            axios.get(`${API_HOST}/proyectosxcarrera`, {
+            axios.get(`${API_HOST}/proyecto/carreras`, {
                 params:{
                     idProyecto: me.id_proyecto
                 }
@@ -556,7 +541,7 @@ export default {
         },
         getEstudiantes(){
             let me = this;
-            axios.get(`${API_HOST}/estudiantesxproyecto`, {
+            axios.get(`${API_HOST}/proyecto/estudiantes`, {
                 params:{
                     idProyecto: me.id_proyecto
                 }
@@ -574,7 +559,7 @@ export default {
             .catch(function (error) {
                 console.log(error);
             });
-            axios.get(`${API_HOST}/cupos_actuales`, {
+            axios.get(`${API_HOST}/proyecto/cupos_actuales`, {
                 params:{
                     idProyecto: me.id_proyecto
                 }
@@ -588,7 +573,7 @@ export default {
         buscarEstudiante(){
             let me = this
             //this.errorActualizar = false
-            var url = `${API_HOST}/estudiante_por_carnet`
+            var url = `${API_HOST}/estudiante/carnet`
             axios.get(url, {
                 params:{
                     carnet: me.carnet
@@ -612,7 +597,7 @@ export default {
         aplicarPorAdmin(){
             let me = this
             me.loading = 1;
-            var url = `${API_HOST}/aplicarporadmin`
+            var url = `${API_HOST}/proyecto/estudiantes/add`
             axios.post(url, {
                 'idProyecto' : me.id_proyecto,
                 'idUser' : me.id_estudiante,
@@ -645,7 +630,7 @@ export default {
             // Si la flag del modal Aceptar / Rechazar es verdadera, entonces se acepta al estudiante
             if(me.flagEstudiante == true){
                 // console.log("Aceptando estudiante")
-                axios.put(`${API_HOST}/aplicarestudiante`, {
+                axios.put(`${API_HOST}/proyecto/estudiantes/aceptar`, {
                 'idUser' : me.id_estudiante,
                 'idProyecto' : me.id_proyecto,
                 // 'estado' : estadoEst
@@ -665,7 +650,7 @@ export default {
             }
             else{
                 // console.log("Rechazando estudiante")
-            axios.put(`${API_HOST}/rechazarestudiante`, {
+            axios.put(`${API_HOST}/proyecto/estudiantes/rechazar`, {
                     'idUser' : me.id_estudiante,
                     'idProyecto' : me.id_proyecto,
                 }).then(function(){

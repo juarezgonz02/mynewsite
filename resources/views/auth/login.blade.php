@@ -35,13 +35,10 @@
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row no-gutter">
-            <div class="col-md-8 col-lg-8">
-                <div class="login d-flex align-items-center py-4">
+      <div class="wrapper">
                     <div class="container">
-                        <div class="row">
-                            <div class="d-flex flex-column align-items-center col-md-9 col-lg-8 mx-auto">
+                        <div class="card-group">
+                            <div id="form-container" class="d-flex flex-column justify-content-center align-items-center mx-auto">
                                 <img class="mx-auto d-block login-logotype" src="img/logotype.svg" />
 
                                 @if ($errors->first('verified'))
@@ -107,9 +104,9 @@
 
                                     <div class="d-flex justify-content-center">
                                         <div id="g_id_onload"
-                                            data-client_id="906270140776-0eigrho9jc14fi00m8ebnhdm7sem0i02.apps.googleusercontent.com"
+                                            data-client_id="906270140776-2mu590prtgmi7or3fl4hop6j2c3njdvd.apps.googleusercontent.com"
                                             data-context="signin" data-ux_mode="redirect"
-                                            data-login_uri="{{ url('/google/callback') }}" data-auto_prompt="false">
+                                            data-login_uri="{{ url('/oauth2Callback') }}" data-auto_prompt="false">
                                         </div>
 
                                         <div class="g_id_signin" data-type="standard" data-shape="rectangular"
@@ -134,11 +131,8 @@
 
                                 </form>
                             </div>
-                        </div>
-                    </div>
-                </div>
             </div>
-            <div class="d-none d-md-flex col-md-4 col-lg-4 bg-image image"></div>
+            {{-- <div class="d-none d-md-flex col-md-4 col-lg-4 bg-image image"></div> --}}
         </div>
     </div>
 </body>

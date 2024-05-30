@@ -13,7 +13,7 @@
       </div>
       <div v-else class="card" style="border: none;">
         <div class="card-body">
-          <table class="table table-bordered table-hover table-sm" style="font-size: 1.25em;">
+          <table class="table table-bordered table-hover table-sm">
             <thead>
               <tr>
                 <!--<th>Opciones</th> -->
@@ -81,11 +81,11 @@
               Aplicar a proyecto
             </h4>
             <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()" aria-label="Close">
-              <span aria-hidden="true">×</span>
+              <span aria-hidden="true" style="color: #ffffff">×</span>
             </button>
           </div>
           <div class="modal-body">
-            <table class="table table-bordered table-sm" style="font-size: 1.35em; margin-top: 10px">
+            <table class="table table-bordered table-sm" style=" margin-top: 10px">
               <tbody>
                 <tr>
                   <th style="background-color: #dedede;">Contraparte</th>
@@ -138,12 +138,12 @@
                   <spinner></spinner>
               </div>
               <div v-if="loading == 0" class="modal-dialog modal-primary modal-lg modal-student" role="document" style=
-              "margin: 10px;">
-                  <div class="modal-content modal-student" style="font-size: 1.35em;">
+                "max-width: 70vw;">
+                  <div class="modal-content modal-student" style="">
                       <div class="modal-header">
                           <h4 class="modal-title">Estudiantes</h4>
                           <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()" aria-label="Close">
-                              <span aria-hidden="true">×</span>
+                              <span aria-hidden="true" style="color: #ffffff">×</span>
                           </button>
                       </div>
                       <div class="modal-body">
@@ -294,8 +294,7 @@ export default {
     bindData(page) {
       let me = this;
       me.loadTable = true;
-      //var url2 = '/public/proyecto?page=' + page;
-      var url = `${API_HOST}/historial_proyectos?page=${page}`;
+      var url = `${API_HOST}/proyecto/historial?page=${page}`;
       axios.get(url).then(function (response) {
         var respuesta = response.data;
         var proyectos = respuesta.proyectos.data;
@@ -376,27 +375,27 @@ export default {
             break;
           }
           case "estudiantes":
-                        {
-                            this.modal3 = 1;
-                            this.id_proyecto = data.idProyecto;
-                            this.modal_nombre = data.nombre;
-                            this.modal_cupos = data.cupos;
-                            this.carnet = '';
-                            this.nombre_completo = '';
-                            this.id_estudiante = 0;
-                            this.flagError = false;
-                            this.errorEstudianteMsg = '';
-                            this.getEstudiantes()
-                            this.proyectoInscrito = data;
-                            break;
-                        }
+          {
+              this.modal3 = 1;
+              this.id_proyecto = data.idProyecto;
+              this.modal_nombre = data.nombre;
+              this.modal_cupos = data.cupos;
+              this.carnet = '';
+              this.nombre_completo = '';
+              this.id_estudiante = 0;
+              this.flagError = false;
+              this.errorEstudianteMsg = '';
+              this.getEstudiantes()
+              this.proyectoInscrito = data;
+              break;
+          }
         default:
           break;
       }
     },
     getEstudiantes(){
                 let me = this;
-                axios.get(`${API_HOST}/estudiantesxproyecto`, {
+                axios.get(`${API_HOST}/proyecto/estudiantes`, {
                     params:{
                         idProyecto: me.id_proyecto
                     }
@@ -414,7 +413,7 @@ export default {
                 .catch(function (error) {
                     console.log(error);
                 });
-                axios.get(`${API_HOST}/cupos_actuales`, {
+                axios.get(`${API_HOST}/proyecto/cupos_actuales`, {
                     params:{
                         idProyecto: me.id_proyecto
                     }
