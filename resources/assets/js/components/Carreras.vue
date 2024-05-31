@@ -5,7 +5,7 @@
             <li class="breadcrumb-item active">Administración de Carreras</li>
         </ol>
         <div class="container">
-        <table>
+            <table class="table table-bordered table-hover table-sm">
 
             <thead>
                 <tr>
@@ -40,7 +40,7 @@
             </tbody>
         </table>
         
-        <button @click="abrirModal('insertar', null)" data-toggle="modal" data-target="#carreersModal">Nueva carrera</button>
+        <button class="btn btn-success" @click="abrirModal('insertar', null)" data-toggle="modal" data-target="#carreersModal">Nueva carrera</button>
         <!--Inicio del modal-->        
         <div class="modal fade" tabindex="-1" role="dialog" id="carreersModal" aria-hidden="true">
                 <div class="modal-dialog modal-primary modal-lg" role="document">
@@ -345,26 +345,6 @@ export default {
 
   h1 {
     text-align: center;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-
-  th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-  }
-
-  th {
-    background-color: #f2f2f2;
-  }
-
-  tr:nth-child(even) {
-    background-color: #f9f9f9;
   }
 
   /* Estilos para el modal */

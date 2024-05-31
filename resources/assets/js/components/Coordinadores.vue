@@ -25,10 +25,10 @@
                 </tbody>
             </table>
 
-            <button @click="showModal">Nuevo Coordinador</button>
+            <button class="btn btn-success" @click="showModal">Nuevo Coordinador</button>
 
             <div class="newCoordContainer" v-if="showRegisterModal">
-                <h2>Nuevo Coordinador</h2>
+                <h3>Nuevo Coordinador</h3>
                 <p v-if="errorMessage"
                     style="color: red; border: 1px solid red; background-color: rgb(255, 242, 242); padding: 10px; font-weight: 400;">
                     {{ errorMessage }}</p>
@@ -49,7 +49,7 @@
                 </select>
                 <p>*Verifica los datos del coordinador, recuerda que una vez registrado no podras realizar ningun tipo
                     de cambio. </p>
-                <button @click="registerCoordinador">Registrar</button>
+                <button class="btn btn-success" @click="registerCoordinador">Registrar</button>
             </div>
             <!-- Confirm modal -->
 
@@ -220,7 +220,7 @@ export default {
 
 .newCoordContainer {
     padding: 5vh;
-    margin: 0 auto;
+    margin: 1em auto;
     background-color: #f2f2f2;
     border-radius: 20px;
 
@@ -230,7 +230,7 @@ h1 {
     text-align: center;
 }
 
-
+/* 
 button {
     display: block;
     margin-top: 20px;
@@ -243,7 +243,7 @@ button {
     max-width: 200px;
     margin: 10px 0;
     font-size: 1rem;
-}
+} */
 
 
 /* Estilos para el modal */
