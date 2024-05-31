@@ -876,7 +876,7 @@ export default {
         return {
             ruta: API_HOST,
             loading: 0,
-            loadTable: false,
+            loadTable: true,
             user_email: '',
             arrayProyectos: [],
             arrayCarreras: [''],
@@ -1587,7 +1587,7 @@ export default {
         },
         getEstudiantes() {
             let me = this;
-            axios.get(`${API_HOST}/estudiantesxproyecto`, {
+            axios.get(`${API_HOST}/proyecto/estudiantes`, {
                 params: {
                     idProyecto: me.id_proyecto
                 }
@@ -1618,7 +1618,7 @@ export default {
         buscarEstudiante() {
             let me = this
             //this.errorActualizar = false
-            var url = `${API_HOST}/estudiante_por_carnet`
+            var url = `${API_HOST}/estudiante/carnet`
             axios.get(url, {
                 params: {
                     carnet: me.carnet

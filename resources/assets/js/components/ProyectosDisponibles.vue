@@ -402,7 +402,7 @@ export default {
         return {
             ruta: API_HOST,
             loading: 0,
-            loadTable: false,
+            loadTable: true,
             user_id: 0,
             user_email: '',
             user_perfil: '',
