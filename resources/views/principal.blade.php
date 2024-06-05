@@ -18,6 +18,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="shortcut icon" type="image/jpg" href=" {{url('/').'/img/logo-uca.png'}}">
     <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
+    <script>
+        Window.API_HOST = "{{env('API_HOST')}}"
+    </script>
 </head>
 
 <body class="app sidebar-fixed aside-menu-fixed aside-menu-hidden">
@@ -68,7 +71,14 @@
         </div>
 
     </div> <!--CLOSING VUE -->
+
     <script src="js/app.js"></script>
     <script src="js/plantilla.js"></script>
+    <script>
+        document.querySelector("#nav-toogler").addEventListener("click", ()=>{
+            console.log("click")
+            document.querySelector("body").classList.toggle("sidebar-mobile-show");
+       })
+    </script>
 </body>
 </html>

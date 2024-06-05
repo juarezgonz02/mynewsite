@@ -14,5 +14,6 @@ export const API_HOST = 'http://201.131.110.26/desarrollo/CSS-UCA/public'
 // export const API_HOST = "/css-proyecto/public";
 //export const API_HOST = "http://172.203.229.152/public"; 
 //export const API_HOST = "/public";
-export const API_HOST = "http://localhost"; 
+// export const API_HOST = "http://192.168.1.37"; 
 //export const API_HOST = "/";
+export const API_HOST = Window.API_HOST;
