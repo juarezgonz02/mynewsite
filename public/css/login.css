@@ -24,10 +24,9 @@
 
 #form-container{
   background: white;
-  margin-top: 3em;
   min-width: 30vw;
   width: 350px;
-  min-height: 85vh;
+  min-height: 90vh;
 }
 
 .wrapper{
@@ -36,7 +35,9 @@
 }
 
 .container {
-  margin-top: auto;
+  padding-top: 3em;
+  padding-bottom: 3em;
+  height: 100vh;
 }
 
 .wrapper::before{
