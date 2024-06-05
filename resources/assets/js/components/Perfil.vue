@@ -1,6 +1,6 @@
 <!--<template>
   <main class="main">
-    <div class="container-fluid">
+    <div class="container-fluid px-4">
       <div class="card">
         
         <table>
@@ -22,7 +22,7 @@
                 <li class="breadcrumb-item">Inicio</li>
                 <li class="breadcrumb-item active">Perfil</li>
             </ol>
-            <div class="container-fluid">
+            <div class="container-fluid px-4">
                 <!-- Ejemplo de tabla Listado -->
                 <div class="card">
                     <div class="card-header">
@@ -158,7 +158,7 @@ import Swal from 'sweetalert2';
         },
         methods:{
             bindData(){
-                let me = this
+                const me = this
                 axios.get(`${API_HOST}/get_user`).then(function (response) {
                     me.user_id = response.data.idUser;
                     me.correo = response.data.correo;

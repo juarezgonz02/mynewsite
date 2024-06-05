@@ -1,6 +1,6 @@
 <template>
   <main class="main" style="background-color: white;">
-    <div class="container-fluid">
+    <div class="container-fluid px-4">
       <div class="card recordatorio-container">
         <img :src="imgsrc" />
       </div>

@@ -5,8 +5,8 @@
                 <li class="breadcrumb-item active">Estadisticas</li>
             </ol>
         <div class="container-dashboard">
-            <h1 style=" font-size: xx-large; margin-bottom: 2vh; margin-top: 5vh; font-weight: bold;">Estadísticas
-                Centro de Servicio Social</h1>
+            <h1 style=" font-size: xx-large; margin-bottom: 2vh; margin-top: 5vh; font-weight: bold;">
+                Estadísticas - Centro de Servicio Social</h1>
             <div
                 style="margin-bottom: 5vh; display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%;">
                 <h4>Aplicar Filtros</h4>
@@ -251,7 +251,7 @@ export default {
     },
     methods: {
         bindData() {
-            let me = this
+            const me = this
             axios.get(`${API_HOST}/facultad`).then(function (response) {
                 // console.log(response.data)
                 me.facultades = response.data
@@ -269,7 +269,7 @@ export default {
 
         },
         bindCarrerasSeleccionadas() {
-            let me = this
+            const me = this
             // console.log(this.idFacultadSeleccionada)
             this.carrerasFacultad = []
             this.idCarreraSeleccionada = 0
@@ -284,7 +284,7 @@ export default {
 
         },
         // bindFacultadSeleccionada(){
-        //     let me = this
+        //     const me = this
         //     console.log(this.idCarreraSeleccionada)
         //     this.facultades.forEach(function (facultad){
         //         if(facultad.idFacultad == me.idFacultadSeleccionada){
@@ -293,7 +293,7 @@ export default {
         //     })
         // },
         bindEstadisticas() {
-            let me = this
+            const me = this
             axios.get(`${API_HOST}/estadisticas`,
                 {
                     params: {
@@ -316,7 +316,7 @@ export default {
                 })
         },
         bindDashboardData() {
-            let me = this;
+            const me = this;
             axios.get(`${API_HOST}/estadisticas/dashboard`, {
                 params: {
                     idFacultad: me.idFacultadSeleccionada,
@@ -342,7 +342,7 @@ export default {
             })
         },
         setFilterName() {
-            let me = this
+            const me = this
 
             if (this.idFacultadSeleccionada == 0) {
                 this.filterAppliedName = "Todas"
