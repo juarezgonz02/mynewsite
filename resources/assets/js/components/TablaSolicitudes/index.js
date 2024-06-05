@@ -512,7 +512,7 @@ export default {
             }
         },
         flagErrorEstado:function(){
-            console.log("Hola")
+            //console.log("Hola")
         }
     },
     mounted() {

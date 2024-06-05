@@ -717,7 +717,7 @@ export default {
             me.search_carrera_id = response.data.idCarrera;
             me.search_pefil_id = response.data.idPerfil;
 
-            console.log(response.data.timeout);
+            //console.log(response.data.timeout);
             if (me.fechaLegible(response.data.timeout))
                 me.timeout = me.fechaLegible(response.data.timeout);
             else
@@ -756,7 +756,7 @@ export default {
             me.loadTable = true;
 
             axios.get(`${API_HOST}/estudiante/aplica/estado`).then(function (response) {
-                console.log(response)
+                //console.log(response)
                 me.ya_aplico_hoy = response.data.ya_aplico_hoy;
                 me.ya_aplico_proyecto = response.data.activeProject;
             })

@@ -143,7 +143,7 @@ export default {
             }
 
 
-            console.log(this.newCoordinador)
+            //console.log(this.newCoordinador)
 
             const me = this;
 
@@ -164,7 +164,7 @@ export default {
                     me.bindData();
                 })
                 .catch(function (error) {
-                    console.log(error.response);
+                    //console.log(error.response);
                     this.errorMessage = error.response
                 });
 

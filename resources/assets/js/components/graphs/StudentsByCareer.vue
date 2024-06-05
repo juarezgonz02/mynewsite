@@ -53,7 +53,7 @@ export default{
     watch:{
         studentsByCareer(){
             
-            // console.log(this.studentsByCareer.map(career => career.nombre));
+            // //console.log(this.studentsByCareer.map(career => career.nombre));
             // this.options.labels = this.studentsByCareer.map(career => career.nombre);
             this.options ={
                 labels: this.studentsByCareer.map(career => career.nombre),
@@ -64,7 +64,7 @@ export default{
                     enabled: true // Desactiva los labels de datos para el gráfico de pie
                 }
             }
-            // console.log(this.options.labels);
+            // //console.log(this.options.labels);
             this.series = this.studentsByCareer.map(career => career.estudiantes);
 
         }

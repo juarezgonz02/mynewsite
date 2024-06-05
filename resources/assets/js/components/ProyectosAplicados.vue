@@ -404,7 +404,7 @@ export default {
             var url = `${API_HOST}/proyecto/aplicado` /*?page=' + page*/;
             axios.get(url).then(function (response) {
                 me.arrayProyectos = response.data;
-                console.log(me.arrayProyectos)
+                //console.log(me.arrayProyectos)
                 me.loadTable = false;
             })
                 .catch(function (error) {

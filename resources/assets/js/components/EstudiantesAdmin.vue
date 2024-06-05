@@ -225,8 +225,8 @@ import Swal from 'sweetalert2'
                 this.arrayCarrera.forEach(function(element){
                     if(element.idFacultad == me.idFacultad) me.arrayCarreraFact.push(element)
                 })
-                    console.log("Exec get carreras", flag)
-                    console.log(this.idCarrera)
+                    //console.log("Exec get carreras", flag)
+                    //console.log(this.idCarrera)
             },
             actualizarEstudiante(){
                 const me = this
@@ -245,7 +245,7 @@ import Swal from 'sweetalert2'
                             'idPerfil' : this.idPerfil
                         }).then(function (response) {
                             me.errorActualizar = 1
-                            console.log(response)
+                            //console.log(response)
                             if(response.status == 200)
                             {
                                 Swal.fire({
@@ -302,7 +302,7 @@ import Swal from 'sweetalert2'
                     } 
                     else me.proyectoInscritoFlag = true
                     me.proyectoInscrito = response.data[0].nombre
-                    console.log(response.data)
+                    //console.log(response.data)
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -343,7 +343,7 @@ import Swal from 'sweetalert2'
         },
         watch:{
             idFacultad:function(val){
-                console.log("Facultad", val)
+                //console.log("Facultad", val)
                 this.getCarreras(val != this.idFacultadAux);
             }
         },

@@ -145,7 +145,7 @@ export default {
                     'estado' : 1
                 }).then(function (response) {
                     me.cerrarModal();
-                    console.log(response);
+                    //console.log(response);
                     if (response.status == 200) {
                         me.showSuccess = true
                         Swal.fire({

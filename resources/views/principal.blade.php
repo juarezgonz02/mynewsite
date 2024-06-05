@@ -76,7 +76,7 @@
     <script src="js/plantilla.js"></script>
     <script>
         document.querySelector("#nav-toogler").addEventListener("click", ()=>{
-            console.log("click")
+            //console.log("click")
             document.querySelector("body").classList.toggle("sidebar-mobile-show");
        })
     </script>

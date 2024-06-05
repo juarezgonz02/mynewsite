@@ -1888,7 +1888,7 @@ export default {
         showChangeStatusConfirm(estado) {
 
             if (estado != 'finalizar' && estado != 'cancelar' && estado != 'eliminar') {
-                console.log("Estado no valido")
+                //console.log("Estado no valido")
                 return
             }
 
@@ -1916,7 +1916,7 @@ export default {
         },
         cambiarEstadoProyecto(estado) {
             if (estado != 'finalizar' && estado != 'cancelar' && estado != 'eliminar') {
-                console.log("Estado no valido")
+                //console.log("Estado no valido")
                 return
             }
             const me = this
@@ -1996,10 +1996,10 @@ export default {
             // }
         },
         flagErrorEstado: function () {
-            console.log("Hola")
+            //console.log("Hola")
         },
         arrayCarreras: function (val) {
-            // console.log("Carreras", val)
+            // //console.log("Carreras", val)
         }
     },
     mounted() {
