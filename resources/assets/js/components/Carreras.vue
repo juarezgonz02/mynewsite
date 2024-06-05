@@ -4,7 +4,7 @@
             <li class="breadcrumb-item">Inicio</li>
             <li class="breadcrumb-item active">Administración de Carreras</li>
         </ol>
-        <div class="container">
+        <div class="container container-fluid">
             <table class="table table-bordered table-hover table-sm">
 
             <thead>
@@ -28,7 +28,7 @@
                         <div class="button-container">
                             <button v-if="carrera.estado == 1" type="button" @click="abrirModal('eliminar', carrera)" data-toggle="modal" data-target="#statusModal" class="btn btn-danger btn-sm" style="margin: 2px 0; width: 100%;">
                                 <i class="icon-lock"></i>
-                                <span class="btn-label">Eliminar</span>
+                                <span class="btn-label">Desactivar</span>
                             </button>
                             <button v-else type="button" @click="abrirModal('activar', carrera)" data-toggle="modal" data-target="#statusModal" class="btn btn-success btn-sm" style="margin: 2px 0; width: 100%;">
                                 <i class="icon-check"></i>
@@ -40,7 +40,7 @@
             </tbody>
         </table>
         
-        <button class="btn btn-success" @click="abrirModal('insertar', null)" data-toggle="modal" data-target="#carreersModal">Nueva carrera</button>
+        <button class="btn btn-success mb-3" @click="abrirModal('insertar', null)" data-toggle="modal" data-target="#carreersModal">Nueva carrera</button>
         <!--Inicio del modal-->        
         <div class="modal fade" tabindex="-1" role="dialog" id="carreersModal" aria-hidden="true">
                 <div class="modal-dialog modal-primary modal-lg" role="document">
@@ -53,7 +53,7 @@
                                 <h4 class="modal-title">Editar carrera</h4>
                             </div>
                             <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()" aria-label="Close">
-                                <span aria-hidden="true">×</span>
+                                <span aria-hidden="true" style="color: #ffffff">×</span>
                             </button>
                         </div>
                         <div class="modal-body">
@@ -78,6 +78,12 @@
             <!--Fin del modal-->
     </div>
 
+    <footer class="app-footer" id="footer"
+    style="display: flex; flex-direction: column; justify-content: center; font-size: 15px; padding: 10px 0px">
+    <span><a target="_blank" href="http://www.uca.edu.sv/servicio-social/">Centro de Servicio Social | UCA</a>
+        &copy; 2024</span>
+        <span>Desarrollado por <a href="#"></a>Grupo de Horas Sociales</span>
+    </footer>
 </main>
 </template>
 
@@ -108,7 +114,7 @@ export default {
             this.showRegisterModal = !this.showRegisterModal;
         },
         actualizarInsertarCarrera(){
-            let me = this;
+            const me = this;
 
             if(!this.idCarrera){
                 axios.post(`${API_HOST}/carreras/insertar`, {
@@ -234,7 +240,7 @@ export default {
         },
         inactivarCarrera(idCarrera) {
             let estado = 0;
-            let me = this;
+            const me = this;
 
             axios.put(`${API_HOST}/carreras/inactivar`, {
                     'idCarrera' : idCarrera,
@@ -254,7 +260,7 @@ export default {
         },
         activarCarrera(idCarrera) {
             let estado = 1;
-            let me = this;
+            const me = this;
 
             axios.put(`${API_HOST}/carreras/inactivar`, {
                     'idCarrera' : idCarrera,
@@ -291,7 +297,7 @@ export default {
             }
         },
         getFacultades() {
-            let me = this;
+            const me = this;
             axios.get(`${API_HOST}/facultad`)
                 .then(response => {
                     me.facultades = response.data;
@@ -303,7 +309,7 @@ export default {
         bindData() {
             this.carreras = [];
             this.getFacultades();
-            let me = this;
+            const me = this;
             axios.get(`${API_HOST}/facultad/carreras`)
                 .then(response => {
                     me.carreras = response.data;
@@ -323,11 +329,12 @@ export default {
 <style scoped>
   /* Estilos generales para mejorar la apariencia de la tabla y los elementos */
 
-  .main{
+
+  .main {
     display: flex;
     flex-direction: column;
     min-height: 95vh;
-  }
+}
   
   .container {
     max-width: 90%;
