@@ -5,7 +5,7 @@
                 <li class="breadcrumb-item">Inicio</li>
                 <li class="breadcrumb-item active">Administración de Estudiantes</li>
             </ol>
-            <div class="container-fluid">
+            <div class="container-fluid px-4">
                 <!-- Ejemplo de tabla Listado -->
                 <div class="card">
                     <div class="card-header">
@@ -159,7 +159,7 @@ import Swal from 'sweetalert2'
         },
         methods:{
             bindData(){
-                let me = this
+                const me = this
                 axios.get(`${API_HOST}/facultad`).then(function (response){
                     me.arrayFacultad = response.data
                 })
@@ -178,7 +178,7 @@ import Swal from 'sweetalert2'
                 });
             },
             buscarEstudiante(){
-                let me = this
+                const me = this
                 this.errorActualizar = false
                 var url = `${API_HOST}/estudiante/carnet`
                 axios.get(url, {
@@ -218,7 +218,7 @@ import Swal from 'sweetalert2'
                 return day + "/" + month + "/" + year;
             },
             getCarreras(flag){
-                let me = this
+                const me = this
                 if(flag) this.idCarrera = 0
                 else this.idCarrera = this.idCarreraAux
                 this.arrayCarreraFact = []
@@ -229,7 +229,7 @@ import Swal from 'sweetalert2'
                     console.log(this.idCarrera)
             },
             actualizarEstudiante(){
-                let me = this
+                const me = this
                 if(this.carnet == '' && this.idPerfil == 0){
                     this.errorActualizar = 2
                     return;
@@ -278,7 +278,7 @@ import Swal from 'sweetalert2'
                     }
             },
             removerTimeOut(){
-                let me = this
+                const me = this
                 axios.patch(`${API_HOST}/estudiante/${me.idUser}/remover-timeout`, {
                 }).then(function (response) {
                     me.errorActualizar = 1
@@ -289,7 +289,7 @@ import Swal from 'sweetalert2'
                 });
             },
             getUserProyectos(){
-                let me = this
+                const me = this
                 axios.get(`${API_HOST}/estudiante/${me.idUser}/proyectos`, {
                 }).then(function (response) {
                     
