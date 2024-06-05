@@ -5,13 +5,13 @@
             <li class="breadcrumb-item">Inicio</li>
             <li class="breadcrumb-item active">Administración de Proyectos</li>
         </ol>
-        <div class="container-fluid" style="background-color: white;">
+        <div class="container-fluid px-4" style="background-color: white;">
             <!-- Ejemplo de tabla Listado -->
             <div v-if="loadTable == true" class="card" style="border: none;">
                 <table-loader></table-loader>
             </div>
             <div v-else class="card" style="border: none;">
-                <div class="card-body">
+                <div class="card-body px-0">
 
                     <!-- Barra accion superior -->
                     <div class="form-group" style=" flex-wrap: wrap; flex-direction: column-reverse;">
@@ -24,7 +24,8 @@
                                 <div style="flex-direction: column-reverse">
                                     <button type="button" @click="bindDataByFilters(0)"
                                         class="btn btn-primary search-button"><i class="icon-magnifier"></i>
-                                        Buscar</button>
+                                        Buscar
+                                    </button>
                                 </div>
                             </form>
 
@@ -42,12 +43,14 @@
                                                 <b> Filtrar por: </b>
                                             </li>
 
-                                            <li @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -1 }), ' Todas las carreras', true)">
+                                            <li
+                                                @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -1 }), ' Todas las carreras', true)">
                                                 <button class="text-button"> Todas las carreras </button>
                                             </li>
 
                                             <li role="separator" class="divider"></li>
-                                            <li @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -2 }), 'Todas las carreras excepto Psicologia e Ing. Civil')">
+                                            <li
+                                                @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -2 }), 'Todas las carreras excepto Psicologia e Ing. Civil')">
                                                 <button class="text-button">
                                                     Todas las carreras excepto Psicologia e Ing. Civil
                                                 </button>
@@ -85,42 +88,60 @@
                                         <!-- v-model="filtrandoPorCarrera"> -->
                                         <!-- <select class="custom-select" v-model="ordenandoPor" @change="bindDataByFilters(0)"> -->
                                         <li value="" disabled selected> <b> Ordenar por: </b> </li>
-                                        <li value="recientes"> <button @click="cambiarOrden('recientes', 'Recientes', true)"
+                                        <li value="recientes"> <button
+                                                @click="cambiarOrden('recientes', 'Recientes', true)"
                                                 class="text-button"> Reciente </button> </li>
                                         <li value="antiguos"> <button @click="cambiarOrden('antiguos', 'Antiguos')"
                                                 class="text-button"> Antiguos </button> </li>
-                                        <li value="menos_cupos"> <button @click="cambiarOrden('menos_cupos', 'Menos cupos libres')"
+                                        <li value="menos_cupos"> <button
+                                                @click="cambiarOrden('menos_cupos', 'Menos cupos libres')"
                                                 class="text-button"> Menos cupos libres </button> </li>
                                         <li value="mas_cupos"> <button @click="cambiarOrden('mas_cupos', 'Más cupos')"
                                                 class="text-button"> Más cupos libres </button> </li>
-                                        <li value="n_solicitudes"> <button @click="cambiarOrden('n_solicitudes', 'Más solicitudes')"
+                                        <li value="n_solicitudes"> <button
+                                                @click="cambiarOrden('n_solicitudes', 'Más solicitudes')"
                                                 class="text-button"> Número solictudes </button> </li>
                                     </ul>
                                 </div>
                                 <div style="flex-direction: column-reverse">
                                     <button type="button" @click="abrirModal('insertar', null)" data-toggle="modal"
                                         data-target="#editModal" class="btn btn-primary"><i class="icon-plus"></i>
-                                        Nuevo</button>
+                                        Nuevo
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!---->
-                    <div style="font-size: 1.1em; font-weight: normal">
-                        <div class="d-flex flex-wrap my-3">
-                            <div class="d-flex mr-4 mb-1" style="gap: 5px">
-                                <span> Mostrando: </span>
-                                <span class="badge badge-pill badge-light"> {{ filter_label }} </span>
-                                <button v-if="!default_filter" type="button" class="close" aria-label="Close">
-                                    <span @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -1 }), ' Todas las carreras', true)" aria-hidden="true" style="color: #000000">×</span>
-                                </button>
+                    <div style="font-size: 1em; font-weight: normal">
+                        <div class="d-flex flex-wrap my-3" style="gap: 1em">
+                            <div class="d-flex flex-wrap mb-1" style="gap: 0.5em 1em">
+                                <div style="width: 75px">
+                                    <span> Mostrando: </span>
+                                </div>
+                                
+                                <span class="d-flex align-items-center badge badge-pill badge-light py-2 f-8em" style="line-height: 0; color: white; background-color: #003C71">
+                                    <span>
+                                        {{ (filter_label).substring(0, 48) }} 
+                                    </span>
+                                    <span v-if="!default_filter" class="px-1" @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -1 }), ' Todas las carreras', true)" 
+                                        aria-hidden="true"style="cursor: pointer; color: #ffffff">
+                                        ×
+                                    </span>
+                                </span>
                             </div>
-                            <div class="d-flex mr-4 mb-1" style="gap: 5px">
-                                <span> Orden: </span>
-                                <span class="badge badge-pill badge-light"> {{order_label}} </span>
-                                <button v-if="!default_order" type="button" class="close" aria-label="Close">
-                                    <span @click="cambiarOrden('recientes', 'Reciente', true)" aria-hidden="true" style="color: #000000">×</span>
-                                </button>
+                            <div class="d-flex flex-wrap mb-1" style="gap: 0.5em 1em">
+                                <div style="width: 75px">
+                                    <span> Ordenar por: </span>
+                                </div>
+                                <span class="d-flex align-items-center badge badge-pill badge-light py-2 f-8em" style="line-height: 0; color: white; background-color: #003C71">
+                                    <span> 
+                                        {{ order_label }} 
+                                    </span>
+                                    <span v-if="!default_order" class="px-1" @click="cambiarOrden('recientes', 'Reciente', true)" 
+                                        aria-hidden="true" style="cursor: pointer; color: #ffffff">×</span>
+
+                                </span>
                             </div>
 
                         </div>
@@ -129,12 +150,12 @@
                     <table v-if="arrayProyectos.length > 0" class="table table-bordered table-hover table-sm">
                         <thead>
                             <tr>
-                                <th style="text-align: center; width: 10%;">Contraparte</th>
-                                <th style="text-align: center; width: 10%;">Proyecto</th>
-                                <th id="disappear" style="text-align: center;">Perfil estudiante</th>
+                                <th style="text-align: center; width: 15%;">Contraparte</th>
+                                <th style="text-align: center; width: 25%;">Proyecto</th>
+                                <th style="text-align: center; width: 20%;" id="disappear">Perfil estudiante</th>
                                 <th style="text-align: center; width: 10%;">Estado del proyecto</th>
-                                <th style="text-align: center; width: 10%;">Cupos</th>
-                                <th style="text-align: center; width: 10%;">Acciones</th>
+                                <th style="width: 10%; text-align: center;" id="disappear">Cupos</th>
+                                <th style="width: 10%; text-align: center;">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -150,7 +171,7 @@
                                 <td v-text="proyecto.estado_proyecto" data-toggle="modal"
                                     data-target="#projectDetailModal" @click="abrirModal('info', proyecto)"
                                     style="text-align: center;"></td>
-                                <td v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`" data-toggle="modal"
+                                <td id="disappear" v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`" data-toggle="modal"
                                     data-target="#projectDetailModal" @click="abrirModal('info', proyecto)"
                                     style="text-align: center;"></td>
                                 <td id="icons-pos">
@@ -233,10 +254,10 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <div v-if="add_edit_flag = 1">
-                            <h4 class="modal-title">Insertar nuevo proyecto</h4>
+                            <h5 class="modal-title">Insertar nuevo proyecto</h5>
                         </div>
                         <div v-else-if="add_edit_flag = 2">
-                            <h4 class="modal-title">Editar proyecto existente</h4>
+                            <h5 class="modal-title">Editar proyecto existente</h5>
                         </div>
 
                         <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()"
@@ -330,7 +351,7 @@
                                         class="error">Debe seleccionar un tipo de horas</p>
                                 </div>
                             </div>
-                            <div class="form-group row div-form">
+                            <div class="form-group row div-form mb-3">
                                 <label class="col-md-3 form-control-label" for="text-input">Descripción
                                     Adicional</label>
                                 <div class="col-md-9">
@@ -380,34 +401,90 @@
                                 <label class="col-md-3 form-control-label" for="text-input">Carreras</label>
 
                                 <div class="form-check">
-                                    <input class="form-check-input " type="radio" id="checkboxTodasCarreras1"
-                                        name="checkboxTodasCarreras" v-model="flagTodasLasCarreras" value="1">
-                                    <label class="form-check-label font-lg" for="checkboxTodasCarreras1">Todas las
-                                        carreras</label>
-                                </div>
-                                <div class="form-check">
                                     <input class="form-check-input " type="radio" id="checkboxTodasCarreras2"
                                         v-model="flagTodasLasCarreras" value="2">
                                     <label class="form-check-label font-lg" for="checkboxTodasCarreras2">Seleccionar
                                         carreras</label>
                                 </div>
+                                <div class="form-check">
+                                    <input class="form-check-input " type="radio" id="checkboxTodasCarreras1"
+                                        name="checkboxTodasCarreras" v-model="flagTodasLasCarreras" value="1">
+                                    <label class="form-check-label font-lg" for="checkboxTodasCarreras1">Todas las
+                                        carreras excepto Ing. Civil y Psicologia</label>
+                                </div>
+
+                            </div>
 
 
-
-                                <div class="col-md-9" v-show='flagTodasLasCarreras == "2"'>
-
+                            <div class="form-group row div-form">
+                                
+                                <label class="col-md-3 form-control-label" for="text-input"></label>
+                                <div class="col-md-9" v-show='flagTodasLasCarreras == "1"'>
+                                    <th style="padding: 0.3rem"> Rango de año para todas las carreras</th>
+                                    <table class="table-sm table-borderless">
+                                        <thead>
+                                            <tr>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <select v-model="create_lim_inf" class="form-control custom-select">
+                                                        <option v-for="perfil in arrayPerfiles" :value="perfil.idPerfil"
+                                                            :key="perfil.idPerfil">{{ perfil.perfil }}</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <select v-model="create_lim_sup" class="form-control custom-select">
+                                                        <option v-for="perfil in arrayPerfiles" :value="perfil.idPerfil"
+                                                            :key="perfil.idPerfil">{{ perfil.perfil }}</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    
+                                </div>
+                                </div>
+                                
+                                <div class="form-group row div-form">
+                                
+                                <div class="col-md-11 mx-auto" v-show='flagTodasLasCarreras == "2"'>
+                                    
                                     <div class="form-button-container">
-                                        <button id="agregarCP" :disabled="disabledBotonAgregarCarrera()" type="button"
-                                            @click="agregarACP()" class="btn btn-primary mb-2"><i class="icon-plus"></i>
-                                            Agregar</button>
-                                        <button type="button" @click="agregarTodasLasCarreras()"
-                                            class="btn btn-outline-info mb-2"><i class="icon-plus"></i> Seleccionar
-                                            todas las carreras</button>
-                                        <button type="button" @click="eliminarTodasLasCarreras()"
-                                            class="btn btn-outline-danger mb-2"><i class="icon-trash"></i> Limpiar
-                                            selección</button>
+                                        <div>
+                                            <button type="button" @click="agregarTodasLasCarreras()"
+                                                class="btn btn-outline-info mb-2 mr-4"><i class="icon-plus"></i> Seleccionar
+                                                todas las carreras</button>
+                                            <button type="button" @click="eliminarTodasLasCarreras()"
+                                                class="btn btn-outline-danger mb-2"><i class="icon-trash"></i> Limpiar
+                                                selección</button>
+                                        </div>
                                     </div>
-
+                                    <br>
+                                    <th style="padding: 0.3rem">Añadir carreras con rango de año:</th>
+                                    <table class="table-sm table-borderless mb-4">
+                                        <thead>
+                                            <tr>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <select v-model="create_lim_inf" class="form-control custom-select">
+                                                        <option v-for="perfil in arrayPerfiles" :value="perfil.idPerfil"
+                                                            :key="perfil.idPerfil">{{ perfil.perfil }}</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <select v-model="create_lim_sup" class="form-control custom-select">
+                                                        <option v-for="perfil in arrayPerfiles" :value="perfil.idPerfil"
+                                                            :key="perfil.idPerfil">{{ perfil.perfil }}</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
 
                                     <table class="table-sm table-borderless">
                                         <thead>
@@ -444,6 +521,13 @@
                                                     </button>
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td>
+                                                    <button id="agregarCP" :disabled="disabledBotonAgregarCarrera()" type="button"
+                                                    @click="agregarACP()" class="btn btn-primary mb-2"><i class="icon-plus"></i>
+                                                    Agregar</button>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                     <div v-if="flagError">
@@ -477,7 +561,7 @@
             <div v-if="loading == 0" class="modal-dialog modal-primary modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Cambiar estado al proyecto {{ modal_nombre }}</h4>
+                        <h5 class="modal-title">Cambiar estado al proyecto {{ modal_nombre }}</h5>
                         <button type="button" data-dismiss="modal" class="close" @click="cerrarModal()"
                             aria-label="Close">
                             <span aria-hidden="true" style="color: #ffffff">×</span>
@@ -497,8 +581,8 @@
                             <button type="button" class="btn btn-success"
                                 @click="showChangeStatusConfirm('finalizar')"><i class="icon-check"></i> Finalizar
                                 proyecto</button>
-                            <button type="button" class="btn btn-danger"
-                                @click="showChangeStatusConfirm('cancelar')"><i class="icon-close"></i> Cancelar
+                            <button type="button" class="btn btn-danger" @click="showChangeStatusConfirm('cancelar')"><i
+                                    class="icon-close"></i> Cancelar
                                 proyecto</button>
                             <button type="button" class="btn btn-secondary"
                                 @click="showChangeStatusConfirm('eliminar')"><i class="icon-trash"></i> Eliminar
@@ -524,7 +608,7 @@
                 style="max-width: 70vw;">
                 <div class="modal-content modal-student">
                     <div class="modal-header">
-                        <h4 class="modal-title">Estudiantes</h4>
+                        <h5 class="modal-title">Estudiantes</h5>
                         <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()"
                             aria-label="Close">
                             <span style="color: #ffff" aria-hidden="true">×</span>
@@ -643,10 +727,10 @@
                 <div class="modal-content ">
                     <div class="modal-header">
                         <div v-if="flagEstudiante">
-                            <h4 class="modal-title">Aceptar estudiante</h4>
+                            <h5 class="modal-title">Aceptar estudiante</h5>
                         </div>
                         <div v-else>
-                            <h4 class="modal-title">Rechazar estudiante</h4>
+                            <h5 class="modal-title">Rechazar estudiante</h5>
                         </div>
                         <button id="cerrarModalARE1" type="button" class="close" data-dismiss="modal"
                             @click="cerrarModal()" aria-label="Close">
@@ -672,50 +756,111 @@
             <div class="modal-dialog modal-primary modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" v-text="modal_nombre">Aplicar a proyecto</h4>
+                        <h5 class="modal-title" v-text="modal_nombre"></h5>
                         <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()"
                             aria-label="Close">
                             <span aria-hidden="true" style="color: #ffffff">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <table class="table table-bordered table-sm" style="margin-top: 10px">
+                        <table class="table table-bordered table-sm" id="appear-table">
                             <tbody>
                                 <tr>
                                     <th class="col-md-4" style="background-color: #dedede;">Contraparte</th>
+                                </tr>
+                                <tr>
                                     <td v-text="modal_contraparte" style="padding-left: 12px;"></td>
                                 </tr>
                                 <tr>
                                     <th class="col-md-4" style="background-color: #dedede;">Perfil del estudiante</th>
+                                </tr>
+                                <tr>
                                     <td v-text="modal_perfil_estudiante" style="padding-left: 12px;"></td>
                                 </tr>
                                 <tr>
                                     <th class="col-md-4" style="background-color: #dedede;">Tipo de horas</th>
+                                </tr>
+                                <tr>
                                     <td v-text="modal_tipo_horas" style="padding-left: 12px;"></td>
                                 </tr>
                                 <tr>
                                     <th class="col-md-4" style="background-color: #dedede;">Cupos</th>
+                                </tr>
+                                <tr>
                                     <td v-text="`${modal_cupos_act}${'/'}${modal_cupos}`" style="padding-left: 12px;">
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="col-md-4" style="background-color: #dedede;">Horario</th>
+                                </tr>
+                                <tr>
                                     <td v-text="modal_horario" style="padding-left: 12px;"></td>
                                 </tr>
                                 <tr>
                                     <th class="col-md-4" style="background-color: #dedede;">Encargado</th>
+                                </tr>
+                                <tr>
                                     <td v-text="modal_encargado" style="padding-left: 12px;"></td>
                                 </tr>
                                 <tr>
                                     <th class="col-md-4" style="background-color: #dedede;">Correo encargado</th>
+                                </tr>
+                                <tr>
                                     <td v-text="modal_correo" style="padding-left: 12px;"></td>
                                 </tr>
                                 <tr>
                                     <th class="col-md-4" style="background-color: #dedede;">Fecha inicial</th>
+                                </tr>
+                                <tr>
                                     <td v-text="modal_fecha_in" style="padding-left: 12px;"></td>
                                 </tr>
                                 <tr>
                                     <th class="col-md-4" style="background-color: #dedede;">Fecha final</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="modal_fecha_fin" style="padding-left: 12px;"></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+ 
+                        <table class="table table-bordered table-sm" id="disappear">
+                            <tbody>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Contraparte</th>
+                                    <td v-text="modal_contraparte" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Perfil del estudiante</th>
+                                    <td v-text="modal_perfil_estudiante" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Tipo de horas</th>
+                                    <td v-text="modal_tipo_horas" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Cupos</th>
+                                    <td v-text="`${modal_cupos_act}${'/'}${modal_cupos}`" style="padding-left: 12px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Horario</th>
+                                    <td v-text="modal_horario" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Encargado</th>
+                                    <td v-text="modal_encargado" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Correo encargado</th>
+                                    <td v-text="modal_correo" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Fecha inicial</th>
+                                    <td v-text="modal_fecha_in" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Fecha final</th>
                                     <td v-text="modal_fecha_fin" style="padding-left: 12px;"></td>
                                 </tr>
 
@@ -738,7 +883,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <div v-if="add_edit_flag = 1">
-                            <h4 class="modal-title">Programar reunión</h4>
+                            <h5 class="modal-title">Programar reunión</h5>
                         </div>
                         <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()"
                             aria-label="Close">
@@ -829,7 +974,7 @@
                 <div class="modal-content ">
                     <div class="modal-header">
                         <div>
-                            <h4 class="modal-title">Remover estudiante</h4>
+                            <h5 class="modal-title">Remover estudiante</h5>
                         </div>
                         <button id="cerrarModalARE1" type="button" class="close" data-dismiss="modal"
                             @click="cerrarModal()" aria-label="Close">
@@ -842,8 +987,8 @@
                             <h5 v-text="rem_nombre_completo"></h5>
                         </div>
                         <div style="display: flex; flex-direction: row; align-items: baseline;">
-                            <h6>de: &nbsp; </h6>
-                            <h6 style="font-weight: 	bold;" v-text="nombre_proyecto"></h6>
+                            <h6>de: &nbsp;</h6>
+                            <h6 style="font-weight: bold;" v-text="nombre_proyecto"></h6>
                         </div>
                         <p>¿Estás seguro/a de que deseas remover a este estudiante?</p>
 
@@ -954,7 +1099,9 @@ export default {
             filter_label: "Todas las carreras",
             order_label: "Recientes",
             default_filter: true,
-            default_order: true
+            default_order: true,
+            create_lim_inf: 1,
+            create_lim_sup: 5
         }
     },
     computed: {
@@ -984,7 +1131,7 @@ export default {
     methods: {
         bindData(page) {
 
-            let me = this;
+            const me = this
             me.loadTable = true;
 
             var url = `${API_HOST}/todos_proyectos?page=${page}`;
@@ -1007,7 +1154,7 @@ export default {
         },
         bindDataByFilters(page) {
 
-            let me = this;
+            const me = this
 
             me.loadTable = true;
 
@@ -1035,22 +1182,22 @@ export default {
                 });
         },
         cambiarPagina(page) {
-            let me = this;
+            const me = this
             me.pagination.current_page = page;
 
             me.bindDataByFilters(page);
 
         },
-        cambiarFiltro(filtro, label, defaultFilter=false) {
-            let me = this;
+        cambiarFiltro(filtro, label, defaultFilter = false) {
+            const me = this
             me.filtrandoPorCarrera = filtro;
             me.filter_label = label;
             me.default_filter = defaultFilter
             me.bindDataByFilters(0);
 
         },
-        cambiarOrden(orden, label, defaultOrder=false) {
-            let me = this;
+        cambiarOrden(orden, label, defaultOrder = false) {
+            const me = this
             me.ordenandoPor = orden;
             me.order_label = label;
             me.default_order = defaultOrder
@@ -1061,7 +1208,7 @@ export default {
             if (this.validarProyecto()) {
                 return;
             }
-            let me = this;
+            const me = this
             if (!this.id_proyecto) {
                 axios.post(`${API_HOST}/proyecto/insertar`, {
                     'idProyecto': this.id_proyecto,
@@ -1127,6 +1274,8 @@ export default {
                     'correo_encargado': this.modal_correo,
                     'carreraPerfil': this.arrayCarreraPerfil,
                     'aplicarTodasCarreras': this.flagTodasLasCarreras === '1' ? true : false,
+                    'p_lim_inf':this.create_lim_inf,
+                    'p_lim_sup':this.create_lim_sup
                 }).then(function (response) {
                     me.cerrarModal();
                     if (response.status == 200) {
@@ -1159,7 +1308,7 @@ export default {
             if (this.validarReunion()) {
                 return;
             }
-            let me = this;
+            const me = this
             if (this.id_proyecto) {
                 axios.post(`${API_HOST}/sendMeetingMail`, {
                     'nombre_proyecto': this.proyecto,
@@ -1311,7 +1460,7 @@ export default {
             return true;
         },
         estadoProyecto() {
-            let me = this;
+            const me = this
             if (me.modal_confirmar != me.modal_nombre) {
                 me.flagErrorEstado = true
                 me.errorEstado = 1
@@ -1348,15 +1497,15 @@ export default {
         },
 
         agregarTodasLasCarreras() {
-            this.arrayCarreraPerfil = [];
 
-            var i = 0;
-            let me = this;
+            let i = 0;
+            const me = this
 
+            me.arrayCarreraPerfil = [];
             let carreras = this.arrayCarrerasSin;
 
             carreras.forEach(carrera => {
-                this.agregarCarrera(carrera);
+                me.agregarCarrera(carrera, me.create_lim_inf, me.create_lim_sup);
                 i++;
             })
 
@@ -1365,8 +1514,8 @@ export default {
             this.arrayCarreraPerfil = [];
             this.arrayCarrerasSelector = this.arrayCarreras;
         },
-        agregarCarrera(carrera) {
-            this.arrayCarreraPerfil.push([carrera.idCarrera, 1, 5]);
+        agregarCarrera(carrera, lim_inf, lim_sup) {
+            this.arrayCarreraPerfil.push([carrera.idCarrera, lim_inf, lim_sup]);
             this.arrayCarrerasSeleccionadas.push(carrera.idCarrera);
         },
         cerrarModal() {
@@ -1391,7 +1540,6 @@ export default {
                     {
                         this.modal = 1;
                         this.add_edit_flag = 1;
-                        this.arrayCarreraPerfil = [[]];
                         this.modal_nombre = '';
                         this.modal_encargado = '';
                         this.modal_cupos = ''
@@ -1409,7 +1557,7 @@ export default {
                         this.errorPerfilMsg = '';
                         this.flagError = false;
                         this.flagErrorProyecto = false;
-                        this.arrayCarreraPerfil = [[]];
+                        this.arrayCarreraPerfil = [];
                         this.flagTodasLasCarreras = '1';
                         break;
                     }
@@ -1529,7 +1677,7 @@ export default {
             }
         },
         getFacultadesCarrerasAndPerfils() {
-            let me = this
+            const me = this
             axios.get(`${API_HOST}/carrera`).then(function (response) {
                 me.arrayCarrerasSin = response.data;
                 me.arrayCarreras = me.arrayCarrerasSin.slice();
@@ -1558,7 +1706,7 @@ export default {
                 });
         },
         updateCarrerasAndPerfil() {
-            let me = this
+            const me = this
             axios.get(`${API_HOST}/proyectos/carreras`, {
                 params: {
                     idProyecto: me.id_proyecto
@@ -1579,14 +1727,14 @@ export default {
                 });
         },
         agregarACP() {
-            this.arrayCarreraPerfil.push([])
+            this.arrayCarreraPerfil.push([, this.create_lim_inf, this.create_lim_sup])
         },
         eliminarACP(acp) {
             let index = this.arrayCarreraPerfil.indexOf(acp);
             this.arrayCarreraPerfil.splice(index, 1)
         },
         getEstudiantes() {
-            let me = this;
+            const me = this
             axios.get(`${API_HOST}/proyecto/estudiantes`, {
                 params: {
                     idProyecto: me.id_proyecto
@@ -1604,7 +1752,7 @@ export default {
                 .catch(function (error) {
                     console.log(error);
                 });
-            axios.get(`${API_HOST}/cupos_actuales`, {
+            axios.get(`${API_HOST}/proyecto/cupos_actuales`, {
                 params: {
                     idProyecto: me.id_proyecto
                 }
@@ -1616,7 +1764,7 @@ export default {
                 });
         },
         buscarEstudiante() {
-            let me = this
+            const me = this
             //this.errorActualizar = false
             var url = `${API_HOST}/estudiante/carnet`
             axios.get(url, {
@@ -1640,7 +1788,7 @@ export default {
                 });
         },
         aplicarPorAdmin() {
-            let me = this
+            const me = this
             me.loading = 1;
             var url = `${API_HOST}/proyecto/estudiantes/add`
             axios.post(url, {
@@ -1671,7 +1819,7 @@ export default {
 
 
             // console.log("Aceptando o rechazando estudiante")
-            let me = this;
+            const me = this
             me.loading = 1;
             // var estadoEst = 2;
             // Si la flag del modal Aceptar / Rechazar es verdadera, entonces se acepta al estudiante
@@ -1720,7 +1868,7 @@ export default {
             axios.post(url).then(() => location.href = `${API_HOST}/`)
         },
         removerEstudianteProyecto() {
-            let me = this;
+            const me = this
             me.loading = 1;
             axios.delete(`${API_HOST}/proyectos/${me.id_proyecto}/estudiante/${me.id_estudiante}`, {
                 'estado': 0
@@ -1771,7 +1919,7 @@ export default {
                 console.log("Estado no valido")
                 return
             }
-            let me = this;
+            const me = this
             if (me.modal_confirmar != me.modal_nombre) {
                 me.flagErrorEstado = true
                 me.errorEstado = 1
@@ -1866,8 +2014,8 @@ body {
 
 .btn-primary {
     color: #fff;
-    background-color: #ff7f00;
-    border-color: #ff7f00;
+    background-color: #e66c20;
+    border-color: #e66c20;
 }
 
 .btn-primary:disabled {
@@ -1996,6 +2144,18 @@ body {
     padding: 5px;
 }
 
+#appear {
+    display: none;
+}
+
+#appear-table {
+    display: none;
+}
+
+.f-8em{
+    font-size: 14px;
+    font-weight: normal;}
+
 @media screen and (max-width: 450px) {
     .btn-label {
         display: none;
@@ -2007,6 +2167,8 @@ body {
     .btn-label {
         display: none;
     }
+
+    
 }
 
 @media screen and (max-width: 991px) {
@@ -2023,13 +2185,13 @@ body {
         overflow: scroll;
     }
 
-    .state-btn-container{
+    .state-btn-container {
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 1em;
     }
-    
+
 }
 
 @media screen and (min-width: 991px) {
@@ -2069,19 +2231,25 @@ body {
         font-size: .75em;
     }
 
-    
+
 }
 
 @media screen and (max-width: 450px) {
     #student-button {
         font-size: .5em;
     }
-    
+
 }
 
 @media screen and (max-width: 500px) {
     #disappear {
         display: none;
+    }
+    #appear {
+        display: block;
+    }
+    #appear-table {
+        display: table;
     }
 }
 
@@ -2156,18 +2324,20 @@ body {
     display: flex;
     align-items: center;
     gap: 1em;
-    
+
 }
 
 @media screen and (max-width: 1000px) {
 
     .search-group {
         max-width: 100%;
+        min-width: 50vw;
     }
 
 }
 
 .badge-pill {
+    height: 2em;
     border-radius: 6px;
     padding: 6px;
 }

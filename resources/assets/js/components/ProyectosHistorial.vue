@@ -6,23 +6,23 @@
       <li class="breadcrumb-item">Inicio</li>
       <li class="breadcrumb-item active">Historial de Proyectos</li>
     </ol>
-    <div class="container-fluid">
+    <div class="container-fluid px-4">
       <!-- Ejemplo de tabla Listado -->
       <div v-if="loadTable == true" class="card" style="border: none;">
         <table-loader></table-loader>
       </div>
       <div v-else class="card" style="border: none;">
-        <div class="card-body">
+        <div class="card-body px-0 ">
           <table class="table table-bordered table-hover table-sm">
             <thead>
               <tr>
                 <!--<th>Opciones</th> -->
                 <!--<th>Numero</th>-->
-                <th style="text-align: center; width: 10%;">Contraparte</th>
-                <th style="text-align: center; width: 20%;">Proyecto</th>
-                <th id="disappear" style="text-align: center;">Perfil Estudiante</th>
-                <th id="resized" style="width: 30px; text-align: center;">Estado del proyecto</th>
-                <th id="resized" style="width: 15px; text-align: center;">Acciones</th>
+                <th style="text-align: center; width: 20%;">Contraparte</th>
+                <th style="text-align: center; width: 25%;">Proyecto</th>
+                <th style="text-align: center; width: 20%;" id="disappear" >Perfil estudiante</th>
+                <th style="text-align: center; width: 10%;" id="disappear">Estado del proyecto</th>
+                <th id="resized" style="width: 10%; text-align: center;">Miembros</th>
               </tr>
             </thead>
             <tbody>
@@ -291,7 +291,7 @@ export default {
   },
   methods: {
     bindData(page) {
-      let me = this;
+      const me = this;
       me.loadTable = true;
       var url = `${API_HOST}/proyecto/historial?page=${page}`;
       axios.get(url).then(function (response) {
@@ -312,7 +312,7 @@ export default {
         });
     },
     cambiarPagina(page) {
-      let me = this;
+      const me = this;
       me.pagination.current_page = page;
       me.bindData(page);
     },
@@ -321,7 +321,7 @@ export default {
       this.moda2 = 0;
     },
     estadoProyecto() {
-      let me = this;
+      const me = this;
       if (me.modal_confirmar != me.modal_nombre) {
         me.flagErrorEstado = true
         me.errorEstado = 1
@@ -393,7 +393,7 @@ export default {
       }
     },
     getEstudiantes(){
-                let me = this;
+                const me = this;
                 axios.get(`${API_HOST}/proyecto/estudiantes`, {
                     params:{
                         idProyecto: me.id_proyecto

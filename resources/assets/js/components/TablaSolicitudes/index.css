@@ -72,6 +72,11 @@
     padding-left: 0;
 }
 
+#appear-table{
+    display: none;
+}
+   
+
 @media screen and (max-width: 450px) {
     .btn-label {
         display: none;
@@ -147,6 +152,12 @@
 #disappear{
     display: none;
     }
+
+#appear-table{
+    display: table;
+    }
+   
+
 }
 
 @media screen and (max-width: 1000px) {

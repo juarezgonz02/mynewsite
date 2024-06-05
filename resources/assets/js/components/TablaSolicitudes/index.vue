@@ -5,7 +5,7 @@
             <li class="breadcrumb-item">Inicio</li>
             <li class="breadcrumb-item active">Administración de Solicitudes</li>
         </ol>
-        <div class="container-fluid" style="background-color: white;">
+        <div class="container-fluid px-4" style="background-color: white;">
             <!-- Ejemplo de tabla Listado -->
             <div v-if="loadTable == true" class="card" style="border: none;">
                 <table-loader></table-loader>
@@ -53,16 +53,16 @@
                                         <!-- v-model="filtrandoPorCarrera"> -->
                                         <!-- @change="bindDataByFilters(0)"> -->
 
-                                        <li @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -1 }))" disabled>
+                                        <li>
                                             <b> Filtrar por: </b>
                                         </li>
 
-                                        <li @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -1 }))">
+                                        <li @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -1 }), 'Todas las Carreras', true)">
                                             <button class="text-button"> Todas las carreras </button>
                                         </li>
 
                                         <li role="separator" class="divider"></li>
-                                        <li @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -2 }))">
+                                        <li @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -2 }), 'Todas las Carreras excepto Psicologia e Ing. Civil')">
                                             <button class="text-button">
                                                 Todas las carreras excepto Psicologia e Ing. Civil
                                             </button>
@@ -72,23 +72,24 @@
                                         <li>
                                             <b> Facultad: </b>
                                         </li>
+                                        
                                         <li v-for="facultad in arrayFactultad">
                                             <!-- :value="JSON.stringify({ por: 'facultad', id: facultad.idFacultad })" -->
                                             <!-- :key="facultad.idFacultad"> -->
                                             <button
-                                                @click="cambiarFiltro(JSON.stringify({ por: 'facultad', id: facultad.idFacultad }))"
+                                                @click="cambiarFiltro(JSON.stringify({ por: 'facultad', id: facultad.idFacultad }), facultad.nombre)"
                                                 class="text-button"> {{ facultad.nombre }} </button>
                                         </li>
 
                                         <li role="separator" class="divider"></li>
-                                        <li :value="JSON.stringify({ por: 'carrera', id: -1 })" disabled>
+                                        <li>
                                             <b> Carrera: </b>
                                         </li>
                                         <li v-for="carrera in arrayCarreras">
                                             <!-- :value="JSON.stringify({ por: 'carrera', id: carrera.idCarrera })"
         :key="carrera.idCarrera"> -->
                                             <button
-                                                @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: carrera.idCarrera }))"
+                                                @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: carrera.idCarrera }), carrera.nombre)"
                                                 class="text-button"> {{ carrera.nombre }} </button>
                                         </li>
                                         <!-- </optgroup> -->
@@ -101,16 +102,21 @@
                     </div>
                 </div>
                 <!---->
-                <div style="font-size: 1.1em; font-weight: normal">
-                        <div class="d-flex flex-wrap my-3">
-                            <div class="d-flex mr-4" style="gap: 5px">
-                                <span> Carrera: </span>
-                                <span class="badge badge-pill badge-light"> {{filter_label}} </span>
-                                <button type="button" class="close" aria-label="Close">
-                                    <span v-if="!default_filter" aria-hidden="true" style="color: #000000">×</span>
+                <div style="font-size: 1em; font-weight: normal">
+                        <div class="d-flex flex-wrap mb-3">
+                            <div class="d-flex flex-wrap mr-4" style="gap: 0.5em 1em">
+                                <span> Mostrando solicitudes para: </span>
+                                <span class="d-flex align-items-center badge badge-pill badge-light py-2 f-8em" style="line-height: 0; color: white; background-color: #003C71">
+                                    <span>
+                                         {{(filter_label).substring(0, 48)}} 
+                                    </span>
+                                    <span v-if="!default_filter" @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -1 }), 'Todas las Carreras', true)" 
+                                    aria-hidden="true" class="px-1" style="cursor: pointer; color: #ffffff">
+                                    ×</span>
                                 </button>
+                                </span>
                             </div>
-
+                            
                         </div>
                     </div>
                     <!--  -->
@@ -121,7 +127,7 @@
                             <th style="text-align: center;">Proyecto</th>
                             <th style="text-align: center; width: 15%;">Carrera</th>
                             <th id="disappear" style="text-align: center; width: 10%;">Cupos</th>
-                            <th style="text-align: center; width: 10%;">Acciones</th>
+                            <th style="text-align: center; width: 10%;">Estudiantes</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -173,43 +179,8 @@
             </div>
         </div>
         <!-- Fin ejemplo de tabla Listado -->
-        </div>
 
-        <!--Inicio del modal estado del proyecto-->
-        <div class="modal fade" tabindex="-1" role="dialog" id="statusModal" aria-hidden="true">
-            <div v-if="loading == 1">
-                <spinner></spinner>
-            </div>
-            <div v-if="loading == 0" class="modal-dialog modal-primary modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">¿Desactivar el proyecto {{ modal_nombre }}?</h4>
-                        <button type="button" data-dismiss="modal" class="close" @click="cerrarModal()"
-                            aria-label="Close">
-                            <span aria-hidden="true" style="color: #ffffff">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <h5>Por favor escriba <b>{{ modal_nombre }}</b> para desactivar este proyecto</h5>
-                        <div class="col-md-9 -alt">
-                            <input type="text" v-model="modal_confirmar" class="form-control">
-                            <p :class="{ show: errorEstado == 1, hide: errorEstado != 1 }" class="error">El texto
-                                ingresado no coincide con el solicitado</p>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" data-dismiss="modal" class="btn btn-secondary"
-                            @click="cerrarModal()">Cerrar</button>
-                        <button type="button" class="btn btn-primary"
-                            v-bind:data-dismiss="flagErrorEstado ? '' : 'modal'"
-                            @click="estadoProyecto()">Confirmar</button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!--Fin del modal-->
+        
         <!--Inicio de modal de estudiantes por proyecto-->
         <div class="modal fade" tabindex="-1" role="dialog" id="membersModal" aria-hidden="true">
             <div v-if="loading == 1">
@@ -219,7 +190,7 @@
                 style="max-width: 70vw;">
                 <div class="modal-content modal-student" style="">
                     <div class="modal-header">
-                        <h4 class="modal-title">Estudiantes</h4>
+                        <h5 class="modal-title">Estudiantes</h5>
                         <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()"
                             aria-label="Close">
                             <span aria-hidden="true" style="color: #ffffff">×</span>
@@ -324,10 +295,10 @@
                 <div class="modal-content ">
                     <div class="modal-header">
                         <div v-if="flagEstudiante">
-                            <h4 class="modal-title">Aceptar estudiante</h4>
+                            <h5 class="modal-title">Aceptar estudiante</h5>
                         </div>
                         <div v-else>
-                            <h4 class="modal-title">Rechazar estudiante</h4>
+                            <h5 class="modal-title">Rechazar estudiante</h5>
                         </div>
                         <button id="cerrarModalARE1" type="button" class="close" data-dismiss="modal"
                             @click="cerrarModal()" aria-label="Close">
@@ -353,14 +324,14 @@
             <div class="modal-dialog modal-primary modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" v-text="modal_nombre">Aplicar a proyecto</h4>
+                        <h5 class="modal-title" v-text="modal_nombre"></h5>
                         <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()"
                             aria-label="Close">
                             <span aria-hidden="true" style="color: #ffffff">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <table class="table table-bordered table-sm" style=" margin-top: 10px">
+                        <!-- <table class="table table-bordered table-sm" style=" margin-top: 10px">
                             <tbody>
                                 <tr>
                                     <th style="background-color: #dedede;">Descripción</th>
@@ -393,6 +364,109 @@
                                 </tr>
 
                             </tbody>
+                        </table> -->
+                        <table class="table table-bordered table-sm" id="appear-table" style="margin-top: 10px">
+                            <tbody>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede;">Contraparte</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="modal_contraparte" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede;">Perfil del estudiante</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="modal_perfil_estudiante" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede;">Tipo de horas</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="modal_tipo_horas" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede;">Cupos</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="`${modal_cupos_act}${'/'}${modal_cupos}`" style="padding-left: 12px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede;">Horario</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="modal_horario" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede;">Encargado</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="modal_encargado" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede;">Correo encargado</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="modal_correo_encargado" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede;">Fecha inicial</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="modal_fecha_in" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede;">Fecha final</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="modal_fecha_fin" style="padding-left: 12px;"></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+ 
+                        <table class="table table-bordered table-sm" id="disappear" style="margin-top: 10px">
+                            <tbody>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Contraparte</th>
+                                    <td v-text="modal_contraparte" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Perfil del estudiante</th>
+                                    <td v-text="modal_perfil_estudiante" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Tipo de horas</th>
+                                    <td v-text="modal_tipo_horas" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Cupos</th>
+                                    <td v-text="`${modal_cupos_act}${'/'}${modal_cupos}`" style="padding-left: 12px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Horario</th>
+                                    <td v-text="modal_horario" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Encargado</th>
+                                    <td v-text="modal_encargado" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Correo encargado</th>
+                                    <td v-text="modal_correo_encargado" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Fecha inicial</th>
+                                    <td v-text="modal_fecha_in" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Fecha final</th>
+                                    <td v-text="modal_fecha_fin" style="padding-left: 12px;"></td>
+                                </tr>
+
+                            </tbody>
                         </table>
                     </div>
                     <div class="modal-footer" style="border-top: none;">
@@ -411,20 +485,19 @@
             <div class="modal-dialog modal-primary modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" v-text="modal_user_carnet"></h4>
+                        <h5 class="modal-title" v-text="modal_user_carnet"></h5>
                         <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()"
                             aria-label="Close">
                             <span aria-hidden="true" style="color: #ffffff">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <table class="table table-bordered table-sm" style=" margin-top: 10px">
+                        <table class="table table-bordered table-sm" id="disappear">
                             <tbody>
                                 <tr>
                                     <th style="background-color: #dedede;">Correo</th>
                                     <td v-text="modal_user_carnet" style="padding-left: 16px;"></td>
                                 </tr>
-                                <tr>
                                 <tr>
                                     <th style="background-color: #dedede;">Nombre</th>
                                     <td v-text="modal_user_name" style="padding-left: 16px;"></td>
@@ -437,6 +510,37 @@
                                     <th style="background-color: #dedede;">Año</th>
                                     <td v-text="modal_user_año" style="padding-left: 16px;"></td>
                                 </tr>
+
+                            </tbody>
+                        </table>
+                            
+                        <table class="table table-bordered table-sm" id="appear-table">
+                            <tbody>
+                                <tr>
+                                    <th style="background-color: #dedede;">Correo</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="modal_user_carnet" style="padding-left: 16px;"></td>
+                                </tr>
+                                <tr>
+                                    <th style="background-color: #dedede;">Nombre</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="modal_user_name" style="padding-left: 16px;"></td>
+                                </tr>
+                                <tr>
+                                    <th style="background-color: #dedede;">Carrera</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="modal_user_carrera" style="padding-left: 16px;"></td>
+                                </tr>
+                                <tr>                                    
+                                    <th style="background-color: #dedede;">Año</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="modal_user_año" style="padding-left: 16px;"></td>
+                                </tr>
+
 
                             </tbody>
                         </table>
