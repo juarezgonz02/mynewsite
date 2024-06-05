@@ -73,7 +73,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/carreras/inactivar', 'CarreraController@inactivarCarrera');
         Route::put('/carreras/actualizar', 'CarreraController@actualizarCarrera');
         Route::put('/estudiante/actualizar', 'UserController@actualizarEstudiante');
-        Route::get('/cupos_actuales', 'ProyectoController@cuposActuales');
+        Route::get('/proyecto/cupos_actuales', 'ProyectoController@cuposActuales');
         Route::delete('/proyectos/{id_proyecto}/estudiante/{id_estudiante}', 'ProyectoxEstudianteController@removerEstudiante' );
         Route::patch('/estudiante/{id_estudiante}/remover-timeout', 'UserController@removerTimeOut' );
         Route::get('/estadisticas', 'EstadisticasController@getEstadisticasGenerales');
