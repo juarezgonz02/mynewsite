@@ -25,7 +25,7 @@
                 </tbody>
             </table>
 
-            <button class="btn btn-success" @click="showModal">Nuevo Coordinador</button>
+            <button class="btn btn-success mb-3" @click="showModal">Nuevo Coordinador</button>
 
             <div class="newCoordContainer" v-if="showRegisterModal">
                 <h3>Nuevo Coordinador</h3>
@@ -145,7 +145,7 @@ export default {
 
             console.log(this.newCoordinador)
 
-            let me = this;
+            const me = this;
 
             // /users/admin/new
             axios.post(`${API_HOST}/users/admin/new`, {
@@ -187,7 +187,7 @@ export default {
         bindData() {
             this.coordinadores = [];
             // console.log('bind data')
-            let me = this;
+            const me = this;
             axios.get(`${API_HOST}/users/admin/all`)
                 .then(response => {
                     me.coordinadores = response.data.users;
