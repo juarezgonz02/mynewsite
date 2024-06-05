@@ -115,7 +115,7 @@
                     <!---->
                     <div style="font-size: 1em; font-weight: normal">
                         <div class="d-flex flex-wrap my-3" style="gap: 1em">
-                            <div class="d-flex flex-wrap mb-1" style="gap: 0.5em 1em">
+                            <div class="d-flex flex-wrap" style="gap: 0.5em 1em">
                                 <div style="width: 75px">
                                     <span> Mostrando: </span>
                                 </div>
@@ -130,7 +130,7 @@
                                     </span>
                                 </span>
                             </div>
-                            <div class="d-flex flex-wrap mb-1" style="gap: 0.5em 1em">
+                            <div class="d-flex flex-wrap" style="gap: 0.5em 1em">
                                 <div style="width: 75px">
                                     <span> Ordenar por: </span>
                                 </div>
