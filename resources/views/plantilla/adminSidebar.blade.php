@@ -3,10 +3,9 @@
 ?>
 <div class="sidebar" style="height: 100%; top: 0;" id="sidebarMenu" >
             <nav class="sidebar-nav">
-                <ul class="nav">
-                    <li class="nav-title">
-                            <img alt="uca" style="color: white, width: auto; height: 55px;" src="img/logotype_white.svg" />
-                    </li>
+                <ul class="nav" id="nav-toogler">
+                    <li @click='menu=0' class="nav-title clickeable">
+                           <img alt="uca" style="color: white, width: auto; height: 55px;" src="img/logotype_white.svg" />                   </li>
                     <li @click='menu=0' class="nav-item">
                       <a style="font-family: 'Abel', sans-serif;" class="nav-link active" href="#"><i><img src="<?php echo $ruta; ?>/img/icons/assignment_white_24dp.svg" alt="proyectos"></i> Proyectos </a>
                     </li>
