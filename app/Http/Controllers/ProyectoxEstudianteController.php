@@ -119,80 +119,91 @@ class ProyectoxEstudianteController extends Controller{
 
     public function rechazarEstudiante(Request $request){
         if(!$request->ajax()) return redirect('/home');
-        $idProyecto = $request->idProyecto;
-        $idUser = $request->idUser;
-        $estado = 2;
-        
-        $solicitudProyecto = ProyectoxEstudiante::where('proyectoxestudiante.idProyecto', '=', $idProyecto)
-        ->where('proyectoxestudiante.idUser', '=', $idUser)->first();
+        DB::transaction(function () use ($request) {
 
-        // Actualizar estado de la solicitud "Rechazado"(estado = 2 )
-        if($solicitudProyecto != null){
-            $solicitudProyecto->estado = 2;
-            $solicitudProyecto->save();
-        }
-
-        $mailData = User::join('proyectoxestudiante', 'users.idUser', '=', 'proyectoxestudiante.idUser')
-            ->join('proyecto', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
-            ->select('users.nombres', 'users.apellidos', 'users.correo','proyecto.encargado','proyecto.nombre')
-            ->where('proyectoxestudiante.idUser', '=', $idUser)
-            ->where('proyectoxestudiante.idProyecto', '=', $idProyecto)
-            ->first();
+            $idProyecto = $request->idProyecto;
+            $idUser = $request->idUser;
+            $estado = 2;
             
-            $this->sendEmailAceptadoRechazado($mailData, $estado);
-        
+            $solicitudProyecto = ProyectoxEstudiante::where('proyectoxestudiante.idProyecto', '=', $idProyecto)
+            ->where('proyectoxestudiante.idUser', '=', $idUser)->first();
+
+            // Actualizar estado de la solicitud "Rechazado"(estado = 2 )
+            if($solicitudProyecto != null){
+                $solicitudProyecto->estado = 2;
+                $solicitudProyecto->save();
+            }
+
+            $mailData = User::join('proyectoxestudiante', 'users.idUser', '=', 'proyectoxestudiante.idUser')
+                ->join('proyecto', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
+                ->select('users.nombres', 'users.apellidos', 'users.correo','proyecto.encargado','proyecto.nombre')
+                ->where('proyectoxestudiante.idUser', '=', $idUser)
+                ->where('proyectoxestudiante.idProyecto', '=', $idProyecto)
+                ->first();
+                
+                $this->sendEmailAceptadoRechazado($mailData, $estado);
+            
+        });
     }
 
     public function aplicar(Request $request){
-        $pXe = new ProyectoxEstudiante();
-        $pXe->idProyecto = $request->idProyecto;
-        $pXe->idUser = Auth()->user()->idUser;
-        $pXe->estado = $request->estado;
-        $pXe->save();
+        DB::transaction(function () use ($request) {
 
-        $user = Auth()->user();
-        $user->ya_aplico_hoy = date('d-m-Y');
-        $user->save();
-        
-        $proyecto = ProyectoxEstudiante::join('users', 'users.idUser', '=', 'proyectoxestudiante.idUser')
-        ->join('proyecto', 'proyecto.idProyecto','=', 'proyectoxestudiante.idProyecto')
-        ->join('carrera', 'carrera.idCarrera', '=', 'users.idCarrera')
-        ->select('proyecto.correo_encargado', 'proyecto.encargado', 'proyecto.nombre', 'users.nombres', 'users.apellidos', 'users.correo', 'carrera.nombre AS n_carrera')
-        ->where('users.idUser', '=', $user->idUser)
-        ->where('proyecto.idProyecto','=', $request->idProyecto)->first();
-        $this->sendEmail($proyecto, 1);
-
-        return response()->json([
-            'message' => 'Solicitud enviada'
-        ]);
-    }
-
-    public function aplicarPorAdmin(Request $request){
-        if(!$request->ajax()) return redirect('/home');
-        $verify = ProyectoxEstudiante::where('proyectoxestudiante.idProyecto', '=', $request->idProyecto)
-        ->where('proyectoxestudiante.idUser', '=', $request->idUser)->first();
-        if($verify == null){
-            if(!$request->ajax()) return redirect('/home');
             $pXe = new ProyectoxEstudiante();
             $pXe->idProyecto = $request->idProyecto;
-            $pXe->idUser = $request->idUser;
+            $pXe->idUser = Auth()->user()->idUser;
             $pXe->estado = $request->estado;
             $pXe->save();
 
-            $restarCupo = Proyecto::where('proyecto.idProyecto', '=', $request->idProyecto)->first();
-            $restarCupo->cupos_act = $restarCupo->cupos_act + 1;
-            $restarCupo->save();
-
+            $user = Auth()->user();
+            $user->ya_aplico_hoy = date('d-m-Y');
+            $user->save();
+            
             $proyecto = ProyectoxEstudiante::join('users', 'users.idUser', '=', 'proyectoxestudiante.idUser')
             ->join('proyecto', 'proyecto.idProyecto','=', 'proyectoxestudiante.idProyecto')
-            ->select('proyecto.encargado', 'proyecto.nombre', 'users.nombres', 'users.apellidos', 'users.correo')
-            ->where('users.idUser', '=', $request->idUser)
+            ->join('carrera', 'carrera.idCarrera', '=', 'users.idCarrera')
+            ->select('proyecto.correo_encargado', 'proyecto.encargado', 'proyecto.nombre', 'users.nombres', 'users.apellidos', 'users.correo', 'carrera.nombre AS n_carrera')
+            ->where('users.idUser', '=', $user->idUser)
             ->where('proyecto.idProyecto','=', $request->idProyecto)->first();
-            $this->sendEmail($proyecto,2);
-        }
-        else{
-            return "El estudiante ya está en el proyecto";
-        }
+            $this->sendEmail($proyecto, 1);
+
+            return response()->json([
+                'message' => 'Solicitud enviada'
+            ]);
+            
+        });
+
+    }
+
+    public function aplicarPorAdmin(Request $request){
+
+        if(!$request->ajax()) return redirect('/home');
+        DB::transaction(function () use ($request) {
+            $verify = ProyectoxEstudiante::where('proyectoxestudiante.idProyecto', '=', $request->idProyecto)
+            ->where('proyectoxestudiante.idUser', '=', $request->idUser)->first();
+            if($verify == null){
+                if(!$request->ajax()) return redirect('/home');
+                $pXe = new ProyectoxEstudiante();
+                $pXe->idProyecto = $request->idProyecto;
+                $pXe->idUser = $request->idUser;
+                $pXe->estado = $request->estado;
+                $pXe->save();
+
+                $restarCupo = Proyecto::where('proyecto.idProyecto', '=', $request->idProyecto)->first();
+                $restarCupo->cupos_act = $restarCupo->cupos_act + 1;
+                $restarCupo->save();
+
+                $proyecto = ProyectoxEstudiante::join('users', 'users.idUser', '=', 'proyectoxestudiante.idUser')
+                ->join('proyecto', 'proyecto.idProyecto','=', 'proyectoxestudiante.idProyecto')
+                ->select('proyecto.encargado', 'proyecto.nombre', 'users.nombres', 'users.apellidos', 'users.correo')
+                ->where('users.idUser', '=', $request->idUser)
+                ->where('proyecto.idProyecto','=', $request->idProyecto)->first();
+                $this->sendEmail($proyecto,2);
+            }
+            else{
+                return "El estudiante ya está en el proyecto";
+            }
+        });
     }
 
     public function sendEmail($user, $mailType){
@@ -207,7 +218,7 @@ class ProyectoxEstudianteController extends Controller{
                 }
             );
         }
-        else{
+        else if($mailType == 2){
             Mail::send(
                 'emails.agregadoPorAdmin',
                 ['user' => $user],
@@ -217,6 +228,17 @@ class ProyectoxEstudianteController extends Controller{
                     $message->subject("Actualización de ingreso a proyecto de horas sociales");
                 }
             );
+        }else if($mailType == 3){
+            Mail::send(
+                'emails.expulsado',
+                ['data' => $user],
+                function($message) use ($user){
+                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+                    $message->to($user->correo);
+                    $message->subject("Notificación de remoción de proyecto");
+                }
+            );
+
         }
         
     }
@@ -264,35 +286,50 @@ class ProyectoxEstudianteController extends Controller{
     }
 
     public function removerEstudiante(Request $request, $id_proyecto, $id_estudiante){
+
         $pxe = ProyectoxEstudiante::where('idProyecto','=', $id_proyecto)
         ->where('idUser','=', $id_estudiante)->first();
 
-
-        if($pxe->estado == 1){
-            $p = Proyecto::where('idProyecto', '=', $pxe->idProyecto)->first();
-            $p->cupos_act = $p->cupos_act-1;
-            $p->save();
-        }
-        $pxe->delete();
-
-        /*
-        ==================================================================================================
-        Funcionalidad para aplicar timeout a estudiante
-         Funcionalidad deshabilitada por el momento, se espera controlar el tiempo de aplicacion de los estudiantes
-         de forma administrativa. 
-        ==================================================================================================
-         */
-
-        // ========================`
-        // $user = User::where('idUser', '=', $id_estudiante)->first();
-        // $user->timeout = date('Y-m-d', strtotime('+1 days'));
-        // $user->save();
-        // ========================
+        $student = User::join('proyectoxestudiante', 'users.idUser', '=', 'proyectoxestudiante.idUser')
+        ->join('proyecto', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
+        ->select('users.nombres', 'users.apellidos', 'users.correo','proyecto.encargado','proyecto.nombre as proyecto')
+        ->where('proyectoxestudiante.idUser', '=', $id_estudiante)
+        ->where('proyectoxestudiante.idProyecto', '=', $id_proyecto)
+        ->first();
         
+        
+        DB::transaction(function () use ($pxe, $student) {
+            
+            if($pxe->estado == 1){
+                $p = Proyecto::where('idProyecto', '=', $pxe->idProyecto)->first();
+                $p->cupos_act = $p->cupos_act-1;
+                $p->save();
+            }
+            $pxe->delete();
 
-        return response()->json([
-            'message' => 'Alumno eliminado de proyecto'
-        ]);
+            $this->sendEmail($student, 3);
+
+            /*
+            ==================================================================================================
+            Funcionalidad para aplicar timeout a estudiante
+            Funcionalidad deshabilitada por el momento, se espera controlar el tiempo de aplicacion de los estudiantes
+            de forma administrativa. 
+            ==================================================================================================
+            */
+
+            // ========================`
+            // $user = User::where('idUser', '=', $id_estudiante)->first();
+            // $user->timeout = date('Y-m-d', strtotime('+1 days'));
+            // $user->save();
+            // ========================
+            
+
+            return response()->json([
+                'message' => 'Alumno eliminado de proyecto'
+            ]);
+
+        });
+
     }
     public function get_all_applications(Request $request){
         
