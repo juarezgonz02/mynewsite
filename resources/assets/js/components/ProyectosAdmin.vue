@@ -48,13 +48,6 @@
                                                 <button class="text-button"> Todas las carreras </button>
                                             </li>
 
-                                            <li role="separator" class="divider"></li>
-                                            <li
-                                                @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -2 }), 'Todas las carreras excepto Psicologia e Ing. Civil')">
-                                                <button class="text-button">
-                                                    Todas las carreras excepto Psicologia e Ing. Civil
-                                                </button>
-                                            </li>
 
                                             <li role="separator" class="divider"></li>
                                             <li>

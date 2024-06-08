@@ -379,7 +379,7 @@ class ProyectoxEstudianteController extends Controller{
     private function obtener_solicitudes_por_carrera(string $nombre, string $ncarrera)
     {
 
-        if($ncarrera == "-1" || $ncarrera == "-2"){
+        if($ncarrera == "-1"){
             $solicitudes = ProyectoxEstudiante::leftJoin('proyecto', 'proyecto.idProyecto', '=', 'proyectoxestudiante.idProyecto')
             ->leftJoin('users', 'users.idUser', '=', 'proyectoxestudiante.idUser')
             ->leftJoin('carrera', 'users.idCarrera', 'carrera.idCarrera')

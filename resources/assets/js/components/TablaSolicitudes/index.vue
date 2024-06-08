@@ -61,12 +61,7 @@
                                             <button class="text-button"> Todas las carreras </button>
                                         </li>
 
-                                        <li role="separator" class="divider"></li>
-                                        <li @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -2 }), 'Todas las Carreras excepto Psicologia e Ing. Civil')">
-                                            <button class="text-button">
-                                                Todas las carreras excepto Psicologia e Ing. Civil
-                                            </button>
-                                        </li>
+
                                         <!-- <optgroup label="Factultad"> -->
                                         <li role="separator" class="divider"></li>
                                         <li>
@@ -113,7 +108,6 @@
                                     <span v-if="!default_filter" @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -1 }), 'Todas las Carreras', true)" 
                                     aria-hidden="true" class="px-1" style="cursor: pointer; color: #ffffff">
                                     ×</span>
-                                </button>
                                 </span>
                             </div>
                             

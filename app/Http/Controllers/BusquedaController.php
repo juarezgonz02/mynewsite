@@ -129,14 +129,6 @@ class BusquedaController extends Controller
             // Todas las carreras 
             $proyectos = Proyecto::where('proyecto.nombre', 'like', '%'.$nombre.'%')->where('proyecto.estado', '=', '1')
             ->with(['carreras']);
-        }else if ($ncarrera == "-2"){
-            // Todas las carreras excepto psiclogia (id = 10) e ing. civil (id = 3)
-            $proyectos = Proyecto::select('proyecto.*')
-            ->leftJoin('proyectoxcarrera as pxc', 'proyecto.idProyecto', '=', 'pxc.idProyecto' )
-            ->where('proyecto.nombre', 'like', '%'.$nombre.'%')->where('proyecto.estado', '=', '1')
-            ->where('pxc.idCarrera', 'NOT =', '3')
-            ->where('pxc.idCarrera', 'NOT =', '10')
-            ->with(['carreras']);
         }else{
             $proyectos = Proyecto::rightJoin('proyectoxcarrera', 'proyecto.idProyecto', '=', 'proyectoxcarrera.idProyecto')
             ->leftJoin('carrera', 'carrera.idCarrera', '=', 'proyectoxcarrera.idCarrera')
