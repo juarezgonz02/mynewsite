@@ -55,7 +55,9 @@ class GoogleLoginController extends Controller
                 
             }
             else {
-
+                return response()->json([
+                    'message' => "Failing at google payload decoding",
+                ], 500); 
             }
             
         } catch (\Throwable $th) {
