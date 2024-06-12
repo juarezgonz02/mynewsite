@@ -1,11 +1,10 @@
 import {API_HOST} from '../../constants/endpoint.js';
-import {API_HOST_ASSETS} from '../../constants/endpoint.js';
 import Swal from 'sweetalert2';
 
 export default {
     data(){
         return{
-            ruta : API_HOST_ASSETS,
+            ruta : API_HOST,
             loading : 0,
             loadTable : false,
             user_email: '',
@@ -26,6 +25,9 @@ export default {
             id_proyecto : 0,  
             id_estudiante : 0,              
             modal_encargado : '',
+            modal_contraparte : '',
+            modal_perfil_estudiante : '',
+            modal_correo_encargado : '',
             modal_nombre : '',
             modal_desc : '',
             modal_correo : '',
@@ -75,7 +77,9 @@ export default {
             ordenandoPor: "recientes",
             selectedFilter: "",
             proyecto: "",
-            arrayFactultad: []
+            arrayFactultad: [],
+            default_filter: true,
+            filter_label: "Todas las carreras"
         }
     },
     computed:{
@@ -103,32 +107,9 @@ export default {
         }
     },
     methods:{
-        bindData(page){
-
-            let me = this;
-            me.loadTable = true;
-
-            var url = `${API_HOST}/todos_proyectos?page=${page}`;
-            me.getFacultadesCarrerasAndPerfils();
-            axios.get(`${API_HOST}/get_user`).then(function (response) {
-                me.user_email = response.data.correo;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-            axios.get(url).then(function (response) {
-                var respuesta = response.data;
-                me.arrayProyectos = respuesta.proyectos.data;
-                me.pagination = respuesta.pagination;
-                me.loadTable = false;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        },
         bindDataByFilters(page){
 
-            let me = this;
+            const me = this;
 
             me.loadTable = true;
             
@@ -156,95 +137,22 @@ export default {
                 console.log(error);
             });
         },
+        cambiarFiltro(filtro, label, default_filter = false) {
+            const me = this;
+            me.filtrandoPorCarrera = filtro;
+            me.filter_label = label;
+            me.default_filter = default_filter;
+            me.bindDataByFilters(0);
+
+        },
         cambiarPagina(page){
-            let me = this;
+            const me = this;
             me.pagination.current_page = page;
 
             me.bindDataByFilters(page);
             
         },
-        actualizarInsertarProyecto(){
-            if(this.validarProyecto()){
-                return;
-            }
-            let me = this;
-            if(!this.id_proyecto){
-                axios.post(`${API_HOST}/proyecto/insertar`, {
-                    'idProyecto' : this.id_proyecto,
-                    'nombre' : this.modal_nombre,
-                    'estado' : 1,
-                    'contraparte' : this.modal_contraparte,
-                    'cupos_act' : 0,
-                    'cupos' : this.modal_cupos,
-                    'descripcion' : this.modal_desc,
-                    'encargado' : this.modal_encargado,
-                    'fecha_inicio' : this.modal_fecha_in,
-                    'fecha_fin' : this.modal_fecha_fin,
-                    'horario' : this.modal_horario,
-                    'tipo_horas' : this.modal_tipo_horas,
-                    'correo_encargado' : this.modal_correo,
-                    'carreraPerfil' : this.arrayCarreraPerfil
-                }).then(function (response) {
-                    me.cerrarModal();
-                    me.bindDataByFilters();
-                }).catch(function (error) {
-                    console.log(error);
-                }); 
-            }
-            else{
-                axios.put(`${API_HOST}/proyecto/actualizar`, {
-                    'idProyecto' : this.id_proyecto,
-                    'nombre' : this.modal_nombre,
-                    'contraparte' : this.modal_contraparte,
-                    'cupos' : this.modal_cupos,
-                    'descripcion' : this.modal_desc,
-                    'encargado' : this.modal_encargado,
-                    'fecha_inicio' : this.modal_fecha_in,
-                    'fecha_fin' : this.modal_fecha_fin,
-                    'horario' : this.modal_horario,
-                    'tipo_horas' : this.modal_tipo_horas,
-                    'correo_encargado' : this.modal_correo,
-                    'carreraPerfil' : this.arrayCarreraPerfil
-                }).then(function (response) {
-                    me.cerrarModal();
-                    me.bindDataByFilters();
-                }).catch(function (error) {
-                    console.log(error);
-                }); 
-            }
-        },
-        enviarReunion(){
-            if(this.validarReunion()){
-                return;
-            }
-            let me = this;
-            if(this.id_proyecto){
-                axios.post(`${API_HOST}/sendMeetingMail`, {
-                    'nombre_proyecto' : this.proyecto,
-                    'descripcion' : this.modal_descripcion,
-                    'encargado' : this.modal_encargado,
-                    "encargado_correo": this.modal_correo,
-                    'estudiantes' : this.arrayEstudiantes.map(e => e.correoCompleto),
-                    'lugar' : this.modal_lugar ,
-                    'fecha' : this.modal_fecha ,
-                    'hora' : this.modal_hora 
-                }).then(function (response) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Correos enviados',
-                        text: 'Los correos con información de la reunión fue enviado exitosamente.',
-                    });
-                    me.cerrarModal();
-                }).catch(function (error) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Correos no enviados',
-                        text: 'Los correos con la información de la reunión no fue enviado. Intente nuevamente.',
-                    });
-                    console.log(error);
-                });
-            }
-        },
+        
         regexCorreo(correo){
             let re = new RegExp("^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$");
             return re.test(correo)
@@ -330,59 +238,6 @@ export default {
             this.flagErrorProyecto = true
             return true;
         },
-        validarReunion(){
-            this.errorProyecto = [];
-            this.flagError = false;
-            this.errorPerfilMsg = "";
-
-            if(!this.modal_fecha) {
-                this.errorProyecto.push(1);
-                this.errorDateMsg = "Debe seleccionar una fecha";
-            }
-            else this.errorProyecto.push(0);
-            if(!this.modal_hora) this.errorProyecto.push(1);
-            else this.errorProyecto.push(0);
-            if(!this.modal_lugar) this.errorProyecto.push(1);
-            else this.errorProyecto.push(0);
-
-            if(this.arrayEstudiantes.length == 0){
-                this.flagError = true
-                this.errorPerfilMsg = "El proyecto no tiene estudiantes inscritos"
-            }
-            
-            var tempFlag = false
-            if(this.errorProyecto.find(element => element > 0) == undefined){
-                tempFlag = true
-            }
-            if(tempFlag && !this.flagError){
-                //No hay errores
-                this.flagErrorProyecto = false
-                return false;
-            }
-            this.flagErrorProyecto = true;
-            return true;
-        },
-        estadoProyecto(){
-            let me = this;
-            if(me.modal_confirmar != me.modal_nombre){
-                me.flagErrorEstado = true
-                me.errorEstado = 1
-            }
-            else {
-                me.loading = 1
-                axios.put(`${API_HOST}/proyecto/estado`, {
-                    'idProyecto' : this.id_proyecto,
-                    'estado' : 0
-                }).then(function (response) {
-                    $('#statusModal').modal('hide');
-                    me.loading = 2;
-                    me.bindDataByFilters();
-                    me.cerrarModal();
-                }).catch(function (error) {
-                    console.log(error);
-                }); 
-            }
-        },
         cerrarModal(){
             if(this.modal == 1 || this.modal4 == 1){
                 this.modal = 0;
@@ -400,62 +255,6 @@ export default {
         abrirModal(modelo, data = [], flag){
             this.loading = 0
             switch (modelo) {
-                case "insertar":
-                    {
-                        this.modal = 1;
-                        this.add_edit_flag = 1;
-                        this.arrayCarreraPerfil = [[]];
-                        this.modal_nombre = '';
-                        this.modal_encargado = '';
-                        this.modal_cupos = ''
-                        this.modal_desc = '';
-                        this.modal_correo = '';
-                        this.modal_horario = '';
-                        this.modal_contraparte = '';
-                        this.modal_tipo_horas = '';
-                        this.contraparte = '';
-                        this.modal_fecha_in = '';
-                        this.modal_fecha_fin = '';
-                        this.errorProyecto = [];
-                        this.errorPerfilMsg = '';
-                        this.flagError = false;
-                        this.flagErrorProyecto = false;
-                        this.arrayCarreraPerfil = [[]];
-                        break;
-                    }
-                case "editar":
-                    {
-                        this.modal = 1;
-                        this.add_edit_flag = 2;
-                        this.id_proyecto = data.idProyecto;
-                        this.modal_encargado = data.encargado;
-                        this.modal_nombre = data.nombre;
-                        this.modal_desc = data.descripcion;
-                        this.modal_correo = data.correo_encargado;
-                        this.modal_tipo_horas = data.tipo_horas;
-                        this.modal_cupos = data.cupos;
-                        this.modal_horario = data.horario;
-                        this.modal_fecha_in = data.fecha_inicio;
-                        this.modal_fecha_fin = data.fecha_fin;
-                        this.modal_contraparte = data.contraparte;
-                        this.modal_createdAt = data.createdAt;
-                        this.flagError = false;
-                        this.flagErrorProyecto = false;
-                        this.errorPerfilMsg = "";
-                        this.arrayCarreraPerfil = [[]];
-                        this.updateCarrerasAndPerfil();
-                        break;
-                    }
-                case "estado":
-                    {
-                        this.modal2 = 1;
-                        this.id_proyecto = data.idProyecto;
-                        this.modal_nombre = data.nombre;
-                        this.errorEstado = 0;
-                        this.modal_confirmar = '';
-                        this.flagErrorEstado = false;
-                        break;
-                    }
                 case "estudiantes":
                     {
                         this.modal3 = 1;
@@ -493,6 +292,9 @@ export default {
                         this.modal5 = 1;
                         this.id_proyecto = data.idProyecto;
                         this.modal_encargado = data.encargado;
+                        this.modal_contraparte = data.contraparte;
+                        this.modal_perfil_estudiante = data.perfil_estudiante;
+                        this.modal_correo_encargado = data.correo_encargado;
                         this.modal_nombre = data.nombre;
                         this.modal_desc = data.descripcion;
                         this.modal_tipo_horas = data.tipo_horas;
@@ -507,7 +309,7 @@ export default {
             }
         },
         getFacultadesCarrerasAndPerfils(){
-            let me = this
+            const me = this
             axios.get(`${API_HOST}/carrera`).then(function (response) {
                 me.arrayCarrerasSin = response.data;
                 me.arrayCarreras = me.arrayCarrerasSin.slice();
@@ -526,9 +328,9 @@ export default {
                 console.log(error);
             });
         },
-        updateCarrerasAndPerfil(){
-            let me = this
-            axios.get(`${API_HOST}/proyectosxcarrera`, {
+        getCarrerasAndPerfil(){
+            const me = this
+            axios.get(`${API_HOST}/proyecto/carreras`, {
                 params:{
                     idProyecto: me.id_proyecto
                 }
@@ -555,8 +357,8 @@ export default {
             this.arrayCarreraPerfil.splice(index, 1)
         },
         getEstudiantes(){
-            let me = this;
-            axios.get(`${API_HOST}/estudiantesxproyecto`, {
+            const me = this;
+            axios.get(`${API_HOST}/proyecto/estudiantes`, {
                 params:{
                     idProyecto: me.id_proyecto
                 }
@@ -574,7 +376,7 @@ export default {
             .catch(function (error) {
                 console.log(error);
             });
-            axios.get(`${API_HOST}/cupos_actuales`, {
+            axios.get(`${API_HOST}/proyecto/cupos_actuales`, {
                 params:{
                     idProyecto: me.id_proyecto
                 }
@@ -586,9 +388,9 @@ export default {
             });
         },
         buscarEstudiante(){
-            let me = this
+            const me = this
             //this.errorActualizar = false
-            var url = `${API_HOST}/estudiante_por_carnet`
+            var url = `${API_HOST}/estudiante/carnet`
             axios.get(url, {
                 params:{
                     carnet: me.carnet
@@ -610,9 +412,9 @@ export default {
             });
         },
         aplicarPorAdmin(){
-            let me = this
+            const me = this
             me.loading = 1;
-            var url = `${API_HOST}/aplicarporadmin`
+            var url = `${API_HOST}/proyecto/estudiantes/add`
             axios.post(url, {
                 'idProyecto' : me.id_proyecto,
                 'idUser' : me.id_estudiante,
@@ -639,13 +441,13 @@ export default {
 
 
             // console.log("Aceptando o rechazando estudiante")
-            let me = this;
+            const me = this;
             me.loading = 1;
             // var estadoEst = 2;
             // Si la flag del modal Aceptar / Rechazar es verdadera, entonces se acepta al estudiante
             if(me.flagEstudiante == true){
                 // console.log("Aceptando estudiante")
-                axios.put(`${API_HOST}/aplicarestudiante`, {
+                axios.put(`${API_HOST}/proyecto/estudiantes/aceptar`, {
                 'idUser' : me.id_estudiante,
                 'idProyecto' : me.id_proyecto,
                 // 'estado' : estadoEst
@@ -665,7 +467,7 @@ export default {
             }
             else{
                 // console.log("Rechazando estudiante")
-            axios.put(`${API_HOST}/rechazarestudiante`, {
+            axios.put(`${API_HOST}/proyecto/estudiantes/rechazar`, {
                     'idUser' : me.id_estudiante,
                     'idProyecto' : me.id_proyecto,
                 }).then(function(){
@@ -710,7 +512,7 @@ export default {
             }
         },
         flagErrorEstado:function(){
-            console.log("Hola")
+            //console.log("Hola")
         }
     },
     mounted() {

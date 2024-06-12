@@ -285,9 +285,9 @@ class ProyectoController extends Controller
         'proyecto.correo_encargado','proyecto.contraparte')
         ->where('proyecto.estado','=','1')
         ->where('proyecto.estado_proyecto','=','En curso')
-        ->where('proyectoxcarrera.limite_inf', '<=', $user->idPerfil)
-        ->where('proyectoxcarrera.limite_sup', '>=', $user->idPerfil)
-        ->where('proyectoxcarrera.idCarrera', '=', $user->idCarrera)
+        ->where('proyectoxcarrera.limite_inf', '<=', $request->query('idPerfil'))
+        ->where('proyectoxcarrera.limite_sup', '>=', $request->query('idPerfil'))
+        ->where('proyectoxcarrera.idCarrera', '=', $request->query('idCarrera'))
         // ->where('proyecto.fecha_inicio', '>=', date('Y-m-d'))// Se mostraran los proyectos que aun no han iniciado deacuerdo a la fecha de consulta
         ->whereRaw('(proyectoxestudiante.idUser !=' . $user->idUser . ' OR proyectoxestudiante.idUser IS NULL)')
         ->whereRaw('proyecto.idProyecto NOT IN (SELECT p.idProyecto FROM proyecto p, proyectoxestudiante pe WHERE p.idProyecto = pe.idProyecto AND pe.idUser = ' . $user->idUser . ')')
@@ -378,8 +378,6 @@ class ProyectoController extends Controller
         if($ncarrera == "-1"){
             $proyectos = Proyecto::where('proyecto.nombre', 'like', '%'.$nombre.'%')->where('proyecto.estado', '=', '1')
             ->with(['carreras']);
-        }else if ($ncarrera == "-2"){
-            $proyectos = Proyecto::where('proyecto.nombre', 'like', '%'.$nombre.'%')->where('proyecto.estado', '=', '1')->with(['carreras']);
         }else{
             $proyectos = Proyecto::rightJoin('proyectoxcarrera', 'proyecto.idProyecto', '=', 'proyectoxcarrera.idProyecto')
             ->leftJoin('carrera', 'carrera.idCarrera', '=', 'proyectoxcarrera.idCarrera')

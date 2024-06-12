@@ -3,12 +3,9 @@
 ?>
 <div class="sidebar" style="height: 100%; top: 0;" id="sidebarMenu">
             <nav class="sidebar-nav">
-                <ul class="nav">
-                    <li class="nav-title">
-                        <span style="display: flex; flex-direction: column; justify-content: center; align-items: center">
-                            <img src="<?php echo $ruta; ?>/img/UCA.6b065e25.png" alt="uca" style="width: 41px; height: 55px;">
-                            <p style="font-family: 'Abel', sans-serif; font-size: 10px; color: white">Centro de Servicio Social</p>
-                        </span>
+                <ul class="nav" id="nav-toogler">
+                    <li @click='menu=0' class="nav-title">
+                           <img alt="uca" style="color: white, width: auto; height: 55px;" src="img/logotype_white.svg" />
                     </li>
                     <li @click='menu=0' class="nav-item">
                         <a style="font-family: 'Abel', sans-serif;" class="nav-link active" href="#"><i><img src="<?php echo $ruta; ?>/img/icons/calendar-week.svg" alt="proyectos"></i> Proyectos Disponibles</a>

@@ -108,7 +108,7 @@ class ProyectoController extends Controller
                 $arraycp = $request->carreraPerfil;
                 
                 if($request->aplicarTodasCarreras){
-                    $this->aplicarTodasCarrerasAlProyecto($proyecto->idProyecto);
+                    $this->aplicarTodasCarrerasAlProyecto($proyecto->idProyecto, $proyecto->p_lim_inf, $proyecto->p_lim_sup);
                 }
                 else{
                     for($i = 0; $i < count($arraycp); $i++){
@@ -128,14 +128,14 @@ class ProyectoController extends Controller
             return response()->json(['Crear Proyecto Fallo'=>$th->getMessage()], 400);
         }
     }
-    private function aplicarTodasCarrerasAlProyecto($idProyecto){
-        $carreras = Carrera::all();
+    private function aplicarTodasCarrerasAlProyecto($idProyecto, $lim_inf, $lim_sup){
+        $carreras = Carrera::where('estado', '=' ,1)->get();
         for($i = 0; $i < count($carreras); $i++){
             $pxc = new ProyectoxCarrera();
             $pxc->idProyecto = $idProyecto; 
             $pxc->idCarrera = $carreras[$i]->idCarrera;
-            $pxc->limite_inf = 1;
-            $pxc->limite_sup = 6;
+            $pxc->limite_inf = $lim_inf;
+            $pxc->limite_sup = $lim_sup;
             $pxc->save();
         }
     }
@@ -201,7 +201,7 @@ class ProyectoController extends Controller
                 
                 $arraycp = $request->carreraPerfil;
                 if($request->aplicarTodasCarreras){
-                    $this->aplicarTodasCarrerasAlProyecto($proyecto->idProyecto);                    
+                    $this->aplicarTodasCarrerasAlProyecto($proyecto->idProyecto, $request->p_lim_inf, $request->p_lim_sup);
                 }
                 else{
                     for($i = 0; $i < count($arraycp); $i++){

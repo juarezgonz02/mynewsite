@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h4 class="text-center">Estudiantes Registrados en el año {{ year }}</h4>
+        <h4 class="text-center">Estudiantes registrados en el año {{ year }}</h4>
         <apex-chart :chart-type="type" :chart-options="options" :chart-series="series"></apex-chart>
     </div>
 </template>

@@ -1,6 +1,6 @@
 <!--<template>
   <main class="main">
-    <div class="container-fluid">
+    <div class="container-fluid px-4">
       <div class="card">
         
         <table>
@@ -22,7 +22,7 @@
                 <li class="breadcrumb-item">Inicio</li>
                 <li class="breadcrumb-item active">Perfil</li>
             </ol>
-            <div class="container-fluid">
+            <div class="container-fluid px-4">
                 <!-- Ejemplo de tabla Listado -->
                 <div class="card">
                     <div class="card-header">
@@ -62,9 +62,9 @@
                             </tr>
                         </table>
                         <div class="editButtosContainer">
-                            <button class="button button1 w-[10]" id="editGradeButton" data-toggle="modal" data-target="#editGrade">Cambiar año de carrera</button>
+                            <button class="button button1 w-[8]" id="editGradeButton" data-toggle="modal" data-target="#editGrade">Cambiar año de carrera</button>
                         
-                            <button class="button button1 w-[10]" id="editCareerButton" data-toggle="modal" data-target="#editCareer">Cambiar carrera</button>
+                            <button class="button button1 w-[8]" id="editCareerButton" data-toggle="modal" data-target="#editCareer">Cambiar carrera</button>
                         </div>
                     </div>
 
@@ -128,7 +128,7 @@
             </div>
 
             <footer class="app-footer" id="footer" style="display: flex; flex-direction: column; justify-content: center; font-size: 15px; padding: 10px 0px">
-                <span><a target="_blank" href="http://www.uca.edu.sv/servicio-social/">Centro de Servicio Social | UCA</a> &copy; 2021</span>
+                <span><a target="_blank" href="http://www.uca.edu.sv/servicio-social/">Centro de Servicio Social | UCA</a> &copy; 2024</span>
                 <span>Desarrollado por <a href="#"></a>Grupo de Horas Sociales</span>
             </footer>
         </main>
@@ -158,7 +158,7 @@ import Swal from 'sweetalert2';
         },
         methods:{
             bindData(){
-                let me = this
+                const me = this
                 axios.get(`${API_HOST}/get_user`).then(function (response) {
                     me.user_id = response.data.idUser;
                     me.correo = response.data.correo;
@@ -171,7 +171,7 @@ import Swal from 'sweetalert2';
                     console.log(error);
                 });
 
-                axios.get(`${API_HOST}/mi_carrera`).then(function (response) {
+                axios.get(`${API_HOST}/estudiante`).then(function (response) {
                     var res = response.data[0];
                     me.carrera = res.nombre_c;
                     me.facultad = res.nombre_f;
@@ -325,9 +325,10 @@ import Swal from 'sweetalert2';
   margin: 4px 2px;
   cursor: pointer;
   flex: 1;
+  border-radius: 6px;
 }
 
-.button1 {background-color: #008CBA;}
+.button1 {background-color: #008CBA; }
 .button2 {background-color: #008CBA;}
 
 .editButtosContainer{
@@ -338,7 +339,6 @@ import Swal from 'sweetalert2';
 
 th, td{
     padding: 10px;
-    font-size: 1.2rem;
 }
 
 
@@ -353,9 +353,6 @@ th, td{
 }
 
 @media screen and (max-width: 991px) {
-    .breadcrumb {
-        margin-top: 55px;
-    }
 
     #sidebarMenu {
         margin-top: 55px;

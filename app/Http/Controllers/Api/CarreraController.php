@@ -13,7 +13,7 @@ class CarreraController extends Controller
      * Responde con todas las carreras de la tabla
      */
     public function getCarreras() {
-        $carreras = Carrera::orderBy('nombre')->get();
+        $carreras = Carrera::orderBy('nombre')->where('estado', '=', 1)->get();
         return response()->json($carreras);
     }
 
@@ -24,7 +24,8 @@ class CarreraController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function getCarrerasPorFacultad($idFacultad){
-        $carreras = Carrera::where('idFacultad', '=', $idFacultad)->get();
+        $carreras = Carrera::where('idFacultad', '=', $idFacultad)
+        ->where('estado', '=', 1)->get();
 
         return response()->json($carreras);
     }
@@ -36,7 +37,7 @@ class CarreraController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function getCarrerasYFacultades(){
-        $carreras = Carrera::get();
+        $carreras = Carrera::where('estado', '=', 1)->get();
         $facultades = Facultad::get();
 
         return [
@@ -45,5 +46,13 @@ class CarreraController extends Controller
                 'facultades' => $facultades
             ]
         ];
+    }
+
+    public function getCarrerasConFacultades(){
+        $carreras = Carrera::join('facultad', 'carrera.idFacultad', '=', 'facultad.idFacultad')
+            ->select('carrera.idCarrera', 'carrera.nombre as nombre_carrera', 'facultad.idFacultad', 'facultad.nombre as nombre_facultad')
+            ->where('estado', '=', 1)->get();
+
+        return $carreras;
     }
 }

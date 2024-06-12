@@ -311,16 +311,20 @@ class EstadisticasController extends Controller
 
         
         $estudiantes = $this->getGendersByFacultadCarrera($idFacultad, $idCarrera);
-        $arrayEstudiantesRegistradorPorMes = $this->parseObjectToArrayYear($this->getStudentsRegisteredByMonth($year), $year);
         $arrayEstudiantesPorCarrera = $this->getTotalStudentsGroupByCareer();
+        $arrayEstudiantesRegistradorPorMes = $this->parseObjectToArrayYear($this->getStudentsRegisteredByMonth($year), $year);
         $arrayProyectosRegistradosPorMes = $this->parseObjectToArrayYear($this->getProjectsRegisteredByMonth($year), $year);
-        
+        $arrayProyectosRegistradosPorAnio = $this->getProjectsRegisteredByYear();
+        $arrayEstudiantesRegistradorPorAnio = $this->getStudentsRegisteredByYear();
+
         return [
             'estudiantes' => $estudiantes,
             'estudiantesRegistradosPorMes' => $arrayEstudiantesRegistradorPorMes,
             'meses' => $this->getMonths($year),
             'estudiantesPorCarrera' => $arrayEstudiantesPorCarrera,
             'proyectosRegistradosPorMes' => $arrayProyectosRegistradosPorMes,
+            'proyectosRegistradosPorAnio' => $arrayProyectosRegistradosPorAnio,
+            'estudiantesRegistradosPorAnio' => $arrayEstudiantesRegistradorPorAnio,
         ];
     }
 
@@ -347,6 +351,7 @@ class EstadisticasController extends Controller
     }
 
     public function getProjectsRegisteredByMonth($year){
+        
         $projects = Proyecto::whereYear('created_at', '=', $year)
             ->get()
             ->groupBy(function($date) {
@@ -362,15 +367,11 @@ class EstadisticasController extends Controller
     }
     public function parseObjectToArrayYear($object, $year = null){
         $array = [];
-        for($i = 0; $i < 12; $i++){
-            if(array_key_exists($i, $object)){
+        for($i = 0; $i < 12; $i++){ // Corrección: cambiar $i de 0 a 1 y <= 12 en lugar de < 12
+            
+            $total = $object[$i+1] ?? 0; // Obtener el total del mes correspondiente
 
-                // push the value
-                $array[$i] = $object[$i];
-            }
-            else{
-                $array[$i] = 0;
-            }
+            $array[$i] = $total; // Asignar el total al mes correspondiente
         }
 
         if($year == date('Y')){
@@ -445,6 +446,40 @@ class EstadisticasController extends Controller
 
 
         return $careers;
+        }
+
+
+        public function getProjectsRegisteredByYear(){
+
+            $projects = Proyecto::get()
+                ->groupBy(function($date) {
+                    return $date->created_at->format('Y');
+                });
+            $projectsCount = [];
+                
+            
+            foreach ($projects as $key => $value) {
+                $projectsCount[(int)$key] = count($value);
+            }
+            return $projectsCount;
+        }
+
+
+        public function getStudentsRegisteredByYear(){
+
+            $students = User::where('estado', '=', 1)
+                ->where('idRol','=', 2)
+                ->get()
+                ->groupBy(function($date) {
+                    return $date->created_at->format('Y');
+                });
+            $studentsCount = [];
+                
+            
+            foreach ($students as $key => $value) {
+                $studentsCount[(int)$key] = count($value);
+            }
+            return $studentsCount;
         }
 
 }

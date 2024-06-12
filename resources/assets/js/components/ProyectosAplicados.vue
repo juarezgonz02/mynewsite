@@ -5,22 +5,22 @@
             <li class="breadcrumb-item">Inicio</li>
             <li class="breadcrumb-item active">Proyectos Aplicados</li>
         </ol>
-        <div class="container-fluid">
+        <div class="container-fluid px-4">
             <!-- Ejemplo de tabla Listado -->
             <div v-if="loadTable == true" class="card" style="border: none;">
                 <table-loader></table-loader>
             </div>
             <div v-else class="card" style="border: none;">
-                <div class="card-body">
-                    <table class="table table-bordered table-hover table-sm" style="font-size: 1.25em;">
+                <div class="card-body px-0 py-0">
+                    <table v-if="arrayProyectos.length > 0" class="table table-bordered table-hover table-sm">
                         <thead>
                             <tr>
-                                    <th style="text-align: center; width: 10%;">Contraparte</th>
-                                    <th style="text-align: center; width: 10%;">Proyecto</th>
-                                    <th style="text-align: center;" id="disappear">Perfil estudiante</th>
-                                    <th style="width: 10%; text-align: center;" id="disappear">Cupos</th>
-                                    <th style="width: 10%; text-align: center;">Estado</th>
-                                    <th style="width: 10%; text-align: center;">Acciones</th>
+                                <th style="text-align: center; width: 15%;">Contraparte</th>
+                                <th style="text-align: center; width: 25%;">Proyecto</th>
+                                <th style="text-align: center; width: 25%;" id="disappear">Perfil Estudiante</th>
+                                <th style="width: 10%; text-align: center;" id="disappear">Cupos</th>
+                                <th style="width: 10%; text-align: center;">Estado</th>
+                                <th style="width: 10%; text-align: center;">Cancelar aplicación</th>
                                 </tr>
                         </thead>
                         <tbody>
@@ -94,9 +94,10 @@
                                         <div
                                             style="display: flex; flex-direction: row; justify-content: center; margin: 0px 10px;">
                                             <button type="button" data-toggle="modal" data-target="#modal-eliminar"
-                                                @click="abrirModal('desaplicar', proyecto)" class="btn btn-warning "
+                                                @click="abrirModal('desaplicar', proyecto)" class="btn btn-danger "
                                                 style="border-radius: 5px;">
                                                 <i class="icon-trash"></i>
+                                                <span id="disappear">Desaplicar</span>
                                                 
                                             </button> &nbsp;
                                         </div>
@@ -105,12 +106,12 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div v-if="arrayProyectos.length === 0">
-                        <p style="color: red"> <b> No has aplicado a ningun proyecto </b> </p>
+                    <div v-else class="alert alert-warning" role="alert">
+                        No has aplicado a ningun proyecto
                     </div>
                 </div>
                 <div>
-                    <div style="margin: 0px 0px 0px 20px;" id="appear">
+                    <div id="appear">
                         <p> Estado de las solicitudes: </p>
                         <span class="badge badge-info" style="border-radius: 5px; margin: 0px 0.6em 0.6em 0px;">
                             <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem;">
@@ -153,13 +154,13 @@
             <div class="modal-dialog modal-primary modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" v-text="modal_nombre"></h4>
+                        <h5 class="modal-title" v-text="modal_nombre"></h5>
                         <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()" aria-label="Close">
-                            <span aria-hidden="true">×</span>
+                            <span aria-hidden="true" style="color: #ffffff">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <table class="table table-bordered table-sm" style="font-size: 1.35em; margin-top: 10px">
+                        <!-- <table class="table table-bordered table-sm">
                             <tbody>
                                 <tr>
                                     <th style="background-color: #dedede; width: 15%;">Contraparte</th>
@@ -194,6 +195,100 @@
                                     <td v-text="modal_encargado" style="padding-left: 16px;"></td>
                                 </tr>
                             </tbody>
+                        </table> -->
+                        <table class="table table-bordered table-sm" id="appear-table">
+                            <tbody>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede;">Contraparte</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="modal_contraparte" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede;">Perfil del estudiante</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="modal_perfil_estudiante" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede;">Tipo de horas</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="modal_tipo_horas" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede;">Cupos</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="`${modal_cupos_act}${'/'}${modal_cupos}`" style="padding-left: 12px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede;">Horario</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="modal_horario" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede;">Encargado</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="modal_encargado" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede;">Fecha inicial</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="modal_fecha_in" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede;">Fecha final</th>
+                                </tr>
+                                <tr>
+                                    <td v-text="modal_fecha_fin" style="padding-left: 12px;"></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+ 
+                        <table class="table table-bordered table-sm" id="disappear">
+                            <tbody>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 25%">Contraparte</th>
+                                    <td v-text="modal_contraparte" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 25%">Perfil del estudiante</th>
+                                    <td v-text="modal_perfil_estudiante" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 25%">Tipo de horas</th>
+                                    <td v-text="modal_tipo_horas" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 25%">Cupos</th>
+                                    <td v-text="`${modal_cupos_act}${'/'}${modal_cupos}`" style="padding-left: 12px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 25%">Horario</th>
+                                    <td v-text="modal_horario" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 25%">Encargado</th>
+                                    <td v-text="modal_encargado" style="padding-left: 12px;"></td>
+                                </tr>
+
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 25%">Fecha inicial</th>
+                                    <td v-text="modal_fecha_in" style="padding-left: 12px;"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 25%">Fecha final</th>
+                                    <td v-text="modal_fecha_fin" style="padding-left: 12px;"></td>
+                                </tr>
+
+                            </tbody>
                         </table>
                     </div>
                     <div class="modal-footer">
@@ -211,13 +306,13 @@
             <div class="modal-dialog modal-primary modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title" v-text="nombre"></h4>
+                        <h5 class="modal-title" v-text="nombre"></h5>
                         <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()" aria-label="Close">
-                            <span aria-hidden="true">×</span>
+                            <span aria-hidden="true" style="color: #ffffff">×</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <h2>¿Eliminar proyecto de su lista de aplicados?</h2>
+                        <h3>¿Eliminar proyecto de su lista de aplicados?</h3>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal"
@@ -234,7 +329,7 @@
         <footer class="app-footer" id="footer"
             style="display: flex; flex-direction: column; justify-content: center; font-size: 15px; padding: 10px 0px">
             <span><a target="_blank" href="http://www.uca.edu.sv/servicio-social/">Centro de Servicio Social | UCA</a>
-                &copy; 2021</span>
+                &copy; 2024</span>
             <span>Desarrollado por <a href="#"></a>Grupo de Horas Sociales</span>
         </footer>
     </main>
@@ -304,12 +399,12 @@ export default {
     },
     methods: {
         bindData(page) {
-            let me = this
+            const me = this
             me.loadTable = true;
-            var url = `${API_HOST}/proyectos_aplicados` /*?page=' + page*/;
+            var url = `${API_HOST}/proyecto/aplicado` /*?page=' + page*/;
             axios.get(url).then(function (response) {
                 me.arrayProyectos = response.data;
-                console.log(me.arrayProyectos)
+                //console.log(me.arrayProyectos)
                 me.loadTable = false;
             })
                 .catch(function (error) {
@@ -325,7 +420,7 @@ export default {
                 });
         },
         desAplicarProyecto() {
-            let me = this;
+            const me = this;
             axios.post(`${API_HOST}/proyecto/desaplicar`, {
                 'idProyecto': this.id_proyecto,
                 'idUser': this.user_id
@@ -380,7 +475,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 
 .main {
     font-family: "Abel", sans-serif;

@@ -5,7 +5,7 @@
                 <li class="breadcrumb-item">Inicio</li>
                 <li class="breadcrumb-item active">Administración de Estudiantes</li>
             </ol>
-            <div class="container-fluid">
+            <div class="container-fluid px-4">
                 <!-- Ejemplo de tabla Listado -->
                 <div class="card">
                     <div class="card-header">
@@ -31,10 +31,10 @@
                 <div class="card">
                     <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; ">
                             <div v-if="nombre_completo == ''">
-                                <h2 style="visibility:hidden; margin-bottom:0">Nada</h2>
+                                <p style="visibility:hidden; margin-bottom:0">Nada</p>
                             </div>
                             <div v-else>
-                                <h2 v-text="nombre_completo" style="margin-bottom:0"></h2>
+                                <p v-text="nombre_completo" style="margin-bottom:0"></p>
                             </div>
                             <div v-if="nombre_completo != ''">
                                 <!-- icon button  -->
@@ -120,7 +120,7 @@
                 </div>
             </div>
             <footer class="app-footer" id="footer" style="display: flex; flex-direction: column; justify-content: center; font-size: 15px; padding: 10px 0px">
-                <span><a target="_blank" href="http://www.uca.edu.sv/servicio-social/">Centro de Servicio Social | UCA</a> &copy; 2021</span>
+                <span><a target="_blank" href="http://www.uca.edu.sv/servicio-social/">Centro de Servicio Social | UCA</a> &copy; 2024</span>
                 <span>Desarrollado por <a href="#"></a>Grupo de Horas Sociales</span>
             </footer>
         </main>
@@ -159,7 +159,7 @@ import Swal from 'sweetalert2'
         },
         methods:{
             bindData(){
-                let me = this
+                const me = this
                 axios.get(`${API_HOST}/facultad`).then(function (response){
                     me.arrayFacultad = response.data
                 })
@@ -178,9 +178,9 @@ import Swal from 'sweetalert2'
                 });
             },
             buscarEstudiante(){
-                let me = this
+                const me = this
                 this.errorActualizar = false
-                var url = `${API_HOST}/estudiante_por_carnet`
+                var url = `${API_HOST}/estudiante/carnet`
                 axios.get(url, {
                     params:{
                         carnet: me.carnet
@@ -218,18 +218,18 @@ import Swal from 'sweetalert2'
                 return day + "/" + month + "/" + year;
             },
             getCarreras(flag){
-                let me = this
+                const me = this
                 if(flag) this.idCarrera = 0
                 else this.idCarrera = this.idCarreraAux
                 this.arrayCarreraFact = []
                 this.arrayCarrera.forEach(function(element){
                     if(element.idFacultad == me.idFacultad) me.arrayCarreraFact.push(element)
                 })
-                    console.log("Exec get carreras", flag)
-                    console.log(this.idCarrera)
+                    //console.log("Exec get carreras", flag)
+                    //console.log(this.idCarrera)
             },
             actualizarEstudiante(){
-                let me = this
+                const me = this
                 if(this.carnet == '' && this.idPerfil == 0){
                     this.errorActualizar = 2
                     return;
@@ -245,7 +245,7 @@ import Swal from 'sweetalert2'
                             'idPerfil' : this.idPerfil
                         }).then(function (response) {
                             me.errorActualizar = 1
-                            console.log(response)
+                            //console.log(response)
                             if(response.status == 200)
                             {
                                 Swal.fire({
@@ -278,7 +278,7 @@ import Swal from 'sweetalert2'
                     }
             },
             removerTimeOut(){
-                let me = this
+                const me = this
                 axios.patch(`${API_HOST}/estudiante/${me.idUser}/remover-timeout`, {
                 }).then(function (response) {
                     me.errorActualizar = 1
@@ -289,7 +289,7 @@ import Swal from 'sweetalert2'
                 });
             },
             getUserProyectos(){
-                let me = this
+                const me = this
                 axios.get(`${API_HOST}/estudiante/${me.idUser}/proyectos`, {
                 }).then(function (response) {
                     
@@ -302,7 +302,7 @@ import Swal from 'sweetalert2'
                     } 
                     else me.proyectoInscritoFlag = true
                     me.proyectoInscrito = response.data[0].nombre
-                    console.log(response.data)
+                    //console.log(response.data)
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -343,7 +343,7 @@ import Swal from 'sweetalert2'
         },
         watch:{
             idFacultad:function(val){
-                console.log("Facultad", val)
+                //console.log("Facultad", val)
                 this.getCarreras(val != this.idFacultadAux);
             }
         },
@@ -437,9 +437,6 @@ import Swal from 'sweetalert2'
 }
 
 @media screen and (max-width: 991px) {
-    .breadcrumb {
-        margin-top: 55px;
-    }
 
     #sidebarMenu {
         margin-top: 55px;

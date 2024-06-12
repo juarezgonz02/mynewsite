@@ -11,14 +11,14 @@
 </head>
 <body>
     <div style="color:black">
-        <p> Estimado/a {{ $user->encargado }}.</p>
+        <p> Estimado/a estudiante.</p>
         <p>
-            Un estudiante ha aplicado al proyecto de horas sociales a su cargo, {{ $user->nombre }}:<br>
-                Nombres: {{ $user->nombres }}.<br>
-                Apellidos: {{ $user->apellidos }}.<br>
-                Correo: {{ $user->correo }}<br>
-                Carrera: {{ $user->n_carrera }}.<br><br>
+            Lamentamos informarle ha sido removido del proyecto para horas sociales <b>{{ $data->proyecto }}</b>
+            <br>
+            Agradecemos su interés mostrado y le invitamos a formar parte de otros proyectos disponibles.
 
+            Puede revisar los proyectos disponibles para usted en el siguiente enlace: <br>
+            <a href="<?php echo $ruta; ?>"><?php echo $ruta; ?></a>
         </p><br>
         <p>
             Atentamente, Centro de Servicio Social.

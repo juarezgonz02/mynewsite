@@ -32,7 +32,12 @@ npm run watch
 ```
 En caso de que los cambios no se vean reflejados, presionar Ctrl+F5, esto recarga el sitio web sin cache.
 
-Finalmente el sitio será accesible en el siguiente link [http://uca-css.test/css-proyecto/public](http://uca-css.test/css-proyecto/public).
+En otra consola hacer: 
+```bash
+php artisan serve --port 80 
+```
+
+Finalmente el sitio será accesible en el siguiente link [http://localhost](http://localhost).
 
 ## Producción
 

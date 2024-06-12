@@ -21,13 +21,13 @@ Route::post('/registro', 'Api\ApiAuthController@registro');
 Route::post('/googleauth', 'Auth\GoogleLoginController@handleAPICallback');
 Route::post('/registrar_google', 'Auth\GoogleLoginController@registrar_api')->name('google.register_google');
 
-Route::post('/olvide-clave', 'Api\ApiAuthController@olvideClave' );
-Route::post('/cambiar-clave', 'Api\ApiAuthController@cambiarClave');
+Route::post('/forgottenPassword', 'Api\ApiAuthController@olvideClave' );
+Route::post('/updatePassword', 'Api\ApiAuthController@cambiarClave');
 
 
-Route::get('getFacultades', 'Api\FacultadController@getFacultades');
-Route::get('getCarreras', 'Api\CarreraController@getCarreras');
-Route::get('getCarrerasPorFacultad/{idFacultad}', 'Api\CarreraController@getCarrerasPorFacultad');
+Route::get('/getFacultades', 'Api\FacultadController@getFacultades');
+Route::get('/getCarreras', 'Api\CarreraController@getCarreras');
+Route::get('/getCarrerasPorFacultad/{idFacultad}', 'Api\CarreraController@getCarrerasPorFacultad');
 
 
 ////APP ENDPOINTS
@@ -43,8 +43,8 @@ Route::middleware(['auth:api', ])->group(function () {
     
     Route::post('/postAplicarProyecto', 'ProyectoxEstudianteController@aplicar');
     Route::post('/postDesaplicarProyecto', 'ProyectoxEstudianteController@deleteRow');
-    Route::put('/estudiante/actualizar/perfil', 'PerfilController@updateMyProfile');
-    Route::put('/estudiante/actualizar/carrera', 'PerfilController@updateMyCareer');
+    Route::put('/updateEstudiantePerfil', 'PerfilController@updateMyProfile');
+    Route::put('/updateEstudianteCarrera', 'PerfilController@updateMyCareer');
     
     // ADMIN ROUTES
     Route::middleware(['Administrador'])->group(function () {
@@ -61,8 +61,8 @@ Route::middleware(['auth:api', ])->group(function () {
             Route::post('/postApplyStudent', 'Api\ProyectoController@postApplyStudent');
 
             // REUNION 
-            Route::post('/sendMeetingMail', 'Api\ProyectoController@postSendMeetingEmails');           
-            
+            Route::post('/sendMeetingMail', 'Api\ProyectoController@postSendMeetingEmails');     
+
             // ESTUDIANTES
             Route::get('/getAllStudents', 'Api\EstudianteController@getAllStudents');
             Route::get('/getPerfiles', 'Api\EstudianteController@getPerfiles');

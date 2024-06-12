@@ -48,7 +48,7 @@
           })
         },
         error: function() {
-          console.log("No se ha seleccionado facultad");
+          //console.log("No se ha seleccionado facultad");
         }
       })
     }
