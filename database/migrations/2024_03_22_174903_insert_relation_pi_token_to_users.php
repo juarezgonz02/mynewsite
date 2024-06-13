@@ -25,6 +25,8 @@ class InsertRelationPiTokenToUsers extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('users_password_resets_tokens', function ($table) {
+            $table->dropForeign('users_password_resets_tokens_iduser_foreign');
+        });
     }
 }

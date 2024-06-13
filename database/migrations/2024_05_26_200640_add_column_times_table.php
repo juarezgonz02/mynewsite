@@ -27,6 +27,9 @@ class AddColumnTimesTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('carrera', function (Blueprint $table) {
+            $table->dropColumn('created_at');
+            $table->dropColumn('updated_at');
+        });
     }
 }
