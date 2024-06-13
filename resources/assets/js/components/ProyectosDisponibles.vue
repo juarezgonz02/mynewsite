@@ -265,9 +265,7 @@
             </div>
         </div>
 
-        </div>
-        <!-- Fin ejemplo de tabla Listado -->
-        </div>
+
         <!--Inicio del modal aplicar a proyecto-->
         <div class="modal fade" tabindex="-1" id="modal-aplicar" role="dialog" aria-labelledby="myModalLabel"
             aria-hidden="true">
@@ -296,20 +294,21 @@
                             se le notificará a usted por correo si ha sido aceptado o no para pasar al siguiente proceso
                             de aplicación.</p>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer" style="display: flex;justify-content: space-between;">
                         <div>
-
-                            <p style="font-size: 1.2em;">
-                                ¿Está seguro/a que desea aplicar a este proyecto?
-                            </p>
-                            <p>
-                                <b>{{ apply_name }}</b>
-                            </p>
+                            <span style="font-size: 1.2em;">
+                                ¿Está seguro/a que desea aplicar a este proyecto?<br/>
+                            </span>
+                            <span style="margin-left: 10px;">
+                               <b>{{ apply_name }}</b>
+                            </span>
                         </div>
 
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal"
-                            @click="aplicarProyecto()">Confirmar</button>
+                        <div>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                @click="aplicarProyecto()">Confirmar</button>
+                        </div>
                     </div>
                 </div>
                 <!-- /.modal-content -->
