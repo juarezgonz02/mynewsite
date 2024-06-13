@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; ">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; align-items: center; ">
                             <div v-if="nombre_completo == ''">
                                 <p style="visibility:hidden; margin-bottom:0">Nada</p>
                             </div>
@@ -38,7 +38,7 @@
                             </div>
                             <div v-if="nombre_completo != ''">
                                 <!-- icon button  -->
-                                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editarEstudiante" style="margin-right: 15px;" @click="toggleEditDisabled(!editDisabled)" >Editar</button>
+                                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editarEstudiante" style="margin-right: 15px; margin-top: 0px;" @click="toggleEditDisabled(!editDisabled)" >Editar</button>
                             </div>
                         
                     </div>
@@ -68,8 +68,35 @@
                                     <option v-for="perfil in arrayPerfil" :value="perfil.idPerfil" :key="perfil.idPerfil">{{perfil.perfil}}</option>
                                 </select>
                             </div>
-                            <!-- Hide timeout feature -->
-                            <div v-if="timeout" hide>
+                           
+                            <div class="form-group row" style="display: flex; flex-direction: column; margin-right: 30px;">
+                                <label for="perfil" class="form-control-label" v-if="proyectoInscritoFlag">Proyecto inscrito:</label>
+                                <label for="perfil" class="form-control-label" v-if="!proyectoInscritoFlag">No se encuentra inscrito en ningun proyecto</label>
+                                <!-- <input type="text" class="form-control" v-if="proyectoInscritoFlag" v-model="proyectoInscrito" style="margin-right: 20px;" readonly> -->
+                                 <ul v-if="proyectoInscritoFlag" v-text="proyectoInscrito" style="font-weight: 600;" styles="margin-right: 30px;"></ul>
+                            </div>
+                                <!-- <div class="form-group row">
+                                    <label for="perfil" class="label" style="font-weight: bold;" v-text="proyectoInscrito"></label>
+                                </div> -->
+                                <div class="form-group row" style="margin-right: 20px;"> 
+
+                                    <div v-if="!proyectoInscritoFlag" id="message" style="margin-bottom:10;" class="alert alert-info" role="alert">
+                                        No se encuentra inscrito en ningun proyecto.
+                                    </div>
+                                    <div v-if="errorActualizar == 1" id="message" style="margin-bottom:10" class="alert alert-success" role="alert">
+                                        Estudiante actualizado correctamente
+                                    </div>
+                                    <div v-else-if="errorActualizar == 2" id="message" style="margin-bottom:10" class="alert alert-danger" role="alert">
+                                        Busque un estudiante
+                                    </div>
+                                    <div v-else-if="errorActualizar == 3" id="message" style="margin-bottom:10" class="alert alert-danger" role="alert">
+                                        Seleccione una carrera
+                                    </div>
+                                    <div v-else style="visibility:hidden; margin-bottom:0"  class="alert row" role="alert">.</div>
+                                    </div>
+                              </div>
+                               <!-- Hide timeout feature -->
+                              <div v-if="timeout" hide>
 
                                 <div class="form-group row">
                                     <label for="perfil" class="form-control-label">Penalizado hasta:</label>
@@ -82,38 +109,7 @@
                                 <div>
                                 </div>
                             </div>
-                            <div style="display:flex; margin-inline:30px; padding:0; margin-top:30px;">
-                                <table class="table table-bordered m-0 p-0" v-if="proyectoInscritoFlag" >
-                                    <thead>
-                                        <tr>
-                                            <th>Proyecto inscrito</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td v-if="proyectoInscritoFlag" v-text="proyectoInscrito"></td>
-                                        </tr>
-                                    </tbody>            
-                                </table>
-                            </div>
-                                <!-- <div class="form-group row">
-                                    <label for="perfil" class="label" style="font-weight: bold;" v-text="proyectoInscrito"></label>
-                                </div> -->
-                            <div v-if="!proyectoInscritoFlag" id="message" style="margin-bottom:10" class="alert alert-info row" role="alert">
-                                No se encuentra inscrito en ningun proyecto.
-                            </div>
-                            <div v-if="errorActualizar == 1" id="message" style="margin-bottom:10" class="alert alert-success row" role="alert">
-                                Estudiante actualizado correctamente
-                            </div>
-                            <div v-else-if="errorActualizar == 2" id="message" style="margin-bottom:10" class="alert alert-danger row" role="alert">
-                                Busque un estudiante
-                            </div>
-                            <div v-else-if="errorActualizar == 3" id="message" style="margin-bottom:10" class="alert alert-danger row" role="alert">
-                                Seleccione una carrera
-                            </div>
-                            <div v-else style="visibility:hidden; margin-bottom:0"  class="alert row" role="alert">.</div>
                         </div>
-                    </div>
                     <div class="card-footer">
                         <button :disabled="editDisabled" type="button" class="btn btn-primary" @click ="actualizarEstudiante()">Confirmar</button>
                     </div>
