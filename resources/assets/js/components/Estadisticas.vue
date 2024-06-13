@@ -5,13 +5,13 @@
                 <li class="breadcrumb-item active">Estadisticas</li>
             </ol>
         <div class="container-dashboard">
-            <h1 style=" font-size: xx-large; margin-bottom: 2vh; margin-top: 5vh; font-weight: bold;">
+            <h1 style=" font-size: xx-large; margin-bottom: 2vh; margin-top: 5vh; font-weight: bold; margin-right: 8px; margin-left:8px;">
                 Estadísticas - Centro de Servicio Social</h1>
             <div
                 style="margin-bottom: 5vh; display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%;">
                 <h4>Aplicar Filtros</h4>
                 <div class="contenedor-flex">
-                    <label for="factultad" style="margin-right: 2vw; font-size: 1.6rem ;">Facultad</label>
+                    <label for="factultad" style="margin-right: 2vw; font-size: 1.6rem ;" class="facultad-label">Facultad</label>
                     <select class="form-control" id="factultad" name="factultad" v-model="idFacultadSeleccionada">
                         <option :value=0>Todas</option>
                         <option v-for="facultad in facultades" :value="facultad.idFacultad">{{ facultad.nombre }}
@@ -472,20 +472,6 @@ export default {
 
 }
 
-@media screen and (max-width: 768px) {
-    .dashboard {
-        grid-template-columns: 1fr;
-    }
-
-    .statistic {
-        margin-bottom: 5vh;
-    }
-    
-    .dashboard-2{
-        grid-template-columns: 1fr;
-    }
-}
-
 .statistic .text {
     font-size: 3.0rem;
     font-weight: bold;
@@ -503,8 +489,29 @@ export default {
     display: flex;
     align-items: baseline;
     justify-content: center;
-    gap: 20px;
+    
     width: 100%;
     padding-inline: 5vw;
 }
+
+@media screen and (max-width: 768px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .statistic {
+        margin-bottom: 5vh;
+    }
+    
+    .dashboard-2{
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+    .contenedor-flex {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+
 </style>
