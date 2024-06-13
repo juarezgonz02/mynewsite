@@ -251,7 +251,8 @@ input,
 select {
     display: block;
     margin: 10px 0;
-    width: 300px;
+    width: 100%;
+    max-width: 400px;
 
 }
 
