@@ -1,20 +1,3 @@
-<!--<template>
-  <main class="main">
-    <div class="container-fluid px-4">
-      <div class="card">
-        
-        <table>
-          <tr>
-            <th>Correo</th>
-            <td>aqui se escribe el Correo</td>
-          </tr>
-        </table>
-         <!--<img src="/public/img/recordatorio.ae2960e4.png" />
-      </div>
-    </div>
-  </main>
-</template>-->
-
 <template>
     <main class="main" style="background-color: white;">
             <!-- Breadcrumb -->
