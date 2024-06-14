@@ -142,6 +142,23 @@
 
 /* Fallback for Edge
   -------------------------------------------------- */
+@media screen and (max-width: 1024px) {
+  #form-container{
+    width: 50vw;
+  }
+
+}
+@media screen and (max-width: 695px) {
+  #form-container{
+    width: 80vw;
+  }
+}
+
+@media screen and (max-width: 436px) {
+  .card-group {
+    width: 90vw;
+  }
+}
 
 @supports (-ms-ime-align: auto) {
   .form-label-group > label {

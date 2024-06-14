@@ -100,15 +100,20 @@ background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   display: flex;
   justify-content: center;
 }
+@media screen and (max-width: 1024px) {
+  .card-group {
+    width: 50vw;
+  }
 
+}
 @media screen and (max-width: 695px) {
   .card-group {
-    width: 400px;
+    width: 80vw;
   }
 }
 
 @media screen and (max-width: 436px) {
   .card-group {
-    width: 300px;
+    width: 90vw;
   }
 }
