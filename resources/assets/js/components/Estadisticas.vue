@@ -5,13 +5,13 @@
                 <li class="breadcrumb-item active">Estadisticas</li>
             </ol>
         <div class="container-dashboard">
-            <h1 style=" font-size: xx-large; margin-bottom: 2vh; margin-top: 5vh; font-weight: bold; margin-right: 8px; margin-left:8px;">
+            <h1 style="font-weight: 700; font-size: x-large; margin: 1em">
                 Estadísticas - Centro de Servicio Social</h1>
             <div
-                style="margin-bottom: 5vh; display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%;">
-                <h4>Aplicar Filtros</h4>
+                style="margin-bottom: 2em; display: flex; flex-direction: column; align-items: center; gap: 12px 20px; width: 100%;">
+                <h5>Aplicar Filtros</h5>
                 <div class="contenedor-flex">
-                    <label for="factultad" style="margin-right: 2vw; font-size: 1.6rem ;" class="facultad-label">Facultad</label>
+                    <label for="factultad" style="margin-right: 1em; font-size: 1.2rem ;" class="facultad-label">Facultad</label>
                     <select class="form-control" id="factultad" name="factultad" v-model="idFacultadSeleccionada">
                         <option :value=0>Todas</option>
                         <option v-for="facultad in facultades" :value="facultad.idFacultad">{{ facultad.nombre }}
@@ -19,7 +19,7 @@
 
                     </select>
 
-                    <label for="carrera" style="margin-right: 2vw; margin-left: 2vw; font-size: 1.6rem">Carrera</label>
+                    <label for="carrera" style="margin-right: 1em; margin-left: 2vw; font-size: 1.2rem">Carrera</label>
                     <select class="form-control" id="carrera" name="carrera" v-model="idCarreraSeleccionada">
                         <option :value=0>Todas</option>
                         <option v-for="carrera in carrerasFacultad" :value="carrera.idCarrera">{{ carrera.nombre }}
@@ -407,11 +407,9 @@ export default {
 
     grid-template-columns: repeat(3, 1fr);
     width: 100%;
-    margin-bottom: 10vh;
     justify-content: center;
     align-items: center;
-    margin-top: 5vh;
-    margin-bottom: 5vh;
+    margin-top: 0.5em;
     padding: 0 5vw;
     gap: 2vw;
 
@@ -421,11 +419,10 @@ export default {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     width: 100%;
-    margin-bottom: 10vh;
+    margin-bottom: 2em;
     justify-content: center;
     align-items: center;
     margin-top: 5vh;
-    margin-bottom: 5vh;
     padding: 0 5vw;
     gap: 2vw;
 
@@ -509,7 +506,7 @@ export default {
     }
     .contenedor-flex {
         flex-direction: column;
-        gap: 20px;
+        gap: 12px 20px;
     }
 }
 
