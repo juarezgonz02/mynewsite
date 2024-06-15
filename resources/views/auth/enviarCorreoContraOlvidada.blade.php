@@ -45,12 +45,12 @@
           <h1>Cambiar contraseña</h1>
         </div>
         <div style="padding: 0 16px;">
-          <p>Por favor ingrese su carnet y se le enviará un Código de Verificación al correo asociado para poder realizar el cambio de contraseña. 
-          <b> <a style="color:red">Se puede realizar el cambio de contraseña una vez por día.</a> </b></p>
+          <p>Por favor ingrese su carnet y se le enviará un Código de Verificación al correo asociado para poder realizar el cambio de contraseña. </p>
+          <p> <b> <a style="color:red">Se puede realizar el cambio de contraseña una vez por día.</a> </b></p>
         </div>
 
         <div class="form-group mb-2" style="padding: 0 16px;">
-          <input type="text" class="form-control" name="carnet" value="{{ old('carnet') }}">
+          <input placeholder="Carnet" type="text" class="form-control" name="carnet" value="{{ old('carnet') }}">
           @if($errors->first('no_verificado'))
             {!!$errors->first('no_verificado','<span style="color:red">:message</span>')!!}
           @elseif($errors->first('carnet'))

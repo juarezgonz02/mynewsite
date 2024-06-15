@@ -4,11 +4,11 @@ Un proyecto de Laravel
 
 ## Instalación
 
-Antes de empezar, prepare su entorno local siguiendo los pasos de la seccion "Setup en Windows" del [Manual técnico](https://drive.google.com/file/d/1IZVgoWFxZt6QJlOz0aYdzYGASiSFe7nF/view?usp=sharing).
+Antes de empezar, prepare su entorno local siguiendo los pasos de la seccion "Instalación" del [Manual técnico](https://docs.google.com/document/d/1aGGLLClkp3PS_JLMKiS_XNteM25jJFu5/edit?usp=sharing&ouid=117573464062116534209&rtpof=true&sd=true).
 
 En la raíz del proyecto...
 
-Descargue el [.env](https://drive.google.com/file/d/1KDadONcbgew-xVdBYi7r-6hWYgwqy2Af/view?usp=sharing).
+Descargue el [.env](https://drive.google.com/file/d/1V10saHaWt1lYmSVnU9ZITT_ZGGQxakZA/view?usp=sharing).
 
 Acto seguido, ejecute los siguientes comandos:
 
