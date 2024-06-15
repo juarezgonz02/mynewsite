@@ -10,8 +10,8 @@
     <div style="color:black">
         <p> Estimado/a {{ $data->nombres }} {{ $data->apellidos }},</p>
         <p>
-            se le notifica que su solicitud para el siguiente proceso de aplicación al proyecto de horas sociales {{ $data->nombre }} 
-            <b style="color:red">ha sido rechazada.</b> <br>
+            se le notifica que su solicitud para el siguiente proceso de aplicación al proyecto de horas sociales: <br>
+            <span> {{ $data->nombre }} </span> <b style="color:red">ha sido rechazada.</b> <br>
         </p>
         <p>
             Si desea más información por favor ponerse en contácto con nosotros.

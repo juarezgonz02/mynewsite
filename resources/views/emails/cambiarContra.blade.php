@@ -12,7 +12,7 @@
 
         @if(isset($token))
             <p>
-                Se solicitó un cambio de contraseña debido a que fue olvidada, ingrese al siguiente enlace para restablecerla.
+                Se solicitó un cambio de contraseña, ingrese al siguiente enlace para restablecerla.
             </p>
             <p>
                Código de restablecimiento: <span style="color: red; font-size: 1.3em"> {!!$token!!} </span>.
