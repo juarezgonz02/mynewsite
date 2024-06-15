@@ -661,7 +661,8 @@
                                         <td v-text="estudiante.carrera"></td>
                                         <td>
                                             <div v-if="estudiante.estado == 0"
-                                                style="display: flex; flex-direction: row;">
+                                                id="estado-btns-container"
+                                                >
                                                 <button type="button" data-toggle="modal" data-target="#confirmModal"
                                                     @click="abrirModal('confirmacion', estudiante, true)"
                                                     class="btn btn-success btn-sm">
@@ -686,7 +687,9 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <div v-if="estudiante.estado == 1">
+                                            <div v-if="estudiante.estado == 1"
+                                                style="display: flex; flex-direction: row; justify-content: center; align-items: center;"
+                                            >
 
                                                 <button type="button" data-toggle="modal"
                                                     data-target="#removeStudentModal" @click="
@@ -1818,7 +1821,7 @@ export default {
             // Si la flag del modal Aceptar / Rechazar es verdadera, entonces se acepta al estudiante
             if (me.flagEstudiante == true) {
                 // console.log("Aceptando estudiante")
-                axios.put(`${API_HOST}/aplicarestudiante`, {
+                axios.put(`${API_HOST}/proyecto/estudiantes/aceptar`, {
                     'idUser': me.id_estudiante,
                     'idProyecto': me.id_proyecto,
                     // 'estado' : estadoEst
@@ -2153,6 +2156,11 @@ body {
     .btn-label {
         display: none;
     }
+
+    .modal-dialog {
+        min-width: 100%;
+        margin: 0px;
+    }
 }
 
 /* Ponelo por aqui lo del sidebar */
@@ -2160,8 +2168,27 @@ body {
     .btn-label {
         display: none;
     }
+    .modal-dialog {
+        max-width: 100%;
+        margin: auto;
+    }
 
+    #estado-btns-container {
+        display: flex;
+        flex-direction: column;
+    }
     
+}
+
+
+#estado-btns-container {
+    display: flex;
+    justify-content: center;
+}
+
+.modal-dialog {
+    max-width: 100%;
+    margin: auto;
 }
 
 @media screen and (max-width: 991px) {
@@ -2227,12 +2254,7 @@ body {
 
 }
 
-@media screen and (max-width: 450px) {
-    #student-button {
-        font-size: .5em;
-    }
 
-}
 
 @media screen and (max-width: 500px) {
     #disappear {

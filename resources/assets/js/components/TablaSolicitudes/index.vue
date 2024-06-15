@@ -243,7 +243,7 @@
                                         <td v-text="estudiante.carrera"></td>
                                         <td>
                                             <div v-if="estudiante.estado == 0"
-                                                style="display: flex; flex-direction: row;">
+                                                id="estado-btns-container">
                                                 <button type="button" data-toggle="modal" data-target="#confirmModal"
                                                     @click="abrirModal('confirmacion', estudiante, true)"
                                                     class="btn btn-success btn-sm">
