@@ -120,7 +120,7 @@
                             <th style="text-align: center; width: 30%;">Alumno</th>
                             <th style="text-align: center;">Proyecto</th>
                             <th style="text-align: center; width: 15%;">Carrera</th>
-                            <th id="disappear" style="text-align: center; width: 10%;">Cupos</th>
+                            <th class="disappear" style="text-align: center; width: 10%;">Cupos</th>
                             <th style="text-align: center; width: 10%;">Estudiantes</th>
                         </tr>
                     </thead>
@@ -132,7 +132,7 @@
                             <td v-text="solicitud.nombre" data-toggle="modal" data-target="#projectDetailModal"
                                 @click="abrirModal('info_proyecto', solicitud)"></td>
                             <td v-text="solicitud.carrera"></td>
-                            <td id="disappear" v-text="`${solicitud.cupos_act}${'/'}${solicitud.cupos}`"
+                            <td class="disappear" v-text="`${solicitud.cupos_act}${'/'}${solicitud.cupos}`"
                                 style="text-align: center;"></td>
                             <td id="icons-pos">
                                 <div class="button-container">
@@ -359,7 +359,7 @@
 
                             </tbody>
                         </table> -->
-                        <table class="table table-bordered table-sm" id="appear-table" style="margin-top: 10px">
+                        <table class="table table-bordered table-sm appear-table" style="margin-top: 10px">
                             <tbody>
                                 <tr>
                                     <th class="col-md-4" style="background-color: #dedede;">Contraparte</th>
@@ -420,7 +420,7 @@
                             </tbody>
                         </table>
  
-                        <table class="table table-bordered table-sm" id="disappear" style="margin-top: 10px">
+                        <table class="table table-bordered table-sm disappear" style="margin-top: 10px">
                             <tbody>
                                 <tr>
                                     <th class="col-md-4" style="background-color: #dedede; width: 15%">Contraparte</th>
@@ -486,7 +486,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <table class="table table-bordered table-sm" id="disappear">
+                        <table class="table table-bordered table-sm disappear">
                             <tbody>
                                 <tr>
                                     <th style="background-color: #dedede;">Correo</th>
@@ -508,7 +508,7 @@
                             </tbody>
                         </table>
                             
-                        <table class="table table-bordered table-sm" id="appear-table">
+                        <table class="table table-bordered table-sm appear-table">
                             <tbody>
                                 <tr>
                                     <th style="background-color: #dedede;">Correo</th>

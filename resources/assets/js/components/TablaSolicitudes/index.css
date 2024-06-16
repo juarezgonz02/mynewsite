@@ -72,7 +72,7 @@
     padding-left: 0;
 }
 
-#appear-table{
+.appear-table{
     display: none;
 }
    
@@ -144,11 +144,11 @@
 
 
 @media screen and (max-width: 500px) {
-#disappear{
+.disappear{
     display: none;
     }
 
-#appear-table{
+.appear-table{
     display: table;
     }
 

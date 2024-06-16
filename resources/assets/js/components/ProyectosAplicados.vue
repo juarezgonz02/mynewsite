@@ -17,8 +17,8 @@
                             <tr>
                                 <th style="text-align: center; width: 15%;">Contraparte</th>
                                 <th style="text-align: center; width: 25%;">Proyecto</th>
-                                <th style="text-align: center; width: 25%;" id="disappear">Perfil Estudiante</th>
-                                <th style="width: 10%; text-align: center;" id="disappear">Cupos</th>
+                                <th style="text-align: center; width: 25%;" class="disappear">Perfil Estudiante</th>
+                                <th style="width: 10%; text-align: center;" class="disappear">Cupos</th>
                                 <th style="width: 10%; text-align: center;">Estado</th>
                                 <th style="width: 10%; text-align: center;">Cancelar aplicación</th>
                                 </tr>
@@ -30,10 +30,10 @@
                                 <td v-text="proyecto.nombre" data-toggle="modal" data-target="#modal-info"
                                     @click="abrirModal('info', proyecto)"></td>
                                 <td v-text="proyecto.perfil_estudiante" data-toggle="modal" data-target="#modal-info"
-                                    @click="abrirModal('info', proyecto)" id="disappear"></td>
+                                    @click="abrirModal('info', proyecto)" class="disappear"></td>
                                 <td v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`" data-toggle="modal"
                                     data-target="#modal-info" @click="abrirModal('info', proyecto)"
-                                    style="text-align: center;" id="disappear"></td>
+                                    style="text-align: center;" class="disappear"></td>
                                 <td>
                                     <div v-if="proyecto.estadoPxe === 0" style="margin: 8px -9px 8px -5px;">
                                         <div
@@ -42,7 +42,7 @@
                                             <span  class="badge badge-info" style="border-radius: 5px;">
                                                 <p id="estadoap" style="display: inline; font-weight: 300; font-size: 1.0rem; ">
                                                     <i class="icon-clock"></i>
-                                                    <span id="disappear">SOLICITUD ENVIADA</span> 
+                                                    <span class="disappear">SOLICITUD ENVIADA</span> 
                                                 </p></span>
                                         </div>
                                     </div>
@@ -52,7 +52,7 @@
                                             <span class="badge badge-primary" style="border-radius: 5px;" @click="abrirModal('info', proyecto)">
                                                 <p id="estadoap" style="display: inline; font-weight: 300; font-size: 1.0rem; ">
                                                     <i class="icon-check"></i>
-                                                    <span id="disappear"> ACEPTADO </span>
+                                                    <span class="disappear"> ACEPTADO </span>
                                                 </p></span>
                                         </div>
                                     </div>
@@ -62,7 +62,7 @@
                                             <span  class="badge badge-danger" style="border-radius: 5px;">
                                                 <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem;">
                                                     <i class="icon-close"></i>
-                                                    <span id="disappear">RECHAZADO</span>
+                                                    <span class="disappear">RECHAZADO</span>
                                                 </p></span>                                            
                                         </div>
                                     </div>
@@ -72,7 +72,7 @@
                                             <span  class="badge badge-success" style="border-radius: 5px;">
                                                 <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem; ">
                                                     <i class="icon-folder"></i>
-                                                    <span id="disappear">PROYECTO FINALIZADO</span>
+                                                    <span class="disappear">PROYECTO FINALIZADO</span>
                                                 </p></span>
                                         </div>
                                     </div>
@@ -83,7 +83,7 @@
                                             <span  class="badge badge-danger" style="border-radius: 5px;">
                                                 <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem; ">
                                                     <i class="icon-info"></i>
-                                                    <span id="disappear">PROYECTO CANCELADO</span>
+                                                    <span class="disappear">PROYECTO CANCELADO</span>
                                                 </p></span>
                                         </div>
                                     </div>
@@ -97,7 +97,7 @@
                                                 @click="abrirModal('desaplicar', proyecto)" class="btn btn-danger "
                                                 style="border-radius: 5px;">
                                                 <i class="icon-trash"></i>
-                                                <span id="disappear">Desaplicar</span>
+                                                <span class="disappear">Desaplicar</span>
                                                 
                                             </button> &nbsp;
                                         </div>
@@ -111,7 +111,7 @@
                     </div>
                 </div>
                 <div>
-                    <div id="appear">
+                    <div class="appear">
                         <p> Estado de las solicitudes: </p>
                         <span class="badge badge-info" style="border-radius: 5px; margin: 0px 0.6em 0.6em 0px;">
                             <p id="estadorp" style="display: inline; font-weight: 300; font-size: 1.0rem;">
@@ -160,43 +160,8 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <!-- <table class="table table-bordered table-sm">
-                            <tbody>
-                                <tr>
-                                    <th style="background-color: #dedede; width: 15%;">Contraparte</th>
-                                    <td v-text="modal_contraparte" style="padding-left: 16px;"></td>
-                                </tr>
-                                <tr>
-                                    <th style="background-color: #dedede; width: 15%;">Perfil Estudiante</th>
-                                    <td v-text="modal_perfil_estudiante" style="padding-left: 16px;"></td>
-                                </tr>
-                                <tr>
-                                    <th style="background-color: #dedede; width: 15%;">Tipo</th>
-                                    <td v-text="modal_tipo_horas" style="padding-left: 16px;"></td>
-                                </tr>
-                                <tr>
-                                    <th style="background-color: #dedede; width: 15%;">Cupos</th>
-                                    <td v-text="`${modal_cupos_act}${'/'}${modal_cupos}`" style="padding-left: 16px;"></td>
-                                </tr>
-                                <tr>
-                                    <th style="background-color: #dedede; width: 15%;">Horario</th>
-                                    <td v-text="modal_horario" style="padding-left: 16px;"></td>
-                                </tr>
-                                <tr>
-                                    <th style="background-color: #dedede; width: 15%;">Inicio</th>
-                                    <td v-text="modal_fecha_in" style="padding-left: 16px;"></td>
-                                </tr>
-                                <tr>
-                                    <th style="background-color: #dedede; width: 15%;">Fin</th>
-                                    <td v-text="modal_fecha_fin" style="padding-left: 16px;"></td>
-                                </tr>
-                                <tr>
-                                    <th style="background-color: #dedede; width: 15%;">Encargado</th>
-                                    <td v-text="modal_encargado" style="padding-left: 16px;"></td>
-                                </tr>
-                            </tbody>
-                        </table> -->
-                        <table class="table table-bordered table-sm" id="appear-table">
+    
+                        <table class="table table-bordered table-sm appear-table">
                             <tbody>
                                 <tr>
                                     <th class="col-md-4" style="background-color: #dedede;">Contraparte</th>
@@ -251,7 +216,7 @@
                             </tbody>
                         </table>
  
-                        <table class="table table-bordered table-sm" id="disappear">
+                        <table class="table table-bordered table-sm disappear">
                             <tbody>
                                 <tr>
                                     <th class="col-md-4" style="background-color: #dedede; width: 25%">Contraparte</th>
@@ -489,7 +454,10 @@ export default {
     width: 100% !important;
     position: absolute !important;
 }
-#appear {
+.appear {
+        display: none;
+}
+.appear-table {
         display: none;
 }
 .mostrar  {
@@ -511,11 +479,14 @@ export default {
 }
 
 @media screen and (max-width: 500px) {
-    #disappear {
+    .disappear {
         display: none;
     }
-    #appear {
+    .appear {
         display: block;
+    }
+    .appear-table {
+        display: table;
     }
 
 }

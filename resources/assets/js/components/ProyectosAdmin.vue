@@ -149,9 +149,9 @@
                             <tr>
                                 <th style="text-align: center; width: 15%;">Contraparte</th>
                                 <th style="text-align: center; width: 25%;">Proyecto</th>
-                                <th style="text-align: center; width: 20%;" id="disappear">Perfil estudiante</th>
+                                <th style="text-align: center; width: 20%;" class="disappear">Perfil estudiante</th>
                                 <th style="text-align: center; width: 10%;">Estado del proyecto</th>
-                                <th style="width: 10%; text-align: center;" id="disappear">Cupos</th>
+                                <th style="width: 10%; text-align: center;" class="disappear">Cupos</th>
                                 <th style="width: 10%; text-align: center;">Acciones</th>
                             </tr>
                         </thead>
@@ -163,12 +163,12 @@
                                     data-target="#projectDetailModal" @click="abrirModal('info', proyecto)"></td>
                                 <td id="pos" v-text="proyecto.nombre" data-toggle="modal"
                                     data-target="#projectDetailModal" @click="abrirModal('info', proyecto)"></td>
-                                <td id="disappear" v-text="proyecto.perfil_estudiante" data-toggle="modal"
+                                <td class="disappear" v-text="proyecto.perfil_estudiante" data-toggle="modal"
                                     data-target="#projectDetailModal" @click="abrirModal('info', proyecto)"></td>
                                 <td v-text="proyecto.estado_proyecto" data-toggle="modal"
                                     data-target="#projectDetailModal" @click="abrirModal('info', proyecto)"
                                     style="text-align: center;"></td>
-                                <td id="disappear" v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`"
+                                <td class="disappear" v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`"
                                     data-toggle="modal" data-target="#projectDetailModal"
                                     @click="abrirModal('info', proyecto)" style="text-align: center;"></td>
                                 <td id="icons-pos">
@@ -484,7 +484,7 @@
                                         </tbody>
                                     </table>
 
-                                    <table id="appear-table" class="table-sm table-borderless">
+                                    <table class="table-sm table-borderless appear-table">
                                         <thead>
                                             <td>
                                                 <th>Carrera/Rango</th>
@@ -537,7 +537,7 @@
                                         </tbody>
                                     </table>
 
-                                    <table id="disappear" class="table-sm table-borderless">
+                                    <table class="table-sm table-borderless disappear">
                                         <thead>
                                             <tr>
                                                 <th>Carrera</th>
@@ -815,7 +815,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <table class="table table-bordered table-sm" id="appear-table">
+                        <table class="table table-bordered table-sm appear-table">
                             <tbody>
                                 <tr>
                                     <th class="col-md-4" style="background-color: #dedede;">Contraparte</th>
@@ -876,7 +876,7 @@
                             </tbody>
                         </table>
 
-                        <table class="table table-bordered table-sm" id="disappear">
+                        <table class="table table-bordered table-sm disappear">
                             <tbody>
                                 <tr>
                                     <th class="col-md-4" style="background-color: #dedede; width: 15%">Contraparte</th>
@@ -2200,11 +2200,8 @@ body {
     padding: 5px;
 }
 
-#appear {
-    display: none;
-}
 
-#appear-table {
+.appear-table {
     display: none;
 }
 
@@ -2271,6 +2268,8 @@ body {
         display: flex;
         flex-direction: column;
         align-items: center;
+        flex-direction: row;
+        flex-wrap: wrap;
         gap: 1em;
     }
 
@@ -2319,15 +2318,11 @@ body {
 
 
 @media screen and (max-width: 500px) {
-    #disappear {
+    .disappear {
         display: none;
     }
 
-    #appear {
-        display: block;
-    }
-
-    #appear-table {
+    .appear-table {
         display: table;
     }
 }
