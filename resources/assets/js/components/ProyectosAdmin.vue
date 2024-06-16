@@ -112,13 +112,15 @@
                                 <div style="width: 75px">
                                     <span> Mostrando: </span>
                                 </div>
-                                
-                                <span class="d-flex align-items-center badge badge-pill badge-light py-2 f-8em" style="line-height: 0; color: white; background-color: #003C71">
+
+                                <span class="d-flex align-items-center badge badge-pill badge-light py-2 f-8em"
+                                    style="line-height: 0; color: white; background-color: #003C71">
                                     <span>
-                                        {{ (filter_label).substring(0, 48) }} 
+                                        {{ (filter_label).substring(0, 48) }}
                                     </span>
-                                    <span v-if="!default_filter" class="px-1" @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -1 }), ' Todas las carreras', true)" 
-                                        aria-hidden="true"style="cursor: pointer; color: #ffffff">
+                                    <span v-if="!default_filter" class="px-1"
+                                        @click="cambiarFiltro(JSON.stringify({ por: 'carrera', id: -1 }), ' Todas las carreras', true)"
+                                        aria-hidden="true" style="cursor: pointer; color: #ffffff">
                                         ×
                                     </span>
                                 </span>
@@ -127,12 +129,14 @@
                                 <div style="width: 75px">
                                     <span> Ordenar por: </span>
                                 </div>
-                                <span class="d-flex align-items-center badge badge-pill badge-light py-2 f-8em" style="line-height: 0; color: white; background-color: #003C71">
-                                    <span> 
-                                        {{ order_label }} 
+                                <span class="d-flex align-items-center badge badge-pill badge-light py-2 f-8em"
+                                    style="line-height: 0; color: white; background-color: #003C71">
+                                    <span>
+                                        {{ order_label }}
                                     </span>
-                                    <span v-if="!default_order" class="px-1" @click="cambiarOrden('recientes', 'Reciente', true)" 
-                                        aria-hidden="true" style="cursor: pointer; color: #ffffff">×</span>
+                                    <span v-if="!default_order" class="px-1"
+                                        @click="cambiarOrden('recientes', 'Reciente', true)" aria-hidden="true"
+                                        style="cursor: pointer; color: #ffffff">×</span>
 
                                 </span>
                             </div>
@@ -164,9 +168,9 @@
                                 <td v-text="proyecto.estado_proyecto" data-toggle="modal"
                                     data-target="#projectDetailModal" @click="abrirModal('info', proyecto)"
                                     style="text-align: center;"></td>
-                                <td id="disappear" v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`" data-toggle="modal"
-                                    data-target="#projectDetailModal" @click="abrirModal('info', proyecto)"
-                                    style="text-align: center;"></td>
+                                <td id="disappear" v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`"
+                                    data-toggle="modal" data-target="#projectDetailModal"
+                                    @click="abrirModal('info', proyecto)" style="text-align: center;"></td>
                                 <td id="icons-pos">
                                     <div class="button-container">
                                         <button type="button" @click="abrirModal('editar', proyecto)"
@@ -246,11 +250,11 @@
             <div class="modal-dialog modal-primary modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <div v-if="add_edit_flag = 1">
+                        <div v-if="add_edit_flag == 1">
                             <h5 class="modal-title">Insertar nuevo proyecto</h5>
                         </div>
-                        <div v-else-if="add_edit_flag = 2">
-                            <h5 class="modal-title">Editar proyecto existente</h5>
+                        <div v-else>
+                            <h5 class="modal-title">Editar proyecto</h5>
                         </div>
 
                         <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()"
@@ -410,7 +414,7 @@
 
 
                             <div class="form-group row div-form">
-                                
+
                                 <label class="col-md-3 form-control-label" for="text-input"></label>
                                 <div class="col-md-9" v-show='flagTodasLasCarreras == "1"'>
                                     <th style="padding: 0.3rem"> Rango de año para todas las carreras</th>
@@ -436,18 +440,19 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    
+
                                 </div>
-                                </div>
-                                
-                                <div class="form-group row div-form">
-                                
+                            </div>
+
+                            <div class="form-group row div-form">
+
                                 <div class="col-md-11 mx-auto" v-show='flagTodasLasCarreras == "2"'>
-                                    
+
                                     <div class="form-button-container">
                                         <div>
                                             <button type="button" @click="agregarTodasLasCarreras()"
-                                                class="btn btn-outline-info mb-2 mr-4"><i class="icon-plus"></i> Seleccionar
+                                                class="btn btn-outline-info mb-2 mr-4"><i class="icon-plus"></i>
+                                                Seleccionar
                                                 todas las carreras</button>
                                             <button type="button" @click="eliminarTodasLasCarreras()"
                                                 class="btn btn-outline-danger mb-2"><i class="icon-trash"></i> Limpiar
@@ -479,7 +484,60 @@
                                         </tbody>
                                     </table>
 
-                                    <table class="table-sm table-borderless">
+                                    <table id="appear-table" class="table-sm table-borderless">
+                                        <thead>
+                                            <td>
+                                                <th>Carrera/Rango</th>
+                                            </td>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(acp, index) in arrayCarreraPerfil" :key="acp.id">
+                                                <td >
+                                                    <div class="d-flex flex-column mb-4" style="gap: 0.5rem">
+                                                        <div>
+                                                            <select class="form-control custom-select" v-model="acp[0]">
+                                                                <option v-for="carrera in arrayCarrerasSelector"
+                                                                    :value="carrera.idCarrera" :key="carrera.idCarrera">
+                                                                    {{ carrera.nombre }}</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="d-flex" style="gap: 1rem">
+                                                            <select class="form-control custom-select" v-model="acp[1]">
+                                                                <option v-for="perfil in arrayPerfiles" :value="perfil.idPerfil"
+                                                                    :key="perfil.idPerfil">{{ perfil.perfil }}</option>
+                                                            </select>
+ 
+                                                            <select class="form-control custom-select" v-model="acp[2]">
+                                                                <option v-for="perfil in arrayPerfiles" :value="perfil.idPerfil"
+                                                                    :key="perfil.idPerfil">{{ perfil.perfil }}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                
+                                                <td>
+                                                    <div class="mb-4"> 
+                                                        <button type="button" class="close" @click="eliminarACP(acp)" style="float: none"
+                                                        aria-label="Close">
+                                                            <span aria-hidden="true" style="color: #000000">×</span>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    <button id="agregarCP" :disabled="disabledBotonAgregarCarrera()"
+                                                        type="button" @click="agregarACP()"
+                                                        class="btn btn-primary mb-2"><i class="icon-plus"></i>
+                                                        Agregar</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <table id="disappear" class="table-sm table-borderless">
                                         <thead>
                                             <tr>
                                                 <th>Carrera</th>
@@ -516,13 +574,15 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <button id="agregarCP" :disabled="disabledBotonAgregarCarrera()" type="button"
-                                                    @click="agregarACP()" class="btn btn-primary mb-2"><i class="icon-plus"></i>
-                                                    Agregar</button>
+                                                    <button id="agregarCP" :disabled="disabledBotonAgregarCarrera()"
+                                                        type="button" @click="agregarACP()"
+                                                        class="btn btn-primary mb-2"><i class="icon-plus"></i>
+                                                        Agregar</button>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
+
                                     <div v-if="flagError">
                                         <P class="show error">{{ errorPerfilMsg }}</P>
                                     </div>
@@ -554,7 +614,7 @@
             <div v-if="loading == 0" class="modal-dialog modal-primary modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Cambiar estado al proyecto {{ modal_nombre }}</h5>
+                        <h5 class="modal-title">Cambiar estado del proyecto</h5>
                         <button type="button" data-dismiss="modal" class="close" @click="cerrarModal()"
                             aria-label="Close">
                             <span aria-hidden="true" style="color: #ffffff">×</span>
@@ -660,9 +720,7 @@
                                         <td v-text="estudiante.perfil"></td>
                                         <td v-text="estudiante.carrera"></td>
                                         <td>
-                                            <div v-if="estudiante.estado == 0"
-                                                id="estado-btns-container"
-                                                >
+                                            <div v-if="estudiante.estado == 0" id="estado-btns-container">
                                                 <button type="button" data-toggle="modal" data-target="#confirmModal"
                                                     @click="abrirModal('confirmacion', estudiante, true)"
                                                     class="btn btn-success btn-sm">
@@ -688,14 +746,12 @@
                                         </td>
                                         <td>
                                             <div v-if="estudiante.estado == 1"
-                                                style="display: flex; flex-direction: row; justify-content: center; align-items: center;"
-                                            >
+                                                style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
 
                                                 <button type="button" data-toggle="modal"
-                                                    data-target="#removeStudentModal" @click="
-                abrirModal('remover_estudiante', estudiante)
-
-                " class="btn btn-danger btn-sm">
+                                                    data-target="#removeStudentModal" 
+                                                    @click="abrirModal('remover_estudiante', estudiante)"
+                                                    class="btn btn-danger btn-sm">
                                                     Remover
                                                 </button> &nbsp;
                                             </div>
@@ -819,7 +875,7 @@
 
                             </tbody>
                         </table>
- 
+
                         <table class="table table-bordered table-sm" id="disappear">
                             <tbody>
                                 <tr>
@@ -827,11 +883,13 @@
                                     <td v-text="modal_contraparte" style="padding-left: 12px;"></td>
                                 </tr>
                                 <tr>
-                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Perfil del estudiante</th>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Perfil del
+                                        estudiante</th>
                                     <td v-text="modal_perfil_estudiante" style="padding-left: 12px;"></td>
                                 </tr>
                                 <tr>
-                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Tipo de horas</th>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Tipo de horas
+                                    </th>
                                     <td v-text="modal_tipo_horas" style="padding-left: 12px;"></td>
                                 </tr>
                                 <tr>
@@ -848,11 +906,13 @@
                                     <td v-text="modal_encargado" style="padding-left: 12px;"></td>
                                 </tr>
                                 <tr>
-                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Correo encargado</th>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Correo encargado
+                                    </th>
                                     <td v-text="modal_correo" style="padding-left: 12px;"></td>
                                 </tr>
                                 <tr>
-                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Fecha inicial</th>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 15%">Fecha inicial
+                                    </th>
                                     <td v-text="modal_fecha_in" style="padding-left: 12px;"></td>
                                 </tr>
                                 <tr>
@@ -878,7 +938,7 @@
             <div class="modal-dialog modal-primary modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <div v-if="add_edit_flag = 1">
+                        <div>
                             <h5 class="modal-title">Programar reunión</h5>
                         </div>
                         <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()"
@@ -1270,8 +1330,8 @@ export default {
                     'correo_encargado': this.modal_correo,
                     'carreraPerfil': this.arrayCarreraPerfil,
                     'aplicarTodasCarreras': this.flagTodasLasCarreras === '1' ? true : false,
-                    'p_lim_inf':this.create_lim_inf,
-                    'p_lim_sup':this.create_lim_sup
+                    'p_lim_inf': this.create_lim_inf,
+                    'p_lim_sup': this.create_lim_sup
                 }).then(function (response) {
                     me.cerrarModal();
                     if (response.status == 200) {
@@ -1534,8 +1594,8 @@ export default {
             switch (modelo) {
                 case "insertar":
                     {
-                        this.modal = 1;
                         this.add_edit_flag = 1;
+                        this.modal = 1;
                         this.modal_nombre = '';
                         this.modal_encargado = '';
                         this.modal_cupos = ''
@@ -1559,8 +1619,8 @@ export default {
                     }
                 case "editar":
                     {
-                        this.modal = 1;
                         this.add_edit_flag = 2;
+                        this.modal = 1;
                         this.id_proyecto = data.idProyecto;
                         this.modal_encargado = data.encargado;
                         this.modal_nombre = data.nombre;
@@ -2148,9 +2208,10 @@ body {
     display: none;
 }
 
-.f-8em{
+.f-8em {
     font-size: 14px;
-    font-weight: normal;}
+    font-weight: normal;
+}
 
 @media screen and (max-width: 450px) {
     .btn-label {
@@ -2158,8 +2219,8 @@ body {
     }
 
     .modal-dialog {
-        min-width: 100%;
-        margin: 0px;
+        min-width: 95%;
+        margin: 20px 0px;
     }
 }
 
@@ -2168,16 +2229,17 @@ body {
     .btn-label {
         display: none;
     }
+
     .modal-dialog {
-        max-width: 100%;
-        margin: auto;
+        max-width: 95%;
+        margin: 20px auto;
     }
 
     #estado-btns-container {
         display: flex;
         flex-direction: column;
     }
-    
+
 }
 
 
@@ -2186,10 +2248,10 @@ body {
     justify-content: center;
 }
 
-.modal-dialog {
-    max-width: 100%;
-    margin: auto;
-}
+// .modal-dialog {
+//     max-width: 100%;
+//     margin: auto;
+// }
 
 @media screen and (max-width: 991px) {
 
@@ -2260,9 +2322,11 @@ body {
     #disappear {
         display: none;
     }
+
     #appear {
         display: block;
     }
+
     #appear-table {
         display: table;
     }
