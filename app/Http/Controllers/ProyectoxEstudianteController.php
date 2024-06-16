@@ -136,7 +136,7 @@ class ProyectoxEstudianteController extends Controller{
 
             $mailData = User::join('proyectoxestudiante', 'users.idUser', '=', 'proyectoxestudiante.idUser')
                 ->join('proyecto', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
-                ->select('users.nombres', 'users.apellidos', 'users.correo','proyecto.encargado','proyecto.nombre')
+                ->select('users.nombres', 'users.apellidos', 'users.correo','proyecto.encargado','proyecto.nombre', 'proyecto.correo_encargado')
                 ->where('proyectoxestudiante.idUser', '=', $idUser)
                 ->where('proyectoxestudiante.idProyecto', '=', $idProyecto)
                 ->first();
