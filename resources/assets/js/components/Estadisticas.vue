@@ -5,27 +5,35 @@
                 <li class="breadcrumb-item active">Estadisticas</li>
             </ol>
         <div class="container-dashboard">
-            <h1 style="font-weight: 700; font-size: x-large; margin: 1em">
-                Estadísticas - Centro de Servicio Social</h1>
+            <p style="font-weight: 700; font-size: x-large; margin: 1em">
+                Estadísticas - Centro de Servicio Social
+            </p>
+            
             <div
                 style="margin-bottom: 2em; display: flex; flex-direction: column; align-items: center; gap: 12px 20px; width: 100%;">
                 <h5>Aplicar Filtros</h5>
-                <div class="contenedor-flex">
-                    <label for="factultad" style="margin-right: 1em; font-size: 1.2rem ;" class="facultad-label">Facultad</label>
-                    <select class="form-control" id="factultad" name="factultad" v-model="idFacultadSeleccionada">
-                        <option :value=0>Todas</option>
-                        <option v-for="facultad in facultades" :value="facultad.idFacultad">{{ facultad.nombre }}
-                        </option>
+                <div class="contenedor-flex" style="gap: 0.5em 0.8em">
+                    <div class="d-flex w-100" style="flex: 1; gap: 0.5em 0.8em">
+                        <div style="width: 80px; font-size: 1.2rem ;">
+                            <span>Facultad</span>
+                        </div>
+                        <select class="form-control flex-1" id="factultad" name="factultad" v-model="idFacultadSeleccionada">
+                            <option :value=0>Todas</option>
+                            <option v-for="facultad in facultades" :value="facultad.idFacultad">{{ facultad.nombre }}
+                            </option>
+                        </select>
+                    </div>
 
-                    </select>
-
-                    <label for="carrera" style="margin-right: 1em; margin-left: 2vw; font-size: 1.2rem">Carrera</label>
-                    <select class="form-control" id="carrera" name="carrera" v-model="idCarreraSeleccionada">
-                        <option :value=0>Todas</option>
-                        <option v-for="carrera in carrerasFacultad" :value="carrera.idCarrera">{{ carrera.nombre }}
-                        </option>
-
-                    </select>
+                    <div class="d-flex w-100" style="flex: 1; gap: 0.5em 0.8em">
+                        <div style="width: 80px; font-size: 1.2rem ;">
+                            <span>Carrera</span>
+                        </div>
+                        <select class="form-control flex-1" id="carrera" name="carrera" v-model="idCarreraSeleccionada">
+                            <option :value=0>Todas</option>
+                            <option v-for="carrera in carrerasFacultad" :value="carrera.idCarrera">{{ carrera.nombre }}
+                            </option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <div class="dashboard">

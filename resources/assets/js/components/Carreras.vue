@@ -4,7 +4,7 @@
             <li class="breadcrumb-item">Inicio</li>
             <li class="breadcrumb-item active">Administración de Carreras</li>
         </ol>
-        <div class="container container-fluid">
+        <div class="container-fluid px-4">
             <table class="table table-bordered table-hover table-sm">
 
             <thead>
