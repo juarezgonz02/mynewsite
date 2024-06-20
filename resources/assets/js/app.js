@@ -11,7 +11,7 @@ window.Vue = require('vue');
 import Vue from 'vue';
 //import Vue from 'vue';
 import VueSweetalert2 from 'vue-sweetalert2';
-//import Swal from 'sweetalert2'
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -37,6 +37,7 @@ Vue.component('coordinadores', require('./components/Coordinadores.vue'))
 Vue.use(VueSweetalert2);
 
 
+// TODO: CHANGE TO SWAL VUE
 
 const app = new Vue({
     el: '#app',

@@ -89,7 +89,6 @@
 
 <script>
 import { API_HOST } from '../constants/endpoint';
-import Swal from 'sweetalert2';
 export default {
     data() {
         return {
@@ -126,7 +125,7 @@ export default {
                     me.cerrarModal();
                     if (response.status == 200) {
                         me.showSuccess = true
-                        Swal.fire({
+                         this.$swal.fire({
                             icon: 'success',
                             title: 'Carrera creada',
                             text: 'La carrera ha sido creada exitosamente.',
@@ -148,7 +147,7 @@ export default {
                     //console.log(response);
                     if (response.status == 200) {
                         me.showSuccess = true
-                        Swal.fire({
+                         this.$swal.fire({
                             icon: 'success',
                             title: 'Carrera actualizada',
                             text: 'La carrera ha sido actualizada exitosamente.',
@@ -196,7 +195,7 @@ export default {
                         this.modal_nombre = data.nombre;
                         this.errorEstado = 0;
                         this.flagErrorEstado = false;
-                        Swal.fire({
+                         this.$swal.fire({
                             title: `¿Desea desactivar esta carrera?`,
                             text: `Se desactivará esta carrera\n No se podrán inscribir proyectos ni estudiantes con esta carrera.`,
                             icon: "warning",
@@ -218,7 +217,7 @@ export default {
                         this.modal_nombre = data.nombre;
                         this.errorEstado = 0;
                         this.flagErrorEstado = false;
-                        Swal.fire({
+                         this.$swal.fire({
                             title: `¿Desea activar la carrera?`,
                             text: `La carrera se activará y se podrá registrar proyectos y estudiantes con ella`,
                             icon: "warning",
@@ -247,7 +246,7 @@ export default {
                     'estado' : estado
             })
             .then(function (response) {
-                Swal.fire({
+                 this.$swal.fire({
                     icon: 'success',
                     title: 'Carrera desactivado',
                     text: 'La carrera se ha desactivado exitosamente',
@@ -267,7 +266,7 @@ export default {
                     'estado' : estado
             })
             .then(function (response) {
-                Swal.fire({
+                 this.$swal.fire({
                     icon: 'success',
                     title: 'Carrera activada',
                     text: 'La carrera se ha activada exitosamente',

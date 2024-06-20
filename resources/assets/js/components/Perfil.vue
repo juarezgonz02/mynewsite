@@ -119,7 +119,6 @@
 
 <script>
 import {API_HOST} from '../constants/endpoint.js';
-import Swal from 'sweetalert2';
     export default {
         data(){
             return{
@@ -218,7 +217,7 @@ import Swal from 'sweetalert2';
                 }).then(function (response) {
                     me.bindData();
                     if(response.status == 200)
-                        Swal.fire({
+                         this.$swal.fire({
                             icon: 'success',
                             title: 'Perfil actualizado',
                             showConfirmButton: false,
@@ -226,7 +225,7 @@ import Swal from 'sweetalert2';
                         })
 
                     else
-                        Swal.fire({
+                         this.$swal.fire({
                             icon: 'error',
                             title: 'Error al actualizar el perfil',
                             showConfirmButton: false,
@@ -236,7 +235,7 @@ import Swal from 'sweetalert2';
                 })
                 .catch(function (error) {
                     console.log(error);
-                    Swal.fire({
+                     this.$swal.fire({
                         icon: 'error',
                         title: 'Error al actualizar el perfil',
                         showConfirmButton: false,
@@ -252,7 +251,7 @@ import Swal from 'sweetalert2';
                 }).then(function (response) {
                     me.bindData();
                     if(response.status == 200)
-                        Swal.fire({
+                         this.$swal.fire({
                             icon: 'success',
                             title: 'Carrera actualizada',
                             showConfirmButton: false,
@@ -260,7 +259,7 @@ import Swal from 'sweetalert2';
                         })
 
                     else
-                        Swal.fire({
+                         this.$swal.fire({
                             icon: 'error',
                             title: 'Error al actualizar la carrera',
                             showConfirmButton: false,
@@ -270,7 +269,7 @@ import Swal from 'sweetalert2';
                 })
                 .catch(function (error) {
                     console.log(error);
-                    Swal.fire({
+                     this.$swal.fire({
                         icon: 'error',
                         title: 'Error al actualizar la carrera',
                         showConfirmButton: false,

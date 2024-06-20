@@ -487,12 +487,12 @@
                                     <table class="table-sm table-borderless appear-table">
                                         <thead>
                                             <td>
-                                                <th>Carrera/Rango</th>
+                                            <th>Carrera/Rango</th>
                                             </td>
                                         </thead>
                                         <tbody>
                                             <tr v-for="(acp, index) in arrayCarreraPerfil" :key="acp.id">
-                                                <td >
+                                                <td>
                                                     <div class="d-flex flex-column mb-4" style="gap: 0.5rem">
                                                         <div>
                                                             <select class="form-control custom-select" v-model="acp[0]">
@@ -504,22 +504,24 @@
 
                                                         <div class="d-flex" style="gap: 1rem">
                                                             <select class="form-control custom-select" v-model="acp[1]">
-                                                                <option v-for="perfil in arrayPerfiles" :value="perfil.idPerfil"
-                                                                    :key="perfil.idPerfil">{{ perfil.perfil }}</option>
+                                                                <option v-for="perfil in arrayPerfiles"
+                                                                    :value="perfil.idPerfil" :key="perfil.idPerfil">{{
+                perfil.perfil }}</option>
                                                             </select>
- 
+
                                                             <select class="form-control custom-select" v-model="acp[2]">
-                                                                <option v-for="perfil in arrayPerfiles" :value="perfil.idPerfil"
-                                                                    :key="perfil.idPerfil">{{ perfil.perfil }}</option>
+                                                                <option v-for="perfil in arrayPerfiles"
+                                                                    :value="perfil.idPerfil" :key="perfil.idPerfil">{{
+                perfil.perfil }}</option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                
+
                                                 <td>
-                                                    <div class="mb-4"> 
-                                                        <button type="button" class="close" @click="eliminarACP(acp)" style="float: none"
-                                                        aria-label="Close">
+                                                    <div class="mb-4">
+                                                        <button type="button" class="close" @click="eliminarACP(acp)"
+                                                            style="float: none" aria-label="Close">
                                                             <span aria-hidden="true" style="color: #000000">×</span>
                                                         </button>
                                                     </div>
@@ -749,7 +751,7 @@
                                                 style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
 
                                                 <button type="button" data-toggle="modal"
-                                                    data-target="#removeStudentModal" 
+                                                    data-target="#removeStudentModal"
                                                     @click="abrirModal('remover_estudiante', estudiante)"
                                                     class="btn btn-danger btn-sm">
                                                     Remover
@@ -1071,7 +1073,6 @@
 
 <script>
 import { API_HOST } from '../constants/endpoint.js';
-import Swal from 'sweetalert2';
 export default {
     data() {
         return {
@@ -1260,136 +1261,151 @@ export default {
             me.bindDataByFilters(0);
 
         },
-        actualizarInsertarProyecto() {
+        async actualizarInsertarProyecto() {
             if (this.validarProyecto()) {
                 return;
             }
             const me = this
-            if (!this.id_proyecto) {
-                axios.post(`${API_HOST}/proyecto/insertar`, {
-                    'idProyecto': this.id_proyecto,
-                    'nombre': this.modal_nombre,
-                    'estado': 1,
-                    'estado_proyecto': 'En curso',
-                    'contraparte': this.modal_contraparte,
-                    'cupos_act': 0,
-                    'cupos': this.modal_cupos,
-                    'descripcion': this.modal_desc,
-                    'perfil_estudiante': this.modal_perfil_estudiante,
-                    'encargado': this.modal_encargado,
-                    'fecha_inicio': this.modal_fecha_in,
-                    'fecha_fin': this.modal_fecha_fin,
-                    'horario': this.modal_horario,
-                    'tipo_horas': this.modal_tipo_horas,
-                    'correo_encargado': this.modal_correo,
-                    'carreraPerfil': this.arrayCarreraPerfil,
-                    'aplicarTodasCarreras': this.flagTodasLasCarreras === '1' ? true : false,
-                }).then(function (response) {
-                    me.cerrarModal();
+            if (this.add_edit_flag) {
+                try {
+                    const response = await axios.post(`${API_HOST}/proyecto/insertar`, {
+                        'idProyecto': this.id_proyecto,
+                        'nombre': this.modal_nombre,
+                        'estado': 1,
+                        'estado_proyecto': 'En curso',
+                        'contraparte': this.modal_contraparte,
+                        'cupos_act': 0,
+                        'cupos': this.modal_cupos,
+                        'descripcion': this.modal_desc,
+                        'perfil_estudiante': this.modal_perfil_estudiante,
+                        'encargado': this.modal_encargado,
+                        'fecha_inicio': this.modal_fecha_in,
+                        'fecha_fin': this.modal_fecha_fin,
+                        'horario': this.modal_horario,
+                        'tipo_horas': this.modal_tipo_horas,
+                        'correo_encargado': this.modal_correo,
+                        'carreraPerfil': this.arrayCarreraPerfil,
+                        'aplicarTodasCarreras': this.flagTodasLasCarreras === '1' ? true : false,
+                        'p_lim_inf': this.create_lim_inf,
+                        'p_lim_sup': this.create_lim_sup
+                    })
 
                     if (response.status == 200) {
-                        Swal.fire({
+                        this.$swal.fire({
                             icon: 'success',
                             title: 'Proyecto guardado',
                             text: 'El proyecto fue guardado exitosamente.',
                         });
-                        me.bindDataByFilters();
                     }
                     else {
-                        Swal.fire({
+                        this.$swal.fire({
                             icon: 'error',
                             title: 'Error al guardar proyecto',
                             text: 'Ha ocurrido un error al guardar el proyecto. Intente nuevamente.',
                         });
                     }
-                    me.bindDataByFilters();
-                }).catch(function (error) {
+
+                } catch (e) {
                     console.log(error);
-                    Swal.fire({
+                    this.$swal.fire({
                         icon: 'error',
                         title: 'Error al guardar proyecto',
                         text: 'Ha ocurrido un error al guardar el proyecto. Intente nuevamente.',
+
                     });
-                });
+                } finally {
+                    me.cerrarModal();
+                    this.bindDataByFilters(0)
+                }
+
             }
             else {
-                axios.put(`${API_HOST}/proyecto/actualizar`, {
-                    'idProyecto': this.id_proyecto,
-                    'nombre': this.modal_nombre,
-                    'estado': 1,
-                    'contraparte': this.modal_contraparte,
-                    'cupos': this.modal_cupos,
-                    'estado_proyecto': 'En curso',
-                    'descripcion': this.modal_desc,
-                    'perfil_estudiante': this.modal_perfil_estudiante,
-                    'encargado': this.modal_encargado,
-                    'fecha_inicio': this.modal_fecha_in,
-                    'fecha_fin': this.modal_fecha_fin,
-                    'horario': this.modal_horario,
-                    'tipo_horas': this.modal_tipo_horas,
-                    'correo_encargado': this.modal_correo,
-                    'carreraPerfil': this.arrayCarreraPerfil,
-                    'aplicarTodasCarreras': this.flagTodasLasCarreras === '1' ? true : false,
-                    'p_lim_inf': this.create_lim_inf,
-                    'p_lim_sup': this.create_lim_sup
-                }).then(function (response) {
-                    me.cerrarModal();
+                try {
+
+                    const response = await axios.put(`${API_HOST}/proyecto/actualizar`, {
+                        'idProyecto': this.id_proyecto,
+                        'nombre': this.modal_nombre,
+                        'estado': 1,
+                        'contraparte': this.modal_contraparte,
+                        'cupos': this.modal_cupos,
+                        'estado_proyecto': 'En curso',
+                        'descripcion': this.modal_desc,
+                        'perfil_estudiante': this.modal_perfil_estudiante,
+                        'encargado': this.modal_encargado,
+                        'fecha_inicio': this.modal_fecha_in,
+                        'fecha_fin': this.modal_fecha_fin,
+                        'horario': this.modal_horario,
+                        'tipo_horas': this.modal_tipo_horas,
+                        'correo_encargado': this.modal_correo,
+                        'carreraPerfil': this.arrayCarreraPerfil,
+                        'aplicarTodasCarreras': this.flagTodasLasCarreras === '1' ? true : false,
+                        'p_lim_inf': this.create_lim_inf,
+                        'p_lim_sup': this.create_lim_sup
+                    })
+
                     if (response.status == 200) {
-                        Swal.fire({
+                        this.$swal.fire({
                             icon: 'success',
                             title: 'Proyecto guardado',
                             text: 'El proyecto fue guardado exitosamente.',
                         });
-                        me.bindDataByFilters();
                     }
                     else {
-                        Swal.fire({
+                        this.$swal.fire({
                             icon: 'error',
                             title: 'Error al guardar proyecto',
                             text: 'Ha ocurrido un error al guardar el proyecto. Intente nuevamente.',
                         });
                     }
-                    me.bindDataByFilters();
-                }).catch(function (error) {
-                    Swal.fire({
+                }
+                catch (e) {
+                    this.$swal.fire({
                         icon: 'error',
                         title: 'Error al guardar proyecto',
                         text: 'Ha ocurrido un error al guardar el proyecto. Intente nuevamente.',
                     });
                     console.log(error);
-                });
+                } finally {
+                    me.cerrarModal();
+                    this.bindDataByFilters(0)
+                }
             }
         },
-        enviarReunion() {
+        async enviarReunion() {
             if (this.validarReunion()) {
                 return;
             }
             const me = this
             if (this.id_proyecto) {
-                axios.post(`${API_HOST}/sendMeetingMail`, {
-                    'nombre_proyecto': this.proyecto,
-                    'descripcion': this.modal_descripcion,
-                    'encargado': this.modal_encargado,
-                    "encargado_correo": this.modal_correo,
-                    'estudiantes': this.arrayEstudiantes.map(e => e.correoCompleto),
-                    'lugar': this.modal_lugar,
-                    'fecha': this.modal_fecha,
-                    'hora': this.modal_hora
-                }).then(function (response) {
-                    Swal.fire({
+                try {
+
+                    const response = await axios.post(`${API_HOST}/sendMeetingMail`, {
+                        'nombre_proyecto': this.proyecto,
+                        'descripcion': this.modal_descripcion,
+                        'encargado': this.modal_encargado,
+                        "encargado_correo": this.modal_correo,
+                        'estudiantes': this.arrayEstudiantes.map(e => e.correoCompleto),
+                        'lugar': this.modal_lugar,
+                        'fecha': this.modal_fecha,
+                        'hora': this.modal_hora
+                    })
+
+                    me.$swal.fire({
                         icon: 'success',
                         title: 'Correos enviados',
                         text: 'Los correos con información de la reunión fue enviado exitosamente.',
                     });
+
                     me.cerrarModal();
-                }).catch(function (error) {
-                    Swal.fire({
+                } catch (e) {
+                    me.$swal.fire({
                         icon: 'error',
                         title: 'Correos no enviados',
                         text: 'El proceso de envío de correos no se completó correctamente. Intente nuevamente.',
                     });
                     console.log(error);
-                });
+                    me.cerrarModal();
+                }
             }
         },
         regexCorreo(correo) {
@@ -1532,7 +1548,7 @@ export default {
 
                     // $('#statusModal').modal('hide');
 
-                    Swal.fire({
+                    this.$swal.fire({
                         icon: response.data.success ? 'success' : 'error',
                         title: 'Estado del proyecto',
                         text: response.data.message,
@@ -1586,7 +1602,6 @@ export default {
                 this.modal5 = 0;
                 this.modal6 = 0;
                 this.modal7 = 0;
-                this.id_proyecto = 0;
             }
         },
         abrirModal(modelo, data = [], flag) {
@@ -1954,7 +1969,7 @@ export default {
                 return
             }
 
-            Swal.fire({
+            this.$swal.fire({
                 title: `¿Estas seguro? de ${estado} el proyecto`,
                 text: `No podras deshacer esta acción\n ${estado == 'eliminar' ? 'Se eliminara el registro completo de este proyecto.' : ''}`,
                 icon: "warning",
@@ -1970,7 +1985,7 @@ export default {
                 this.cerrarModal();
             });
         },
-        cambiarEstadoProyecto(estado) {
+        async cambiarEstadoProyecto(estado) {
             if (estado != 'finalizar' && estado != 'cancelar' && estado != 'eliminar') {
                 //console.log("Estado no valido")
                 return
@@ -1982,26 +1997,28 @@ export default {
             }
             else {
                 me.loading = 1;
-                axios.post(`${API_HOST}/proyecto/${estado}`, {
-                    idProyecto: this.id_proyecto
-                }).then(function (response) {
+                try {
+                    const response = await axios.post(`${API_HOST}/proyecto/${estado}`, {
+                        idProyecto: this.id_proyecto
+                    })
                     // console.log(response);
 
                     // $('#statusModal').modal('hide');
 
-                    Swal.fire({
+                    this.$swal.fire({
                         icon: response.data.success ? 'success' : 'error',
                         title: 'Estado del proyecto',
                         text: response.data.message,
                     });
-                }).catch(function (error) {
+
+                } catch (error) {
                     console.log(error);
-                }).finally(function () {
+                } finally {
                     $('#statusModal').modal('hide');
                     me.loading = 0;
                     me.bindDataByFilters();
                     me.cerrarModal();
-                });
+                };
 
             }
         },

@@ -121,7 +121,6 @@
 
 <script>
 import {API_HOST} from '../constants/endpoint.js';
-import Swal from 'sweetalert2'
     export default {
         data(){
             return{
@@ -241,7 +240,7 @@ import Swal from 'sweetalert2'
                             //console.log(response)
                             if(response.status == 200)
                             {
-                                Swal.fire({
+                                 this.$swal.fire({
                                     title: 'Estudiante actualizado',
                                     text: 'El estudiante ha sido actualizado correctamente',
                                     icon: 'success',
@@ -257,7 +256,7 @@ import Swal from 'sweetalert2'
                             me.buscarEstudiante()
                         })
                         .catch(function (error) {
-                            Swal.fire({
+                             this.$swal.fire({
                                 title: 'Error',
                                 text: 'Ha ocurrido un error al actualizar el estudiante',
                                 icon: 'error',
