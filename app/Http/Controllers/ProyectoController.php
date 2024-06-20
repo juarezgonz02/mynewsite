@@ -108,7 +108,7 @@ class ProyectoController extends Controller
                 $arraycp = $request->carreraPerfil;
                 
                 if($request->aplicarTodasCarreras){
-                    $this->aplicarTodasCarrerasAlProyecto($proyecto->idProyecto, $proyecto->p_lim_inf, $proyecto->p_lim_sup);
+                    $this->aplicarTodasCarrerasAlProyecto($proyecto->idProyecto, $request->p_lim_inf, $request->p_lim_sup);
                 }
                 else{
                     for($i = 0; $i < count($arraycp); $i++){
