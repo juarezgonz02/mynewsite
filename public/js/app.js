@@ -18067,6 +18067,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('carreras', __webpack_requ
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.component('coordinadores', __webpack_require__(133));
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_sweetalert2___default.a);
 
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.config.devtools = false;
+
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
   el: '#app',
   data: {
@@ -48166,7 +48168,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 return;
             }
             var me = this;
-            if (this.add_edit_flag) {
+            if (this.add_edit_flag == 1) {
                 axios.post(__WEBPACK_IMPORTED_MODULE_0__constants_endpoint_js__["a" /* API_HOST */] + '/proyecto/insertar', {
                     'idProyecto': this.id_proyecto,
                     'nombre': this.modal_nombre,
