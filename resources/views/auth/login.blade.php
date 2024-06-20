@@ -115,6 +115,13 @@
                                         </div>
                                     </div>
 
+                                    <div class="d-flex align-items-center mt-4 flex-column">
+                                        Encuentranos en: 
+                                        <a href="https://play.google.com/store/apps/details?id=com.cssuca.app&hl=es">
+                                            <img class="google-badge-class" alt="Encuentranos en Google Play " src="img/google-play-badge.png"/> 
+                                        </a>
+                                    </div>
+
                                     <div
                                         class="d-flex justify-content-center form-group{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
                                         <div class="col-md-12 text-center">
