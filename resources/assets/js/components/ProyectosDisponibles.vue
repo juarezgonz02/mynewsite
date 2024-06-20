@@ -714,7 +714,7 @@ export default {
             me.user_perfil_id = response.data.idPerfil;
 
             me.search_carrera_id = response.data.idCarrera;
-            me.search_pefil_id = response.data.idPerfil;
+            me.search_perfil_id = response.data.idPerfil;
 
             //console.log(response.data.timeout);
             if (me.fechaLegible(response.data.timeout))
@@ -760,7 +760,7 @@ export default {
                 me.ya_aplico_proyecto = response.data.activeProject;
             })
 
-            var url = `${API_HOST}/proyecto?nombre=${this.filtrandoPorNombre}&carrera=${this.search_carrera_id}&ano=${this.search_pefil_id}&tipo=${this.filtrandoPorTipo}&page=${page}`;
+            var url = `${API_HOST}/proyecto?nombre=${this.filtrandoPorNombre}&carrera=${this.search_carrera_id}&ano=${this.search_perfil_id}&tipo=${this.filtrandoPorTipo}&page=${page}`;
             axios.get(url).then(function (response) {
                 var respuesta = response.data;
                 var proyectos = respuesta.proyectos.data;
