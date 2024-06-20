@@ -72,7 +72,7 @@
     padding-left: 0;
 }
 
-#appear-table{
+.appear-table{
     display: none;
 }
    
@@ -142,21 +142,21 @@
     }
 }
 
-@media screen and (max-width: 450px) {
-    #student-button{
-        font-size: .5em;
-    }
-}
 
 @media screen and (max-width: 500px) {
-#disappear{
+.disappear{
     display: none;
     }
 
-#appear-table{
+.appear-table{
     display: table;
     }
-   
+
+#estado-btns-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+}
 
 }
 
@@ -204,4 +204,10 @@
 .search-input {
     flex: 2;
     height: 100%;
+}
+
+
+#estado-btns-container {
+    display: flex;
+    justify-content: center;
 }

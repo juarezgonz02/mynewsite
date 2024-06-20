@@ -13,7 +13,7 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-8" style="margin: 25px 0px 20px 20px;">
+                            <div class="col-md-8" style="margin: 1rem">
                                 <div class="form-group">
                                     <input type="text" v-model="carnet" class="form-control inputs" placeholder="Ingrese el carnet del estudiante">
                                     <div v-if="flagError" class="mt-2 text-danger">
@@ -43,27 +43,24 @@
                         
                     </div>
                     <div class="card-body">
-                        <div class="col-md-8" style="margin: 20px 0px 0px 20px;">
+                        <div class="col-md-8" style="width: auto; margin: 1rem;">
                             <div class="form-group row">
                                 <label class="form-control-label">Facultad</label>
-                            </div>
-                            <div class="form-group row">
+
                                 <select :disabled="editDisabled" class="form-control custom-select" id="facultad " v-model="idFacultad">
                                     <option v-for="facultad in arrayFacultad" :value="facultad.idFacultad" :key="facultad.idFacultad">{{facultad.nombre}}</option>
                                 </select>
                             </div>
                             <div class="form-group row">
                                 <label class="form-control-label">Carrera</label>
-                            </div>
-                            <div class="form-group row">
+ 
                                 <select :disabled="editDisabled" class="form-control custom-select" id="carrera" v-model="idCarrera">
                                     <option v-for="carrera in arrayCarreraFact" :value="carrera.idCarrera" :key="carrera.idCarrera">{{carrera.nombre}}</option>
                                 </select>
                             </div>
                             <div class="form-group row">
                                 <label for="perfil" class="form-control-label">Año de carrera</label>
-                            </div>
-                            <div class="form-group row">
+
                                 <select :disabled="editDisabled" class="form-control custom-select" id="perfil" v-model="idPerfil">
                                     <option v-for="perfil in arrayPerfil" :value="perfil.idPerfil" :key="perfil.idPerfil">{{perfil.perfil}}</option>
                                 </select>

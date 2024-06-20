@@ -13,7 +13,9 @@ class CarreraController extends Controller
      * Responde con todas las carreras de la tabla
      */
     public function getCarreras() {
-        $carreras = Carrera::orderBy('nombre')->where('estado', '=', 1)->get();
+        $carreras = Carrera::where('estado', '=', 1)
+        ->orderBy('idCarrera')
+        ->get();
         return response()->json($carreras);
     }
 

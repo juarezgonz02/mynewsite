@@ -20,8 +20,8 @@
                 <!--<th>Numero</th>-->
                 <th style="text-align: center; width: 20%;">Contraparte</th>
                 <th style="text-align: center; width: 25%;">Proyecto</th>
-                <th style="text-align: center; width: 20%;" id="disappear" >Perfil estudiante</th>
-                <th style="text-align: center; width: 10%;" id="disappear">Estado del proyecto</th>
+                <th style="text-align: center; width: 20%;" class="disappear" >Perfil estudiante</th>
+                <th style="text-align: center; width: 10%;" class="disappear">Estado del proyecto</th>
                 <th id="resized" style="width: 10%; text-align: center;">Miembros</th>
               </tr>
             </thead>
@@ -32,9 +32,9 @@
                   data-target="#modal-info"></td>
                 <td v-text="proyecto.nombre" @click="abrirModal('info', proyecto)" data-toggle="modal"
                   data-target="#modal-info"></td>
-                <td id="disappear" v-text="proyecto.perfil_estudiante" @click="abrirModal('info', proyecto)"
+                <td class="disappear" v-text="proyecto.perfil_estudiante" @click="abrirModal('info', proyecto)"
                   data-toggle="modal" data-target="#modal-info"></td>
-                <td id="disappear" v-text="proyecto.estado_proyecto" @click="abrirModal('info', proyecto)"
+                <td class="disappear" v-text="proyecto.estado_proyecto" @click="abrirModal('info', proyecto)"
                   data-toggle="modal" data-target="#modal-info"></td>
                 <td @click="abrirModal('info', proyecto)" style="text-align: center;">
                   <div class="button-container">
@@ -77,8 +77,8 @@
       <div class="modal-dialog modal-primary modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title" v-text="modal_nombre">
-              Aplicar a proyecto
+            <h4 class="modal-title">
+              {{modal_nombre}}
             </h4>
             <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()" aria-label="Close">
               <span aria-hidden="true" style="color: #ffffff">×</span>
@@ -452,7 +452,7 @@ export default {
 }
 
 @media screen and (max-width: 500px) {
-  #disappear {
+  .disappear {
     display: none;
   }
 

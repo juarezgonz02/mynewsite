@@ -12,14 +12,22 @@
 <body>
     <div style="color:black">
         <p> Estimado/a {{ $user->encargado }}.</p>
-        <p>
-            Un estudiante ha aplicado al proyecto de horas sociales a su cargo, {{ $user->nombre }}:<br>
-                Nombres: {{ $user->nombres }}.<br>
+        <div>
+            Un estudiante ha aplicado al proyecto de horas sociales a su cargo <br>
+                <b>Proyecto: {{ $user->nombre }} </b> <br><br>
+
+                <p>
+                Información del estudiante: 
+                </p>
+                
+                <p style="padding-left: 1em">
+                Nombre: {{ $user->nombres }}.<br>
                 Apellidos: {{ $user->apellidos }}.<br>
                 Correo: {{ $user->correo }}<br>
                 Carrera: {{ $user->n_carrera }}.<br><br>
+                </p>
 
-        </p><br>
+        </div><br>
         <p>
             Atentamente, Centro de Servicio Social.
         </p><br><br>

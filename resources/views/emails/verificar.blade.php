@@ -17,7 +17,7 @@
             <p> Puede verificar su cuenta a traves de este enlace: 
                 <b style="font-size: 1.1em"><a href="{{ url('verificar_usuario/'.$user->correo) }}"> Click aquí </a></b>
             </p>
-        <p>
+        <p> 
             Atentamente, Centro de Servicio Social.
         </p><br><br>
     </div>

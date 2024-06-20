@@ -192,8 +192,8 @@
                             <th style="text-align: center; width: 25%;">Contraparte</th>
                             <th style="text-align: center; width: 25%;">Proyecto</th>
                             <th style="text-align: center; width: 20%;">Perfil estudiante</th>
-                            <th style="width: 10%; text-align: center;" id="disappear">Cupos</th>
-                            <th style="width: 10%; text-align: center;" id="disappear">Aplicar</th>
+                            <th style="width: 10%; text-align: center;" class="disappear">Cupos</th>
+                            <th style="width: 10%; text-align: center;" class="disappear">Aplicar</th>
                         </tr>
                     </thead>
                     <tbody style="width: 100%;">
@@ -204,10 +204,10 @@
                                 @click="abrirModal('info', proyecto)"></td>
                             <td v-text="proyecto.perfil_estudiante" data-toggle="modal" data-target="#modal-info"
                                 @click="abrirModal('info', proyecto)"></td>
-                            <td id="disappear" v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`"
+                            <td class="disappear" v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`"
                                 data-toggle="modal" data-target="#modal-info" @click="abrirModal('info', proyecto)"
                                 style="text-align: center;"></td>
-                            <td id="disappear">
+                            <td class="disappear">
                                 <div class="button-container">
                                     <div v-if="!ya_aplico_hoy && !ya_aplico_proyecto && !timeout"
                                         style="display: flex; margin: 0px 10px;">
@@ -329,7 +329,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div id="appear" class="button-container">
+                        <div class="button-container appear">
                             <div v-if="!ya_aplico_hoy && !ya_aplico_proyecto && !timeout"
                                 style="display: flex; margin: 0px;">
                                 <button data-dismiss="modal" aria-label="Close" type="button" data-toggle="modal"
@@ -347,7 +347,7 @@
                                 </button> &nbsp;
                             </div>
                         </div>
-                            <table class="table table-bordered table-sm mt-3" id="appear-table">
+                            <table class="table table-bordered table-sm mt-3 appear-table">
                             <tbody>
                                 <tr>
                                     <th class="col-md-4" style="background-color: #dedede;">Contraparte</th>
@@ -408,7 +408,7 @@
                             </tbody>
                         </table>
  
-                        <table class="table table-bordered table-sm" id="disappear">
+                        <table class="table table-bordered table-sm disappear">
                             <tbody s>
                                 <tr>
                                     <th class="col-md-4" style="background-color: #dedede; width: 25%">Contraparte</th>
@@ -875,11 +875,11 @@ body {
     height: 100%;
 }
 
-#appear {
+.appear {
     display: none;
 }
 
-#appear-table {
+.appear-table {
     display: none;
 }
 
@@ -920,7 +920,7 @@ body {
 }
 
 @media screen and (max-width: 500px) {
-    #disappear {
+    .disappear {
         display: none;
     }
 
@@ -928,11 +928,11 @@ body {
         display: inline;
     } 
 
-    #appear {
+    .appear {
         display: block;
     }
 
-    #appear-table {
+    .appear-table {
         display: table;
     }
 

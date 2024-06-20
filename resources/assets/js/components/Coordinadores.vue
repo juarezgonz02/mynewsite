@@ -4,7 +4,7 @@
                 <li class="breadcrumb-item">Inicio</li>
                 <li class="breadcrumb-item active">Administración de Coordinadores</li>
             </ol>
-        <div class="container container-fluid">
+        <div class="container-fluid px-4">
 
             <div v-if="showSuccess"
                 style="color: green; border: 1px solid green; background-color: rgb(242, 255, 242); padding: 10px; font-weight: 400;">
