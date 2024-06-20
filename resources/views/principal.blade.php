@@ -75,9 +75,18 @@
     <script src="js/app.js"></script>
     <script src="js/plantilla.js"></script>
     <script>
+        /*
+            Implementation for auto fade sidebar when view on mobile 
+            ** USING BOOTSTRAP 4 
+       */
         document.querySelector("#nav-toogler").addEventListener("click", ()=>{
             //console.log("click")
             document.querySelector("body").classList.toggle("sidebar-mobile-show");
+       })
+
+        document.querySelector("main").addEventListener("click", ()=>{
+            //console.log("click")
+                document.querySelector("body").classList.remove("sidebar-mobile-show");
        })
     </script>
 </body>
