@@ -140,6 +140,11 @@
   justify-content: center;
 }
 
+.google-badge-class{
+  width: 150px;
+  height: auto;
+}
+
 /* Fallback for Edge
   -------------------------------------------------- */
 @media screen and (max-width: 1024px) {

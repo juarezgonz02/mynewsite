@@ -49,7 +49,7 @@
                                 <div class="d-flex align-items-center">
                                     <div style="width: 70px">
                                         <span>
-                                            Filtrar por:   
+                                            Filtrar por:
                                         </span>
                                     </div>
                                 </div>
@@ -65,6 +65,16 @@
                                             </button>
                                             <ul class="dropdown-menu">
 
+                                                <li role="separator" class="divider"></li>
+                                                <li>
+                                                    <b> Todos los proyectos: </b>
+                                                </li>
+                                                <li>
+                                                    <!-- :value="JSON.stringify({ por: 'carrera', id: carrera.idCarrera })"
+                                            :key="carrera.idCarrera"> -->
+                                                    <button @click="cambiarFiltro(-1, 'Todos los proyectos')"
+                                                        class="text-button"> Todos los proyectos </button>
+                                                </li>
                                                 <li role="separator" class="divider"></li>
                                                 <li>
                                                     <b> Carrera: </b>
@@ -147,7 +157,7 @@
                 </div>
                 <!---->
                 <div style="font-size: 1em; font-weight: normal">
-                    <div class="d-flex flex-wrap my-3" style="gap: 0.5em 1em" >
+                    <div class="d-flex flex-wrap my-3" style="gap: 0.5em 1em">
                         <div class="d-flex align-items-center">
                             <div style="width: 70px">
                                 <span> Mostrando: </span>
@@ -155,30 +165,35 @@
                         </div>
                         <div class="d-flex flex-wrap " style="gap: 0.5em 1em">
                             <div class="d-flex align-items-center" style="gap: 5px">
-                                <span class="d-flex align-items-center badge badge-pill badge-light py-2 f-8em" style="line-height: 0; color: white; background-color: #003C71">
+                                <span class="d-flex align-items-center badge badge-pill badge-light py-2 f-8em"
+                                    style="line-height: 0; color: white; background-color: #003C71">
                                     <span>
                                         {{ (search_carrera).substring(0, 50) }}
                                     </span>
-                                        <span v-if="!default_filter" class="px-1" @click="cambiarFiltro(user_carrera_id, user_carrera, true)"
-                                            aria-hidden="true" style="cursor: pointer; color: #ffffff">×</span>
+                                    <span v-if="!default_filter" class="px-1"
+                                        @click="cambiarFiltro(user_carrera_id, user_carrera, true)" aria-hidden="true"
+                                        style="cursor: pointer; color: #ffffff">×</span>
                                 </span>
                             </div>
                             <div class="d-flex align-items-center" style="gap: 5px">
-                                <span class="d-flex align-items-center badge badge-pill badge-light py-2 f-8em" style="line-height: 0; color: white; background-color: #003C71"> 
+                                <span class="d-flex align-items-center badge badge-pill badge-light py-2 f-8em"
+                                    style="line-height: 0; color: white; background-color: #003C71">
                                     <span>
                                         {{ search_perfil }}
                                     </span>
-                                        <span v-if="!default_year" class="px-1" @click="cambiarAno(user_perfil_id, user_perfil, true)" aria-hidden="true"
-                                            style="cursor: pointer; color: #ffffff">×</span>
+                                    <span v-if="!default_year" class="px-1"
+                                        @click="cambiarAno(user_perfil_id, user_perfil, true)" aria-hidden="true"
+                                        style="cursor: pointer; color: #ffffff">×</span>
                                 </span>
                             </div>
                             <div v-if="!default_type" class="d-flex align-items-center" style="gap: 5px">
-                                <span class="d-flex align-items-center badge badge-pill badge-light py-2 f-8em" style="line-height: 0; color: white; background-color: #003C71"> 
+                                <span class="d-flex align-items-center badge badge-pill badge-light py-2 f-8em"
+                                    style="line-height: 0; color: white; background-color: #003C71">
                                     <span>
                                         {{ type_label }}
                                     </span>
-                                        <span class="px-1" @click="cambiarTipo('todas', 'Todas', true)" aria-hidden="true"
-                                            style="cursor: pointer; color: #ffffff">×</span>
+                                    <span class="px-1" @click="cambiarTipo('todas', 'Todas', true)" aria-hidden="true"
+                                        style="cursor: pointer; color: #ffffff">×</span>
                                 </span>
                             </div>
                         </div>
@@ -198,8 +213,12 @@
                     </thead>
                     <tbody style="width: 100%;">
                         <tr v-for="proyecto in arrayProyectos" :key="proyecto.idProyecto">
-                            <td v-text="proyecto.contraparte" id="name_p" data-toggle="modal" data-target="#modal-info"
-                                @click="abrirModal('info', proyecto)"></td>
+                            <td id="name_p" data-toggle="modal" data-target="#modal-info"
+                                @click="abrirModal('info', proyecto)">
+                                <div class="cell-minimizer">
+                                    {{ proyecto.contraparte }}
+                                </div>
+                            </td>
                             <td v-text="proyecto.nombre" id="name_p" data-toggle="modal" data-target="#modal-info"
                                 @click="abrirModal('info', proyecto)"></td>
                             <td v-text="proyecto.perfil_estudiante" data-toggle="modal" data-target="#modal-info"
@@ -208,19 +227,18 @@
                                 data-toggle="modal" data-target="#modal-info" @click="abrirModal('info', proyecto)"
                                 style="text-align: center;"></td>
                             <td class="disappear">
-                                <div class="button-container">
-                                    <div v-if="!ya_aplico_hoy && !ya_aplico_proyecto && !timeout"
-                                        style="display: flex; margin: 0px 10px;">
+                                <div class="d-flex justify-content-center">
+                                    <div v-if="!ya_aplico_hoy && !ya_aplico_proyecto && !timeout">
                                         <button type="button" data-toggle="modal" data-target="#modal-aplicar"
                                             @click="abrirModal('aplicar', proyecto)" class="btn btn-primary btn-sm"
-                                            style="width: 100%; border-radius: 5px;">
+                                            style="border-radius: 5px;">
                                             <i class="icon-envelope"></i>
                                             <span class="btn-label">Aplicar</span>
                                         </button> &nbsp;
                                     </div>
-                                    <div v-else style="display: flex; margin: 0px 10px;">
+                                    <div v-else>
                                         <button type="button" class="btn btn-primary btn-sm" disabled
-                                            style="width: 100%; border-radius: 5px;">
+                                            style="border-radius: 5px;">
                                             <i class="icon-envelope"></i>
                                             <span class="btn-label">Aplicar</span>
                                         </button> &nbsp;
@@ -297,15 +315,14 @@
                     <div class="modal-footer" style="display: flex;justify-content: space-between;">
                         <div>
                             <span style="font-size: 1.2em;">
-                                ¿Está seguro/a que desea aplicar a este proyecto?<br/>
+                                ¿Está seguro/a que desea aplicar a este proyecto?<br />
                             </span>
                             <span style="margin-left: 10px;">
-                               <b>{{ apply_name }}</b>
+                                <b>{{ apply_name }}</b>
                             </span>
                         </div>
 
                         <div>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                             <button type="button" class="btn btn-primary" data-dismiss="modal"
                                 @click="aplicarProyecto()">Confirmar</button>
                         </div>
@@ -329,25 +346,21 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="button-container appear">
-                            <div v-if="!ya_aplico_hoy && !ya_aplico_proyecto && !timeout"
-                                style="display: flex; margin: 0px;">
-                                <button data-dismiss="modal" aria-label="Close" type="button" data-toggle="modal"
-                                    data-target="#modal-aplicar" @click="abrirModal('aplicar')"
-                                    class="btn btn-primary btn-sm" style="border-radius: 5px;">
-                                    <i class="icon-envelope"></i>
-                                    <span class="btn-label">Aplicar</span>
-                                </button> &nbsp;
-                            </div>
-                            <div v-else style="display: flex; margin: 0px;">
-                                <button type="button" class="btn btn-primary btn-sm" disabled
-                                    style="border-radius: 5px;">
-                                    <i class="icon-envelope"></i>
-                                    <span class="btn-label">Aplicar</span>
-                                </button> &nbsp;
-                            </div>
+                        <div class="appear" v-if="!ya_aplico_hoy && !ya_aplico_proyecto && !timeout">
+                            <button data-dismiss="modal" aria-label="Close" type="button" data-toggle="modal"
+                                data-target="#modal-aplicar" @click="abrirModal('aplicar')"
+                                class="btn btn-primary btn-sm" style="border-radius: 5px;">
+                                <i class="icon-envelope"></i>
+                                <span class="btn-label">Aplicar</span>
+                            </button> &nbsp;
                         </div>
-                            <table class="table table-bordered table-sm mt-3 appear-table">
+                        <div class="appear" v-else>
+                            <button type="button" class="btn btn-primary btn-sm" disabled style="border-radius: 5px;">
+                                <i class="icon-envelope"></i>
+                                <span class="btn-label">Aplicar</span>
+                            </button> &nbsp;
+                        </div>
+                        <table class="table table-bordered table-sm mt-3 appear-table">
                             <tbody>
                                 <tr>
                                     <th class="col-md-4" style="background-color: #dedede;">Contraparte</th>
@@ -407,7 +420,7 @@
 
                             </tbody>
                         </table>
- 
+
                         <table class="table table-bordered table-sm disappear">
                             <tbody s>
                                 <tr>
@@ -415,11 +428,13 @@
                                     <td v-text="modal_contraparte" style="padding-left: 12px;"></td>
                                 </tr>
                                 <tr>
-                                    <th class="col-md-4" style="background-color: #dedede; width: 25%">Perfil del estudiante</th>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 25%">Perfil del
+                                        estudiante</th>
                                     <td v-text="modal_perfil_estudiante" style="padding-left: 12px;"></td>
                                 </tr>
                                 <tr>
-                                    <th class="col-md-4" style="background-color: #dedede; width: 25%">Tipo de horas</th>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 25%">Tipo de horas
+                                    </th>
                                     <td v-text="modal_tipo_horas" style="padding-left: 12px;"></td>
                                 </tr>
                                 <tr>
@@ -436,11 +451,13 @@
                                     <td v-text="modal_encargado" style="padding-left: 12px;"></td>
                                 </tr>
                                 <tr>
-                                    <th class="col-md-4" style="background-color: #dedede; width: 25%">Correo encargado</th>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 25%">Correo encargado
+                                    </th>
                                     <td v-text="modal_correo_encargado" style="padding-left: 12px;"></td>
                                 </tr>
                                 <tr>
-                                    <th class="col-md-4" style="background-color: #dedede; width: 25%">Fecha inicial</th>
+                                    <th class="col-md-4" style="background-color: #dedede; width: 25%">Fecha inicial
+                                    </th>
                                     <td v-text="modal_fecha_in" style="padding-left: 12px;"></td>
                                 </tr>
                                 <tr>
@@ -450,7 +467,7 @@
 
                             </tbody>
                         </table>
-                        
+
                         <!-- <table class="table table-bordered table-sm" style=" margin-top: 10px">
                             <tbody>
                                 <tr>
@@ -714,7 +731,7 @@ export default {
             me.user_perfil_id = response.data.idPerfil;
 
             me.search_carrera_id = response.data.idCarrera;
-            me.search_pefil_id = response.data.idPerfil;
+            me.search_perfil_id = response.data.idPerfil;
 
             //console.log(response.data.timeout);
             if (me.fechaLegible(response.data.timeout))
@@ -760,7 +777,7 @@ export default {
                 me.ya_aplico_proyecto = response.data.activeProject;
             })
 
-            var url = `${API_HOST}/proyecto?nombre=${this.filtrandoPorNombre}&carrera=${this.search_carrera_id}&ano=${this.search_pefil_id}&tipo=${this.filtrandoPorTipo}&page=${page}`;
+            var url = `${API_HOST}/proyecto?nombre=${this.filtrandoPorNombre}&carrera=${this.search_carrera_id}&ano=${this.search_perfil_id}&tipo=${this.filtrandoPorTipo}&page=${page}`;
             axios.get(url).then(function (response) {
                 var respuesta = response.data;
                 var proyectos = respuesta.proyectos.data;
@@ -786,6 +803,13 @@ export default {
 <style>
 body {
     font-size: 1em;
+}
+
+.cell-minimizer {
+    display: flex;
+    align-items: center;
+    min-height: 115px;
+    max-height: 400px;
 }
 
 .main {
@@ -926,7 +950,7 @@ body {
 
     .btn-label {
         display: inline;
-    } 
+    }
 
     .appear {
         display: block;
@@ -971,10 +995,10 @@ body {
     height: 100%;
 }
 
-.f-8em{
+.f-8em {
     font-size: 14px;
     font-weight: normal;
-    
+
 }
 
 @media screen and (max-width: 991px) {

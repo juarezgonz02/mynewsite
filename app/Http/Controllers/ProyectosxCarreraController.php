@@ -66,22 +66,36 @@ class ProyectosxCarreraController extends Controller
         $user_carrera = $request -> query('carrera');
         $user = Auth() -> user();
 
-        $proyectos = Proyecto::join('proyectoxcarrera', 'proyecto.idProyecto', '=','proyectoxcarrera.idProyecto')
-        ->leftJoin('proyectoxestudiante', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
-        ->select('proyecto.idProyecto', 'proyecto.nombre','proyecto.descripcion','proyecto.estado',
-        'proyecto.tipo_horas', 'proyecto.cupos_act','proyecto.cupos', 'proyecto.horario', 'proyecto.encargado',
-        'proyecto.fecha_inicio','proyecto.fecha_fin','proyecto.estado_proyecto', 'proyecto.perfil_estudiante',
-        'proyecto.correo_encargado','proyecto.contraparte')
-        ->where('proyecto.estado','=','1')
-        ->where('proyecto.estado_proyecto','=','En curso')
-        ->where('proyectoxcarrera.limite_inf', '<=', $user_perfil)
-        ->where('proyectoxcarrera.limite_sup', '>=', $user_perfil)
-        ->where('proyectoxcarrera.idCarrera', '=', $user_carrera)
-        // ->where('proyecto.fecha_inicio', '>=', date('Y-m-d'))// Se mostraran los proyectos que aun no han iniciado deacuerdo a la fecha de consulta
-        ->whereRaw('(proyectoxestudiante.idUser !=' . $user->idUser . ' OR proyectoxestudiante.idUser IS NULL)')
-        ->whereRaw('proyecto.idProyecto NOT IN (SELECT p.idProyecto FROM proyecto p, proyectoxestudiante pe WHERE p.idProyecto = pe.idProyecto AND pe.idUser = ' . $user->idUser . ')')
-        ->whereRaw('proyecto.cupos_act < proyecto.cupos');
-        
+        if($user_carrera == -1){
+
+            $proyectos = Proyecto::leftJoin('proyectoxestudiante', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
+            ->select('proyecto.idProyecto', 'proyecto.nombre','proyecto.descripcion','proyecto.estado',
+            'proyecto.tipo_horas', 'proyecto.cupos_act','proyecto.cupos', 'proyecto.horario', 'proyecto.encargado',
+            'proyecto.fecha_inicio','proyecto.fecha_fin','proyecto.estado_proyecto', 'proyecto.perfil_estudiante',
+            'proyecto.correo_encargado','proyecto.contraparte')
+            ->where('proyecto.estado', '=', '1')
+            ->whereRaw('(proyectoxestudiante.idUser !=' . $user->idUser . ' OR proyectoxestudiante.idUser IS NULL)')
+            ->whereRaw('proyecto.idProyecto NOT IN (SELECT p.idProyecto FROM proyecto p, proyectoxestudiante pe WHERE p.idProyecto = pe.idProyecto AND pe.idUser = ' . $user->idUser . ')')
+            ->whereRaw('proyecto.cupos_act < proyecto.cupos');
+        }
+        else{
+            $proyectos = Proyecto::join('proyectoxcarrera', 'proyecto.idProyecto', '=','proyectoxcarrera.idProyecto')
+            ->leftJoin('proyectoxestudiante', 'proyectoxestudiante.idProyecto', '=', 'proyecto.idProyecto')
+            ->select('proyecto.idProyecto', 'proyecto.nombre','proyecto.descripcion','proyecto.estado',
+            'proyecto.tipo_horas', 'proyecto.cupos_act','proyecto.cupos', 'proyecto.horario', 'proyecto.encargado',
+            'proyecto.fecha_inicio','proyecto.fecha_fin','proyecto.estado_proyecto', 'proyecto.perfil_estudiante',
+            'proyecto.correo_encargado','proyecto.contraparte')
+            ->where('proyecto.estado','=','1')
+            ->where('proyecto.estado_proyecto','=','En curso')
+            ->where('proyectoxcarrera.limite_inf', '<=', $user_perfil)
+            ->where('proyectoxcarrera.limite_sup', '>=', $user_perfil)
+            ->where('proyectoxcarrera.idCarrera', '=', $user_carrera)
+            // ->where('proyecto.fecha_inicio', '>=', date('Y-m-d'))// Se mostraran los proyectos que aun no han iniciado deacuerdo a la fecha de consulta
+            ->whereRaw('(proyectoxestudiante.idUser !=' . $user->idUser . ' OR proyectoxestudiante.idUser IS NULL)')
+            ->whereRaw('proyecto.idProyecto NOT IN (SELECT p.idProyecto FROM proyecto p, proyectoxestudiante pe WHERE p.idProyecto = pe.idProyecto AND pe.idUser = ' . $user->idUser . ')')
+            ->whereRaw('proyecto.cupos_act < proyecto.cupos');
+            
+        }
 
 
         if($name != ''){

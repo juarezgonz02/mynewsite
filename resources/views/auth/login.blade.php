@@ -39,7 +39,7 @@
                     <div class="container">
                         <div class="card-group">
                             <div id="form-container" class="d-flex flex-column justify-content-center align-items-center mx-auto">
-                                <img class="mx-auto d-block login-logotype" src="img/logotype.svg" />
+                                <img alt="CSS LOGO" class="mx-auto d-block login-logotype" src="img/logotype.svg" />
 
                                 @if ($errors->first('verified'))
                                     {!! $errors->first('verified', '<div class="message_box"> <p style="color: blue">:message</p></div>') !!}
@@ -61,7 +61,7 @@
 
                                     <div class="form-group mb-2">
                                         <div class="d-flex justify-content-between " style="gap: 24px;">
-                                            <label for="con" class="label-form">Contraseña</label>
+                                            <label for="contraseña" class="label-form">Contraseña</label>
                                             <a class="small" href="{{ url('/contra_olvidada_form') }}">Olvidaste tu
                                                 contraseña?</a>
                                         </div>
@@ -113,6 +113,13 @@
                                             data-theme="filled_blue" data-text="signin_with" data-size="large"
                                             data-logo_alignment="left" data-width="100" data-height="110">
                                         </div>
+                                    </div>
+
+                                    <div class="d-flex align-items-center mt-4 flex-column">
+                                        Encuentranos en: 
+                                        <a href="https://play.google.com/store/apps/details?id=com.cssuca.app&hl=es">
+                                            <img class="google-badge-class" alt="Encuentranos en Google Play " src="img/google-play-badge.png"/> 
+                                        </a>
                                     </div>
 
                                     <div
