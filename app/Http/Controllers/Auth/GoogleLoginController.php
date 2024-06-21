@@ -8,7 +8,7 @@ use App\Facultad;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
-use Google\Client;
+use Google\Auth\AccessToken;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -25,8 +25,10 @@ class GoogleLoginController extends Controller
     public function handleAPICallback(Request $request)
     {
         //code...
-        $client = new Client(['client_id' => env('GOOGLE_CLIENT_ID')]);  // Specify the CLIENT_ID of the app that accesses the backend
-        $payload = $client->verifyIdToken($request->credential);
+        // $client = new Client(['client_id' => env('GOOGLE_CLIENT_ID')]);  // Specify the CLIENT_ID of the app that accesses the backend
+        // $payload = $client->verifyIdToken($request->credential);
+        $auth = new AccessToken();
+        $payload = $auth->verify($request->credential); 
         try {
             if ($payload) {
                 $user_id = $payload['sub'];
@@ -85,9 +87,10 @@ class GoogleLoginController extends Controller
         $googleUser = Socialite::driver('google')->stateless()->user();
         */
         
-        // Get $id_token via HTTPS POST.
-        $client = new Client(['client_id' => env('GOOGLE_CLIENT_ID')]);  // Specify the CLIENT_ID of the app that accesses the backend
-        $payload = $client->verifyIdToken($request->credential);
+        // $client = new Client(['client_id' => env('GOOGLE_CLIENT_ID')]);  // Specify the CLIENT_ID of the app that accesses the backend
+        // $payload = $client->verifyIdToken($request->credential);
+        $auth = new AccessToken();
+        $payload = $auth->verify($request->credential, ['audience' => env('GOOGLE_CLIENT_ID')]); 
         
         Log::debug($payload);
         try {
