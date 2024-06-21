@@ -1266,7 +1266,7 @@ export default {
                 return;
             }
             const me = this
-            if (this.add_edit_flag) {
+            if (this.add_edit_flag == 1) {
                 try {
                     const response = await axios.post(`${API_HOST}/proyecto/insertar`, {
                         'idProyecto': this.id_proyecto,
@@ -1531,40 +1531,34 @@ export default {
             this.flagErrorProyecto = true;
             return true;
         },
-        estadoProyecto() {
+        async estadoProyecto() {
             const me = this
             if (me.modal_confirmar != me.modal_nombre) {
                 me.flagErrorEstado = true
                 me.errorEstado = 1
             }
             else {
-
-                me.loading = 1;
-
-                axios.post(`${API_HOST}/proyecto/${me.modal_estado == '2' ? 'finalizar' : 'cancelar'}`, {
-                    idProyecto: this.id_proyecto
-                }).then(function (response) {
-                    // console.log(response);
-
-                    // $('#statusModal').modal('hide');
+                try{
+                    me.loading = 1;
+                    await axios.post(`${API_HOST}/proyecto/${me.modal_estado == '2' ? 'finalizar' : 'cancelar'}`, {
+                        idProyecto: this.id_proyecto
+                    })
 
                     this.$swal.fire({
                         icon: response.data.success ? 'success' : 'error',
                         title: 'Estado del proyecto',
                         text: response.data.message,
                     });
-                }).catch(function (error) {
+                }
+                catch(error) {
                     console.log(error);
-                }).finally(function () {
+                }
+                finally {
                     $('#statusModal').modal('hide');
                     me.loading = 0;
                     me.bindDataByFilters();
                     me.cerrarModal();
-                });
-
-
-
-
+                }
             }
         },
 
