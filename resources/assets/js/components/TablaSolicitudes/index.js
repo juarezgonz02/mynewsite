@@ -1,5 +1,4 @@
 import {API_HOST} from '../../constants/endpoint.js';
-import Swal from 'sweetalert2';
 
 export default {
     data(){

@@ -7,10 +7,11 @@
     "require": {
         "php": ">=5.6.4",
         "anhskohbo/no-captcha": "^3.3",
-        "google/apiclient": "2.14.0",
+        "google/auth": "^1.15",
         "google/recaptcha": "1.1",
         "laravel/framework": "5.4.*",
-        "laravel/tinker": "~1.0"
+        "laravel/tinker": "~1.0",
+        "phpseclib/phpseclib": "^3.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -44,8 +45,7 @@
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "php artisan optimize"
-        ],
-        "pre-autoload-dump": "Google\\Task\\Composer::cleanup"
+        ]
 
     },
     "config": {
@@ -55,8 +55,5 @@
         "allow-plugins": {
             "kylekatarnls/update-helper": true
         }
-    },
-    "extra": {
-        "google/apiclient-services": [""]
     }
 }

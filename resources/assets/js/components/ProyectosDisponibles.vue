@@ -207,8 +207,9 @@
                             <th style="text-align: center; width: 25%;">Contraparte</th>
                             <th style="text-align: center; width: 25%;">Proyecto</th>
                             <th style="text-align: center; width: 20%;">Perfil estudiante</th>
+                            <th style="text-align: center; width: 10%;" class="disappear">Tipo</th>
                             <th style="width: 10%; text-align: center;" class="disappear">Cupos</th>
-                            <th style="width: 10%; text-align: center;" class="disappear">Aplicar</th>
+                            <th style="width: 7%; text-align: center;" class="disappear">Aplicar</th>
                         </tr>
                     </thead>
                     <tbody style="width: 100%;">
@@ -223,6 +224,8 @@
                                 @click="abrirModal('info', proyecto)"></td>
                             <td v-text="proyecto.perfil_estudiante" data-toggle="modal" data-target="#modal-info"
                                 @click="abrirModal('info', proyecto)"></td>
+                            <td v-text="proyecto.tipo_horas" data-toggle="modal" data-target="#modal-info"
+                                @click="abrirModal('info', proyecto)" class="disappear" style="text-align: center;"></td>
                             <td class="disappear" v-text="`${proyecto.cupos_act}${'/'}${proyecto.cupos}`"
                                 data-toggle="modal" data-target="#modal-info" @click="abrirModal('info', proyecto)"
                                 style="text-align: center;"></td>
@@ -230,18 +233,18 @@
                                 <div class="d-flex justify-content-center">
                                     <div v-if="!ya_aplico_hoy && !ya_aplico_proyecto && !timeout">
                                         <button type="button" data-toggle="modal" data-target="#modal-aplicar"
-                                            @click="abrirModal('aplicar', proyecto)" class="btn btn-primary btn-sm"
+                                            @click="abrirModal('aplicar', proyecto)" class="mx-2 btn btn-primary"
                                             style="border-radius: 5px;">
                                             <i class="icon-envelope"></i>
                                             <span class="btn-label">Aplicar</span>
-                                        </button> &nbsp;
+                                        </button>
                                     </div>
                                     <div v-else>
-                                        <button type="button" class="btn btn-primary btn-sm" disabled
+                                        <button type="button" class="mx-2 btn btn-primary" disabled
                                             style="border-radius: 5px;">
                                             <i class="icon-envelope"></i>
                                             <span class="btn-label">Aplicar</span>
-                                        </button> &nbsp;
+                                        </button>
                                     </div>
                                 </div>
                             </td>

@@ -9,7 +9,7 @@
 
 window.Vue = require('vue');
 //import Vue from 'vue';
-//import Swal from 'sweetalert2'
+//import  this.$swal from 'sweetalert2'
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
