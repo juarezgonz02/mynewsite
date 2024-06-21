@@ -77,19 +77,19 @@
                                 </div> -->
                                 <div class="form-group row" style="margin-right: 20px;"> 
 
-                                    <div v-if="!proyectoInscritoFlag" id="message" style="margin-bottom:10;" class="alert alert-info" role="alert">
+                                    <div v-if="!proyectoInscritoFlag" id="message" class="alert alert-info" role="alert">
                                         No se encuentra inscrito en ningun proyecto.
                                     </div>
-                                    <div v-if="errorActualizar == 1" id="message" style="margin-bottom:10" class="alert alert-success" role="alert">
+                                    <div v-if="errorActualizar == 1" id="message" class="alert alert-success" role="alert">
                                         Estudiante actualizado correctamente
                                     </div>
-                                    <div v-else-if="errorActualizar == 2" id="message" style="margin-bottom:10" class="alert alert-danger" role="alert">
+                                    <div v-else-if="errorActualizar == 2" id="message" class="alert alert-danger" role="alert">
                                         Busque un estudiante
                                     </div>
-                                    <div v-else-if="errorActualizar == 3" id="message" style="margin-bottom:10" class="alert alert-danger" role="alert">
+                                    <div v-else-if="errorActualizar == 3" id="message" class="alert alert-danger" role="alert">
                                         Seleccione una carrera
                                     </div>
-                                    <div v-else style="visibility:hidden; margin-bottom:0"  class="alert row" role="alert">.</div>
+                                    <div v-else style="visibility:hidden;"  class="alert row" role="alert">.</div>
                                     </div>
                               </div>
                                <!-- Hide timeout feature -->
@@ -220,7 +220,7 @@ import {API_HOST} from '../constants/endpoint.js';
                     //console.log("Exec get carreras", flag)
                     //console.log(this.idCarrera)
             },
-            actualizarEstudiante(){
+            async actualizarEstudiante(){
                 const me = this
                 if(this.carnet == '' && this.idPerfil == 0){
                     this.errorActualizar = 2
@@ -230,44 +230,47 @@ import {API_HOST} from '../constants/endpoint.js';
                     this.errorActualizar = 1
                     return;
                 }
+                try{
+
                     if(this.idCarrera != null && this.idCarrera != 0){
-                        axios.put(`${API_HOST}/estudiante/actualizar`, {
+
+                        const response = await axios.put(`${API_HOST}/estudiante/actualizar`, {
                             'carnet' : this.carnet,
                             'idCarrera' : this.idCarrera,
                             'idPerfil' : this.idPerfil
-                        }).then(function (response) {
+                        })
+
+                        // .then(function (response) {
                             me.errorActualizar = 1
                             //console.log(response)
                             if(response.status == 200)
                             {
                                  this.$swal.fire({
-                                    title: 'Estudiante actualizado',
-                                    text: 'El estudiante ha sido actualizado correctamente',
-                                    icon: 'success',
-                                    timer: 2000
-                                });
-                                me.idCarreraAux = me.idCarrera
-                                me.idFacultadAux = me.idFacultad
-                                me.idPerfilAux = me.idPerfil
+                                     title: 'Estudiante actualizado',
+                                     text: 'El estudiante ha sido actualizado correctamente',
+                                     icon: 'success',
+                                     timer: 2000
+                                    });
+                                    me.idCarreraAux = me.idCarrera
+                                    me.idFacultadAux = me.idFacultad
+                                    me.idPerfilAux = me.idPerfil
+                                }
                             }
-                        }).
-                        finally(function(){
+                        
                             me.toggleEditDisabled(true);
                             me.buscarEstudiante()
-                        })
-                        .catch(function (error) {
-                             this.$swal.fire({
-                                title: 'Error',
-                                text: 'Ha ocurrido un error al actualizar el estudiante',
-                                icon: 'error',
-                                confirmButtonText: 'Aceptar'
-                            })
+                }
+                catch(e) {
+                        this.$swal.fire({
+                            title: 'Error',
+                                    text: 'Ha ocurrido un error al actualizar el estudiante',
+                                    icon: 'error',
+                                    confirmButtonText: 'Aceptar'
+                                })
                             console.log(error);
-                        });
-                    }
-                    else{
-                        this.errorActualizar = 3
-                    }
+                            this.errorActualizar = 3
+                }
+                        
             },
             removerTimeOut(){
                 const me = this
