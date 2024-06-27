@@ -7,6 +7,9 @@ RewriteRule ^(.*)\.(js|css|svg|png|jpg|jpeg|ttf|woff2|ico|gif)$ /css-proyecto/pu
 RewriteCond %{REQUEST_URI} !^/public/
 RewriteRule ^(.*)$ server.php [L]
 
+RewriteCond %{REQUEST_URI} !^/css-proyecto/public/
+#RewriteRule ^(.*)$ /css-proyecto/public/$1 [L]
+RewriteRule ^(.*)$ server.php [L]
 # Deny access to other directories
 RewriteCond %{REQUEST_URI} !^/public/
 RewriteRule ^ - [F]
@@ -20,4 +23,19 @@ Options -Indexes
     Order allow,deny
     Deny from all
 </Files>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

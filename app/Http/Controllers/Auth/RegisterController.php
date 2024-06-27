@@ -56,7 +56,7 @@ class RegisterController extends Controller
             $carnet = $request->carnet;
             $genero = $request->genero;
             $carrera = $request->carrera;
-            $perfil = $request->$perfil;
+            $perfil = $request->perfil;
 
             User::create([
                 'nombres' => strtoupper($nombre),

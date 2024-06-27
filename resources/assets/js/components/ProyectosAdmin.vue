@@ -1910,7 +1910,7 @@ export default {
             }
             else {
                 // console.log("Rechazando estudiante")
-                axios.put(`${API_HOST}/rechazarestudiante`, {
+                axios.put(`${API_HOST}/proyecto/estudiantes/rechazar`, {
                     'idUser': me.id_estudiante,
                     'idProyecto': me.id_proyecto,
                 }).then(function () {
