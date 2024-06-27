@@ -1,8 +1,11 @@
 RewriteEngine On
-
-# Redirect requests to the public directory
+# Redirect requests to the public directory if is a file
 RewriteCond %{REQUEST_URI} !^/public/
-RewriteRule ^(.*)$ /public/$1 [L]
+RewriteRule ^(.*)\.(js|css|svg|png|jpg|jpeg|ttf|woff2|ico|gif)$ /css-proyecto/public/$1.$2 [L]
+
+# Redirect requesto server.php file -> to public
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^(.*)$ server.php [L]
 
 # Deny access to other directories
 RewriteCond %{REQUEST_URI} !^/public/
