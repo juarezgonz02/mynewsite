@@ -79,7 +79,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/estadisticas', 'EstadisticasController@getEstadisticasGenerales');
         Route::get('/solicitudes', 'ProyectoxEstudianteController@get_all_applications');
         
-        Route::post('/users/admin/new', 'AdminUserController@createUser');
+        Route::post('/users/admin/new', 'AdminUserController@addAdmin');
         Route::delete('/users/admin/delete', 'AdminUserController@deleteAdminUser');
         Route::get('/users/admin/all', 'AdminUserController@getAllAdmins');
         Route::post('/proyecto/cancelar', 'ProyectoController@cancelProject');

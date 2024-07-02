@@ -10,34 +10,37 @@ use Illuminate\Support\Facades\Validator;
 class AdminUserController extends Controller
 {
 
-    public function createUser(Request $request){
-        if(!$request->ajax()) return redirect('/home');
-        
 
-        $validator = $this->valid($request); 
-        if ($validator -> fails()) {
-            return response()->json($validator->messages(), 400);
+
+    public function addAdmin(Request $request){
+        if(!$request->ajax()) return redirect('/home');
+        // if user exists update role to admin, if not create user with admin role
+        $user = User::where('correo', $request->correo)->first();
+        if($user){
+            $user->idRol = 1;
+            $user->save();
+        }else{
+            $validator = $this->valid($request); 
+            if ($validator -> fails()) {
+                return response()->json($validator->messages(), 400);
+            }
+
+            $usuario = User::create([
+                'nombres'               => strtoupper($request->nombre),
+                'apellidos'             => strtoupper($request->apellido),
+                'correo'                => $request->correo,
+                'estado'                => 1,
+                'genero'                => $request->genero,
+                'verificado'            => 1,
+                'ultima_fecha_contra'   => '1-1-2000',
+                'ya_aplico_hoy'         => '1-1-2000',
+                'idRol'                 => 1,
+                'password'              => $request->contrasena,
+                'api_token'             => $this->generarApiToken()
+            ]);
         }
 
-        $usuario = User::create([
-            'nombres'               => strtoupper($request->nombre),
-            'apellidos'             => strtoupper($request->apellido),
-            'correo'                => $request->correo,
-            'estado'                => 1,
-            'genero'                => $request->genero,
-            'verificado'            => 1,
-            'ultima_fecha_contra'   => '1-1-2000',
-            'ya_aplico_hoy'         => '1-1-2000',
-            'idRol'                 => 1,
-            'password'              => $request->contrasena,
-            'api_token'             => $this->generarApiToken()
-        ]);
-
-
-
-        return response()->json([
-            'message'=>'creado con exito'
-        ], 200);
+        
     }
 
     public function deleteAdminUser(Request $request) {
