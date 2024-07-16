@@ -29,6 +29,6 @@ class VerifyMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Mail from CSS subject part')->view('emails.verificar');
+        return $this->subject("Solicitud de creación de cuenta.")->view('emails.verificar');
     }
 }
