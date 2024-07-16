@@ -13,6 +13,6 @@ class RetryFailedJobs extends Command
     public function handle()
     {
         echo "Reintentando todos los trabajos fallidos...\n";
-        $this->call('queue:retry', ['id' => 'all']);
+        $this->call('queue:retry', ['all'] 	);
     }
 }
