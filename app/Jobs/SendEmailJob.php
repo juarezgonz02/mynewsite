@@ -39,12 +39,12 @@ class SendEmailJob implements ShouldQueue
     {
         echo "Enviando email a: " . $this->emailDetails['email'] . "\n";
         $cacheKey = "email_quota_daily_limit";
-        $quotaLimit = env('EMAIL_QUOTA_LIMIT', 2);
+        $quotaLimit = env('EMAIL_QUOTA_LIMIT',100);
 
         $currentHour = Carbon::now()->hour;
 
-        if ($currentHour < 8 || $currentHour > 20) {
-            Log::info('Email sending time is outside of 8am to 7pm. Job released back to the queue for retry in 10 seconds.');
+        if ($currentHour < 7 || $currentHour > 22) {
+            Log::info('Email sending time is outside of 7am to 10pm. Job released back to the queue for retry in 4 hours.');
             // Delay 4 hours 
             return $this->release(14400);
         }
@@ -68,8 +68,8 @@ class SendEmailJob implements ShouldQueue
                 Log::info('Email sent and quota updated. New email count: ' . ($emailCount + 1) . ' at ' . Carbon::now()->endOfDay());
             } else {
                 Log::info('Email quota limit reached at ' . Carbon::now());
-                Log::info('Job released back to the queue for retry in - seconds.');
-                return $this->release(300);
+                Log::info('Job released back to the queue for retry in 1 hour');
+                return $this->release(3600);
             }
         } else {
             Log::info('Cache key does not exist. Sending first email and initializing quota.');
