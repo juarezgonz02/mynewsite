@@ -13,7 +13,7 @@
     <div style="color:black">
         <p> Estimado/a estudiante.</p>
         <p>
-            Lamentamos informarle ha sido removido del proyecto de horas sociales: <b>{{ $data->proyecto }}</b>
+            Lamentamos informarle ha sido removido del proyecto de horas sociales: <b>{{ $details['data']->proyecto }}</b>
             <br>
             Agradecemos su interés mostrado y le invitamos a formar parte de otros proyectos disponibles.
 

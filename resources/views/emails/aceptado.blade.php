@@ -8,10 +8,10 @@
 </head>
 <body>
     <div style="color:black">
-        <p> Estimado/a {{ $data->nombres }} {{ $data->apellidos }},</p>
+        <p> Estimado/a {{ $details['data']->nombres }} {{ $details['data']->apellidos }},</p>
         <p>
             Se le notifica que <b style="color:red">ha sido aceptado</b> para el siguiente proyecto de horas sociales: <br>
-            <b> {{ $data->nombre }}. </b> <br>
+            <b> {{ $details['data']->nombre }}. </b> <br>
             Favor estar pendiente de su correo institucional para futuras indicaciones.
         </p><br>
         <p>

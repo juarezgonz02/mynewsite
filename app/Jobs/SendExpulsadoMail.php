@@ -8,13 +8,12 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\VerifyMail;
+use App\Mail\ExpulsadoMail;
 use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
-// use function Illuminate\Support\Carbon\now;
 
-class SendEmailJob implements ShouldQueue
+class SendExpulsadoMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -23,7 +22,7 @@ class SendEmailJob implements ShouldQueue
      *
      * @return void
      */
-     protected $emailDetails;
+    protected $emailDetails;
 
     public function __construct($emailDetails)
     {
@@ -57,7 +56,7 @@ class SendEmailJob implements ShouldQueue
     
             if ($emailCount < $quotaLimit) {
                 Log::info('Sending email now.');
-                Mail::to($this->emailDetails['email'])->send(new VerifyMail($this->emailDetails));
+                Mail::to($this->emailDetails['email'])->send(new ExpulsadoMail($this->emailDetails));
                 Cache::put($cacheKey, $emailCount + 1, Carbon::now()->endOfDay());
                 
                 
@@ -73,7 +72,7 @@ class SendEmailJob implements ShouldQueue
             }
         } else {
             Log::info('Cache key does not exist. Sending first email and initializing quota.');
-            Mail::to($this->emailDetails['email'])->send(new VerifyMail($this->emailDetails));
+            Mail::to($this->emailDetails['email'])->send(new ExpulsadoMail($this->emailDetails));
             Cache::put($cacheKey, 1, Carbon::now()->addDay());
             Log::info('Email sent and quota initialized. New email count: 1');
         }

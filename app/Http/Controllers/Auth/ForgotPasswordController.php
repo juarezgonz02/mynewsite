@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use App\PasswordResetToken;
 use App\User;
 use Mail;
+use App\Jobs\SendCambiarContraMail;
 
 class ForgotPasswordController extends Controller
 {
@@ -224,15 +225,23 @@ class ForgotPasswordController extends Controller
 
     //Función que envía correos
     public function sendEmail($user, $token){
-        Mail::send(
-            'emails.cambiarContra',
-            ['user' => $user, 'token' => $token->token],
-            function($message) use ($user){
-                $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                $message->to($user->correo);
-                $message->subject("Solicitud para cambiar contraseña.");
-            }
-        );
+        // Mail::send(
+        //     'emails.cambiarContra',
+        //     ['user' => $user, 'token' => $token->token],
+        //     function($message) use ($user){
+        //         $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+        //         $message->to($user->correo);
+        //         $message->subject("Solicitud para cambiar contraseña.");
+        //     }
+        // );
+
+        $emailDetails = [
+            'email' => $user->correo,
+            'token' => $token->token,
+            'user' => $user
+        ];
+
+        SendCambiarContraMail::dispatch($emailDetails)->onConnection('database');
     }
 
     protected function validateMail(Request $request){
