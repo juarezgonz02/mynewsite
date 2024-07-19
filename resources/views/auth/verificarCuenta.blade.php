@@ -71,13 +71,4 @@
 
     <script src="{{url('/js/helpers.js')}}"></script>
 </body>
-
-    <style>
-    <?php include "css/verifyAccount.css" ?>
-    </style>
-    <style>
-    <?php include "css/bootstrap.min.css" ?>
-    </style>
-
-
 </html>
