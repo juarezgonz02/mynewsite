@@ -11,7 +11,7 @@
     <link href="{{ asset('js/plantilla.css') }}" >
     <link href="{{ asset('js/jquery.min.css') }}" >
     <link href="{{ asset('js/bootstrap.min.css') }}" >
-    <link rel="shortcut icon" type="image/jpg" href=" {{url('/').'/img/logo-uca.png'}}">
+    <link rel="icon" href="{{url('/').'/img/icons/logo-uca.ico'}}">
 
     <!--<script src="js/plantilla.js"></script>
     <script src="js/jquery.min.js"></script>
