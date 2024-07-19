@@ -1,11 +1,14 @@
+RewriteEngine On
+
 # Redirect requests to the public directory
 RewriteCond %{REQUEST_URI} !^/css-proyecto/public/
 #RewriteRule ^(.*)$ /css-proyecto/public/$1 [L]
 RewriteRule ^(.*)\.(js|css|svg|png|jpg|jpeg)$ /css-proyecto/public/$1.$2 [L]
 
+# Redirect non file request to index handler
 RewriteCond %{REQUEST_URI} !^/css-proyecto/public/
-#RewriteRule ^(.*)$ /css-proyecto/public/$1 [L]
 RewriteRule ^(.*)$ server.php [L]
+
 # Deny access to other directories
 RewriteCond %{REQUEST_URI} !^/public/
 RewriteRule ^ - [F]
