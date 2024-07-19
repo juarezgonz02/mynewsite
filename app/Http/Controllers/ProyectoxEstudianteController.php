@@ -9,8 +9,11 @@ use App\User;
 use Illuminate\Support\Facades\Auth;
 use Mail;
 use Illuminate\Support\Facades\DB;
-
-
+use App\Jobs\SendEstudianteAplicoMail;
+use App\Jobs\SendAgregadoPorAdminMail;
+use App\Jobs\SendExpulsadoMail;
+use App\Jobs\SendAceptadoMail;
+use App\Jobs\SendRechazadoMail;
 class ProyectoxEstudianteController extends Controller{
     public function index(Request $request)
     {
@@ -208,63 +211,93 @@ class ProyectoxEstudianteController extends Controller{
 
     public function sendEmail($user, $mailType){
         if($mailType == 1){
-            Mail::send(
-                'emails.estudianteAplico',
-                ['user' => $user],
-                function($message) use ($user){
-                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                    $message->to($user->correo_encargado);
-                    $message->subject("Aplicación de un estudiante en su proyecto.");
-                }
-            );
+            // Mail::send(
+            //     'emails.estudianteAplico',
+            //     ['user' => $user],
+            //     function($message) use ($user){
+            //         $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+            //         $message->to($user->correo_encargado);
+            //         $message->subject("Aplicación de un estudiante en su proyecto.");
+            //     }
+            // );
+            $emailDetails = [
+                'email' => $user->correo_encargado,
+                'user' => $user
+            ];
+            SendEstudianteAplicoMail::dispatch($emailDetails)->onConnection('database');
         }
         else if($mailType == 2){
-            Mail::send(
-                'emails.agregadoPorAdmin',
-                ['user' => $user],
-                function($message) use ($user){
-                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                    $message->to($user->correo);
-                    $message->subject("Actualización de ingreso a proyecto de horas sociales");
-                }
-            );
-        }else if($mailType == 3){
-            Mail::send(
-                'emails.expulsado',
-                ['data' => $user],
-                function($message) use ($user){
-                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                    $message->to($user->correo);
-                    $message->subject("Notificación de remoción de proyecto");
-                }
-            );
+            // Mail::send(
+            //     'emails.agregadoPorAdmin',
+            //     ['user' => $user],
+            //     function($message) use ($user){
+            //         $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+            //         $message->to($user->correo);
+            //         $message->subject("Actualización de ingreso a proyecto de horas sociales");
+            //     }
+            // );
 
+            $emailDetails = [
+                'email' => $user->correo,
+                'user' => $user
+            ];
+            SendAgregadoPorAdminMail::dispatch($emailDetails)->onConnection('database');
+
+        }else if($mailType == 3){
+            // Mail::send(
+            //     'emails.expulsado',
+            //     ['data' => $user],
+            //     function($message) use ($user){
+            //         $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+            //         $message->to($user->correo);
+            //         $message->subject("Notificación de remoción de proyecto");
+            //     }
+            // );
+
+            $emailDetails = [
+                'email' => $user->correo,
+                'data' => $user
+            ];
+            SendExpulsadoMail::dispatch($emailDetails)->onConnection('database');
         }
         
     }
 
     public function sendEmailAceptadoRechazado($mailData, $estado){
         if($estado == 1){
-            Mail::send(
-                'emails.aceptado',
-                ['data' => $mailData],
-                function($message) use ($mailData){
-                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                    $message->to($mailData->correo);
-                    $message->subject("Estado de su aplicación. Proyecto: ". $mailData->nombre);
-                }
-            );
+            // Mail::send(
+            //     'emails.aceptado',
+            //     ['data' => $mailData],
+            //     function($message) use ($mailData){
+            //         $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+            //         $message->to($mailData->correo);
+            //         $message->subject("Estado de su aplicación. Proyecto: ". $mailData->nombre);
+            //     }
+            // );
+
+            $emailDetails = [
+                'email' => $mailData->correo,
+                'data' => $mailData
+            ];
+            SendAceptadoMail::dispatch($emailDetails)->onConnection('database');
         }
         elseif($estado == 2){
-            Mail::send(
-                'emails.rechazado',
-                ['data' => $mailData],
-                function($message) use ($mailData){
-                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                    $message->to($mailData->correo);
-                    $message->subject("Estado de su aplicación. Proyecto: ". $mailData->nombre);
-                }
-            );
+            // Mail::send(
+            //     'emails.rechazado',
+            //     ['data' => $mailData],
+            //     function($message) use ($mailData){
+            //         $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+            //         $message->to($mailData->correo);
+            //         $message->subject("Estado de su aplicación. Proyecto: ". $mailData->nombre);
+            //     }
+            // );
+
+            $emailDetails = [
+                'email' => $mailData->correo,
+                'data' => $mailData
+            ];
+
+            SendRechazadoMail::dispatch($emailDetails)->onConnection('database');
         }
     }
 

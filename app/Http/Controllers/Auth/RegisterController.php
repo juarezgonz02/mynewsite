@@ -50,9 +50,9 @@ class RegisterController extends Controller
 
         DB::beginTransaction();
 
+        $this->validator($request);
         try{
 
-        $this->validator($request);
         
         $email = $request->carnet . "@uca.edu.sv";
         $user = User::whereCorreo($email)->first();
