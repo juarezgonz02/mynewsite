@@ -9,13 +9,13 @@
 <body>
     <div style="color:black; font-size: 1.2em">
         <p>
-            <p> Estimado/a {{ $user->nombres }} {{ $user->apellidos }}</p>
+            <p> Estimado/a {{ $details['user']->nombres }} {{ $details['user']->apellidos }}</p>
                 Usted ha creado una cuenta nueva en el sistema de proyectos para horas sociales CSS, ingrese este código para verificar su cuenta y establecer su contraseña.
                 <br>
-                    <p style="color:red; font-size: 2em" > {{$user -> utoken -> token}}</p>
+                    <p style="color:red; font-size: 2em" > {{$details['user'] -> utoken -> token}}</p>
             </p><br>
             <p> Puede verificar su cuenta a traves de este enlace: 
-                <b style="font-size: 1.1em"><a href="{{ url('verificar_usuario/'.$user->correo) }}"> Click aquí </a></b>
+                <b style="font-size: 1.1em"><a href="{{ url('verificar_usuario/'.$details['user']->correo) }}"> Click aquí </a></b>
             </p>
         <p> 
             Atentamente, Centro de Servicio Social.

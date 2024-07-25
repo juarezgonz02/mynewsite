@@ -10,6 +10,8 @@ use App\Carrera;
 use App\User;
 use App\ProyectoxEstudiante;
 use Mail;
+use App\Jobs\SendReunionMail;
+use App\Jobs\SendProyectoDesactivadoMail;
 
 class ProyectoController extends Controller
 {
@@ -245,15 +247,23 @@ public function state(Request $request)
     }
 
     public function sendEmail($mails, $nombre){
-        Mail::send(
-            'emails.proyectoDesactivado',
-            ['mails' => $mails, 'nombre'=> $nombre],
-            function($message) use ($mails, $nombre){
-                $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                $message->bcc($mails);
-                $message->subject("Actualización de proyecto de horas sociales: ". $nombre->nombre);
-            }
-        );
+        // Mail::send(
+        //     'emails.proyectoDesactivado',
+        //     ['mails' => $mails, 'nombre'=> $nombre],
+        //     function($message) use ($mails, $nombre){
+        //         $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+        //         $message->bcc($mails);
+        //         $message->subject("Actualización de proyecto de horas sociales: ". $nombre->nombre);
+        //     }
+        // );
+
+        $emailDetails = [
+            'nombre' => $nombre,
+            'mails' => $mails
+        ];
+
+        SendProyectoDesactivadoMail::dispatch($emailDetails)->onConnection('database');
+
     }
 
     public function cuposActuales(Request $request){
@@ -273,20 +283,37 @@ public function state(Request $request)
 
         // Envia a los estudiantes involucrados
        
-            Mail::send(
-                'emails.reunion',
-                ['nombre_proyecto' => $project, 'descripcion' => $description, 'lugar' => $place, 'fecha' => $date, 'hour' => $hour,'encargado' => $manager], 
-                function($message) use ($students, $manager_mail){
-                    # TEST 
-                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                    foreach ($students as $student) {
-                        $message->to($student);
-                    }
-                    $message->cc($manager_mail);
-                    $message->subject("El encargado del proyecto solicitó una reunion.");
-                }
-            );
-        
+            // Mail::send(
+            //     'emails.reunion',
+            //     ['nombre_proyecto' => $project, 'descripcion' => $description, 'lugar' => $place, 'fecha' => $date, 'hour' => $hour,'encargado' => $manager], 
+            //     function($message) use ($students, $manager_mail){
+            //         # TEST 
+            //         $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+            //         foreach ($students as $student) {
+            //             $message->to($student);
+            //         }
+            //         $message->cc($manager_mail);
+            //         $message->subject("El encargado del proyecto solicitó una reunion.");
+            //     }
+            // );
+
+            foreach ($students as $student) {
+                $emailDetails = [
+                    'email' => $student,
+                    'manager_email' => $manager_mail,
+                    'nombre_proyecto' => $project,
+                    'descripcion' => $description,
+                    'lugar' => $place,
+                    'fecha' => $date,
+                    'hour' => $hour,
+                    'encargado' => $manager,
+                    'manager_mail' => $manager_mail
+                ];
+    
+                SendReunionMail::dispatch($emailDetails)->onConnection('database');
+            }
+            
+            
 
         
     }

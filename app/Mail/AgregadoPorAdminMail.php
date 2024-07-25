@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class VerifyMail extends Mailable
+class AgregadoPorAdminMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -29,6 +29,6 @@ class VerifyMail extends Mailable
      */
     public function build()
     {
-        return $this->from("automatic.noreply.css@gmail.com","Centro de servicio social")->subject("Solicitud de creación de cuenta.")->view('emails.verificar');
+        return $this->from("automatic.noreply.css@gmail.com","Centro de servicio social")->subject("Actualización de ingreso a proyecto de horas sociales.")->view('emails.agregadoPorAdmin');
     }
 }

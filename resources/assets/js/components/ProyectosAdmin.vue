@@ -1379,7 +1379,7 @@ export default {
             if (this.id_proyecto) {
                 try {
 
-                    const response = await axios.post(`${API_HOST}/sendMeetingMail`, {
+                    const response = await axios.post(`${API_HOST}/reunion`, {
                         'nombre_proyecto': this.proyecto,
                         'descripcion': this.modal_descripcion,
                         'encargado': this.modal_encargado,

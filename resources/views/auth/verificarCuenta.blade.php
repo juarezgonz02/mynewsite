@@ -10,7 +10,7 @@
     <link href="{{ asset('js/plantilla.css') }}" >
     <link href="{{ asset('js/jquery.min.css') }}" >
     <link href="{{ asset('js/bootstrap.min.css') }}" >
-    <link rel="shortcut icon" type="image/jpg" href=" {{url('/').'/img/logo-uca.png'}}">
+    <link rel="icon" href="{{url('/').'/img/icons/logo-uca.ico'}}">
 
     <!--<link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="./olvidec.css" rel="stylesheet">
@@ -71,13 +71,4 @@
 
     <script src="{{url('/js/helpers.js')}}"></script>
 </body>
-
-    <style>
-    <?php include "css/verifyAccount.css" ?>
-    </style>
-    <style>
-    <?php include "css/bootstrap.min.css" ?>
-    </style>
-
-
 </html>
