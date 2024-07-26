@@ -14,8 +14,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <meta name="description" content="Busca y aplica a los proyectos disponibles para tu carrera  ">
-    <meta name="title" content="Proyectos centro de Servicio Social | CSS UCA">
+    <meta name="description" content="Busca y aplica a los proyectos disponibles para tu carrera">
+    <meta name="title" content="Proyectos del Centro de Servicio Social | CSS UCA">
     <meta name="author" content="">
     <meta name="keyword" content="proyecto, proyectos CSS, CSS">
      <meta name="robots" content="index"/>
@@ -41,14 +41,14 @@
                     <div class="container">
                         <div class="card-group">
                             <div id="form-container" class="d-flex flex-column justify-content-center align-items-center mx-auto">
-                                <img alt="CSS LOGO" class="mx-auto d-block login-logotype" src="img/logotype.svg" />
+                                <img alt="CSS LOGO" class="pt-5 mx-auto d-block login-logotype" src="img/logotype.svg" />
 
                                 @if ($errors->first('verified'))
                                     {!! $errors->first('verified', '<div class="message_box"> <p style="color: blue">:message</p></div>') !!}
                                 @else
                                     <span style="visibility: hidden;">.</span>
                                 @endif
-                                <form method="POST" style="min-width: 70%" id="login_form" action="{{ route('login') }}">
+                                <form method="POST" style="width: 70%" id="login_form" action="{{ route('login') }}">
                                     {{ csrf_field() }}
                                     <div class="form-group">
                                         <label for="carnet" class="label-form">Carnet</label>
