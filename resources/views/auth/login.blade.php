@@ -48,7 +48,7 @@
                                 @else
                                     <span style="visibility: hidden;">.</span>
                                 @endif
-                                <form method="POST" style="width: 70%" id="login_form" action="{{ route('login') }}">
+                                <form method="POST" style="width: 75%" id="login_form" action="{{ route('login') }}">
                                     {{ csrf_field() }}
                                     <div class="form-group">
                                         <label for="carnet" class="label-form">Carnet</label>
@@ -61,8 +61,8 @@
                                         @endif
                                     </div>
 
-                                    <div class="form-group mb-2">
-                                        <div class="d-flex justify-content-between " style="gap: 24px;">
+                                    <div class="form-group mb-4">
+                                        <div class="d-flex justify-content-between">
                                             <label for="contraseña" class="label-form">Contraseña</label>
                                             <a class="small" href="{{ url('/contra_olvidada_form') }}">Olvidaste tu
                                                 contraseña?</a>
@@ -77,7 +77,7 @@
                                         @elseif($errors->first('no_verified'))
                                             {!! $errors->first('no_verified', '<span style="color: red">:message </span>') !!}
                                         @else
-                                            <span style="visibility: hidden;">.</span>
+                                            <span style="display: none;">.</span>
                                         @endif
                                     </div>
 
