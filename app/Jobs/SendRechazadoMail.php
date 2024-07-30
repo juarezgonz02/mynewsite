@@ -39,13 +39,6 @@ class SendRechazadoMail implements ShouldQueue
         $cacheKey = "email_quota_daily_limit";
         $quotaLimit = env('EMAIL_QUOTA_LIMIT',100);
 
-        $currentHour = Carbon::now()->hour;
-
-        if ($currentHour < 6 || $currentHour > 24) {
-            Log::info('Email sending time is outside of 6am to 12pm. Job released back to the queue for retry in 4 hours.');
-            // Delay 4 hours 
-            return $this->release(14400);
-        }
     
         Log::info('Sending email to: ' . $this->emailDetails['email']);
     
