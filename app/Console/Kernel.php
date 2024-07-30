@@ -26,14 +26,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
-	//Log::info('Executing schedule crontab');
-    
-        $schedule->command('queue:retry all')->everyThirtyMinutes();
-        $schedule->command('queue:work database --queue=default --tries=3 --sleep=3 --timeout=30 --daemon ')->everyMinute()->withoutOverlapping();
+        $schedule->command('queue:retry all')->hourly();
         $schedule->command('queue:restart')->hourly();
-	//$schedule->exec('php artisan queue:retry-failed');
+        $schedule->command('queue:work database --queue=default --tries=3 --sleep=3 --timeout=30 --daemon ')->everyThirtyMinutes()->withoutOverlapping();
     }
 
     /**
