@@ -994,7 +994,7 @@
                             <div class="form-group row div-form">
                                 <label class="col-md-3 form-control-label" for="text-input">Miembros inscritos</label>
                                 <div class="col-md-9">
-                                    <div v-for="estudiante in arrayEstudiantes">
+                                    <div v-for="estudiante in arrayEstudiantes.filter(e => e.estado == 1)">
                                         <p v-text="estudiante.nombreCompleto"></p>
                                         <p v-text="estudiante.correoCompleto"></p>
                                     </div>
@@ -1384,7 +1384,7 @@ export default {
                         'descripcion': this.modal_descripcion,
                         'encargado': this.modal_encargado,
                         "encargado_correo": this.modal_correo,
-                        'estudiantes': this.arrayEstudiantes.map(e => e.correoCompleto),
+                        'estudiantes': this.arrayEstudiantes.filter(e => e.estado == 1).map(e => e.correoCompleto),
                         'lugar': this.modal_lugar,
                         'fecha': this.modal_fecha,
                         'hora': this.modal_hora
