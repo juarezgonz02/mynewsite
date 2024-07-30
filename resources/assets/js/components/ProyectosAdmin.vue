@@ -994,6 +994,8 @@
                             <div class="form-group row div-form">
                                 <label class="col-md-3 form-control-label" for="text-input">Miembros inscritos</label>
                                 <div class="col-md-9">
+                                    
+                                    <p v-if="arrayEstudiantes.filter(e=> e.estado == 1).length == 0" class="show error">No hay miembros inscritos para mandar correos</p>
                                     <div v-for="estudiante in arrayEstudiantes.filter(e => e.estado == 1)">
                                         <p v-text="estudiante.nombreCompleto"></p>
                                         <p v-text="estudiante.correoCompleto"></p>
@@ -1012,6 +1014,7 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal"
                             @click="cerrarModal()">Cerrar</button>
                         <button type="button" class="btn btn-primary"
+                            v-if="arrayEstudiantes.filter(e=> e.estado == 1).length != 0"
                             v-bind:data-dismiss="flagErrorProyecto ? '' : 'modal'"
                             @click="enviarReunion()">Aceptar</button>
                     </div>
