@@ -28,10 +28,10 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
-	Log::info('Executing schedule crontab');
+	//Log::info('Executing schedule crontab');
     
-        $schedule->command('queue:retry all')->everyFiveMinutes();
-        $schedule->command('queue:work --queue=default --tries=3 --sleep=3  --daemon ')->everyMinute()->withoutOverlapping();
+        $schedule->command('queue:retry all')->everyThirtyMinutes();
+        $schedule->command('queue:work database --queue=default --tries=3 --sleep=3 --timeout=30 --daemon ')->everyMinute()->withoutOverlapping();
         $schedule->command('queue:restart')->hourly();
 	//$schedule->exec('php artisan queue:retry-failed');
     }
