@@ -162,11 +162,15 @@ class ApiAuthController extends Controller
                 'error' => trans('auth.ya_cambio_contra')
             ], 200);
         } else {
-            $token = PasswordResetToken::create([
-                'idUser' => $usuario->idUser,
-                'token' => strtoupper(Str::random(5)),
-                'expires_at' => Carbon::now()->addHour(),
-            ]);
+            $token = PasswordResetToken::where('idUser', $usuario->idUser)->where('expires_at', '>', Carbon::now())->first();
+
+            if($token == null){
+                $token = PasswordResetToken::create([
+                    'idUser' => $usuario->idUser,
+                    'token' => strtoupper(Str::random(5)),
+                    'expires_at' => Carbon::now()->addHour(),
+                ]);
+            }
 
             // Mail::send(
             //     'emails.cambiarContra',

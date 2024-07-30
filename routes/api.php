@@ -16,13 +16,13 @@ use Illuminate\Http\Request;
 
 
 //AUTH ENDPOINTS
-Route::post('/login', 'Api\ApiAuthController@login');
-Route::post('/registro', 'Api\ApiAuthController@registro');
-Route::post('/googleauth', 'Auth\GoogleLoginController@handleAPICallback');
-Route::post('/registrar_google', 'Auth\GoogleLoginController@registrar_api')->name('google.register_google');
+Route::post('/login', 'Api\ApiAuthController@login')->middleware('throttle:25,60');
+Route::post('/registro', 'Api\ApiAuthController@registro')->middleware('throttle:5,60');
+Route::post('/googleauth', 'Auth\GoogleLoginController@handleAPICallback')->middleware('throttle:25,60');
+Route::post('/registrar_google', 'Auth\GoogleLoginController@registrar_api')->name('google.register_google')->middleware('throttle:25,60');
 
-Route::post('/forgottenPassword', 'Api\ApiAuthController@olvideClave' );
-Route::post('/updatePassword', 'Api\ApiAuthController@cambiarClave');
+Route::post('/forgottenPassword', 'Api\ApiAuthController@olvideClave' )->middleware('throttle:5,60');
+Route::post('/updatePassword', 'Api\ApiAuthController@cambiarClave')->middleware('throttle:5,60');;
 
 
 Route::get('/getFacultades', 'Api\FacultadController@getFacultades');
