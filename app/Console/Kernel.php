@@ -27,8 +27,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('queue:retry all')->hourly();
-        $schedule->command('queue:restart')->hourly();
+        
         $schedule->command('queue:work database --queue=default --tries=3 --sleep=3 --timeout=30 --daemon ')->everyThirtyMinutes()->withoutOverlapping();
+        
+        $schedule->command('queue:restart')->daily();
     }
 
     /**
