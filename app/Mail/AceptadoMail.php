@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use phpDocumentor\Reflection\Types\This;
 
 class AceptadoMail extends Mailable
 {
@@ -29,6 +30,6 @@ class AceptadoMail extends Mailable
      */
     public function build()
     {
-        return $this->from("automatic.noreply.css@gmail.com","Centro de servicio social")->subject("Estado de su aplicación a Proyecto.")->view('emails.aceptado');
+        return $this->from("automatic.noreply.css@gmail.com","Centro de servicio social")->subject("Estado de su aplicación a proyecto " . $this->details['data']->nombre )->view('emails.aceptado');
     }
 }

@@ -401,7 +401,13 @@ class ProyectoxEstudianteController extends Controller{
         ->leftJoin('carrera', 'users.idCarrera', 'carrera.idCarrera')
         ->leftJoin('perfil', 'users.idPerfil', 'perfil.idPerfil')
         ->select("users.nombres as u_nombre", "users.apellidos as u_apellido", 'carrera.idCarrera as id_c' , 'carrera.nombre as carrera', 'perfil.descripcion as ano',"proyecto.*", "users.nombres", "users.apellidos", "users.correo","users.idUser" )
-        ->where('proyecto.nombre', 'like', $nombre.'%')
+        // ->where('proyecto.nombre', 'like', $nombre.'%')
+        ->where(function($query) use ($nombre){
+            $query->where('proyecto.nombre', 'like', '%'.$nombre.'%')
+                ->orWhere('proyecto.contraparte', 'like', '%'.$nombre.'%')
+                ->orWhere('proyecto.encargado', 'like', '%'.$nombre.'%');
+
+        }) 
         ->where('carrera.idFacultad', '=', $nfacultad)
         ->where('proyectoxestudiante.estado', '=', '0')->paginate(15);
         
@@ -418,7 +424,13 @@ class ProyectoxEstudianteController extends Controller{
             ->leftJoin('carrera', 'users.idCarrera', 'carrera.idCarrera')
             ->leftJoin('perfil', 'users.idPerfil', 'perfil.idPerfil')
             ->select("users.nombres as u_nombre", "users.apellidos as u_apellido", 'carrera.idCarrera as id_c' , 'carrera.nombre as carrera', 'perfil.descripcion as ano',"proyecto.*", "users.nombres", "users.apellidos", "users.correo", "users.idUser" )
-            ->where('proyecto.nombre', 'like', $nombre.'%')
+            // ->where('proyecto.nombre', 'like', $nombre.'%')
+            ->where(function($query) use ($nombre){
+                $query->where('proyecto.nombre', 'like', '%'.$nombre.'%')
+                    ->orWhere('proyecto.contraparte', 'like', '%'.$nombre.'%')
+                    ->orWhere('proyecto.encargado', 'like', '%'.$nombre.'%');
+    
+            }) 
             ->where('proyectoxestudiante.estado', '=', '0')->paginate(15);   
         }
         else{
@@ -427,7 +439,13 @@ class ProyectoxEstudianteController extends Controller{
             ->leftJoin('carrera', 'users.idCarrera', 'carrera.idCarrera')
             ->leftJoin('perfil', 'users.idPerfil', 'perfil.idPerfil')
             ->select("users.nombres as u_nombre", "users.apellidos as u_apellido", 'carrera.idCarrera as id_c' , 'carrera.nombre as carrera', 'perfil.descripcion as ano',"proyecto.*", "users.nombres", "users.apellidos", "users.correo" )
-            ->where('proyecto.nombre', 'like', $nombre.'%')
+            // ->where('proyecto.nombre', 'like', $nombre.'%')
+            ->where(function($query) use ($nombre){
+                $query->where('proyecto.nombre', 'like', '%'.$nombre.'%')
+                    ->orWhere('proyecto.contraparte', 'like', '%'.$nombre.'%')
+                    ->orWhere('proyecto.encargado', 'like', '%'.$nombre.'%');
+    
+            }) 
             ->where('carrera.idCarrera', '=', $ncarrera)
             ->where('proyectoxestudiante.estado', '=', '0')->paginate(15);
         }

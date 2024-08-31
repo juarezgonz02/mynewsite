@@ -327,7 +327,10 @@ class ProyectoController extends Controller
         $tipo = $request -> query('tipo');
 
         if($name != ''){
-            $proyectos = $proyectos->where('proyecto.nombre', "like", $name.'%');
+            $proyectos = $proyectos->where(function($query) use ($name){
+                $query->where('proyecto.nombre', 'like', '%'.$name.'%')
+                    ->orWhere('proyecto.contraparte', 'like', '%'.$name.'%');
+            });
             
         }
         
@@ -361,7 +364,13 @@ class ProyectoController extends Controller
         ->leftjoin('carrera', 'carrera.idCarrera', '=', 'proyectoxcarrera.idCarrera')
         ->where('carrera.idFacultad', '=', $nfacultad)
         ->where('proyecto.estado', '=', '1')
-        ->where('proyecto.nombre', 'like', $nombre.'%')
+        // ->where('proyecto.nombre', 'like', $nombre.'%')
+        ->where(function($query) use ($nombre){
+            $query->where('proyecto.nombre', 'like', '%'.$nombre.'%')
+                ->orWhere('proyecto.contraparte', 'like', '%'.$nombre.'%')
+                ->orWhere('proyecto.encargado', 'like', '%'.$nombre.'%');
+
+        })
         ->select("proyecto.*", "carrera.idFacultad")
         ->groupBy(
             'proyecto.nombre',
@@ -406,12 +415,24 @@ class ProyectoController extends Controller
     private function obtener_todo_por_carrera(string $nombre, string $ncarrera, string $orden)
     {
         if($ncarrera == "-1"){
-            $proyectos = Proyecto::where('proyecto.nombre', 'like', '%'.$nombre.'%')->where('proyecto.estado', '=', '1')
+            $proyectos = Proyecto::where(function($query) use ($nombre){
+                $query->where('proyecto.nombre', 'like', '%'.$nombre.'%')
+                    ->orWhere('proyecto.contraparte', 'like', '%'.$nombre.'%')
+                    ->orWhere('proyecto.encargado', 'like', '%'.$nombre.'%');
+
+            }) 
+            ->where('proyecto.estado', '=', '1')
             ->with(['carreras']);
         }else{
             $proyectos = Proyecto::rightJoin('proyectoxcarrera', 'proyecto.idProyecto', '=', 'proyectoxcarrera.idProyecto')
             ->leftJoin('carrera', 'carrera.idCarrera', '=', 'proyectoxcarrera.idCarrera')
-            ->select("proyecto.*", "carrera.idCarrera")->where('carrera.idCarrera', '=', $ncarrera)->where('proyecto.nombre', 'like', $nombre.'%')
+            ->select("proyecto.*", "carrera.idCarrera")->where('carrera.idCarrera', '=', $ncarrera)
+            ->where(function($query) use ($nombre){
+                $query->where('proyecto.nombre', 'like', '%'.$nombre.'%')
+                    ->orWhere('proyecto.contraparte', 'like', '%'.$nombre.'%')
+                    ->orWhere('proyecto.encargado', 'like', '%'.$nombre.'%');
+
+            })
             ->with(['carreras']);
         }
 
