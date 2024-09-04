@@ -149,6 +149,7 @@ class ProyectoxEstudianteController extends Controller{
         });
     }
 
+    //TODO: ENDPOINT VALIDATION NO PREV REQUEST
     public function aplicar(Request $request){
         DB::transaction(function () use ($request) {
 
@@ -165,7 +166,8 @@ class ProyectoxEstudianteController extends Controller{
             $proyecto = ProyectoxEstudiante::join('users', 'users.idUser', '=', 'proyectoxestudiante.idUser')
             ->join('proyecto', 'proyecto.idProyecto','=', 'proyectoxestudiante.idProyecto')
             ->join('carrera', 'carrera.idCarrera', '=', 'users.idCarrera')
-            ->select('proyecto.correo_encargado', 'proyecto.encargado', 'proyecto.nombre', 'users.nombres', 'users.apellidos', 'users.correo', 'carrera.nombre AS n_carrera')
+            ->join('perfil', 'perfil.idPerfil', '=', 'users.idPerfil')
+            ->select('proyecto.correo_encargado', 'proyecto.encargado', 'proyecto.nombre', 'users.nombres', 'users.apellidos', 'users.correo', 'carrera.nombre as n_carrera', 'perfil.descripcion as n_perfil')
             ->where('users.idUser', '=', $user->idUser)
             ->where('proyecto.idProyecto','=', $request->idProyecto)->first();
             $this->sendEmail($proyecto, 1);

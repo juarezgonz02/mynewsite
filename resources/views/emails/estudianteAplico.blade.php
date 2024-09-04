@@ -24,7 +24,8 @@
                 Nombre: {{ $details['user']->nombres }}.<br>
                 Apellidos: {{ $details['user']->apellidos }}.<br>
                 Correo: {{ $details['user']->correo }}<br>
-                Carrera: {{ $details['user']->n_carrera }}.<br><br>
+                Carrera: {{ $details['user']->n_carrera }}.<br>
+                Año: {{$details['user']->n_perfil}}<br>
                 </p>
 
         </div><br>
