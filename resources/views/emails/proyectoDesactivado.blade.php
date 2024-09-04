@@ -1,8 +1,8 @@
 <?php
-    $ruta = App\Http\Controllers\UserController::ruta(2);
+    $ruta = App\Http\Controllers\UserController::ruta(1);
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,7 +14,7 @@
         <p> Estimado/a estudiante.</p>
         <p>
             Lamentamos informarle que el proyecto de horas sociales <br> 
-            <b> {{ $nombre->nombre }} </b> ha sido <b style="color:red">suspendido</b> por motivos de fuerza mayor.
+            <b> {{ $details['nombre']->nombre }} </b> ha sido <b style="color:red">suspendido</b> por motivos de fuerza mayor.
         </p>
         <p>
             Agradecemos su interés mostrado y le invitamos a formar parte de otros proyectos disponibles. <br>

@@ -10,7 +10,7 @@
 * Licensed under MIT (https://coreui.io/license)
 -->
 
-<html lang="en">
+<html lang="es">
 
 <head>
   <base href="./">
@@ -28,7 +28,7 @@
   <script src="js/bootstrap.min.js"></script>
 
   <title> Registrate </title>
-  <link rel="shortcut icon" type="image/jpg" href=" {{url('/').'/img/logo-uca.png'}}">
+  <link rel="icon" href="{{url('/').'/img/icons/logo-uca.ico'}}">
 
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <!-- <link href="css/plantilla.css" rel="stylesheet"> -->

@@ -99,7 +99,11 @@ class ProyectosxCarreraController extends Controller
 
 
         if($name != ''){
-            $proyectos = $proyectos->where('proyecto.nombre', "like", $name.'%');
+            $proyectos = $proyectos->where(function($query) use ($name){
+                $query->where('proyecto.nombre', 'like', '%'.$name.'%')
+                    ->orWhere('proyecto.contraparte', 'like', '%'.$name.'%');
+
+            }) ;
             
         }
         

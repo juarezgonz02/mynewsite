@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,13 +8,13 @@
 </head>
 <body>
     <div style="color:black">
-        <p> Estimado/a {{ $data->nombres }} {{ $data->apellidos }},</p>
+        <p> Estimado/a {{ $details['data']->nombres }} {{ $details['data']->apellidos }},</p>
         <p>
             Se le notifica que su solicitud para el siguiente proceso de aplicación al proyecto de horas sociales: <br>
-            <span> <b> {{ $data->nombre }} <b> </span> <b style="color:red">ha sido rechazada.</b> <br>
+            <span> <b> {{ $details['data']->nombre }} <b> </span> <b style="color:red">ha sido rechazada.</b> <br>
         </p>
         <p>
-            Si desea más información por favor ponerse en contácto con {{ $data->encargado }} {{ $data->correo_encargado }}.
+            Si desea más información por favor ponerse en contácto con {{ $details['data']->encargado }} {{ $details['data']->correo_encargado }}.
         </p><br>
         <p>
             Atentamente, Centro de Servicio Social.

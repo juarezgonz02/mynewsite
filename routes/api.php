@@ -45,7 +45,7 @@ Route::middleware(['auth:api', ])->group(function () {
     Route::post('/postDesaplicarProyecto', 'ProyectoxEstudianteController@deleteRow');
     Route::put('/updateEstudiantePerfil', 'PerfilController@updateMyProfile');
     Route::put('/updateEstudianteCarrera', 'PerfilController@updateMyCareer');
-    
+
     // ADMIN ROUTES
     Route::middleware(['Administrador'])->group(function () {
         Route::prefix('admin')->group(function () {
@@ -59,7 +59,7 @@ Route::middleware(['auth:api', ])->group(function () {
             Route::put('/putAplicarEnProyecto', 'ProyectoxEstudianteController@aceptarRechazarEstudiante');
             Route::post('/storeProyecto', 'ProyectoController@store');
             Route::post('/postApplyStudent', 'Api\ProyectoController@postApplyStudent');
-
+            Route::get('/proyecto/estudiantes', 'ProyectoxEstudianteController@estudiantesPorProyecto');
             // REUNION 
             Route::post('/sendMeetingMail', 'Api\ProyectoController@postSendMeetingEmails');     
 

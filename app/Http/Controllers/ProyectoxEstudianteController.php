@@ -9,8 +9,11 @@ use App\User;
 use Illuminate\Support\Facades\Auth;
 use Mail;
 use Illuminate\Support\Facades\DB;
-
-
+use App\Jobs\SendEstudianteAplicoMail;
+use App\Jobs\SendAgregadoPorAdminMail;
+use App\Jobs\SendExpulsadoMail;
+use App\Jobs\SendAceptadoMail;
+use App\Jobs\SendRechazadoMail;
 class ProyectoxEstudianteController extends Controller{
     public function index(Request $request)
     {
@@ -40,13 +43,13 @@ class ProyectoxEstudianteController extends Controller{
     }
 
     public function estudiantesPorProyecto(Request $request){
-        if(!$request->ajax()) return redirect('/home');
         $idProyecto = $request->idProyecto;
         
         $estudiantes = User::join('proyectoxestudiante', 'users.idUser', '=', 'proyectoxestudiante.idUser')
         ->join('carrera', 'users.idCarrera', '=', 'carrera.idCarrera')
         ->join('perfil', 'users.idPerfil', '=', 'perfil.idPerfil')
-        ->select('users.nombres', 'users.apellidos', 'users.correo', 'users.genero', 'users.idPerfil', 'users.idCarrera', 'proyectoxestudiante.estado', 'users.idUser', 'carrera.nombre AS n_carrera', 'perfil.descripcion AS n_perfil')
+        ->join('facultad', 'carrera.idFacultad', '=', 'facultad.idFacultad')
+        ->select('users.nombres', 'users.apellidos', 'users.correo', 'users.genero', 'users.idPerfil', 'users.idCarrera', 'proyectoxestudiante.estado', 'users.idUser', 'carrera.nombre AS n_carrera', 'perfil.descripcion AS n_perfil', 'facultad.nombre AS n_facultad')
         ->where('proyectoxestudiante.idProyecto', '=', $idProyecto)
         ->orderBy('proyectoxestudiante.estado')->get();
         return $estudiantes;
@@ -208,63 +211,93 @@ class ProyectoxEstudianteController extends Controller{
 
     public function sendEmail($user, $mailType){
         if($mailType == 1){
-            Mail::send(
-                'emails.estudianteAplico',
-                ['user' => $user],
-                function($message) use ($user){
-                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                    $message->to($user->correo_encargado);
-                    $message->subject("Aplicación de un estudiante en su proyecto.");
-                }
-            );
+            // Mail::send(
+            //     'emails.estudianteAplico',
+            //     ['user' => $user],
+            //     function($message) use ($user){
+            //         $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+            //         $message->to($user->correo_encargado);
+            //         $message->subject("Aplicación de un estudiante en su proyecto.");
+            //     }
+            // );
+            $emailDetails = [
+                'email' => $user->correo_encargado,
+                'user' => $user
+            ];
+            SendEstudianteAplicoMail::dispatch($emailDetails)->onConnection('database');
         }
         else if($mailType == 2){
-            Mail::send(
-                'emails.agregadoPorAdmin',
-                ['user' => $user],
-                function($message) use ($user){
-                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                    $message->to($user->correo);
-                    $message->subject("Actualización de ingreso a proyecto de horas sociales");
-                }
-            );
-        }else if($mailType == 3){
-            Mail::send(
-                'emails.expulsado',
-                ['data' => $user],
-                function($message) use ($user){
-                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                    $message->to($user->correo);
-                    $message->subject("Notificación de remoción de proyecto");
-                }
-            );
+            // Mail::send(
+            //     'emails.agregadoPorAdmin',
+            //     ['user' => $user],
+            //     function($message) use ($user){
+            //         $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+            //         $message->to($user->correo);
+            //         $message->subject("Actualización de ingreso a proyecto de horas sociales");
+            //     }
+            // );
 
+            $emailDetails = [
+                'email' => $user->correo,
+                'user' => $user
+            ];
+            SendAgregadoPorAdminMail::dispatch($emailDetails)->onConnection('database');
+
+        }else if($mailType == 3){
+            // Mail::send(
+            //     'emails.expulsado',
+            //     ['data' => $user],
+            //     function($message) use ($user){
+            //         $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+            //         $message->to($user->correo);
+            //         $message->subject("Notificación de remoción de proyecto");
+            //     }
+            // );
+
+            $emailDetails = [
+                'email' => $user->correo,
+                'data' => $user
+            ];
+            SendExpulsadoMail::dispatch($emailDetails)->onConnection('database');
         }
         
     }
 
     public function sendEmailAceptadoRechazado($mailData, $estado){
         if($estado == 1){
-            Mail::send(
-                'emails.aceptado',
-                ['data' => $mailData],
-                function($message) use ($mailData){
-                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                    $message->to($mailData->correo);
-                    $message->subject("Estado de su aplicación. Proyecto: ". $mailData->nombre);
-                }
-            );
+            // Mail::send(
+            //     'emails.aceptado',
+            //     ['data' => $mailData],
+            //     function($message) use ($mailData){
+            //         $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+            //         $message->to($mailData->correo);
+            //         $message->subject("Estado de su aplicación. Proyecto: ". $mailData->nombre);
+            //     }
+            // );
+
+            $emailDetails = [
+                'email' => $mailData->correo,
+                'data' => $mailData
+            ];
+            SendAceptadoMail::dispatch($emailDetails)->onConnection('database');
         }
         elseif($estado == 2){
-            Mail::send(
-                'emails.rechazado',
-                ['data' => $mailData],
-                function($message) use ($mailData){
-                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                    $message->to($mailData->correo);
-                    $message->subject("Estado de su aplicación. Proyecto: ". $mailData->nombre);
-                }
-            );
+            // Mail::send(
+            //     'emails.rechazado',
+            //     ['data' => $mailData],
+            //     function($message) use ($mailData){
+            //         $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+            //         $message->to($mailData->correo);
+            //         $message->subject("Estado de su aplicación. Proyecto: ". $mailData->nombre);
+            //     }
+            // );
+
+            $emailDetails = [
+                'email' => $mailData->correo,
+                'data' => $mailData
+            ];
+
+            SendRechazadoMail::dispatch($emailDetails)->onConnection('database');
         }
     }
 
@@ -368,7 +401,13 @@ class ProyectoxEstudianteController extends Controller{
         ->leftJoin('carrera', 'users.idCarrera', 'carrera.idCarrera')
         ->leftJoin('perfil', 'users.idPerfil', 'perfil.idPerfil')
         ->select("users.nombres as u_nombre", "users.apellidos as u_apellido", 'carrera.idCarrera as id_c' , 'carrera.nombre as carrera', 'perfil.descripcion as ano',"proyecto.*", "users.nombres", "users.apellidos", "users.correo","users.idUser" )
-        ->where('proyecto.nombre', 'like', $nombre.'%')
+        // ->where('proyecto.nombre', 'like', $nombre.'%')
+        ->where(function($query) use ($nombre){
+            $query->where('proyecto.nombre', 'like', '%'.$nombre.'%')
+                ->orWhere('proyecto.contraparte', 'like', '%'.$nombre.'%')
+                ->orWhere('proyecto.encargado', 'like', '%'.$nombre.'%');
+
+        }) 
         ->where('carrera.idFacultad', '=', $nfacultad)
         ->where('proyectoxestudiante.estado', '=', '0')->paginate(15);
         
@@ -385,7 +424,13 @@ class ProyectoxEstudianteController extends Controller{
             ->leftJoin('carrera', 'users.idCarrera', 'carrera.idCarrera')
             ->leftJoin('perfil', 'users.idPerfil', 'perfil.idPerfil')
             ->select("users.nombres as u_nombre", "users.apellidos as u_apellido", 'carrera.idCarrera as id_c' , 'carrera.nombre as carrera', 'perfil.descripcion as ano',"proyecto.*", "users.nombres", "users.apellidos", "users.correo", "users.idUser" )
-            ->where('proyecto.nombre', 'like', $nombre.'%')
+            // ->where('proyecto.nombre', 'like', $nombre.'%')
+            ->where(function($query) use ($nombre){
+                $query->where('proyecto.nombre', 'like', '%'.$nombre.'%')
+                    ->orWhere('proyecto.contraparte', 'like', '%'.$nombre.'%')
+                    ->orWhere('proyecto.encargado', 'like', '%'.$nombre.'%');
+    
+            }) 
             ->where('proyectoxestudiante.estado', '=', '0')->paginate(15);   
         }
         else{
@@ -394,7 +439,13 @@ class ProyectoxEstudianteController extends Controller{
             ->leftJoin('carrera', 'users.idCarrera', 'carrera.idCarrera')
             ->leftJoin('perfil', 'users.idPerfil', 'perfil.idPerfil')
             ->select("users.nombres as u_nombre", "users.apellidos as u_apellido", 'carrera.idCarrera as id_c' , 'carrera.nombre as carrera', 'perfil.descripcion as ano',"proyecto.*", "users.nombres", "users.apellidos", "users.correo" )
-            ->where('proyecto.nombre', 'like', $nombre.'%')
+            // ->where('proyecto.nombre', 'like', $nombre.'%')
+            ->where(function($query) use ($nombre){
+                $query->where('proyecto.nombre', 'like', '%'.$nombre.'%')
+                    ->orWhere('proyecto.contraparte', 'like', '%'.$nombre.'%')
+                    ->orWhere('proyecto.encargado', 'like', '%'.$nombre.'%');
+    
+            }) 
             ->where('carrera.idCarrera', '=', $ncarrera)
             ->where('proyectoxestudiante.estado', '=', '0')->paginate(15);
         }

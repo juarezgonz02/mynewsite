@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -14,6 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
+        \App\Console\Commands\RetryFailedJobs::class,
     ];
 
     /**
@@ -24,8 +26,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->command('queue:retry all')->hourly();
+        
+        $schedule->command('queue:work database --queue=default --tries=3 --sleep=3 --timeout=30 --daemon ')->everyThirtyMinutes()->withoutOverlapping();
+        
+        $schedule->command('queue:restart')->daily();
     }
 
     /**

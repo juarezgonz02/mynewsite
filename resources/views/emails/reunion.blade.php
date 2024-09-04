@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,23 +8,23 @@
 </head>
 <body>
     <div style="color:black">
-        <p> Centro de servicio social Programación de reunión. <b>{{ $nombre_proyecto }}</b></p>
+        <p> Centro de servicio social Programación de reunión. <b>{{ $details['nombre_proyecto'] }}</b></p>
         <p>
-            Se le notifica que se ha programado una reunion de discusión del proyecto <b>{{ $nombre_proyecto }}</b>, con los siguientes detalles:
+            Se le notifica que se ha programado una reunion de discusión del proyecto <b>{{ $details['nombre_proyecto'] }}</b>, con los siguientes detalles:
             </p><br>
         <p>
-            <b>Motivo: </b> {{$descripcion}} </p>
+            <b>Motivo: </b> {{$details['descripcion']}} </p>
         <p> 
-            <b>Lugar:</b> {{ $lugar }}
+            <b>Lugar:</b> {{ $details['lugar'] }}
         </p>
         <p> 
-            <b>Fecha:</b> {{ $fecha }}
+            <b>Fecha:</b> {{ $details['fecha'] }}
         </p>
         <p> 
-            <b>Hora:</b> {{ $hour }}
+            <b>Hora:</b> {{ $details['hour'] }}
         </p>
         <p> 
-            <b>Encargado:</b> {{ $encargado}}        </p>
+            <b>Encargado:</b> {{ $details['encargado']}}        </p>
         <p>
             Atentamente, Centro de Servicio Social.
         </p><br><br>

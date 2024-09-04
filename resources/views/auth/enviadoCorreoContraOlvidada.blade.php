@@ -14,7 +14,7 @@
     <!--<script src="js/plantilla.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>-->
-    <link rel="shortcut icon" type="image/jpg" href=" {{url('/').'/img/logo-uca.png'}}">
+    <link rel="icon" href="{{url('/').'/img/icons/logo-uca.ico'}}">
 
     <title>Contraseña Olvidada</title>
 </head>

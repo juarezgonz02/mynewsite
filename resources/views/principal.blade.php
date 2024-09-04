@@ -5,9 +5,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Centro de Servicio Social | UCA">
+    <meta name="description" content="Busca y aplica a los proyectos disponibles para tu carrera">
+    <meta name="title" content="Proyectos del Centro de Servicio Social | CSS UCA">
     <meta name="author" content="">
-    <meta name="keyword" content="Sistema de inscripción de proyectos CSS UCA">
+    <meta name="keyword" content="proyecto, proyectos CSS, CSS">
     <title>Centro de Servicio Social | UCA</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -16,7 +17,7 @@
     <link href="css/plantilla.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="shortcut icon" type="image/jpg" href=" {{url('/').'/img/logo-uca.png'}}">
+    <link rel="icon" href="{{url('/').'/img/icons/logo-uca.ico'}}">
     <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
     <script>
         Window.API_HOST = "{{env('API_HOST')}}"

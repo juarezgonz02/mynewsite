@@ -10,16 +10,17 @@
 * Licensed under MIT (https://coreui.io/license)
 -->
 
-<html lang="en">
+<html lang="es">
 
 <head>
   <base href="./">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-  <meta name="description" content="Centro de Servicio Social | UCA">
+  <meta name="description" content="Busca y aplica a los proyectos disponibles para tu carrera">
+  <meta name="title" content="Proyectos del Centro de Servicio Social | CSS UCA">
   <meta name="author" content="">
-  <meta name="keyword" content="Sistema de inscripción de proyectos CSS UCA">
+  <meta name="keyword" content="proyecto, proyectos CSS, CSS">
   <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/register.css" rel="stylesheet">
@@ -27,7 +28,7 @@
   <script src="js/jquery.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <title> Registrate </title>
-  <link rel="shortcut icon" type="image/jpg" href=" {{url('/').'/img/logo-uca.png'}}">
+  <link rel="icon" href="{{url('/').'/img/icons/logo-uca.ico'}}">
 
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <!-- <link href="css/plantilla.css" rel="stylesheet"> -->
@@ -161,6 +162,15 @@
                   <img src="<?php echo $ruta; ?>/img/snake.gif" alt="Loading" /><span  > Cargando....</span>
                 </div>
               </div>
+            </div>
+            <div>
+              @if($errors->first('error'))
+                {!!$errors->first('error','<span style="color: red">:message</span>')!!}
+                @elseif($errors->first('error'))
+                {!!$errors->first('error','<span style="color: red">:message</span>')!!}
+                @else
+                <span style="visibility: hidden;">.</span>
+                @endif
             </div>
              {!! app('captcha')->displaySubmit('gform', 'Registrame', ['class' => 'btn btn-primary', 'id'=>'registrarbtn', 'style' => 'background-image: linear-gradient( 109.6deg,  rgba(39,142,255,1) 11.2%, rgba(98,113,255,0.78) 100.2% );']) !!}
             <!--button type="submit" class="btn btn-primary" style="background-image: linear-gradient( 109.6deg,  rgba(39,142,255,1) 11.2%, rgba(98,113,255,0.78) 100.2% );" id="registrarbtn">Registrame</button>

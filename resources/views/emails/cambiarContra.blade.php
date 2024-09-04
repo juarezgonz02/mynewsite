@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,16 +8,16 @@
 </head>
 <body>
     <div style="color:black">
-        <p> Estimado/a {{ $user->nombres }},</p>
+        <p> Estimado/a {{ $details['user']->nombres }},</p>
 
-        @if(isset($token))
+        @if(isset($details['token']))
             <p>
                 Se solicitó un cambio de contraseña, ingrese al siguiente enlace para restablecerla.
             </p>
             <p>
-               Código de restablecimiento: <span style="color: red; font-size: 1.3em"> {!!$token!!} </span>.
+               Código de restablecimiento: <span style="color: red; font-size: 1.3em"> {!!$details['token']!!} </span>.
             </p>
-            <span style="color: blue; font-size: 1em" ><a href="{{ url('/cambiar_contra_olvidada/').'/'.$token }}"> Restablecer contraseña </a></span>
+            <span style="color: blue; font-size: 1em" ><a href="{{ url('/cambiar_contra_olvidada/').'/'.$details['token'] }}"> Restablecer contraseña </a></span>
         @endif
 
         <p>

@@ -1,8 +1,8 @@
 <?php
-    $ruta = App\Http\Controllers\UserController::ruta(2);
+    $ruta = App\Http\Controllers\UserController::ruta(1);
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,20 +11,20 @@
 </head>
 <body>
     <div style="color:black">
-        <p> Estimado/a {{ $user->encargado }}.</p>
+        <p> Estimado/a {{ $details['user']->encargado }}.</p>
         <div>
             Un estudiante ha aplicado al proyecto de horas sociales a su cargo <br>
-                <b>Proyecto: {{ $user->nombre }} </b> <br><br>
+                <b>Proyecto: {{ $details['user']->nombre }} </b> <br><br>
 
                 <p>
                 Información del estudiante: 
                 </p>
                 
                 <p style="padding-left: 1em">
-                Nombre: {{ $user->nombres }}.<br>
-                Apellidos: {{ $user->apellidos }}.<br>
-                Correo: {{ $user->correo }}<br>
-                Carrera: {{ $user->n_carrera }}.<br><br>
+                Nombre: {{ $details['user']->nombres }}.<br>
+                Apellidos: {{ $details['user']->apellidos }}.<br>
+                Correo: {{ $details['user']->correo }}<br>
+                Carrera: {{ $details['user']->n_carrera }}.<br><br>
                 </p>
 
         </div><br>

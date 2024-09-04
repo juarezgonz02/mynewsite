@@ -29,6 +29,6 @@ class VerifyMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Mail from CSS subject part')->view('emails.verificar');
+        return $this->from("automatic.noreply.css@gmail.com","Centro de servicio social")->subject("Solicitud de creación de cuenta.")->view('emails.verificar');
     }
 }

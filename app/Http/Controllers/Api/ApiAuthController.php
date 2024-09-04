@@ -13,7 +13,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-
+use App\Jobs\SendEmailJob;
+use App\Jobs\SendCambiarContraMail;
 class ApiAuthController extends Controller
 {
     /**
@@ -106,15 +107,22 @@ class ApiAuthController extends Controller
 
 
         try{
-            Mail::send(
-                'emails.verificar',
-                ['user' => $usuario,],
-                function($message) use ($usuario){
-                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                    $message->to($usuario->correo);
-                    $message->subject("Solicitud de creación de cuenta.");
-                }
-            );
+            // Mail::send(
+            //     'emails.verificar',
+            //     ['user' => $usuario,],
+            //     function($message) use ($usuario){
+            //         $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+            //         $message->to($usuario->correo);
+            //         $message->subject("Solicitud de creación de cuenta.");
+            //     }
+            // );
+
+            $emailDetails = [
+                'email' => $usuario->correo,
+                'subject' => 'Solicitud de creación de cuenta.',
+                'user' => $usuario
+            ];
+            SendEmailJob::dispatch($emailDetails)->onConnection('database');
 
         }
         catch (\Throwable $th) {
@@ -153,23 +161,31 @@ class ApiAuthController extends Controller
             return response()->json([
                 'error' => trans('auth.ya_cambio_contra')
             ], 200);
-        } else {
-            $token = PasswordResetToken::create([
-                'idUser' => $usuario->idUser,
-                'token' => strtoupper(Str::random(5)),
-                'expires_at' => Carbon::now()->addHour(),
-            ]);
+        } else
+        
+        {
+            $token = PasswordResetToken::where('idUser', $usuario->idUser)->where('expires_at', '>', Carbon::now())->first();
+            
+            if($token == null){
+                $token = PasswordResetToken::create([
+                    'idUser' => $usuario->idUser,
+                    'token' => strtoupper(Str::random(5)),
+                    'expires_at' => Carbon::now()->addHour(),
+                ]);
 
-            Mail::send(
-                'emails.cambiarContra',
-                ['user' => $usuario, 'token' => $token->token],
-                function($message) use ($usuario){
-                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                    $message->to($usuario->correo);
-                    $message->subject("Solicitud para cambiar contraseña.");
-                }
-            );
+                
+                
+                $emailDetails = [
+                'email' => $usuario->correo,
+                'user' => $usuario,
+                'token' => $token->token
+                ];
 
+
+                SendCambiarContraMail::dispatch($emailDetails)->onConnection('database');
+                
+            }
+                    
             return response()->json([
                 'message' => 'Solicitud de cambio de clave recibida, revise su correo electrónico.',
             ], 200);

@@ -6,6 +6,7 @@ use App\User;
 use App\Estudiante;
 use App\Facultad;
 use App\PasswordResetToken;
+use App\Jobs\SendEmailJob;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -46,7 +47,12 @@ class RegisterController extends Controller
     }
 
     public function registrar(Request $request){
+
+        DB::beginTransaction();
+
         $this->validator($request);
+        try{
+
         
         $email = $request->carnet . "@uca.edu.sv";
         $user = User::whereCorreo($email)->first();
@@ -85,6 +91,7 @@ class RegisterController extends Controller
                 $user->delete();
                 return (500);
             }
+            DB::commit();
             return redirect('/verificar_usuario/'.$email);
         }
         elseif($user != null && $user->verificado == 0){
@@ -94,8 +101,18 @@ class RegisterController extends Controller
         }
         else{
             return back()
-            ->withErrors(['email_existente' => trans('auth.ya_verificado')])
+            ->withErrors(['error' => trans('auth.ya_verificado')])
             ->withInput(request(['carnet', 'apellidos', 'nombres']));
+        }
+
+
+
+        }
+        catch(\Exception $e){
+            DB::rollback();
+            \Log::error($e);
+            return back()
+            ->withErrors(['error' => 'Ha ocurrido un error al registrar usuario. Intente nuevamente.']);
         }
     }
 
@@ -112,15 +129,30 @@ class RegisterController extends Controller
 
     public function sendEmail($user){
         try{
-            Mail::send(
-                'emails.verificar',
-                ['user' => $user],
-                function($message) use ($user){
-                    $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
-                    $message->to($user->correo);
-                    $message->subject("Solicitud de creación de cuenta.");
-                }
-            );
+            // Mail::send(
+            //     'emails.verificar',
+            //     ['user' => $user],
+            //     function($message) use ($user){
+            //         $message->from("automatic.noreply.css@gmail.com", "Centro de Servicio Social");
+            //         $message->to($user->correo);
+            //         $message->subject("Solicitud de creación de cuenta.");
+            //     }
+            // );
+
+            $emailDetails = [
+                'email' => $user->correo,
+                'subject' => 'Solicitud de creación de cuenta.',
+                'user' => $user
+            ];
+
+            SendEmailJob::dispatch($emailDetails)->onConnection('database');
+            //  SIMULACIÓN DE ENVÍO DE CORREOS
+            
+            // SendEmailJob::dispatch($emailDetails)->onConnection('database');
+            // SendEmailJob::dispatch($emailDetails)->onConnection('database');
+            // SendEmailJob::dispatch($emailDetails)->onConnection('database')->onQueue('emails');
+
+
         }catch(Swift_TransportException $e){
             echo "Error al enviar correo electrónico de registro. Ponte en contacto con el administrador.";
             return false;
