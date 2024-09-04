@@ -7,10 +7,10 @@
     <title>Document</title>
 </head>
 <body>
-    <div style="color:black; font-size: 1.2em">
+    <div style="color:black;">
         <p>
             <p> Estimado/a {{ $details['user']->nombres }} {{ $details['user']->apellidos }}</p>
-                Usted ha creado una cuenta nueva en el sistema de proyectos para horas sociales CSS, ingrese este código para verificar su cuenta y establecer su contraseña.
+                Usted ha creado una cuenta nueva en el sistema de proyectos para horas sociales del CSS, ingrese este código para verificar su cuenta y establecer su contraseña.
                 <br>
                     <p style="color:red; font-size: 2em" > {{$details['user'] -> utoken -> token}}</p>
             </p><br>

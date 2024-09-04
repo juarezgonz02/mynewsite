@@ -12,7 +12,7 @@
         <p>
         Recibimos su solicitud para el siguiente proceso de aplicación al proyecto de horas sociales: <br>
             <b> {{ $details['data']->nombre }}. </b> <br>
-        Se le notifica que fue <b> aceptado </b> y ahora proximamente será contactado por el encargado del proyecto. 
+        Se le notifica que fue <b>aceptado</b>, proximamente será contactado por el encargado del proyecto. 
         
         <br>
         Favor estar pendiente de su correo institucional para futuras indicaciones.

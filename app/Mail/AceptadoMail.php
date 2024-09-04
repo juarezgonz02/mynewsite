@@ -30,6 +30,6 @@ class AceptadoMail extends Mailable
      */
     public function build()
     {
-        return $this->from("automatic.noreply.css@gmail.com","Centro de servicio social")->subject("Estado de su aplicación a proyecto " . $this->details['data']->nombre )->view('emails.aceptado');
+        return $this->from("automatic.noreply.css@gmail.com","Centro de servicio social")->subject("Estado de su aplicación a proyecto: ". $this->details['data']->nombre )->view('emails.aceptado');
     }
 }

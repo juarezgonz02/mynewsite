@@ -12,8 +12,8 @@
         <p>
             Recibimos su solicitud para el siguiente proceso de aplicación al proyecto de horas sociales: <br>
             <span> <b> {{ $details['data']->nombre }} <b> </span> <br>
-        Agradecemos mucho su interés en el proyecto y después de revisar su solicitud, hemos determinado que no cumple con el perfil específico
-        requerido para este proyecto en particular. Sin embargo, le animamos a considerar aplicar a otros proyectos.
+        Agradecemos mucho su interés en el proyecto y después de evaluar su solicitud, parece no cumplir con el perfil
+        deseado para este proyecto. Sin embargo, le animamos a considerar aplicar a otros proyectos.
         </p>
 
         <p>

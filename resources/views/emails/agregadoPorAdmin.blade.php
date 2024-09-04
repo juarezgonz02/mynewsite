@@ -10,8 +10,8 @@
     <div style="color:black">
         <p> Estimado/a {{ $details['user']->nombres }} {{ $details['user']->apellidos }}.</p>
         <p>
-            Se le notifica que usted ha sido agregado/a al siguiente proyecto de horas sociales por el encargado: <br>
-            <b> {{$details['user']->nombre}}. </b>
+            Se le notifica que usted ha sido agregado/a al siguiente proyecto de horas sociales
+            <b> {{$details['user']->nombre}}, por parte del/la encargado/a de dicho proyecto.</b>
             Se le solicita estar pendiente de su correo institucional para futuras actualizaciones.<br>
 
             Si usted no solicitó este proceso o si tiene dudas al respecto, por favor ponerse en contacto con nosotros.
