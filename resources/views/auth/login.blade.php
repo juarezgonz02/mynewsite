@@ -30,7 +30,8 @@
     <style>
         .message_box {
             padding: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 0.8em;
+            margin-top: 0.8em;
             border: 1px solid blue;
         }
     </style>
