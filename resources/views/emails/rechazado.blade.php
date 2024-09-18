@@ -10,12 +10,14 @@
     <div style="color:black">
         <p> Estimado/a {{ $details['data']->nombres }} {{ $details['data']->apellidos }},</p>
         <p>
-            Se le notifica que su solicitud para el siguiente proceso de aplicación al proyecto de horas sociales: <br>
-            <span> <b> {{ $details['data']->nombre }} <b> </span> <b style="color:red">ha sido rechazada.</b> <br>
+            Recibimos su solicitud para el siguiente proceso de aplicación al proyecto de horas sociales: <br>
+            <span> <b> {{ $details['data']->nombre }} <b> </span> <br>
+        Agradecemos mucho su interés en el proyecto, sin embargo, después de evaluar su solicitud, 
+        se ha tomado la decisión de optar por otros perfiles para este proyecto. 
+        <br>
+        Le animamos a considerar aplicar a otros desde la platafoma.
         </p>
-        <p>
-            Si desea más información por favor ponerse en contácto con {{ $details['data']->encargado }} {{ $details['data']->correo_encargado }}.
-        </p><br>
+
         <p>
             Atentamente, Centro de Servicio Social.
         </p><br><br>

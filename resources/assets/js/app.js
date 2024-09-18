@@ -37,7 +37,7 @@ Vue.component('coordinadores', require('./components/Coordinadores.vue'))
 Vue.use(VueSweetalert2);
 
 
-// TODO: CHANGE TO SWAL VUE
+// TODO: Creación de coordinadores, cuando ya existe en la bd, el sitio no puede responder; Estilo para el selector de filtros (llenar cuadro)
 
 const app = new Vue({
     el: '#app',

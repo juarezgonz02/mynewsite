@@ -30,8 +30,13 @@
     <style>
         .message_box {
             padding: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 0.8em;
+            margin-top: 0.8em;
             border: 1px solid blue;
+        }
+        .welcome_message {
+            margin-bottom: 0.2em;
+            margin-top: 0.2em;
         }
     </style>
 </head>
@@ -47,7 +52,9 @@
                                     {!! $errors->first('verified', '<div class="message_box"> <p style="color: blue">:message</p></div>') !!}
                                 @else
                                     <span style="visibility: hidden;">.</span>
-                                @endif
+                                    @endif
+                                <span class="welcome_message">Accede para ver los proyectos disponibles</span>
+                                
                                 <form method="POST" style="width: 75%" id="login_form" action="{{ route('login') }}">
                                     {{ csrf_field() }}
                                     <div class="form-group">

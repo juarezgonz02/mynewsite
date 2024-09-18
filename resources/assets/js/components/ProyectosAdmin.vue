@@ -19,7 +19,7 @@
                             <form class="search-group" @submit.prevent="bindDataByFilters(0)">
                                 <div class="search-bar">
                                     <input class="search-input" style="margin: auto; width: 100%;" type="text"
-                                        v-model="filtrandoPorNombre" placeholder="Buscar por nombre del proyecto">
+                                        v-model="filtrandoPorNombre" placeholder="Buscar por nombre del proyecto, contraparte o nombre del encargado">
                                 </div>
                                 <div style="flex-direction: column-reverse">
                                     <button type="button" @click="bindDataByFilters(0)"
@@ -245,8 +245,11 @@
             </div>
             <!-- Fin ejemplo de tabla Listado -->
         </div>
-        <!--Inicio del modal editar proyecto-->
-        <div class="modal fade" tabindex="-1" role="dialog" id="editModal" aria-hidden="true">
+        <!-- Inicio del modal editar proyecto
+        <button type="button" class="btn btn-success"
+                            v-bind:data-dismiss="flagErrorProyecto ? '' : 'modal'"
+                            @click="actualizarInsertarProyecto()">Guardar</button> -->
+        <div v-on:keyup.enter="actualizarInsertarProyecto()" class="modal fade" tabindex="-1" role="dialog" id="editModal" aria-hidden="true">
             <div class="modal-dialog modal-primary modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -284,6 +287,24 @@
                                 </div>
                             </div>
                             <div class="form-group row div-form">
+                                <label class="col-md-3 form-control-label" for="text-input">Perfil del
+                                    estudiante</label>
+                                <div class="col-md-9">
+                                    <textarea type="text" v-model="modal_perfil_estudiante" class="form-control"
+                                        placeholder="Perfil del estudiante"></textarea>
+                                    <span>{{ modal_perfil_estudiante.length }}/2000</span>
+                                    <div v-if="errorProyecto[5] != 2">
+                                        <p :class="{ show: errorProyecto[5] == 1, hide: errorProyecto[5] != 1 }"
+                                            class="error">El perfil del estudiante que puede aplicar al proyecto no
+                                            puede ir vacío</p>
+                                    </div>
+                                    <div v-else>
+                                        <p class="error">El perfil del estudiante no puede superar el número máximo de
+                                            caracteres</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row div-form">
                                 <label class="col-md-3 form-control-label" for="text-input">Encargado</label>
                                 <div class="col-md-9">
                                     <input type="text" v-model="modal_encargado" class="form-control"
@@ -306,24 +327,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group row div-form">
-                                <label class="col-md-3 form-control-label" for="text-input">Perfil del
-                                    estudiante</label>
-                                <div class="col-md-9">
-                                    <textarea type="text" v-model="modal_perfil_estudiante" class="form-control"
-                                        placeholder="Perfil del estudiante"></textarea>
-                                    <span>{{ modal_perfil_estudiante.length }}/2000</span>
-                                    <div v-if="errorProyecto[5] != 2">
-                                        <p :class="{ show: errorProyecto[5] == 1, hide: errorProyecto[5] != 1 }"
-                                            class="error">El perfil del estudiante que puede aplicar al proyecto no
-                                            puede ir vacío</p>
-                                    </div>
-                                    <div v-else>
-                                        <p class="error">El perfil del estudiante no puede superar el número máximo de
-                                            caracteres</p>
-                                    </div>
-                                </div>
-                            </div>
+
                             <div class="form-group row div-form">
                                 <label class="col-md-3 form-control-label" for="text-input">Cupos</label>
                                 <div class="col-md-9">
@@ -1299,6 +1303,7 @@ export default {
                             title: 'Proyecto guardado',
                             text: 'El proyecto fue guardado exitosamente.',
                         });
+                        this.resetModalForm();
                     }
                     else {
                         this.$swal.fire({
@@ -1373,6 +1378,8 @@ export default {
                     this.bindDataByFilters(0)
                 }
             }
+
+            me.cerrarModal()
         },
         async enviarReunion() {
             if (this.validarReunion()) {
@@ -1587,7 +1594,30 @@ export default {
             this.arrayCarreraPerfil.push([carrera.idCarrera, lim_inf, lim_sup]);
             this.arrayCarrerasSeleccionadas.push(carrera.idCarrera);
         },
+
+        resetModalForm(){
+            this.modal_nombre = '';
+                        this.modal_encargado = '';
+                        this.modal_cupos = ''
+                        this.modal_desc = '';
+                        this.modal_perfil_estudiante = '';
+                        this.modal_correo = '';
+                        this.modal_horario = '';
+                        this.modal_contraparte = '';
+                        this.modal_tipo_horas = '';
+                        //this.modal_estado_proyecto = '';
+                        this.contraparte = '';
+                        this.modal_fecha_in = '';
+                        this.modal_fecha_fin = '';
+                        this.errorProyecto = [];
+                        this.errorPerfilMsg = '';
+                        this.flagError = false;
+                        this.flagErrorProyecto = false;
+                        this.arrayCarreraPerfil = [];
+                        this.flagTodasLasCarreras = '1';
+        },
         cerrarModal() {
+            
             if (this.modal == 1 || this.modal4 == 1) {
                 this.modal = 0;
                 this.modal4 = 0;
