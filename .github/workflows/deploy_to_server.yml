@@ -26,7 +26,7 @@ jobs:
       # SSH into the server and run git log
       - name: SSH and run git log
         run: |
-          ssh -o StrictHostKeyChecking=no juarez@juarezdev.lat << 'EOF'
+          ssh -o StrictHostKeyChecking=no juarez@jgdevtech.lat << 'EOF'
             cd /var/www/css-proyecto
             git checkout production
             echo "=== Pull Started at $(date) ===" >> pull_log.txt
