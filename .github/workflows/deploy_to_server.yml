@@ -1,6 +1,13 @@
 name: SSH to Server and Run Git
 
 on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'staging'
+  
   push:
     branches:
       - Release-v2.1.x
@@ -44,7 +51,7 @@ jobs:
         - name: Add and commit changes to production
           id: commit
           run: |
-          
+
             git config pull.rebase true
             git pull origin production 
             git checkout production   
