@@ -35,8 +35,7 @@ jobs:
 
       # Añadir los archivos generados por el build
       # Usar el mensaje del commit que activó el workflow
-      - name: Add and commit changes to production
-        id: commit
+      - name: Get production branch
         run: |
           git pull cicdtest production
       
@@ -51,7 +50,6 @@ jobs:
       # Añadir los archivos generados por el build
       # Usar el mensaje del commit que activó el workflow
       - name: Add and commit changes to production
-        id: commit
         run: |
           git add .
           COMMIT_MSG="${{ github.event.head_commit.message }}"
