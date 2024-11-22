@@ -57,6 +57,7 @@ jobs:
           git status
           git checkout -b production cicdtest/production
           git checkout production   
+          git status
           git merge Release-v2.1.x
 
       # Push a la rama 'production'
