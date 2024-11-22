@@ -34,12 +34,6 @@ jobs:
           git config user.email "github-actions@github.com"
           git config pull.rebase false
 
-      # Añadir los archivos generados por el build
-      # Usar el mensaje del commit que activó el workflow
-      # - name: Get production branch
-      #   run: |
-      #     git pull origin production
-      
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -84,6 +78,6 @@ jobs:
             cd /var/www/css-proyecto
             git checkout production
             echo "=== Pull Started at $(date) ===" >> pull_log.txt
-            git pull origin production >> pull_log.txt 2>&1  # Append the result of the git pull
+            # git pull origin production >> pull_log.txt 2>&1  # Append the result of the git pull
             echo "=== Pull end at $(date) ===" >> pull_log.txt
           EOF

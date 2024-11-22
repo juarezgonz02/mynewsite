@@ -53,7 +53,7 @@
                                 @else
                                     <span style="visibility: hidden;">.</span>
                                     @endif
-                                <span class="welcome_message">Accede para ver los proyectos disponibles</span>
+                                <span class="welcome_message">Accede para ver los proyectos disponibles en la plataforma</span>
                                 
                                 <form method="POST" style="width: 75%" id="login_form" action="{{ route('login') }}">
                                     {{ csrf_field() }}
