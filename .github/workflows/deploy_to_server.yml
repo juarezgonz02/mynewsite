@@ -4,17 +4,16 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Deployment environment'
+        description: "Deployment environment"
         required: false
-        default: 'staging'
-  
+        default: "staging"
+
   push:
     branches:
       - Release-v2.1.x
 
 jobs:
-
-  run-node-compilation:
+  git-node:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -22,58 +21,54 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run production
+      # Checkout del repositorio para obtener los cambios generados
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-  commit-and-push-to-production:
-      runs-on: ubuntu-latest
-      needs: run-node-compilation   # Este job depende de que el anterior termine correctamente
+      # Configura las credenciales de Git
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git remote add cicdtest https://github.com/juarezgonz02/mynewsite.git
+          git config pull.ff only
 
-      steps:
-        # Checkout del repositorio para obtener los cambios generados
-        - name: Checkout repository
-          uses: actions/checkout@v3
+      # Añadir los archivos generados por el build
+      # Usar el mensaje del commit que activó el workflow
+      - name: Add and commit changes to production
+        id: commit
+        run: |
+          git pull cicdtest production
 
-        # Configura las credenciales de Git
-        - name: Configure Git
-          run: |
-            git config user.name "github-actions"
-            git config user.email "github-actions@github.com"
-            git remote add cicdtest https://github.com/juarezgonz02/mynewsite.git
-            git config pull.ff only  
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+        run: |
+          npm ci
+          npm run production
 
-        # Añadir los archivos generados por el build
-        # Usar el mensaje del commit que activó el workflow
-        - name: Add and commit changes to production
-          id: commit
-          run: |
+      # Añadir los archivos generados por el build
+      # Usar el mensaje del commit que activó el workflow
+      - name: Add and commit changes to production
+        id: commit
+        run: |
+          git add .
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          git commit -m "$COMMIT_MSG"
+          git checkout production   
+          git merge Release-v2.1.x
 
-            git pull cicdtest production 
-            git checkout production   
-            git merge Release-v2.1.x 
-
-            git add .             
-            
-            COMMIT_MSG="${{ github.event.head_commit.message }}"
-            git commit -m "$COMMIT_MSG"
-        
-      
-        # Push a la rama 'production'
-        # Realiza el push a la rama 'production' con el mismo mensaje
-        - name: Push changes to production with the same commit message
-          run: |
-            git push origin production  
-
+      # Push a la rama 'production'
+      # Realiza el push a la rama 'production' con el mismo mensaje
+      - name: Push changes to production with the same commit message
+        run: |
+          git push cicdtest production
 
   ssh-to-server:
     runs-on: ubuntu-latest
-    needs: commit-and-push-to-production
+    needs: git-node  # Fix this line to reference the correct job name
     steps:
       # Checkout the repository
       - name: Checkout repository
