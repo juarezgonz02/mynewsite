@@ -8,12 +8,14 @@ on:
         required: false
         default: "staging"
 
+  
   push:
     branches:
       - production
 
 jobs:
   git-node:
+    if: github.actor != 'github-actions[bot]'  # Ignore pushes from GitHub Actions bot
     runs-on: ubuntu-latest
     strategy:
       matrix:
