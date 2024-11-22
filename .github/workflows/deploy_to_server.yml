@@ -30,14 +30,13 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git remote add cicdtest https://github.com/juarezgonz02/mynewsite.git
           git config pull.rebase false
 
       # Añadir los archivos generados por el build
       # Usar el mensaje del commit que activó el workflow
       # - name: Get production branch
       #   run: |
-      #     git pull cicdtest production
+      #     git pull origin production
       
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -55,7 +54,7 @@ jobs:
           COMMIT_MSG="${{ github.event.head_commit.message }}"
           git commit -m "$COMMIT_MSG"
           git status
-          git pull cicdtest production
+          git pull origin production
           git checkout production   
           git status
           git merge Release-v2.1.x
@@ -64,7 +63,7 @@ jobs:
       # Realiza el push a la rama 'production' con el mismo mensaje
       - name: Push changes to production with the same commit message
         run: |
-          git push cicdtest production
+          git push origin production
 
   ssh-to-server:
     runs-on: ubuntu-latest
