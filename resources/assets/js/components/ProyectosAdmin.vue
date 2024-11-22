@@ -214,7 +214,7 @@
                     <div v-else>
                         <div v-if="filtrandoPorNombre == '' && filtrandoPorCarrera == JSON.stringify({ 'por': 'carrera', 'id': -1 })"
                             class="alert alert-danger" role="alert">
-                            No hay proyectos actualmente disponibles paramostrar
+                            No hay proyectos actualmente disponibles
                         </div>
                         <div v-else class="alert alert-danger" role="alert">
                             No hay resultado para tu busqueda

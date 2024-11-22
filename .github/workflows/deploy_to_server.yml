@@ -78,6 +78,6 @@ jobs:
             cd /var/www/css-proyecto
             git checkout production
             echo "=== Pull Started at $(date) ===" >> pull_log.txt
-            # git pull origin production >> pull_log.txt 2>&1  # Append the result of the git pull
+            git pull origin production >> pull_log.txt 2>&1  # Append the result of the git pull
             echo "=== Pull end at $(date) ===" >> pull_log.txt
           EOF
