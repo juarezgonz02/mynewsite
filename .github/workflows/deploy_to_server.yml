@@ -54,6 +54,8 @@ jobs:
           git add .
           COMMIT_MSG="${{ github.event.head_commit.message }}"
           git commit -m "$COMMIT_MSG"
+          git status
+          git checkout -b production cicdtest/production
           git checkout production   
           git merge Release-v2.1.x
 
