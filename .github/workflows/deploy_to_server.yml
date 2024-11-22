@@ -5,7 +5,7 @@ on:
     inputs:
       environment:
         description: 'Deployment environment'
-        required: true
+        required: false
         default: 'staging'
   
   push:
