@@ -1,0 +1,35 @@
+name: SSH to Server and Run Git
+
+on:
+  push:
+    branches:
+      - [production]
+  pull_request:
+    branches:
+      - [production]
+
+jobs:
+  ssh-to-server:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Set up the SSH key
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # SSH into the server and run git log
+      - name: SSH and run git log
+        run: |
+          ssh -o StrictHostKeyChecking=no juarez@juarezdev.lat << 'EOF'
+            cd /var/www/css-proyecto
+            git checkout production
+            echo "=== Pull Started at $(date) ===" >> pull_log.txt
+            git pull origin production >> pull_log.txt 2>&1  # Append the result of the git pull
+            echo "=== Pull end at $(date) ===" >> pull_log.txt
+          EOF
