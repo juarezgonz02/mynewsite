@@ -3,10 +3,10 @@ name: SSH to Server and Run Git
 on:
   push:
     branches:
-      - [production]
+      - production
   pull_request:
     branches:
-      - [production]
+      - production
 
 jobs:
   ssh-to-server:
