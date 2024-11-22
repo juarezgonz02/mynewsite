@@ -3,12 +3,63 @@ name: SSH to Server and Run Git
 on:
   push:
     branches:
-      - production
-  pull_request:
-    branches:
-      - production
+      - Release-v2.1.x
 
 jobs:
+
+  run-node-compilation:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run production
+
+  commit-and-push-to-production:
+      runs-on: ubuntu-latest
+      needs: run-node-compilation   # Este job depende de que el anterior termine correctamente
+
+      steps:
+        # Checkout del repositorio para obtener los cambios generados
+        - name: Checkout repository
+          uses: actions/checkout@v3
+
+        # Configura las credenciales de Git
+        - name: Configure Git
+          run: |
+            git config user.name "github-actions"
+            git config user.email "github-actions@github.com"
+
+        # Añadir los archivos generados por el build
+        # Usar el mensaje del commit que activó el workflow
+        - name: Add and commit changes to production
+          id: commit
+          run: |
+            git checkout production   
+            git pull origin production 
+
+            git add .             
+            
+            COMMIT_MSG="${{ github.event.head_commit.message }}"
+            git commit -m "$COMMIT_MSG"
+        
+      
+        # Push a la rama 'production'
+        # Realiza el push a la rama 'production' con el mismo mensaje
+        - name: Push changes to production with the same commit message
+          run: |
+            git push origin production  
+
+
   ssh-to-server:
     runs-on: ubuntu-latest
     
