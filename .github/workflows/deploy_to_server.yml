@@ -51,7 +51,6 @@ jobs:
         - name: Add and commit changes to production
           id: commit
           run: |
-
             git config pull.rebase true
             git pull origin production 
             git checkout production   
