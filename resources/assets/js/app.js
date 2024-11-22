@@ -38,7 +38,7 @@ Vue.use(VueSweetalert2);
 
 
 // TODO: Creación de coordinadores, cuando ya existe en la bd, el sitio no puede responder; Estilo para el selector de filtros (llenar cuadro)
-
+// Crear algo
 const app = new Vue({
     el: '#app',
     data :{
