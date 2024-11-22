@@ -44,8 +44,9 @@ jobs:
         - name: Add and commit changes to production
           id: commit
           run: |
-            git checkout production   
             git pull origin production 
+            git checkout production   
+            git pull origin Release-v2.1.x 
 
             git add .             
             
