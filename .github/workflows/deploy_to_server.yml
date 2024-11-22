@@ -10,7 +10,7 @@ on:
 
   push:
     branches:
-      - Release-v2.1.x
+      - production
 
 jobs:
   git-node:
@@ -51,14 +51,9 @@ jobs:
       - name: Add and commit changes to production
         run: |
           git add .
-          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          COMMIT_MSG="Bot Release for: ${{ github.event.head_commit.message }}"
           git commit -m "$COMMIT_MSG"
           git status
-          git pull origin production
-          git checkout production   
-          git pull origin production
-          git status
-          git merge Release-v2.1.x --allow-unrelated-histories
 
       # Push a la rama 'production'
       # Realiza el push a la rama 'production' con el mismo mensaje
