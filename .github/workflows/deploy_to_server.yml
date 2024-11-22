@@ -39,15 +39,14 @@ jobs:
         id: commit
         run: |
           git pull cicdtest production
-
+      
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
-        run: |
-          npm ci
-          npm run production
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run production
 
       # Añadir los archivos generados por el build
       # Usar el mensaje del commit que activó el workflow
